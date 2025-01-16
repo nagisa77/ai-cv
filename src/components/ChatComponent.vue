@@ -1,7 +1,7 @@
 <template>
   <div class="chat-component">
     <!-- 消息区 -->
-    <div class="messages-container">
+    <div class="messages-container" ref="messagesContainer">
       <div
         v-for="(message, index) in messages"
         :key="index"
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits } from 'vue'
+import { ref, computed, watch, defineEmits, nextTick } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
 
 // 1. 获取 ChatGPT 模型的单例
@@ -55,7 +55,10 @@ const sendIcon = require('@/assets/icon/chatgpt-send-icon.svg')
 // 3. 定义要发出的事件
 const emit = defineEmits(['update-resume'])
 
-// 4. 发送消息的函数 —— 非 async，让响应式数据变化后触发界面更新
+// 4. 引用 messagesContainer
+const messagesContainer = ref(null)
+
+// 5. 发送消息的函数 —— 非 async，让响应式数据变化后触发界面更新
 function handleSendMessage() {
   const trimmedValue = inputValue.value.trim()
   if (!trimmedValue) return
@@ -67,7 +70,7 @@ function handleSendMessage() {
   inputValue.value = ''
 }
 
-// 5. 解析 GPT 消息中的 JSON 并提取 message 字段
+// 6. 解析 GPT 消息中的 JSON 并提取 message 字段
 function extractMessage(gptText) {
   try {
     const parsed = JSON.parse(gptText)
@@ -79,10 +82,10 @@ function extractMessage(gptText) {
   }
 }
 
-// 6. 监听 messages 的变化，一旦发现 GPT 发来新消息，就做进一步处理
+// 7. 监听 messages 的变化，一旦发现 GPT 发来新消息，就做进一步处理
 watch(
   () => messages.value,
-  (newMessages) => {
+  async (newMessages) => { // 修改为 async 以使用 await
     if (!newMessages || newMessages.length === 0) return
 
     const lastMessage = newMessages[newMessages.length - 1]
@@ -100,6 +103,12 @@ watch(
         console.error('GPT 返回的消息不是标准 JSON 或解析失败：', e)
       }
     }
+
+    // 等待 DOM 更新后再滚动
+    await nextTick()
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+    }
   },
   { deep: true }
 )
@@ -109,7 +118,7 @@ watch(
 .chat-component {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 60px);
   width: 38vw;
   box-shadow: inset 0 0 20px 0 rgba(0, 0, 0, 0.2);
   justify-content: space-between;

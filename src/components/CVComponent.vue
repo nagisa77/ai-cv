@@ -75,7 +75,7 @@ export default {
 <style scoped>
 .cv-component {
   /* 基础布局 */
-  height: 100vh;
+  height: calc(100vh - 60px);
   width: 62vw;
   box-sizing: border-box;
   display: flex;
