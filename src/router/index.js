@@ -1,14 +1,19 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-// 你的页面组件
-import HomePage from '@/views/Home.vue'
+import Home from '@/views/Home.vue'
+import ResumeForm from '@/views/ResumeForm.vue'
 import CreateResume from '@/views/CreateResume.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomePage
+    component: Home
+  },
+  {
+    path: '/resume-form',
+    name: 'ResumeForm',
+    component: ResumeForm
   },
   {
     path: '/create-resume',

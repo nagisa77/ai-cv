@@ -1,10 +1,12 @@
+<!-- Home.vue -->
 <template>
   <div class="home">
     <h1 class="home-title">欢迎使用简历生成器！</h1>
-    <p class="home-description">该工具帮助用户轻松创建专业简历，输入个人信息、教育背景和工作经历，自动生成美观简历，助您求职成功！</p>
-    
-    <!-- 通过 router-link 跳转到创建简历页面 -->
-    <router-link to="/create-resume">
+    <p class="home-description">
+      该工具帮助用户轻松创建专业简历，输入个人信息、教育背景和工作经历，自动生成美观简历，助您求职成功！
+    </p>
+    <!-- 通过 router-link 跳转到填写表单页面 -->
+    <router-link to="/resume-form">
       <button class="create-resume-button">创建简历</button>
     </router-link>
   </div>
