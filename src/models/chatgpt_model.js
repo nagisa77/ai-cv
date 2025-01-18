@@ -1,3 +1,5 @@
+// chatgpt_model.js
+
 import axios from 'axios'
 import { reactive } from 'vue'
 import metadata_model from './metadata_model.js'
@@ -5,20 +7,14 @@ import metadata_model from './metadata_model.js'
 const ChatgptModel = (function () {
   let instance
 
-  /**
-   * 创建一个 ChatgptModel 的实例
-   */
+  // 增加一个变量来存储用户输入的 API Key
+  let userApiKey = ''
+
   function createInstance() {
-    // 用 Vue 的 reactive 包装所有对话记录，按 type 和 title 存储
     const data = reactive({
       conversations: {}
     })
 
-    /**
-     * 初始化某个 type 和 title 的消息数组
-     * @param {string} type - 对话的类型 (例如: "workExperience", "education")
-     * @param {string} title - 对话标题
-     */
     function initConversation(type, title) {
       if (!data.conversations[type]) {
         data.conversations[type] = {}
@@ -128,44 +124,23 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       }
     }
 
-    /**
-     * 获取指定类型和标题的消息
-     * @param {string} type - 对话的类型 (例如: "workExperience", "education")
-     * @param {string} title - 对话标题
-     * @returns {Array<{ text: string, sender: string }>}
-     */
     function getMessagesForTitle(type, title) {
       initConversation(type, title)
       return data.conversations[type][title]
     }
 
-    /**
-     * 发送消息给 GPT，并获取回复
-     * 内部会自动调用 fetchGptResponse，并分别添加用户和 GPT 消息到 messages
-     * @param {string} type - 对话的类型 (例如: "workExperience", "education")
-     * @param {string} title - 对话标题
-     * @param {string} userText - 用户输入内容
-     */
     async function sendMessage(type, title, userText) {
       if (!userText.trim()) return
 
-      // 1. 将用户消息推入 messages
       data.conversations[type][title].push({
         text: userText,
         sender: 'me',
       })
 
-      // 2. 异步调用 GPT API，获取回复
       const gptReply = await fetchGptResponse(type, title, userText)
       data.conversations[type][title].push({ text: gptReply, sender: 'gpt' })
     }
 
-    /**
-     * 将本地存储的 messages 转换成 OpenAI 需要的 messages 格式
-     * @param {string} type - 对话的类型
-     * @param {string} title - 对话标题
-     * @returns {Array<{ role: 'user'|'assistant'|'system', content: string }>}
-     */
     function buildGptMessagesFromData(type, title) {
       return data.conversations[type][title].map((msg) => {
         let role = 'system'
@@ -178,26 +153,27 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       })
     }
 
-    /**
-     * 调用 GPT 接口的核心函数
-     * @param {string} type - 对话的类型 (例如: "workExperience", "education")
-     * @param {string} title - 对话标题
-     * @param {string} userText - 用户发送的文本
-     * @returns {Promise<string>} - 返回 GPT 回复的文本
-     */
+
+    function setApiKey(key) {
+      userApiKey = key
+    }
+
+    // 核心: 调用 GPT 接口时，使用 userApiKey (由用户输入)
     async function fetchGptResponse(type, title, userText) {
       const apiUrl = 'https://api.openai.com/v1/chat/completions'
-      const apiKey = '' // 用自己的 Key
+
+      // 这里从 userApiKey 中获取用户提供的 key
+      // 如果没提供，则为空字符串。
+      const apiKey = userApiKey || ''
 
       try {
-        let messages = buildGptMessagesFromData(type, title) // 使用动态的 type 和 title
+        let messages = buildGptMessagesFromData(type, title)
         messages.push({ role: 'user', content: userText })
 
         const response = await axios.post(
           apiUrl,
           {
-            // model: 'gpt-4o-mini-2024-07-18', 
-            model: 'gpt-4o', 
+            model: 'gpt-4o', // 你的 model
             messages,
             temperature: 0.7,
           },
@@ -209,26 +185,22 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
           }
         )
 
-        // 根据 OpenAI 返回的数据结构，取出聊天回复
         const gptContent = response.data.choices[0].message.content.trim()
         return gptContent
       } catch (error) {
         console.error('调用 GPT API 出错：', error)
-        return 'GPT 接口调用失败，请稍后重试。'
+        return 'GPT 接口调用失败，请检查 API Key 或稍后重试。'
       }
     }
 
     return {
       getMessagesForTitle,
       sendMessage,
+      setApiKey,
     }
   }
 
   return {
-    /**
-     * 获取单例
-     * @returns {Object} ChatgptModel 实例
-     */
     getInstance() {
       if (!instance) {
         instance = createInstance()

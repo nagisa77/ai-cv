@@ -1,6 +1,13 @@
 <template>
   <div class="chat-component">
-    <!-- （已删除模块选择区域） -->
+    <!-- 这里是一个示例区域，用来让用户输入API Key -->
+    <div class="api-key-settings">
+      <input
+        v-model="apiKeyInput"
+        placeholder="在此粘贴你的 OpenAI API Key"
+      />
+      <button @click="handleSetApiKey">保存 Key</button>
+    </div>
 
     <!-- 消息区 -->
     <div class="messages-container" ref="messagesContainer">
@@ -10,18 +17,17 @@
         class="message"
         :class="message.sender"
       >
-        <!-- 如果是 GPT 消息，只显示 JSON 中的 message 字段 -->
+        <!-- GPT 消息解析后只显示message字段 -->
         <span v-if="message.sender === 'gpt'">
           {{ extractMessage(message.text) }}
         </span>
-        <!-- 否则正常显示原文本 -->
         <span v-else>
           {{ message.text }}
         </span>
       </div>
     </div>
 
-    <!-- 输入区 -->
+    <!-- 输入区（发送给ChatGPT） -->
     <div class="input-area-container">
       <div class="input-area-left">
         <input
@@ -39,14 +45,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits, nextTick, defineProps } from 'vue'
+import { ref, computed, watch, nextTick, defineProps, defineEmits, onMounted } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
 
-/**
- * 父组件需传入：
- * - modules: Array<{ type, title }>
- * - currentSelectedTitle: string
- */
+// 父组件需传入
 const props = defineProps({
   modules: {
     type: Array,
@@ -64,6 +66,27 @@ const emit = defineEmits(['update-resume'])
 // ChatGPT 实例 (单例)
 const chatgptInstance = ChatgptModel.getInstance()
 
+// 用户输入的 API Key
+const apiKeyInput = ref('')
+
+// 在组件初始化时，可以从 localStorage 中尝试读取
+onMounted(() => {
+  const storedKey = localStorage.getItem('openaiApiKey')
+  if (storedKey) {
+    apiKeyInput.value = storedKey
+    // 同时给 ChatgptModel 设置
+    chatgptInstance.setApiKey(storedKey)
+  }
+})
+
+// 点击“保存 Key”按钮时，把 key 存到单例
+function handleSetApiKey() {
+  chatgptInstance.setApiKey(apiKeyInput.value)
+  // 同时存到 localStorage（可选）
+  localStorage.setItem('openaiApiKey', apiKeyInput.value)
+  alert('已设置 API Key')
+}
+
 // 输入框内容
 const inputValue = ref('')
 
@@ -75,7 +98,6 @@ const messagesContainer = ref(null)
 
 /**
  * 计算：根据 currentSelectedTitle，找到对应模块
- * 如果找不到，则返回 { type: '', title: '' }
  */
 const activeModule = computed(() => {
   return (
@@ -93,9 +115,6 @@ const messages = computed(() => {
   return chatgptInstance.getMessagesForTitle(type, title)
 })
 
-/**
- * 发送消息
- */
 function handleSendMessage() {
   const trimmedValue = inputValue.value.trim()
   if (!trimmedValue) return
@@ -115,7 +134,6 @@ function extractMessage(gptText) {
     const parsed = JSON.parse(gptText)
     return parsed.message || '(未找到 message 字段)'
   } catch (error) {
-    // 如果无法解析为 JSON，则直接显示原文本
     return gptText
   }
 }
@@ -138,7 +156,6 @@ watch(
       }
     }
 
-    // 等待 DOM 更新后再滚动到底部
     await nextTick()
     if (messagesContainer.value) {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
@@ -158,7 +175,14 @@ watch(
   justify-content: space-between;
 }
 
-/* 消息容器 */
+/* 简单示例API Key设置区域 */
+.api-key-settings {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px;
+}
+
 .messages-container {
   display: flex;
   flex-direction: column;
@@ -175,7 +199,6 @@ watch(
   word-wrap: break-word;
 }
 
-/* GPT 消息样式：左侧显示 */
 .message.gpt {
   background-color: #e8f0fe;
   text-align: left;
@@ -184,7 +207,6 @@ watch(
   margin-left: 20px;
 }
 
-/* 系统消息样式 */
 .message.system {
   padding-left: 20px;
   padding-right: 20px;
@@ -193,7 +215,6 @@ watch(
   max-width: none;
 }
 
-/* 我 (me) 消息样式：右侧显示 */
 .message.me {
   background-color: #f1f1f1;
   text-align: right;
@@ -202,7 +223,6 @@ watch(
   margin-right: 20px;
 }
 
-/* 输入区 */
 .input-area-container {
   display: flex;
   bottom: 0;
