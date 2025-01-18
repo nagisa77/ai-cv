@@ -11,33 +11,17 @@
         <label class="form-label" for="name">
           姓名<span class="required">*</span>
         </label>
-        <input
-          type="text"
-          id="name"
-          class="form-input"
-          placeholder="请输入您的姓名"
-          required
-        />
+        <input type="text" id="name" class="form-input" placeholder="请输入您的姓名" required value="Tim" />
       </div>
 
       <div class="form-group">
         <label class="form-label" for="phone">手机号 (选填)</label>
-        <input
-          type="tel"
-          id="phone"
-          class="form-input"
-          placeholder="请输入您的手机号"
-        />
+        <input type="tel" id="phone" class="form-input" placeholder="请输入您的手机号" value="13800000000" />
       </div>
 
       <div class="form-group">
         <label class="form-label" for="email">邮箱 (选填)</label>
-        <input
-          type="email"
-          id="email"
-          class="form-input"
-          placeholder="请输入您的邮箱"
-        />
+        <input type="email" id="email" class="form-input" placeholder="请输入您的邮箱" value="tim@example.com" />
       </div>
 
       <!-- 教育经历 -->
@@ -50,35 +34,27 @@
           </button>
           <div class="form-group">
             <label class="form-label">学校名</label>
-            <input type="text" class="form-input" placeholder="如：北京大学" />
+            <input type="text" class="form-input" placeholder="如：北京大学" value="清华大学" />
           </div>
           <div class="form-group">
             <label class="form-label">时间</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="如：2018.09 - 2022.06"
-            />
+            <input type="text" class="form-input" placeholder="如：2018.09 - 2022.06" value="2016.09 - 2020.06" />
           </div>
           <div class="form-group">
             <label class="form-label">专业</label>
-            <input type="text" class="form-input" placeholder="如：计算机科学" />
+            <input type="text" class="form-input" placeholder="如：计算机科学" value="软件工程" />
           </div>
           <div class="form-group">
             <label class="form-label">学历</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="如：本科 / 硕士 / 博士"
-            />
+            <input type="text" class="form-input" placeholder="如：本科 / 硕士 / 博士" value="本科" />
           </div>
           <div class="form-group">
             <label class="form-label">GPA (选填)</label>
-            <input type="text" class="form-input" placeholder="如：3.8" />
+            <input type="text" class="form-input" placeholder="如：3.8" value="3.9" />
           </div>
           <div class="form-group">
             <label class="form-label">城市</label>
-            <input type="text" class="form-input" placeholder="如：北京" />
+            <input type="text" class="form-input" placeholder="如：北京" value="上海" />
           </div>
         </div>
       </div>
@@ -97,23 +73,19 @@
           </button>
           <div class="form-group">
             <label class="form-label">公司名</label>
-            <input type="text" class="form-input" placeholder="如：腾讯" />
+            <input type="text" class="form-input" placeholder="如：腾讯" value="阿里巴巴" />
           </div>
           <div class="form-group">
             <label class="form-label">时间</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="如：2020.05 - 2022.12"
-            />
+            <input type="text" class="form-input" placeholder="如：2020.05 - 2022.12" value="2020.07 - 2023.01" />
           </div>
           <div class="form-group">
             <label class="form-label">职位</label>
-            <input type="text" class="form-input" placeholder="如：后端开发" />
+            <input type="text" class="form-input" placeholder="如：后端开发" value="全栈工程师" />
           </div>
           <div class="form-group">
             <label class="form-label">城市</label>
-            <input type="text" class="form-input" placeholder="如：深圳" />
+            <input type="text" class="form-input" placeholder="如：深圳" value="北京" />
           </div>
         </div>
       </div>
@@ -132,23 +104,15 @@
           </button>
           <div class="form-group">
             <label class="form-label">项目名</label>
-            <input type="text" class="form-input" placeholder="如：AI 简历系统" />
+            <input type="text" class="form-input" placeholder="如：AI 简历系统" value="智能推荐系统" />
           </div>
           <div class="form-group">
             <label class="form-label">时间</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="如：2021.02 - 2021.04"
-            />
+            <input type="text" class="form-input" placeholder="如：2021.02 - 2021.04" value="2021.05 - 2021.11" />
           </div>
           <div class="form-group">
             <label class="form-label">职位/角色</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="如：产品负责人"
-            />
+            <input type="text" class="form-input" placeholder="如：产品负责人" value="项目经理" />
           </div>
         </div>
       </div>
@@ -175,11 +139,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">时间</label>
-          <input
-            type="text"
-            class="form-input"
-            placeholder="如：2018.09 - 2022.06"
-          />
+          <input type="text" class="form-input" placeholder="如：2018.09 - 2022.06" />
         </div>
         <div class="form-group">
           <label class="form-label">专业</label>
@@ -187,11 +147,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">学历</label>
-          <input
-            type="text"
-            class="form-input"
-            placeholder="如：本科 / 硕士 / 博士"
-          />
+          <input type="text" class="form-input" placeholder="如：本科 / 硕士 / 博士" />
         </div>
         <div class="form-group">
           <label class="form-label">GPA (选填)</label>
@@ -229,11 +185,7 @@
         <button class="remove-btn" type="button" @click="removeCard($event)">×</button>
         <div class="form-group">
           <label class="form-label">项目名</label>
-          <input
-            type="text"
-            class="form-input"
-            placeholder="如：AI 简历系统"
-          />
+          <input type="text" class="form-input" placeholder="如：AI 简历系统" />
         </div>
         <div class="form-group">
           <label class="form-label">时间</label>
@@ -241,11 +193,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">职位/角色</label>
-          <input
-            type="text"
-            class="form-input"
-            placeholder="如：产品负责人"
-          />
+          <input type="text" class="form-input" placeholder="如：产品负责人" />
         </div>
       </div>
     </div>
@@ -253,12 +201,14 @@
 </template>
 
 <script>
+import metadataInstance from '@/models/metadata_model.js' // 这行是你需要新增的导入
+
 export default {
   name: 'ResumeForm',
   methods: {
     // ========= 提交按钮处理 =========
     handleSubmit() {
-      // 1. 采集表单数据，这里仅作简单示例
+      // 1. 采集表单数据
       const name = document.getElementById('name').value
       const phone = document.getElementById('phone').value
       const email = document.getElementById('email').value
@@ -306,7 +256,77 @@ export default {
         }
       })
 
-      // 2. 可以把数据存到 localStorage，也可以通过 Vuex / Pinia / query 参数等方式传递
+      // 2. 写入 metadata_model
+      // ---- 2.1 填写 personalInfo ----
+      metadataInstance.setContentForType('personalInfo', {
+        name,
+        phone,
+        email
+      })
+
+      // ---- 2.2 填写 education(educationList) ----
+      educationList.forEach((edu) => {
+        // 假设 time 是 "2016.09 - 2020.06" 格式
+        const [fromTime, toTime] = edu.time.split(' - ')
+        const title = `${edu.school}`
+        metadataInstance.setContentForType(
+          'education',
+          {
+            title,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            // 初始化一个空数组或占位内容，后续可由 AI 进行亮点总结
+            content: [
+              "在校期间积极参与各类社团活动，锻炼了组织能力。",
+              "获得校内奖学金，表彰学术成绩优秀。",
+              "参与多个科研项目，积累了丰富的实践经验。",
+            ]
+          },
+          title // 同步作为title索引
+        )
+      })
+
+      // ---- 2.3 填写 workExperience(workList) ----
+      workList.forEach((work) => {
+        const [fromTime, toTime] = work.time.split(' - ')
+        const title = `${work.company}`
+        metadataInstance.setContentForType(
+          'workExperience',
+          {
+            title,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            content: [
+              "在项目中成功领导团队，提升了工作效率。",
+              "通过优化流程，减少了30%的项目交付时间。",
+              "成功实施新技术，提升了产品质量和客户满意度。",
+            ]
+          },
+          title
+        )
+      })
+
+      // ---- 2.4 填写 projectExperience(projectList) ----
+      projectList.forEach((proj) => {
+        const [fromTime, toTime] = proj.time.split(' - ')
+        const title = `${proj.projectName}`
+        metadataInstance.setContentForType(
+          'projectExperience',
+          {
+            title,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            content: [
+              "成功完成项目，提升了团队协作效率。",
+              "在项目中引入新技术，显著提高了工作质量。",
+              "负责项目管理，确保按时交付并满足客户需求。",
+            ]
+          },
+          title
+        )
+      })
+
+      // 3. 将原始表单数据（非 metadata_model 结构）继续存入 localStorage，方便后续使用
       const formData = {
         name,
         phone,
@@ -317,7 +337,7 @@ export default {
       }
       localStorage.setItem('resumeFormData', JSON.stringify(formData))
 
-      // 3. 跳转到创建简历的页面
+      // 4. 跳转到创建简历的页面
       this.$router.push('/create-resume')
     },
 
@@ -390,7 +410,8 @@ export default {
 .scroll-container {
   height: 100vh;
   overflow-y: auto;
-  background-color: #f0f2f5; /* Optional: Add a light background for better contrast */
+  background-color: #f0f2f5;
+  /* Optional: Add a light background for better contrast */
 }
 
 /* 容器外框与标题 */
@@ -402,11 +423,13 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
+
 .title {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
+
 .subtitle {
   font-size: 1rem;
   color: #999999;
@@ -417,15 +440,18 @@ export default {
 .form-group {
   margin-bottom: 1rem;
 }
+
 .form-label {
   display: block;
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
+
 .required {
   color: red;
   margin-left: 0.25rem;
 }
+
 .form-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -435,6 +461,7 @@ export default {
   outline: none;
   transition: border-color 0.2s ease;
 }
+
 .form-input:focus {
   border-color: #69a7ff;
   box-shadow: 0 0 0 2px rgba(105, 167, 255, 0.2);
@@ -459,6 +486,7 @@ export default {
   margin-bottom: 1rem;
   position: relative;
 }
+
 .card .remove-btn {
   position: absolute;
   top: 8px;
@@ -470,6 +498,7 @@ export default {
   font-size: 1.2rem;
   transition: color 0.2s ease;
 }
+
 .card .remove-btn:hover {
   color: #ff4d4f;
 }
@@ -489,6 +518,7 @@ export default {
   transition: all 0.2s ease;
   background-color: #fff;
 }
+
 .add-button:hover {
   background-color: #69a7ff;
   color: #ffffff;
@@ -510,6 +540,7 @@ export default {
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .submit-btn:hover {
   background-color: #578deb;
   box-shadow: 0 3px 8px rgba(105, 167, 255, 0.2);
@@ -518,7 +549,8 @@ export default {
 /* 响应式 */
 @media (max-width: 600px) {
   .card {
-    grid-template-columns: 1fr; /* 小屏时单列 */
+    grid-template-columns: 1fr;
+    /* 小屏时单列 */
   }
 }
 </style>

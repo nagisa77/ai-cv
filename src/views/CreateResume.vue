@@ -1,55 +1,95 @@
-<!-- src/views/CreateResume.vue -->
 <template>
   <div class="app">
-    <ChatComponent @update-resume="handleUpdateResume" />
-    <CVComponent :resumeData="resumeData" />
+    <!-- Chat 部分 -->
+    <ChatComponent 
+      :modules="chatModules"
+      @update-resume="handleUpdateResume"
+      :currentSelectedTitle="currentSelectedTitle"
+    />
+    <!-- CV 部分 -->
+    <CVComponent 
+      :highlightTitle="currentSelectedTitle" 
+      @selected-module-changed="handleSelectedModuleChanged"
+    />
   </div>
 </template>
 
 <script>
 import ChatComponent from '@/components/ChatComponent.vue'
 import CVComponent from '@/components/CVComponent.vue'
+import metadataInstance from '@/models/metadata_model.js'
 
 export default {
   name: 'CreateResume',
-  data() {
-    return {
-      resumeData: {
-        name: "",
-        university: "",
-        education: [],
-        work: [],
-        summary: ""
-      }
-    }
-  },
   components: {
     ChatComponent,
     CVComponent
   },
-  created() {
-    // 如果你是用 localStorage 来传递数据，可以在这里读取
-    const formDataStr = localStorage.getItem('resumeFormData')
-    if (formDataStr) {
-      try {
-        const formData = JSON.parse(formDataStr)
-        // 根据你自己的需求将 formData 合并到 resumeData
-        // 比如：
-        this.resumeData.name = formData.name || ''
-        // 也可能要把 educationList、workList、projectList 等合并到 resumeData 里
-      } catch (error) {
-        console.error('解析简历表单数据出错', error)
-      }
+  data() {
+    return {
+      // 当前正在讨论的标题，用于在 CV 中高亮
+      currentSelectedTitle: ''
+    }
+  },
+  computed: {
+    /**
+     * 动态生成聊天模块 tabs
+     * （依然从 metadata_model 中取数据，自动生成教育/工作/项目等标签）
+     */
+    chatModules() {
+      const result = []
+
+      // 1) 遍历教育经历
+      const educationList = metadataInstance.contentForType('education') || []
+      educationList.forEach((edu, index) => {
+        const eduTitle = edu.title || `教育经历-${index + 1}`
+        result.push({
+          type: 'education',
+          title: eduTitle
+        })
+      })
+
+      // 2) 遍历工作经历
+      const workList = metadataInstance.contentForType('workExperience') || []
+      workList.forEach((work, index) => {
+        const workTitle = work.title || `工作经历-${index + 1}`
+        result.push({
+          type: 'workExperience',
+          title: workTitle
+        })
+      })
+
+      // 3) 遍历项目经历
+      const projectList = metadataInstance.contentForType('projectExperience') || []
+      projectList.forEach((proj, index) => {
+        const projTitle = proj.title || `项目经历-${index + 1}`
+        result.push({
+          type: 'projectExperience',
+          title: projTitle
+        })
+      })
+
+      return result
     }
   },
   methods: {
-    handleUpdateResume(newResumeData) {
-      console.log('newResumeData', JSON.stringify(newResumeData))
-      this.resumeData = {
-        ...this.resumeData,
-        ...newResumeData.resumeData
-      }
-      console.log('简历已更新：', this.resumeData)
+    /**
+     * 当 ChatComponent 得到 GPT 返回的简历 JSON 时
+     * 会通过 update-resume 向父组件发射
+     */
+    handleUpdateResume(newMetaData) {
+      console.log('handleUpdateResume newMetaData', newMetaData)
+      // 根据新数据更新 metadata 模型
+      metadataInstance.setContentForTitle(newMetaData.resumeData.title, newMetaData.resumeData)
+    },
+
+    /**
+     * 接收从 ChatComponent 发射的 "selected-module-changed" 事件
+     * 更新当前选择的标题，以便在 CV 中高亮
+     */
+    handleSelectedModuleChanged(moduleItem) {
+      
+      this.currentSelectedTitle = moduleItem.title
     }
   }
 }

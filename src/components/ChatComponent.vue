@@ -1,5 +1,7 @@
 <template>
   <div class="chat-component">
+    <!-- （已删除模块选择区域） -->
+
     <!-- 消息区 -->
     <div class="messages-container" ref="messagesContainer">
       <div
@@ -37,14 +39,30 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits, nextTick } from 'vue'
+import { ref, computed, watch, defineEmits, nextTick, defineProps } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
 
-// 1. 获取 ChatGPT 模型的单例
-const chatgptInstance = ChatgptModel.getInstance()
+/**
+ * 父组件需传入：
+ * - modules: Array<{ type, title }>
+ * - currentSelectedTitle: string
+ */
+const props = defineProps({
+  modules: {
+    type: Array,
+    default: () => []
+  },
+  currentSelectedTitle: {
+    type: String,
+    default: ''
+  }
+})
 
-// 2. 通过 computed 引用 messages，实现实时更新
-const messages = computed(() => chatgptInstance.getMessages())
+// 只向父组件发射 “update-resume” 事件
+const emit = defineEmits(['update-resume'])
+
+// ChatGPT 实例 (单例)
+const chatgptInstance = ChatgptModel.getInstance()
 
 // 输入框内容
 const inputValue = ref('')
@@ -52,59 +70,75 @@ const inputValue = ref('')
 // 发送按钮图标
 const sendIcon = require('@/assets/icon/chatgpt-send-icon.svg')
 
-// 3. 定义要发出的事件
-const emit = defineEmits(['update-resume'])
-
-// 4. 引用 messagesContainer
+// 消息滚动容器
 const messagesContainer = ref(null)
 
-// 5. 发送消息的函数 —— 非 async，让响应式数据变化后触发界面更新
+/**
+ * 计算：根据 currentSelectedTitle，找到对应模块
+ * 如果找不到，则返回 { type: '', title: '' }
+ */
+const activeModule = computed(() => {
+  return (
+    props.modules.find((m) => m.title === props.currentSelectedTitle) ||
+    { type: '', title: '' }
+  )
+})
+
+/**
+ * 根据 activeModule 计算出对应的消息
+ */
+const messages = computed(() => {
+  const { type, title } = activeModule.value
+  if (!type || !title) return []
+  return chatgptInstance.getMessagesForTitle(type, title)
+})
+
+/**
+ * 发送消息
+ */
 function handleSendMessage() {
   const trimmedValue = inputValue.value.trim()
   if (!trimmedValue) return
 
-  // 调用模型的 sendMessage，会自动往 messages 数组里 push 新消息
-  chatgptInstance.sendMessage(trimmedValue)
+  const { type, title } = activeModule.value
+  chatgptInstance.sendMessage(type, title, trimmedValue)
 
   // 清空输入框
   inputValue.value = ''
 }
 
-// 6. 解析 GPT 消息中的 JSON 并提取 message 字段
+/**
+ * 解析 GPT 消息中的 JSON 并提取 message 字段
+ */
 function extractMessage(gptText) {
   try {
     const parsed = JSON.parse(gptText)
     return parsed.message || '(未找到 message 字段)'
   } catch (error) {
-    // 如果 GPT 返回的文本无法解析为 JSON，或者不符合预期
-    // 你可以选择降级处理，比如直接显示原文本
+    // 如果无法解析为 JSON，则直接显示原文本
     return gptText
   }
 }
 
-// 7. 监听 messages 的变化，一旦发现 GPT 发来新消息，就做进一步处理
+/**
+ * 监听 messages 变化，一旦 GPT 发来新消息，就向外发射 update-resume
+ */
 watch(
   () => messages.value,
-  async (newMessages) => { // 修改为 async 以使用 await
+  async (newMessages) => {
     if (!newMessages || newMessages.length === 0) return
 
     const lastMessage = newMessages[newMessages.length - 1]
-    // 判断是否来自 GPT
     if (lastMessage.sender === 'gpt') {
       try {
         const parsedData = JSON.parse(lastMessage.text)
-        console.log('解析到的 JSON 数据：', parsedData)
-        const message = parsedData.message
-        console.log('从 JSON 中获取的消息：', message)
-        
-        // 触发自定义事件，将 resumeData 发送给父组件
         emit('update-resume', parsedData.meta_data)
       } catch (e) {
-        console.error('GPT 返回的消息不是标准 JSON 或解析失败：', e)
+        console.error('GPT 返回消息不是标准 JSON 或解析失败：', e)
       }
     }
 
-    // 等待 DOM 更新后再滚动
+    // 等待 DOM 更新后再滚动到底部
     await nextTick()
     if (messagesContainer.value) {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
@@ -124,6 +158,7 @@ watch(
   justify-content: space-between;
 }
 
+/* 消息容器 */
 .messages-container {
   display: flex;
   flex-direction: column;
@@ -149,12 +184,13 @@ watch(
   margin-left: 20px;
 }
 
+/* 系统消息样式 */
 .message.system {
   padding-left: 20px;
   padding-right: 20px;
   opacity: 0.3;
   font-size: 10px;
-  max-width: none; /* 取消最大宽度限制 */
+  max-width: none;
 }
 
 /* 我 (me) 消息样式：右侧显示 */
@@ -166,6 +202,7 @@ watch(
   margin-right: 20px;
 }
 
+/* 输入区 */
 .input-area-container {
   display: flex;
   bottom: 0;
