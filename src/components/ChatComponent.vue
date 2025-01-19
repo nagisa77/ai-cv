@@ -11,19 +11,31 @@
 
     <!-- 消息区 -->
     <div class="messages-container" ref="messagesContainer">
-      <div
-        v-for="(message, index) in messages"
-        :key="index"
-        class="message"
-        :class="message.sender"
-      >
-        <!-- GPT 消息解析后只显示message字段 -->
-        <span v-if="message.sender === 'gpt'">
-          {{ extractMessage(message.text) }}
-        </span>
-        <span v-else>
-          {{ message.text }}
-        </span>
+      <!-- 使用 v-for 渲染所有消息 -->
+      <div v-for="(message, index) in messages" :key="index">
+        <!-- GPT 消息：头像 + 蓝框并列 -->
+        <template v-if="message.sender === 'gpt'">
+          <div class="gpt-message-container">
+            <img :src="gptMessageIcon" alt="ChatGPT 头像" class="chatgpt-message-icon" />
+            <div class="message gpt">
+              <span>{{ extractMessage(message.text) }}</span>
+            </div>
+          </div>
+        </template>
+
+        <!-- 用户消息（me） -->
+        <template v-else-if="message.sender === 'me'">
+          <div class="message me">
+            <span>{{ message.text }}</span>
+          </div>
+        </template>
+
+        <!-- 系统消息（system） -->
+        <template v-else-if="message.sender === 'system'">
+          <div class="message system">
+            <span>{{ message.text }}</span>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -92,6 +104,9 @@ const inputValue = ref('')
 
 // 发送按钮图标
 const sendIcon = require('@/assets/icon/chatgpt-send-icon.svg')
+
+// GPT 消息头像
+const gptMessageIcon = require('@/assets/icon/logo1.png')
 
 // 消息滚动容器
 const messagesContainer = ref(null)
@@ -191,36 +206,47 @@ watch(
   padding-top: 20px;
 }
 
-.message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  max-width: 300px;
-  word-wrap: break-word;
-}
-
-.message.gpt {
-  background-color: #e8f0fe;
-  text-align: left;
-  margin-right: auto;
+/* GPT消息容器：头像与消息并列 */
+.gpt-message-container {
+  display: flex;
+  align-items: flex-start;
   margin-top: 30px;
   margin-left: 20px;
 }
 
-.message.system {
-  padding-left: 20px;
-  padding-right: 20px;
-  opacity: 0.3;
-  font-size: 10px;
-  max-width: none;
+/* GPT 蓝框消息 */
+.message.gpt {
+  background-color: #e8f0fe;
+  text-align: left;
+  border-radius: 5px;
+  max-width: 300px;
+  word-wrap: break-word;
+  padding: 10px;
+  margin-bottom: 10px; /* 仅留底部间距，去掉原来的 margin-left */
 }
 
+/* 用户(我)的消息 */
 .message.me {
   background-color: #f1f1f1;
   text-align: right;
   margin-left: auto;
   margin-top: 30px;
   margin-right: 20px;
+  border-radius: 5px;
+  max-width: 300px;
+  word-wrap: break-word;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* 系统消息 */
+.message.system {
+  opacity: 0.3;
+  font-size: 10px;
+  max-width: none;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 10px;
 }
 
 .input-area-container {
@@ -271,5 +297,14 @@ watch(
   filter: brightness(0) invert(1);
   width: 20px;
   height: 20px;
+}
+
+/* GPT 消息头像样式 */
+.chatgpt-message-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  /* 让头像对齐消息的顶部 */
+  margin-top: 2px;
 }
 </style>
