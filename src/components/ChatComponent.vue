@@ -206,6 +206,7 @@ function handleOk(choiceMessage) {
     const parsed = JSON.parse(choiceMessage.text)
     // 如果解析成功，拿到 meta_data，发射事件
     emit('update-resume', parsed.meta_data)
+    emit('close-chat')
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
   }

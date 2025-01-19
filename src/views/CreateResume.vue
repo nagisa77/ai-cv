@@ -3,11 +3,12 @@
     <!-- 左侧 -->
     <div class="left-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
-      <template v-if="currentSelectedTitle">
+      <template v-if="currentSelectedTitle != ''">
         <ChatComponent 
           :modules="chatModules"
           @update-resume="handleUpdateResume"
           :currentSelectedTitle="currentSelectedTitle"
+          @close-chat="handleCloseChat"
         />
       </template>
       <!-- 否则，显示我们自定义的“选择模块”组件 -->
@@ -105,7 +106,15 @@ export default {
     handleSelectedModuleChanged(moduleItem) {
       
       this.currentSelectedTitle = moduleItem.title
-    }
+    },
+
+    /**
+     * 接收从 ChatComponent 发射的 "close-chat" 事件
+     * 关闭当前正在讨论的标题
+     */
+    handleCloseChat() {
+      this.currentSelectedTitle = ''
+    } 
   }
 }
 </script>
