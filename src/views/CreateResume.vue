@@ -1,12 +1,25 @@
 <template>
   <div class="app">
-    <!-- Chat 部分 -->
-    <ChatComponent 
-      :modules="chatModules"
-      @update-resume="handleUpdateResume"
-      :currentSelectedTitle="currentSelectedTitle"
-    />
-    <!-- CV 部分 -->
+    <!-- 左侧 -->
+    <div class="left-container">
+      <!-- 如果已选中某个title，就显示ChatComponent -->
+      <template v-if="currentSelectedTitle">
+        <ChatComponent 
+          :modules="chatModules"
+          @update-resume="handleUpdateResume"
+          :currentSelectedTitle="currentSelectedTitle"
+        />
+      </template>
+      <!-- 否则，显示我们自定义的“选择模块”组件 -->
+      <template v-else>
+        <SelectModuleComponent
+          :chatModules="chatModules"
+          @selected-module-changed="handleSelectedModuleChanged"
+        />
+      </template>
+    </div>
+
+    <!-- 右侧 -->
     <CVComponent 
       :highlightTitle="currentSelectedTitle" 
       @selected-module-changed="handleSelectedModuleChanged"
@@ -17,13 +30,15 @@
 <script>
 import ChatComponent from '@/components/ChatComponent.vue'
 import CVComponent from '@/components/CVComponent.vue'
+import SelectModuleComponent from '@/components/SelectModuleComponent.vue' // <-- 新增引入
 import metadataInstance from '@/models/metadata_model.js'
 
 export default {
   name: 'CreateResume',
   components: {
     ChatComponent,
-    CVComponent
+    CVComponent,
+    SelectModuleComponent // <-- 注册
   },
   data() {
     return {
