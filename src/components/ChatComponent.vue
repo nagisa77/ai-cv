@@ -213,11 +213,25 @@ function handleOk(choiceMessage) {
 }
 
 /**
- * 用户点击“我觉得还不够”时调用，留给你自行实现
+ * 用户点击“我觉得还不够”时调用
  */
-function handleNotEnough() {
-  // TODO: 用户点击“我觉得还不够”后的逻辑留待你实现
-  console.log('用户觉得不够，待实现')
+ function handleNotEnough() {
+  const predefinedMessage = '我认为总结还不够，请继续对话'
+  
+  const { type, title } = activeModule.value
+  if (!type || !title) {
+    console.error('当前未选择有效的模块')
+    return
+  }
+
+  // 发送预定义消息到 GPT
+  chatgptInstance.sendMessage(type, title, predefinedMessage)
+  
+  // 可选：清空输入框（如果需要）
+  inputValue.value = ''
+
+  // 可选：提示用户消息已发送
+  console.log('已发送预定义消息给GPT')
 }
 </script>
 
