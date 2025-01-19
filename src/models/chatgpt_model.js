@@ -103,11 +103,13 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
   "meta_data": {
       "resumeData": ${metadata_model.formatForType(type)}  
   },
+  "is_enough": true
 }
 2. 除了 JSON 数据外，请不要包含其它内容（不要携带前后缀等）。  
 3. message 字段是给用户看的提示信息, 可以是引导用户继续介绍自己的文案, 注意引用上文信息，你就像循循善诱的老师一样，引导用户继续介绍自己的信息。
 4. 发挥想象力，尽量详尽，体现面试者价值，追问也可以详尽、发散
 5. 以下是对于回复的meta_data的描述: ${metadata_model.metaDataDescribeForType(type)}
+6. is_enough 字段是代表AI，觉得信息是否已经足够，如果is enough为true，则代表AI觉得信息已经足够, 之后我的代码逻辑会询问用户是否渲染meta_data. 用户对于is enough为数的情况，其实可以有两种反应，第一种反应是可以接受接受就会渲染另外一种是可以不接受，就是觉得不够的意思的话，我会用非常明确的语言告诉AI用户还觉得不满意，因此需要收集更具体更详尽更准确更为完善的信息才能再次把is enough弄为true.另外当用户自己想要小结对话内容到简历中，如果用户有明确的意向，it's in love必须在下次置为false，然后我需要重新收集信息，直到is_enough为true，然后用户可以小结对话内容到简历中。当然如果用户有明确的意向向AI要求总结简历或者小结的意思，或者希望结束对话,那么下一次的is enough必须为true 
 
 -------------------
 【注意事项】
@@ -127,6 +129,10 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
     function getMessagesForTitle(type, title) {
       initConversation(type, title)
       return data.conversations[type][title]
+    }
+
+    function addMessage(type, title, message) {
+      data.conversations[type][title].push(message)
     }
 
     async function sendMessage(type, title, userText) {
@@ -152,7 +158,6 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
         return { role, content: msg.text }
       })
     }
-
 
     function setApiKey(key) {
       userApiKey = key
@@ -197,6 +202,7 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       getMessagesForTitle,
       sendMessage,
       setApiKey,
+      addMessage,
     }
   }
 

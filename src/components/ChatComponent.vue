@@ -36,6 +36,17 @@
             <span>{{ message.text }}</span>
           </div>
         </template>
+
+        <!-- 新增：选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
+        <template v-else-if="message.sender === 'choice'">
+          <div class="message choice">
+            <span>GPT 觉得已经够了，你是否满意？</span>
+            <div class="choice-buttons">
+              <button @click="handleOk(message)">OK</button>
+              <button @click="handleNotEnough">我觉得还不够</button>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -154,7 +165,8 @@ function extractMessage(gptText) {
 }
 
 /**
- * 监听 messages 变化，一旦 GPT 发来新消息，就向外发射 update-resume
+ * 监听 messages 变化，一旦 GPT 发来新消息，就检查 is_enough 逻辑；
+ * 如果 is_enough=true，则插入一个“choice”类型的消息，让用户选择
  */
 watch(
   () => messages.value,
@@ -165,7 +177,14 @@ watch(
     if (lastMessage.sender === 'gpt') {
       try {
         const parsedData = JSON.parse(lastMessage.text)
-        emit('update-resume', parsedData.meta_data)
+        if (parsedData.is_enough) {
+          // 新增：往消息列表里再插入一个 choice 消息（和聊天内容同级）
+          const { type, title } = activeModule.value
+          chatgptInstance.addMessage(type, title, {
+            sender: 'choice',
+            text: JSON.stringify({ meta_data: parsedData.meta_data })
+          })
+        }
       } catch (e) {
         console.error('GPT 返回消息不是标准 JSON 或解析失败：', e)
       }
@@ -178,6 +197,27 @@ watch(
   },
   { deep: true }
 )
+
+/**
+ * 用户点击“OK”时调用
+ */
+function handleOk(choiceMessage) {
+  try {
+    const parsed = JSON.parse(choiceMessage.text)
+    // 如果解析成功，拿到 meta_data，发射事件
+    emit('update-resume', parsed.meta_data)
+  } catch (e) {
+    console.error('choiceMessage.text 不是 JSON', e)
+  }
+}
+
+/**
+ * 用户点击“我觉得还不够”时调用，留给你自行实现
+ */
+function handleNotEnough() {
+  // TODO: 用户点击“我觉得还不够”后的逻辑留待你实现
+  console.log('用户觉得不够，待实现')
+}
 </script>
 
 <style scoped>
@@ -247,6 +287,33 @@ watch(
   padding-left: 20px;
   padding-right: 20px;
   margin-bottom: 10px;
+}
+
+/* 新增：choice 消息布局 */
+.message.choice {
+  background-color: #fff9e6;
+  color: #333;
+  margin-left: 20px;
+  margin-top: 30px;
+  border-radius: 5px;
+  max-width: 300px;
+  word-wrap: break-word;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* 放置选择按钮的区块 */
+.choice-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.choice-buttons button {
+  padding: 6px 12px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }
 
 .input-area-container {
