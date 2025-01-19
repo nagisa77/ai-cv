@@ -26,7 +26,8 @@
               v-for="(point, i2) in edu.content.content"
               :key="i2"
             >
-              {{ point }}
+              <span class="bullet-point">{{ point.bullet_point }}:</span>
+              <span class="bullet-content">{{ point.content }}</span>
             </li>
           </ul>
         </div>
@@ -52,7 +53,8 @@
               v-for="(point, i2) in work.content.content"
               :key="i2"
             >
-              {{ point }}
+              <span class="bullet-point">{{ point.bullet_point }}:</span>
+              <span class="bullet-content">{{ point.content }}</span>
             </li>
           </ul>
         </div>
@@ -78,7 +80,8 @@
               v-for="(point, i2) in project.content.content"
               :key="i2"
             >
-              {{ point }}
+              <span class="bullet-point">{{ point.bullet_point }}:</span>
+              <span class="bullet-content">{{ point.content }}</span>
             </li>
           </ul>
         </div>
@@ -234,4 +237,13 @@ export default {
   background-color: #a4bdea; /* 浅蓝色高亮 */
   border-radius: 4px;
 }
+
+.bullet-point {
+  font-weight: bold;
+}
+
+.bullet-content {
+  margin-left: 4px;
+}
+
 </style>

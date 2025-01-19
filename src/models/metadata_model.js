@@ -26,22 +26,22 @@ class MetadataModel {
     switch (type) {
       case 'education':
         return `
-        - meta_data 中的 title 是用户的教育经历标题，例如学校名称和学位。
-        - meta_data 中的 content 是AI需要通过对话，总结出的教育经历内容（亮点），需总结为2-4点，突出学习成果和相关课程，或其他成就。
+        - meta_data 中的 title 是用户的教育经历标题， 不做改动。
+        - meta_data 中的 content 是AI需要通过对话，总结出的教育经历内容（亮点），需总结为2-4点，突出学习成果和相关课程, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是用户的入学时间。
         - meta_data 中的 to_time 是用户的毕业时间。
         `;
       case 'workExperience':
         return `
-        - meta_data 中的 title 是用户的工作经历标题，例如公司名称和职位。
-        - meta_data 中的 content 是AI需要通过对话，总结出的工作经历内容（亮点），需总结为2-4点，强调职责、成就和量化成果。
+        - meta_data 中的 title 是用户的工作经历标题, 不做改动。
+        - meta_data 中的 content 是AI需要通过对话，总结出的工作经历内容（亮点），需总结为2-4点，强调职责、成就和量化成果, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是用户的入职时间。
         - meta_data 中的 to_time 是用户的离职时间。
         `;
       case 'projectExperience':
         return `
-        - meta_data 中的 title 是用户的项目经历标题，例如项目名称。
-        - meta_data 中的 content 是AI需要通过对话，总结出的项目经历内容（亮点），需总结为2-4点，突出项目目标、所用技术和取得的成果。
+        - meta_data 中的 title 是用户的项目经历标题，不做改动。
+        - meta_data 中的 content 是AI需要通过对话，总结出的项目经历内容（亮点），需总结为2-4点，突出项目目标、所用技术和取得的成果, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是项目开始时间。
         - meta_data 中的 to_time 是项目结束时间。
         `;
@@ -72,9 +72,18 @@ class MetadataModel {
           "from_time": "",
           "to_time": "",
           "content": [
-            "ai 总结出的亮点内容1",
-            "ai 总结出的亮点内容2",
-            "ai 总结出的亮点内容3",
+            {
+              "bullet_point": "总结小标题1",
+              "content": "总结内容1"
+            },
+            {
+              "bullet_point": "总结小标题2",
+              "content": "总结内容2"
+            },
+            {
+              "bullet_point": "总结小标题3",
+              "content": "总结内容3"
+            },
           ],
         });
       case 'personalInfo':
