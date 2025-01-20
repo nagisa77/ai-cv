@@ -9,18 +9,37 @@
       <div class="block-title">基础信息</div>
       <div class="form-line">
         <div class="form-group">
-          <input type="text" id="name" class="form-input" placeholder=" " required v-model="basicInfo.name" />
+          <input
+            type="text"
+            id="name"
+            class="form-input"
+            placeholder=" "
+            required
+            v-model="basicInfo.name"
+          />
           <label class="form-label" for="name">姓名</label>
         </div>
 
         <div class="form-group">
-          <input type="tel" id="phone" class="form-input" placeholder=" " v-model="basicInfo.phone" />
+          <input
+            type="tel"
+            id="phone"
+            class="form-input"
+            placeholder=" "
+            v-model="basicInfo.phone"
+          />
           <label class="form-label" for="phone">手机号 (选填)</label>
         </div>
       </div>
 
       <div class="form-group">
-        <input type="email" id="email" class="form-input" placeholder=" " v-model="basicInfo.email" />
+        <input
+          type="email"
+          id="email"
+          class="form-input"
+          placeholder=" "
+          v-model="basicInfo.email"
+        />
         <label class="form-label" for="email">邮箱 (选填)</label>
       </div>
 
@@ -35,35 +54,74 @@
         >
           <div class="card-header">
             <div class="card-title">教育经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click.stop="removeCard('educationList', index)">
+            <button
+              class="remove-btn"
+              type="button"
+              @click.stop="removeCard('educationList', index)"
+            >
               ×
             </button>
           </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="edu.school" required />
+            <input
+              type="text"
+              class="form-input"
+              placeholder=" "
+              v-model="edu.school"
+              required
+            />
             <label class="form-label">学校名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.time" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="edu.time"
+                required
+              />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.major" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="edu.major"
+                required
+              />
               <label class="form-label">专业</label>
             </div>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.degree" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="edu.degree"
+                required
+              />
               <label class="form-label">学历</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.gpa" />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="edu.gpa"
+              />
               <label class="form-label">GPA (选填)</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.city" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="edu.city"
+                required
+              />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -86,25 +144,53 @@
         >
           <div class="card-header">
             <div class="card-title">工作经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click.stop="removeCard('workList', index)">
+            <button
+              class="remove-btn"
+              type="button"
+              @click.stop="removeCard('workList', index)"
+            >
               ×
             </button>
           </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="work.company" required />
+            <input
+              type="text"
+              class="form-input"
+              placeholder=" "
+              v-model="work.company"
+              required
+            />
             <label class="form-label">公司名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.time" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="work.time"
+                required
+              />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.title" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="work.title"
+                required
+              />
               <label class="form-label">职位</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.city" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="work.city"
+                required
+              />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -127,21 +213,43 @@
         >
           <div class="card-header">
             <div class="card-title">项目经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click.stop="removeCard('projectList', index)">
+            <button
+              class="remove-btn"
+              type="button"
+              @click.stop="removeCard('projectList', index)"
+            >
               ×
             </button>
           </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="proj.projectName" required />
+            <input
+              type="text"
+              class="form-input"
+              placeholder=" "
+              v-model="proj.projectName"
+              required
+            />
             <label class="form-label">项目名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="proj.time" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="proj.time"
+                required
+              />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="proj.role" required />
+              <input
+                type="text"
+                class="form-input"
+                placeholder=" "
+                v-model="proj.role"
+                required
+              />
               <label class="form-label">职位/角色</label>
             </div>
           </div>
@@ -158,14 +266,41 @@
         开始创建我的简历
       </button>
     </div>
+
+    <!-- 预览窗格 -->
+    <div class="preview-pane">
+      <div v-if="selectedModule.type">
+        <component
+          :is="getComponent(selectedModule.type)"
+          :educationList="mappedEducationList"
+          :workList="mappedWorkList"
+          :projectList="mappedProjectList"
+          :personalInfo="basicInfo"
+          :personalSummary="personalSummary"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import EducationSection from '@/components/cv_components/EducationSection.vue'
+import WorkSection from '@/components/cv_components/WorkSection.vue'
+import ProjectSection from '@/components/cv_components/ProjectSection.vue'
+import PersonalInfo from '@/components/cv_components/PersonalInfo.vue'
+import SummarySection from '@/components/cv_components/SummarySection.vue'
+
 import metadataInstance from '@/models/metadata_model.js' // 这行是你需要新增的导入
 
 export default {
   name: 'ResumeForm',
+  components: {
+    EducationSection,
+    WorkSection,
+    ProjectSection,
+    PersonalInfo,
+    SummarySection
+  },
   data() {
     return {
       basicInfo: {
@@ -197,7 +332,83 @@ export default {
           time: '2021.02 - 2021.04',
           role: '项目经理'
         }
-      ]
+      ],
+      personalSummary: '', // 如果有个人总结，可以在表单中添加相应的输入项
+      selectedModule: {
+        type: '',
+        title: ''
+      }
+    }
+  },
+  computed: {
+    // 映射教育经历数据
+    mappedEducationList() {
+      return this.educationList.map(edu => {
+        const [from_time, to_time] = edu.time.split(' - ')
+        return {
+          title: edu.school,
+          content: {
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            content: [
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+            ]
+          }
+        }
+      })
+    },
+    // 映射工作经历数据
+    mappedWorkList() {
+      return this.workList.map(work => {
+        const [from_time, to_time] = work.time.split(' - ')
+        return {
+          title: work.company,
+          content: {
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            content: [
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+            ]
+          }
+        }
+      })
+    },
+    // 映射项目经历数据
+    mappedProjectList() {
+      return this.projectList.map(proj => {
+        const [from_time, to_time] = proj.time.split(' - ')
+        return {
+          title: proj.projectName,
+          content: {
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            content: [
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+              {
+                "bullet_point": "xxxx",
+                "content": "xxxx"
+              },
+            ]
+          }
+        }
+      })
     }
   },
   methods: {
@@ -229,11 +440,7 @@ export default {
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
             // 初始化一个空数组或占位内容，后续可由 AI 进行亮点总结
-            content: [
-              // "在校期间积极参与各类社团活动，锻炼了组织能力。",
-              // "获得校内奖学金，表彰学术成绩优秀。",
-              // "参与多个科研项目，积累了丰富的实践经验。",
-            ]
+            content: []
           },
           title // 同步作为title索引
         )
@@ -249,11 +456,7 @@ export default {
             title,
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
-            content: [
-              // "在项目中成功领导团队，提升了工作效率。",
-              // "通过优化流程，减少了30%的项目交付时间。",
-              // "成功实施新技术，提升了产品质量和客户满意度。",
-            ]
+            content: []
           },
           title
         )
@@ -269,11 +472,7 @@ export default {
             title,
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
-            content: [
-              // "成功完成项目，提升了团队协作效率。",
-              // "在项目中引入新技术，显著提高了工作质量。",
-              // "负责项目管理，确保按时交付并满足客户需求。",
-            ]
+            content: []
           },
           title
         )
@@ -286,7 +485,8 @@ export default {
         email,
         educationList,
         workList,
-        projectList
+        projectList,
+        personalSummary: this.personalSummary
       }
       localStorage.setItem('resumeFormData', JSON.stringify(formData))
 
@@ -333,6 +533,25 @@ export default {
     // ================== 点击卡片处理 ==================
     handleCardClick(type, name) {
       console.log(`Currently editing ${type}: ${name}`)
+      this.selectedModule = { type, title: name }
+    },
+
+    // 动态获取组件
+    getComponent(type) {
+      switch (type) {
+        case 'educationExperience':
+          return 'EducationSection'
+        case 'workExperience':
+          return 'WorkSection'
+        case 'projectExperience':
+          return 'ProjectSection'
+        case 'personalInfo':
+          return 'PersonalInfo'
+        case 'personalSummary':
+          return 'SummarySection'
+        default:
+          return null
+      }
     }
   }
 }
@@ -342,32 +561,66 @@ export default {
 .container {
   background-color: var(--color-white);
   margin-left: 100px;
-  margin-top: 60px;
+  margin-top: 100px;
   padding-bottom: 60px;
   max-width: 600px;
 }
 
-.title {
-  margin-top: 100px;
+.preview-pane {
+  position: fixed;
+  top: 100px;
+  right: 100px;
+  width: 400px;
+  overflow-y: auto;
+}
+
+.preview-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.no-selection {
+  text-align: center;
+  color: #888;
+  margin-top: 50px;
+}
+
+@media (max-width: 1200px) {
+  .scroll-container {
+    flex-direction: column;
+  }
+
+  .preview-pane {
+    border-left: none;
+    border-top: 1px solid #ccc;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Existing styles remain unchanged */
+.container .title {
+  margin-top: 20px;
   font-size: 24px;
   font-weight: bold;
   color: var(--color-black);
 }
 
-.subtitle {
+.container .subtitle {
   font-size: 14px;
   color: var(--color-black);
   opacity: 0.5;
 }
 
-.form-group {
+.container .form-group {
   position: relative;
   width: 100%;
   height: 50px;
   margin-bottom: 10px;
 }
 
-.form-input {
+.container .form-input {
   width: calc(100% - 24px);
   height: calc(100% - 12px);
   padding: 12px 12px 0 12px;
@@ -377,16 +630,16 @@ export default {
   display: block;
 }
 
-.highlight {
+.container .highlight {
   color: var(--color-primary);
 }
 
-.form-input:focus {
+.container .form-input:focus {
   outline: none;
   border: 2px solid var(--color-primary);
 }
 
-.form-label {
+.container .form-label {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -397,25 +650,26 @@ export default {
   transition: all 0.3s ease;
 }
 
-.form-input:focus+.form-label,
-.form-input:not(:placeholder-shown)+.form-label {
+.container .form-input:focus + .form-label,
+.container .form-input:not(:placeholder-shown) + .form-label {
   top: 10px;
   left: 12px;
   font-size: 10px;
 }
 
-.form-input:focus+.form-label {
+.container .form-input:focus + .form-label {
   color: var(--color-primary);
 }
 
-.card {
+.container .card {
   position: relative;
   border-radius: 10px;
   margin-bottom: 15px;
   cursor: pointer;
+  transition: box-shadow 0.3s ease;
 }
 
-.remove-btn {
+.container .remove-btn {
   font-size: 12px;
   cursor: pointer;
   border: none;
@@ -425,7 +679,7 @@ export default {
   right: -3px;
 }
 
-.add-button {
+.container .add-button {
   color: var(--color-primary);
   background-color: transparent;
   border: none;
@@ -435,7 +689,7 @@ export default {
   font-size: 14px;
 }
 
-.submit-btn {
+.container .submit-btn {
   width: 100%;
   background-color: var(--color-primary);
   color: var(--color-secondary);
@@ -448,27 +702,27 @@ export default {
   margin-top: 30px;
 }
 
-.submit-btn:hover {
+.container .submit-btn:hover {
   background-color: var(--color-primary-hover);
 }
 
-.form-line {
+.container .form-line {
   display: flex;
   gap: 10px;
 }
 
-.block-title {
+.container .block-title {
   font-size: 15px;
   margin-bottom: 10px;
   margin-top: 20px;
 }
 
-.card-title {
+.container .card-title {
   font-size: 12px;
   opacity: 0.5;
 }
 
-.card-header {
+.container .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
