@@ -10,7 +10,7 @@
     </header>
 
     <!-- 路由出口：这里会动态展示 Home.vue 或 CreateResume.vue -->
-    <router-view />
+    <router-view class="router-view"/>
   </div>
 </template>
 
@@ -28,11 +28,20 @@ header {
   display: flex;
   justify-content: flex-start; /* 从左向右排 */
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .header-link {
   margin-left: 20px;
   text-decoration: none;
   color: #333;
+}
+
+.router-view {
+  transform: translateY(60px);
 }
 </style>

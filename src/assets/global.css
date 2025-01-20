@@ -1,7 +1,14 @@
+:root {
+  --color-primary: #5aa1ec;
+  --color-secondary: #f0f2f5;
+  --color-primary-hover: #4a8dd0;
+  --color-black: #000000;
+  --color-gray: #dddddd;
+}
+
 html, body {
   font-family: 'Arial', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* 禁止外层滚动 */
 }
