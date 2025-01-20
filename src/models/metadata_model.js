@@ -1,5 +1,5 @@
 // metadata_model.js
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 class MetadataModel {
   constructor() {
@@ -11,13 +11,20 @@ class MetadataModel {
      * 重点：使用 Vue.observable() 包装 data
      * 使得此对象具备 Vue 的响应式检测能力
      */
-    this.data = reactive({
+    // 尝试从 localStorage 加载数据
+    const storedData = localStorage.getItem('metadata');
+    this.data = reactive(storedData ? JSON.parse(storedData) : {
       education: [],
       workExperience: [],
       projectExperience: [],
       personalInfo: {},
       personalSummary: ''
     });
+
+    // 监听数据变化并保存到 localStorage
+    watch(this.data, (newData) => {
+      localStorage.setItem('metadata', JSON.stringify(newData));
+    }, { deep: true });
 
     MetadataModel.instance = this;
   }
@@ -201,6 +208,20 @@ class MetadataModel {
     }
   }
 
+  clearMetadata() {
+    // Clear the localStorage
+    localStorage.removeItem('metadata');
+
+    // Reset the data to its initial state
+    this.data.education = [];
+    this.data.workExperience = [];
+    this.data.projectExperience = [];
+    this.data.personalInfo = {};
+    this.data.personalSummary = '';
+
+    // Optionally, you could log this or return a confirmation
+    console.log("Metadata cleared and state reset to default.");
+  }
 }
 
 // 只实例化一次

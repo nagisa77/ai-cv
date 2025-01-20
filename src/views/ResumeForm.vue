@@ -169,6 +169,9 @@ import PersonalInfo from '@/components/cv_components/PersonalInfo.vue'
 import SummarySection from '@/components/cv_components/SummarySection.vue'
 
 import metadataInstance from '@/models/metadata_model.js' // 这行是你需要新增的导入
+import ChatgptModel from '@/models/chatgpt_model.js'
+
+const chatgptInstance = ChatgptModel.getInstance()
 
 export default {
   name: 'ResumeForm',
@@ -297,6 +300,9 @@ export default {
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
+
+      metadataInstance.clearMetadata()
+      chatgptInstance.clearConversations()
 
       // 2. 写入 metadata_model
       // ---- 2.1 填写 personalInfo ----

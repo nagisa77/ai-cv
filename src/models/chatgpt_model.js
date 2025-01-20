@@ -1,7 +1,7 @@
 // chatgpt_model.js
 
 import axios from 'axios'
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 
 const ChatgptModel = (function () {
@@ -14,6 +14,25 @@ const ChatgptModel = (function () {
     const data = reactive({
       conversations: {}
     })
+
+    // 尝试从 localStorage 加载聊天记录
+    const storedConversations = localStorage.getItem('conversations')
+    if (storedConversations) {
+      try {
+        Object.assign(data.conversations, JSON.parse(storedConversations))
+      } catch (error) {
+        console.error('加载聊天记录时出错:', error)
+      }
+    }
+
+    // 监听 conversations 的变化并保存到 localStorage
+    watch(
+      () => data.conversations,
+      (newConversations) => {
+        localStorage.setItem('conversations', JSON.stringify(newConversations))
+      },
+      { deep: true }
+    )
 
     function initConversation(type, title) {
       if (!data.conversations[type]) {
@@ -88,7 +107,7 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
 5. 以下是对于回复的meta_data的描述: ${metadata_model.metaDataDescribeForType(type)}
 6. is_enough 字段是代表AI，觉得信息是否已经足够，如果is enough为true，则代表AI觉得信息已经足够, 之后我的代码逻辑会询问用户是否渲染meta_data. 用户对于is enough为数的情况，其实可以有两种反应，第一种反应是可以接受接受就会渲染另外一种是可以不接受，就是觉得不够的意思的话，我会用非常明确的语言告诉AI用户还觉得不满意，因此需要收集更具体更详尽更准确更为完善的信息才能再次把is enough弄为true.另外当用户自己想要小结对话内容到简历中，如果用户有明确的意向，it's in love必须在下次置为false，然后我需要重新收集信息，直到is_enough为true，然后用户可以小结对话内容到简历中。当然如果用户有明确的意向向AI要求总结简历或者小结的意思，或者希望结束对话,那么下一次的is enough必须为true 
 
-`,
+    `,
             sender: 'system',
           },
         ]
@@ -132,6 +151,10 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       userApiKey = key
     }
 
+    function clearConversations() {
+      data.conversations = {} 
+    }
+
     // 核心: 调用 GPT 接口时，使用 userApiKey (由用户输入)
     async function fetchGptResponse(type, title, userText) {
       const apiUrl = 'https://api.openai.com/v1/chat/completions'
@@ -172,6 +195,7 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       sendMessage,
       setApiKey,
       addMessage,
+      clearConversations,
     }
   }
 
