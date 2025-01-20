@@ -27,10 +27,15 @@
       <!-- 教育经历 -->
       <div class="block-title">教育经历</div>
       <div id="education-experience" class="education-list">
-        <div class="card" v-for="(edu, index) in educationList" :key="index">
+        <div
+          class="card"
+          v-for="(edu, index) in educationList"
+          :key="index"
+          @click="handleCardClick('educationExperience', edu.school)"
+        >
           <div class="card-header">
             <div class="card-title">教育经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click="removeCard('educationList', index)">
+            <button class="remove-btn" type="button" @click.stop="removeCard('educationList', index)">
               ×
             </button>
           </div>
@@ -73,10 +78,15 @@
       <!-- 工作经历 -->
       <div class="block-title">工作经历</div>
       <div id="work-experience" class="experience-list">
-        <div class="card" v-for="(work, index) in workList" :key="index">
+        <div
+          class="card"
+          v-for="(work, index) in workList"
+          :key="index"
+          @click="handleCardClick('workExperience', work.company)"
+        >
           <div class="card-header">
             <div class="card-title">工作经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click="removeCard('workList', index)">
+            <button class="remove-btn" type="button" @click.stop="removeCard('workList', index)">
               ×
             </button>
           </div>
@@ -109,10 +119,15 @@
       <!-- 项目经历 -->
       <div class="block-title">项目经历</div>
       <div id="project-experience" class="project-list">
-        <div class="card" v-for="(proj, index) in projectList" :key="index">
+        <div
+          class="card"
+          v-for="(proj, index) in projectList"
+          :key="index"
+          @click="handleCardClick('projectExperience', proj.projectName)"
+        >
           <div class="card-header">
             <div class="card-title">项目经历{{ index + 1 }}</div>
-            <button class="remove-btn" type="button" @click="removeCard('projectList', index)">
+            <button class="remove-btn" type="button" @click.stop="removeCard('projectList', index)">
               ×
             </button>
           </div>
@@ -313,6 +328,11 @@ export default {
     // ================== 删除卡片 ==================
     removeCard(listName, index) {
       this[listName].splice(index, 1)
+    },
+
+    // ================== 点击卡片处理 ==================
+    handleCardClick(type, name) {
+      console.log(`Currently editing ${type}: ${name}`)
     }
   }
 }
@@ -391,6 +411,8 @@ export default {
 .card {
   position: relative;
   border-radius: 10px;
+  margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .remove-btn {
