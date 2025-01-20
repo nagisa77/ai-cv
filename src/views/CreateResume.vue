@@ -96,7 +96,6 @@ export default {
      * 更新当前选择的标题，以便在 CV 中高亮
      */
     handleSelectedModuleChanged(moduleItem) {
-
       this.currentSelectedTitle = moduleItem.title
     },
 

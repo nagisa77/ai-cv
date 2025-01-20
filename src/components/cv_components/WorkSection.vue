@@ -1,6 +1,6 @@
 <!-- src/components/WorkSection.vue -->
 <template>
-    <section v-if="workList && workList.length" class="work-section">
+    <section v-if="workList && workList.length" class="work-section session">
       <h2 class="session-title">工作经历</h2>
       <div
         class="work-item"
@@ -13,16 +13,21 @@
           <h3 class="item-title">{{ work.title }}</h3>
           <p class="item-time">{{ work.content.from_time }} - {{ work.content.to_time }}</p>
         </div>
-        <ul class="item-content">
-          <li
+          <div
             class="item-content-item"
             v-for="(point, i2) in work.content.content"
             :key="i2"
           >
-            <span class="bullet-point">{{ point.bullet_point }}:</span>
-            <span class="bullet-content">{{ point.content }}</span>
-          </li>
-        </ul>
+            <div class="bullet-point-prefix">·</div>
+            <div class="bullet-point-content">
+              <span class="bullet-point">{{ point.bullet_point }}:</span>
+              <span class="bullet-content">{{ point.content }}</span>
+            </div>
+          </div>
+
+          <div class="item-content-item" v-if="work.content.content.length === 0" style="opacity: 0.5;">
+            (这里是描述，您可以在这里详细描述您的工作经历，包括您的职责、使用的技术以及取得的成果等。)
+          </div>
       </div>
     </section>
   </template>
@@ -57,10 +62,6 @@
   </script>
   
   <style scoped>
-  .work-section {
-    margin-bottom: 24px;
-  }
-  
   .work-item {
     margin-bottom: 12px;
     cursor: pointer;
@@ -69,43 +70,6 @@
   
   .work-item:hover {
     background-color: #f6f9fe;
-  }
-  
-  .session-title {
-    font-size: 16px;
-    position: relative;
-  }
-  
-  .session-title::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #000;
-    margin-top: 4px;
-  }
-  
-  .item-title {
-    font-size: 12px;
-    margin: 0 0 4px 0;
-  }
-  
-  .item-time {
-    font-size: 10px;
-  }
-  
-  .title-and-time {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .item-content {
-    margin-top: 4px;
-  }
-  
-  .item-content-item {
-    font-size: 10px;
   }
   
   .highlight {

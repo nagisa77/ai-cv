@@ -6,25 +6,16 @@
       <PersonalInfo :personalInfo="personalInfo" />
 
       <!-- Education Section -->
-      <EducationSection
-        :educationList="educationList"
-        :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged"
-      />
+      <EducationSection :educationList="educationList" :highlightTitle="highlightTitle"
+        @selected-module-changed="handleSelectedModuleChanged" />
 
       <!-- Work Experience Section -->
-      <WorkSection
-        :workList="workList"
-        :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged"
-      />
+      <WorkSection :workList="workList" :highlightTitle="highlightTitle"
+        @selected-module-changed="handleSelectedModuleChanged" />
 
       <!-- Project Experience Section -->
-      <ProjectSection
-        :projectList="projectList"
-        :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged"
-      />
+      <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
+        @selected-module-changed="handleSelectedModuleChanged" />
 
       <!-- Personal Summary -->
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
@@ -83,7 +74,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .cv-component {
   /* 基础布局 */
   height: calc(100vh - 60px);
@@ -96,8 +87,53 @@ export default {
 
 .cv-page {
   height: 80%;
-  aspect-ratio: 3/4; /* 3:4纸张比例，可按需调整 */
+  aspect-ratio: 3/4;
+  /* 3:4纸张比例，可按需调整 */
   padding: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.item-content-item {
+  display: flex;
+  font-size: 8px;
+}
+
+.bullet-point-prefix {
+  margin-right: 4px;
+  margin-top: 4px;
+}
+
+.bullet-point-content {
+  margin-top: 2px;
+}
+
+.session-title {
+  font-size: 12px;
+  position: relative;
+}
+
+.session-title::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  margin-top: 4px;
+}
+
+.title-and-time {
+  display: flex;
+  height: 12px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.item-title {
+  font-size: 10px;
+}
+
+.item-time {
+  font-size: 8px;
 }
 </style>

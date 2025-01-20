@@ -231,16 +231,7 @@ export default {
           content: {
             from_time: from_time ? from_time.trim() : '',
             to_time: to_time ? to_time.trim() : '',
-            content: [
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-            ]
+            content: []
           }
         }
       })
@@ -254,16 +245,7 @@ export default {
           content: {
             from_time: from_time ? from_time.trim() : '',
             to_time: to_time ? to_time.trim() : '',
-            content: [
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-            ]
+            content: []
           }
         }
       })
@@ -277,16 +259,7 @@ export default {
           content: {
             from_time: from_time ? from_time.trim() : '',
             to_time: to_time ? to_time.trim() : '',
-            content: [
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-              {
-                "bullet_point": "xxxx",
-                "content": "xxxx"
-              },
-            ]
+            content: []
           }
         }
       })
@@ -316,7 +289,7 @@ export default {
       educationList.forEach((edu) => {
         // 假设 time 是 "2016.09 - 2020.06" 格式
         const [fromTime, toTime] = edu.time.split(' - ')
-        const title = `${edu.school}`
+        const title = `${edu.school} - ${edu.degree}`
         metadataInstance.setContentForType(
           'education',
           {
@@ -333,7 +306,7 @@ export default {
       // ---- 2.3 填写 workExperience(workList) ----
       workList.forEach((work) => {
         const [fromTime, toTime] = work.time.split(' - ')
-        const title = `${work.company}`
+        const title = `${work.company} - ${work.title}`
         metadataInstance.setContentForType(
           'workExperience',
           {

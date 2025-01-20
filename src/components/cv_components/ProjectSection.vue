@@ -1,6 +1,6 @@
 <!-- src/components/ProjectSection.vue -->
 <template>
-    <section v-if="projectList && projectList.length" class="project-section">
+    <section v-if="projectList && projectList.length" class="project-section session">
       <h2 class="session-title">项目经历</h2>
       <div
         class="project-item"
@@ -13,16 +13,20 @@
           <h3 class="item-title">{{ project.title }}</h3>
           <p class="item-time">{{ project.content.from_time }} - {{ project.content.to_time }}</p>
         </div>
-        <ul class="item-content">
-          <li
+          <div
             class="item-content-item"
             v-for="(point, i2) in project.content.content"
             :key="i2"
           >
-            <span class="bullet-point">{{ point.bullet_point }}:</span>
-            <span class="bullet-content">{{ point.content }}</span>
-          </li>
-        </ul>
+            <div class="bullet-point-prefix">·</div>  
+            <div class="bullet-point-content">
+              <span class="bullet-point">· {{ point.bullet_point }}:</span>
+              <span class="bullet-content">{{ point.content }}</span>
+            </div>
+          </div>
+          <div class="item-content-item" v-if="project.content.content.length === 0"  style="opacity: 0.5;">
+            (这里是描述，您可以在这里详细描述您的项目经历，包括项目的背景、您的角色、使用的技术以及取得的成果等。)
+          </div>
       </div>
     </section>
   </template>
@@ -49,10 +53,6 @@
   </script>
   
   <style scoped>
-  .project-section {
-    margin-bottom: 24px;
-  }
-  
   .project-item {
     margin-bottom: 12px;
     cursor: pointer;
@@ -62,44 +62,7 @@
   .project-item:hover {
     background-color: #f6f9fe;
   }
-  
-  .session-title {
-    font-size: 16px;
-    position: relative;
-  }
-  
-  .session-title::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #000;
-    margin-top: 4px;
-  }
-  
-  .item-title {
-    font-size: 12px;
-    margin: 0 0 4px 0;
-  }
-  
-  .item-time {
-    font-size: 10px;
-  }
-  
-  .title-and-time {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .item-content {
-    margin-top: 4px;
-  }
-  
-  .item-content-item {
-    font-size: 10px;
-  }
-  
+
   .highlight {
     background-color: #a4bdea;
     border-radius: 4px;
@@ -111,5 +74,13 @@
   
   .bullet-content {
     margin-left: 4px;
+  }
+
+  .bullet-point-prefix {
+    margin-top: 2px;
+  }
+
+  .bullet-point-content {
+    margin-top: 4px;
   }
   </style>
