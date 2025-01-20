@@ -136,4 +136,30 @@ export default {
 .item-time {
   font-size: 8px;
 }
+
+.session-item {
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.highlight {
+  position: absolute;
+  width: calc(100% + 40px);
+  height: calc(100% + 10px);
+  top: -5px;
+  left: -20px;
+  background-color: var(--color-session-selected);
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.highlight-left {
+  width: 5px;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  z-index: -1;
+}
+
 </style>

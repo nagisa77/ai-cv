@@ -3,7 +3,7 @@
   <div class="scroll-container">
     <!-- 主体容器 -->
     <div class="container">
-      <h1 class="title">你好，欢迎来到 <span class="highlight">AI 简历君</span></h1>
+      <h1 class="title">你好，欢迎来到 <span class="highlight-content">AI 简历君</span></h1>
       <p class="subtitle">在开始为您创建 AI 智能简历前，请先完善以下基础信息：</p>
 
       <div class="card" @click="handleCardClick('personalInfo', '')">
@@ -218,7 +218,7 @@ export default {
       selectedModule: {
         type: '',
         title: ''
-      }
+      },
     }
   },
   computed: {
@@ -488,7 +488,7 @@ export default {
   display: block;
 }
 
-.container .highlight {
+.container .highlight-content {
   color: var(--color-primary);
 }
 

@@ -3,10 +3,9 @@
     <section v-if="workList && workList.length" class="work-section session">
       <h2 class="session-title">工作经历</h2>
       <div
-        class="work-item"
+        class="session-item"
         v-for="(work, index) in workList"
         :key="index"
-        :class="{ highlight: work.title === highlightTitle }"
         @click="onTitleClick('workExperience', work.title)"
       >
         <div class="title-and-time">
@@ -27,6 +26,9 @@
 
           <div class="item-content-item" v-if="work.content.content.length === 0" style="opacity: 0.5;">
             (这里是描述，您可以在这里详细描述您的工作经历，包括您的职责、使用的技术以及取得的成果等。)
+          </div>
+          <div class="highlight" v-if="work.title === highlightTitle">
+            <div class="highlight-left"></div>
           </div>
       </div>
     </section>
@@ -62,21 +64,6 @@
   </script>
   
   <style scoped>
-  .work-item {
-    margin-bottom: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .work-item:hover {
-    background-color: #f6f9fe;
-  }
-  
-  .highlight {
-    background-color: #a4bdea;
-    border-radius: 4px;
-  }
-  
   .bullet-point {
     font-weight: bold;
   }
