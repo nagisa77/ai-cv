@@ -160,6 +160,7 @@ export default {
 </script>
 
 <style scoped>
+/* 定义关键帧动画 */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -213,6 +214,7 @@ export default {
   }
 }
 
+/* 动画类 */
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
 }
@@ -243,6 +245,37 @@ export default {
 
 .animate-fade-in-right {
   animation: fadeInRight 1s ease-out forwards;
+}
+
+/* 初始隐藏状态，根据 data-animation 设置不同的初始 transform */
+.animate-on-scroll[data-animation="fade-in-up"],
+.animate-on-scroll[data-animation="fade-in-up-delay"],
+.animate-on-scroll[data-animation="fade-in-up-delay2"] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.animate-on-scroll[data-animation="slide-in-left"] {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.animate-on-scroll[data-animation="fade-in"] {
+  opacity: 0;
+}
+
+.animate-on-scroll[data-animation="fade-in-delay"] {
+  opacity: 0;
+}
+
+.animate-on-scroll[data-animation="fade-in-left"] {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.animate-on-scroll[data-animation="fade-in-right"] {
+  opacity: 0;
+  transform: translateX(20px);
 }
 
 /* 保持原有样式不变 */
