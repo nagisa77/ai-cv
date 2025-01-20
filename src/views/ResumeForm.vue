@@ -6,122 +6,62 @@
       <h1 class="title">你好，欢迎来到 <span class="highlight">AI 简历君</span></h1>
       <p class="subtitle">在开始为您创建 AI 智能简历前，请先完善以下基础信息：</p>
 
-      <div class="block-title">基础信息</div>
-      <div class="form-line">
-        <div class="form-group">
-          <input
-            type="text"
-            id="name"
-            class="form-input"
-            placeholder=" "
-            required
-            v-model="basicInfo.name"
-          />
-          <label class="form-label" for="name">姓名</label>
+      <div class="card" @click="handleCardClick('personalInfo', '')">
+        <div class="block-title">基础信息</div>
+        <div class="form-line">
+          <div class="form-group">
+            <input type="text" id="name" class="form-input" placeholder=" " required v-model="basicInfo.name" />
+            <label class="form-label" for="name">姓名</label>
+          </div>
+
+          <div class="form-group">
+            <input type="tel" id="phone" class="form-input" placeholder=" " v-model="basicInfo.phone" />
+            <label class="form-label" for="phone">手机号 (选填)</label>
+          </div>
         </div>
 
         <div class="form-group">
-          <input
-            type="tel"
-            id="phone"
-            class="form-input"
-            placeholder=" "
-            v-model="basicInfo.phone"
-          />
-          <label class="form-label" for="phone">手机号 (选填)</label>
+          <input type="email" id="email" class="form-input" placeholder=" " v-model="basicInfo.email" />
+          <label class="form-label" for="email">邮箱 (选填)</label>
         </div>
-      </div>
-
-      <div class="form-group">
-        <input
-          type="email"
-          id="email"
-          class="form-input"
-          placeholder=" "
-          v-model="basicInfo.email"
-        />
-        <label class="form-label" for="email">邮箱 (选填)</label>
       </div>
 
       <!-- 教育经历 -->
       <div class="block-title">教育经历</div>
       <div id="education-experience" class="education-list">
-        <div
-          class="card"
-          v-for="(edu, index) in educationList"
-          :key="index"
-          @click="handleCardClick('educationExperience', edu.school)"
-        >
+        <div class="card" v-for="(edu, index) in educationList" :key="index"
+          @click="handleCardClick('educationExperience', edu.school)">
           <div class="card-header">
             <div class="card-title">教育经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('educationList', index)"
-            >
+            <button class="remove-btn" type="button" @click.stop="removeCard('educationList', index)">
               ×
             </button>
           </div>
           <div class="form-group">
-            <input
-              type="text"
-              class="form-input"
-              placeholder=" "
-              v-model="edu.school"
-              required
-            />
+            <input type="text" class="form-input" placeholder=" " v-model="edu.school" required />
             <label class="form-label">学校名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="edu.time"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="edu.major"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.major" required />
               <label class="form-label">专业</label>
             </div>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="edu.degree"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.degree" required />
               <label class="form-label">学历</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="edu.gpa"
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.gpa" />
               <label class="form-label">GPA (选填)</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="edu.city"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.city" required />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -136,61 +76,29 @@
       <!-- 工作经历 -->
       <div class="block-title">工作经历</div>
       <div id="work-experience" class="experience-list">
-        <div
-          class="card"
-          v-for="(work, index) in workList"
-          :key="index"
-          @click="handleCardClick('workExperience', work.company)"
-        >
+        <div class="card" v-for="(work, index) in workList" :key="index"
+          @click="handleCardClick('workExperience', work.company)">
           <div class="card-header">
             <div class="card-title">工作经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('workList', index)"
-            >
+            <button class="remove-btn" type="button" @click.stop="removeCard('workList', index)">
               ×
             </button>
           </div>
           <div class="form-group">
-            <input
-              type="text"
-              class="form-input"
-              placeholder=" "
-              v-model="work.company"
-              required
-            />
+            <input type="text" class="form-input" placeholder=" " v-model="work.company" required />
             <label class="form-label">公司名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="work.time"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="work.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="work.title"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="work.title" required />
               <label class="form-label">职位</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="work.city"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="work.city" required />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -205,51 +113,25 @@
       <!-- 项目经历 -->
       <div class="block-title">项目经历</div>
       <div id="project-experience" class="project-list">
-        <div
-          class="card"
-          v-for="(proj, index) in projectList"
-          :key="index"
-          @click="handleCardClick('projectExperience', proj.projectName)"
-        >
+        <div class="card" v-for="(proj, index) in projectList" :key="index"
+          @click="handleCardClick('projectExperience', proj.projectName)">
           <div class="card-header">
             <div class="card-title">项目经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('projectList', index)"
-            >
+            <button class="remove-btn" type="button" @click.stop="removeCard('projectList', index)">
               ×
             </button>
           </div>
           <div class="form-group">
-            <input
-              type="text"
-              class="form-input"
-              placeholder=" "
-              v-model="proj.projectName"
-              required
-            />
+            <input type="text" class="form-input" placeholder=" " v-model="proj.projectName" required />
             <label class="form-label">项目名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="proj.time"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="proj.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                placeholder=" "
-                v-model="proj.role"
-                required
-              />
+              <input type="text" class="form-input" placeholder=" " v-model="proj.role" required />
               <label class="form-label">职位/角色</label>
             </div>
           </div>
@@ -270,14 +152,10 @@
     <!-- 预览窗格 -->
     <div class="preview-pane">
       <div v-if="selectedModule.type">
-        <component
-          :is="getComponent(selectedModule.type)"
-          :educationList="mappedEducationList"
-          :workList="mappedWorkList"
-          :projectList="mappedProjectList"
-          :personalInfo="basicInfo"
-          :personalSummary="personalSummary"
-        />
+        <div class="preview-title"> 这是您的输入在简历的大致样子，您可以在此基础上进行修改 </div>
+        <component class="preview-component" :is="getComponent(selectedModule.type)"
+          :educationList="mappedEducationList" :workList="mappedWorkList" :projectList="mappedProjectList"
+          :personalInfo="basicInfo" :personalSummary="personalSummary" />
       </div>
     </div>
   </div>
@@ -578,6 +456,7 @@ export default {
   font-size: 18px;
   margin-bottom: 20px;
   text-align: center;
+  opacity: 0.5;
 }
 
 .no-selection {
@@ -650,14 +529,14 @@ export default {
   transition: all 0.3s ease;
 }
 
-.container .form-input:focus + .form-label,
-.container .form-input:not(:placeholder-shown) + .form-label {
+.container .form-input:focus+.form-label,
+.container .form-input:not(:placeholder-shown)+.form-label {
   top: 10px;
   left: 12px;
   font-size: 10px;
 }
 
-.container .form-input:focus + .form-label {
+.container .form-input:focus+.form-label {
   color: var(--color-primary);
 }
 
@@ -727,5 +606,18 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3px;
+}
+
+.preview-component {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.preview-title {
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 </style>
