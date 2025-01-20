@@ -2,51 +2,117 @@
 <template>
   <div class="home">
     <div class="session1">
-      <h1 class="home-title">欢迎使用<span class="home-title-highlight">简历生成器</span>！</h1>
-      <p class="home-description">
+      <h1
+        class="home-title animate-on-scroll"
+        data-animation="fade-in-up"
+      >
+        欢迎使用<span class="home-title-highlight">简历生成器</span>！
+      </h1>
+      <p
+        class="home-description animate-on-scroll"
+        data-animation="fade-in-up-delay"
+      >
         该工具帮助用户轻松<span class="home-title-highlight">创建专业简历</span>，输入个人信息、教育背景和工作经历，自动生成<span class="home-title-highlight">美观简历</span>，助您求职成功！
       </p>
       <!-- 通过 router-link 跳转到填写表单页面 -->
       <router-link to="/resume-form">
-        <button class="create-resume-button">创建简历 🎉</button>
+        <button
+          class="create-resume-button animate-on-scroll"
+          data-animation="fade-in-up-delay2"
+        >
+          创建简历 🎉
+        </button>
       </router-link>
     </div>
 
     <div class="session2">
-      <div class="session2-icon-content">
-        <img :src="imChatConversationIcon" alt="im-chat-conversation-1 图标" class="session2-icon" />
-        <img :src="arrowIcon" alt="arrow-142 图标" class="arrow-icon" />
-        <img :src="formIcon" alt="form-7 图标" class="session2-icon" />
+      <div
+        class="session2-icon-content animate-on-scroll"
+        data-animation="slide-in-left"
+      >
+        <img
+          :src="imChatConversationIcon"
+          alt="im-chat-conversation-1 图标"
+          class="session2-icon"
+        />
+        <img
+          :src="arrowIcon"
+          alt="arrow-142 图标"
+          class="arrow-icon"
+        />
+        <img
+          :src="formIcon"
+          alt="form-7 图标"
+          class="session2-icon"
+        />
       </div>
 
-      <h2 class="session2-title">
+      <h2
+        class="session2-title animate-on-scroll"
+        data-animation="fade-in"
+      >
         通过对话
       </h2>
-      <div class="session2-description">
+      <div
+        class="session2-description animate-on-scroll"
+        data-animation="fade-in-delay"
+      >
         我们会通过对话的方式，与您沟通简历内容，并生成简历。我们的系统会根据您提供的信息，自动生成一份专业的简历，确保您的简历在求职过程中脱颖而出。无论是教育背景、工作经历还是个人技能，我们都会为您精心编排，打造一份完美的简历，助您在职场中取得成功。
       </div>
     </div>
 
-    <div class="session3">  
-      <div class="session3-title-content">
+    <div class="session3">
+      <div
+        class="session3-title-content animate-on-scroll"
+        data-animation="fade-in-up"
+      >
         <div class="session3-title">我们会处理困难的事情</div>
-        <div class="session3-title-sub">通过以下三种方式生成简历：对话沟通、导入文件、使用模版。</div>
+        <div class="session3-title-sub">
+          通过以下三种方式生成简历：对话沟通、导入文件、使用模版。
+        </div>
       </div>
       <div class="session3-button-content">
-        <div class="session3-button">
-          <img :src="createResumeIcon" alt="form-7 图标" class="session3-icon" />
+        <div
+          class="session3-button animate-on-scroll"
+          data-animation="fade-in-left"
+        >
+          <img
+            :src="createResumeIcon"
+            alt="form-7 图标"
+            class="session3-icon"
+          />
           <div class="session3-button-title">创建简历</div>
-          <div class="session3-button-description">通过对话的方式，与您沟通简历内容，并生成简历</div>
+          <div class="session3-button-description">
+            通过对话的方式，与您沟通简历内容，并生成简历
+          </div>
         </div>
-        <div class="session3-button">
-          <img :src="importResumeIcon" alt="form-7 图标" class="session3-icon" />
+        <div
+          class="session3-button animate-on-scroll"
+          data-animation="fade-in-up"
+        >
+          <img
+            :src="importResumeIcon"
+            alt="form-7 图标"
+            class="session3-icon"
+          />
           <div class="session3-button-title">导入简历</div>
-          <div class="session3-button-description">通过导入已有的简历文件，系统会自动解析并生成一份新的简历，帮助您节省时间和精力。</div>
+          <div class="session3-button-description">
+            通过导入已有的简历文件，系统会自动解析并生成一份新的简历，帮助您节省时间和精力。
+          </div>
         </div>
-        <div class="session3-button">
-          <img :src="modelIcon" alt="form-7 图标" class="session3-icon" />
+        <div
+          class="session3-button animate-on-scroll"
+          data-animation="fade-in-right"
+        >
+          <img
+            :src="modelIcon"
+            alt="form-7 图标"
+            class="session3-icon"
+          />
           <div class="session3-button-title">简历模版</div>
-          <div class="session3-button-description">通过简历模版，您可以快速生成一份专业的简历，节省时间并确保简历的质量和美观度。</div>
+          <div class="session3-button-description">
+            通过简历模版，您可以快速生成一份专业的简历，节省时间并确保简历的质量和美观度。
+          </div>
         </div>
       </div>
     </div>
@@ -65,11 +131,121 @@ export default {
       importResumeIcon: require('@/assets/icon/import-19.svg'),
       modelIcon: require('@/assets/icon/model-24.svg')
     }
+  },
+  mounted() {
+    const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+
+    const observerOptions = {
+      root: null, // 视口
+      rootMargin: '0px',
+      threshold: 0.1 // 元素进入视口10%时触发
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const animationClass = `animate-${element.dataset.animation}`;
+          element.classList.add(animationClass);
+          observer.unobserve(element); // 动画触发后停止观察
+        }
+      });
+    }, observerOptions);
+
+    animateOnScrollElements.forEach(el => {
+      observer.observe(el);
+    });
   }
 }
 </script>
 
 <style scoped>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.animate-fade-in-up-delay {
+  animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+.animate-fade-in-up-delay2 {
+  animation: fadeInUp 1s ease-out 1s forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 1s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 1s ease-out 0.5s forwards;
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft 1s ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1s ease-out forwards;
+}
+
+/* 保持原有样式不变 */
 .home {
   /* 你的样式 */
   display: flex;
@@ -233,5 +409,4 @@ export default {
   text-align: center;
   max-width: 600px;
 }
-
 </style>
