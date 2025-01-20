@@ -331,13 +331,13 @@ export default {
 }
 
 .session2 {
-  height: calc(100vh - 60px);
+  height: calc(100vh);
   width: 100vw;
   background-color: var(--color-primary);
 }
 
 .session3 {
-  height: calc(100vh - 60px);
+  height: calc(100vh);
   width: 100vw;
   background-color: var(--color-secondary);
 }
@@ -431,7 +431,7 @@ export default {
   font-size: 30px;
   font-weight: bold;
   color: var(--color-black);
-  margin-top: 150px;
+  margin-top: 210px;
 }
 
 .session3-title-sub {
