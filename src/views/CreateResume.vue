@@ -1,30 +1,22 @@
 <template>
   <div class="app">
     <!-- 左侧 -->
-    <div class="left-container">
+    <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
       <template v-if="currentSelectedTitle != ''">
-        <ChatComponent 
-          :modules="chatModules"
-          @update-resume="handleUpdateResume"
-          :currentSelectedTitle="currentSelectedTitle"
-          @close-chat="handleCloseChat"
-        />
+        <ChatComponent :modules="chatModules" @update-resume="handleUpdateResume"
+          :currentSelectedTitle="currentSelectedTitle" @close-chat="handleCloseChat" />
       </template>
       <!-- 否则，显示我们自定义的“选择模块”组件 -->
       <template v-else>
-        <SelectModuleComponent
-          :chatModules="chatModules"
-          @selected-module-changed="handleSelectedModuleChanged"
-        />
+        <SelectModuleComponent :chatModules="chatModules" @selected-module-changed="handleSelectedModuleChanged" />
       </template>
     </div>
 
     <!-- 右侧 -->
-    <CVComponent 
-      :highlightTitle="currentSelectedTitle" 
-      @selected-module-changed="handleSelectedModuleChanged"
-    />
+    <div class="right-container cv-container">
+      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" />
+    </div>
   </div>
 </template>
 
@@ -39,7 +31,7 @@ export default {
   components: {
     ChatComponent,
     CVComponent,
-    SelectModuleComponent // <-- 注册
+    SelectModuleComponent
   },
   data() {
     return {
@@ -104,7 +96,7 @@ export default {
      * 更新当前选择的标题，以便在 CV 中高亮
      */
     handleSelectedModuleChanged(moduleItem) {
-      
+
       this.currentSelectedTitle = moduleItem.title
     },
 
@@ -114,7 +106,7 @@ export default {
      */
     handleCloseChat() {
       this.currentSelectedTitle = ''
-    } 
+    }
   }
 }
 </script>
@@ -122,6 +114,11 @@ export default {
 <style scoped>
 .app {
   display: flex;
+  height: 100vh;
+}
+
+.cv-container {
   height: calc(100vh - 60px);
+  margin-top: 60px;
 }
 </style>
