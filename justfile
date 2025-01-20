@@ -1,5 +1,6 @@
 # 这是一个“构建”配方，会执行 autoPodInstall.command 脚本
 publish:
+  git pull
   rm -rf ./dist
   npm run build     
   cp -r ./dist/* ./ 
