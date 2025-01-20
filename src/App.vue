@@ -56,14 +56,4 @@ header {
   height: 20px;
 }
 
-.form-line {
-  display: flex;
-  gap: 10px;
-}
-
-.block-title {
-  font-size: 15px;
-  margin-bottom: 10px;
-  margin-top: 20px;
-}
 </style>

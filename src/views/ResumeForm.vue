@@ -3,60 +3,62 @@
   <div class="scroll-container">
     <!-- 主体容器 -->
     <div class="container">
-      <h1 class="title">你好，欢迎来到 AI 简历君</h1>
+      <h1 class="title">你好，欢迎来到 <span class="highlight">AI 简历君</span></h1>
       <p class="subtitle">在开始为您创建 AI 智能简历前，请先完善以下基础信息：</p>
 
       <div class="block-title">基础信息</div>
       <div class="form-line">
         <div class="form-group">
-          <input type="text" id="name" class="form-input" placeholder=" " required value="Tim" />
+          <input type="text" id="name" class="form-input" placeholder=" " required v-model="basicInfo.name" />
           <label class="form-label" for="name">姓名</label>
         </div>
 
         <div class="form-group">
-          <input type="tel" id="phone" class="form-input" placeholder=" " value="13800000000" />
+          <input type="tel" id="phone" class="form-input" placeholder=" " v-model="basicInfo.phone" />
           <label class="form-label" for="phone">手机号 (选填)</label>
         </div>
       </div>
 
       <div class="form-group">
-        <input type="email" id="email" class="form-input" placeholder=" " value="tim@example.com" />
+        <input type="email" id="email" class="form-input" placeholder=" " v-model="basicInfo.email" />
         <label class="form-label" for="email">邮箱 (选填)</label>
       </div>
 
       <!-- 教育经历 -->
       <div class="block-title">教育经历</div>
       <div id="education-experience" class="education-list">
-        <div class="card">
-          <button class="remove-btn" type="button" @click="removeCard($event)">
-            ×
-          </button>
+        <div class="card" v-for="(edu, index) in educationList" :key="index">
+          <div class="card-header">
+            <div class="card-title">教育经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click="removeCard('educationList', index)">
+              ×
+            </button>
+          </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " value="清华大学" />
+            <input type="text" class="form-input" placeholder=" " v-model="edu.school" required />
             <label class="form-label">学校名</label>
           </div>
           <div class="form-line">
-
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="2018.09 - 2022.06" />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="软件工程" />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.major" required />
               <label class="form-label">专业</label>
             </div>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="本科" />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.degree" required />
               <label class="form-label">学历</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="3.9" />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.gpa" />
               <label class="form-label">GPA (选填)</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="北京" />
+              <input type="text" class="form-input" placeholder=" " v-model="edu.city" required />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -71,25 +73,28 @@
       <!-- 工作经历 -->
       <div class="block-title">工作经历</div>
       <div id="work-experience" class="experience-list">
-        <div class="card">
-          <button class="remove-btn" type="button" @click="removeCard($event)">
-            ×
-          </button>
+        <div class="card" v-for="(work, index) in workList" :key="index">
+          <div class="card-header">
+            <div class="card-title">工作经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click="removeCard('workList', index)">
+              ×
+            </button>
+          </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " value="阿里巴巴" />
+            <input type="text" class="form-input" placeholder=" " v-model="work.company" required />
             <label class="form-label">公司名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="2020.07 - 2023.01" />
+              <input type="text" class="form-input" placeholder=" " v-model="work.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="全栈工程师" />
+              <input type="text" class="form-input" placeholder=" " v-model="work.title" required />
               <label class="form-label">职位</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="北京" />
+              <input type="text" class="form-input" placeholder=" " v-model="work.city" required />
               <label class="form-label">城市</label>
             </div>
           </div>
@@ -104,21 +109,24 @@
       <!-- 项目经历 -->
       <div class="block-title">项目经历</div>
       <div id="project-experience" class="project-list">
-        <div class="card">
-          <button class="remove-btn" type="button" @click="removeCard($event)">
-            ×
-          </button>
+        <div class="card" v-for="(proj, index) in projectList" :key="index">
+          <div class="card-header">
+            <div class="card-title">项目经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click="removeCard('projectList', index)">
+              ×
+            </button>
+          </div>
           <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " value="智能推荐系统" />
+            <input type="text" class="form-input" placeholder=" " v-model="proj.projectName" required />
             <label class="form-label">项目名</label>
           </div>
           <div class="form-line">
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="2021.02 - 2021.04" />
+              <input type="text" class="form-input" placeholder=" " v-model="proj.time" required />
               <label class="form-label">时间</label>
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " value="项目经理" />
+              <input type="text" class="form-input" placeholder=" " v-model="proj.role" required />
               <label class="form-label">职位/角色</label>
             </div>
           </div>
@@ -135,76 +143,6 @@
         开始创建我的简历
       </button>
     </div>
-
-    <!-- 隐藏模板区域（各模块各一份） -->
-    <div id="template-area" style="display: none;">
-      <!-- 教育经历模板 -->
-      <div id="education-card-template" class="card">
-        <button class="remove-btn" type="button" @click="removeCard($event)">×</button>
-        <div class="form-group">
-          <label class="form-label">学校名</label>
-          <input type="text" class="form-input" placeholder="如：北京大学" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">时间</label>
-          <input type="text" class="form-input" placeholder="如：2018.09 - 2022.06" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">专业</label>
-          <input type="text" class="form-input" placeholder="如：计算机科学" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">学历</label>
-          <input type="text" class="form-input" placeholder="如：本科 / 硕士 / 博士" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">GPA (选填)</label>
-          <input type="text" class="form-input" placeholder="如：3.8" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">城市</label>
-          <input type="text" class="form-input" placeholder="如：北京" />
-        </div>
-      </div>
-
-      <!-- 工作经历模板 -->
-      <div id="work-card-template" class="card">
-        <button class="remove-btn" type="button" @click="removeCard($event)">×</button>
-        <div class="form-group">
-          <label class="form-label">公司名</label>
-          <input type="text" class="form-input" placeholder="如：腾讯" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">时间</label>
-          <input type="text" class="form-input" placeholder="如：2020.05 - 2022.12" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">职位</label>
-          <input type="text" class="form-input" placeholder="如：后端开发" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">城市</label>
-          <input type="text" class="form-input" placeholder="如：深圳" />
-        </div>
-      </div>
-
-      <!-- 项目经历模板 -->
-      <div id="project-card-template" class="card">
-        <button class="remove-btn" type="button" @click="removeCard($event)">×</button>
-        <div class="form-group">
-          <label class="form-label">项目名</label>
-          <input type="text" class="form-input" placeholder="如：AI 简历系统" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">时间</label>
-          <input type="text" class="form-input" placeholder="如：2021.02 - 2021.04" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">职位/角色</label>
-          <input type="text" class="form-input" placeholder="如：产品负责人" />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -213,56 +151,48 @@ import metadataInstance from '@/models/metadata_model.js' // 这行是你需要�
 
 export default {
   name: 'ResumeForm',
+  data() {
+    return {
+      basicInfo: {
+        name: 'Tim',
+        phone: '13800000000',
+        email: 'tim@example.com'
+      },
+      educationList: [
+        {
+          school: '清华大学',
+          time: '2018.09 - 2022.06',
+          major: '软件工程',
+          degree: '本科',
+          gpa: '3.9',
+          city: '北京'
+        }
+      ],
+      workList: [
+        {
+          company: '阿里巴巴',
+          time: '2020.07 - 2023.01',
+          title: '全栈工程师',
+          city: '北京'
+        }
+      ],
+      projectList: [
+        {
+          projectName: '智能推荐系统',
+          time: '2021.02 - 2021.04',
+          role: '项目经理'
+        }
+      ]
+    }
+  },
   methods: {
     // ========= 提交按钮处理 =========
     handleSubmit() {
       // 1. 采集表单数据
-      const name = document.getElementById('name').value
-      const phone = document.getElementById('phone').value
-      const email = document.getElementById('email').value
-
-      // 教育经历
-      const educationCards = document
-        .getElementById('education-experience')
-        .querySelectorAll('.card')
-      const educationList = Array.from(educationCards).map((card) => {
-        const inputs = card.querySelectorAll('input')
-        return {
-          school: inputs[0]?.value || '',
-          time: inputs[1]?.value || '',
-          major: inputs[2]?.value || '',
-          degree: inputs[3]?.value || '',
-          gpa: inputs[4]?.value || '',
-          city: inputs[5]?.value || ''
-        }
-      })
-
-      // 工作经历
-      const workCards = document
-        .getElementById('work-experience')
-        .querySelectorAll('.card')
-      const workList = Array.from(workCards).map((card) => {
-        const inputs = card.querySelectorAll('input')
-        return {
-          company: inputs[0]?.value || '',
-          time: inputs[1]?.value || '',
-          title: inputs[2]?.value || '',
-          city: inputs[3]?.value || ''
-        }
-      })
-
-      // 项目经历
-      const projectCards = document
-        .getElementById('project-experience')
-        .querySelectorAll('.card')
-      const projectList = Array.from(projectCards).map((card) => {
-        const inputs = card.querySelectorAll('input')
-        return {
-          projectName: inputs[0]?.value || '',
-          time: inputs[1]?.value || '',
-          role: inputs[2]?.value || ''
-        }
-      })
+      const { name, phone, email } = this.basicInfo
+      const educationList = this.educationList
+      const workList = this.workList
+      const projectList = this.projectList
 
       // 2. 写入 metadata_model
       // ---- 2.1 填写 personalInfo ----
@@ -351,64 +281,38 @@ export default {
 
     // ================== 教育经历 ==================
     addEducationExperience() {
-      const container = document.getElementById('education-experience')
-      let firstCard = container.querySelector('.card')
-      if (firstCard) {
-        const newCard = firstCard.cloneNode(true)
-        this.clearInputs(newCard)
-        container.appendChild(newCard)
-      } else {
-        const template = document.getElementById('education-card-template')
-        const clone = template.cloneNode(true)
-        this.clearInputs(clone)
-        container.appendChild(clone)
-      }
+      this.educationList.push({
+        school: '',
+        time: '',
+        major: '',
+        degree: '',
+        gpa: '',
+        city: ''
+      })
     },
 
     // ================== 工作经历 ==================
     addWorkExperience() {
-      const container = document.getElementById('work-experience')
-      let firstCard = container.querySelector('.card')
-      if (firstCard) {
-        const newCard = firstCard.cloneNode(true)
-        this.clearInputs(newCard)
-        container.appendChild(newCard)
-      } else {
-        const template = document.getElementById('work-card-template')
-        const clone = template.cloneNode(true)
-        this.clearInputs(clone)
-        container.appendChild(clone)
-      }
+      this.workList.push({
+        company: '',
+        time: '',
+        title: '',
+        city: ''
+      })
     },
 
     // ================== 项目经历 ==================
     addProjectExperience() {
-      const container = document.getElementById('project-experience')
-      let firstCard = container.querySelector('.card')
-      if (firstCard) {
-        const newCard = firstCard.cloneNode(true)
-        this.clearInputs(newCard)
-        container.appendChild(newCard)
-      } else {
-        const template = document.getElementById('project-card-template')
-        const clone = template.cloneNode(true)
-        this.clearInputs(clone)
-        container.appendChild(clone)
-      }
+      this.projectList.push({
+        projectName: '',
+        time: '',
+        role: ''
+      })
     },
 
     // ================== 删除卡片 ==================
-    removeCard(event) {
-      const btn = event.currentTarget
-      const card = btn.closest('.card')
-      if (card) {
-        card.remove()
-      }
-    },
-
-    clearInputs(cardElement) {
-      const inputs = cardElement.querySelectorAll('input')
-      inputs.forEach((inp) => (inp.value = ''))
+    removeCard(listName, index) {
+      this[listName].splice(index, 1)
     }
   }
 }
@@ -419,6 +323,7 @@ export default {
   background-color: var(--color-white);
   margin-left: 100px;
   margin-top: 60px;
+  padding-bottom: 60px;
   max-width: 600px;
 }
 
@@ -452,6 +357,10 @@ export default {
   display: block;
 }
 
+.highlight {
+  color: var(--color-primary);
+}
+
 .form-input:focus {
   outline: none;
   border: 2px solid var(--color-primary);
@@ -477,5 +386,70 @@ export default {
 
 .form-input:focus+.form-label {
   color: var(--color-primary);
+}
+
+.card {
+  position: relative;
+  border-radius: 10px;
+}
+
+.remove-btn {
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: red;
+  position: relative;
+  right: -3px;
+}
+
+.add-button {
+  color: var(--color-primary);
+  background-color: transparent;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  padding: 15px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.submit-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.form-line {
+  display: flex;
+  gap: 10px;
+}
+
+.block-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.card-title {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
 }
 </style>
