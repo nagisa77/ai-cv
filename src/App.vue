@@ -51,12 +51,19 @@ header {
   align-items: center;
 }
 
-.router-view {
-  transform: translateY(60px);
-}
-
 .header-logo {
   width: 20px;
   height: 20px;
+}
+
+.form-line {
+  display: flex;
+  gap: 10px;
+}
+
+.block-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 </style>

@@ -280,10 +280,8 @@ export default {
 
 /* 保持原有样式不变 */
 .home {
-  /* 你的样式 */
   display: flex;
   flex-direction: column;
-  transform: translateY(60px);
 }
 
 .home-title-highlight {
@@ -321,7 +319,7 @@ export default {
 }
 
 .session1 {
-  height: calc(100vh - 60px);
+  height: calc(100vh);
   width: 100vw;
   background-color: var(--color-secondary);
   display: flex;

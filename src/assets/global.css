@@ -4,7 +4,8 @@
   --color-primary-hover: #4a8dd0;
   --color-black: #000000;
   --color-gray: #dddddd;
-  --color-header-background: rgba(240, 242, 245, 0.3);
+  --color-gray-dark: #bebdbd;
+  --color-header-background: rgba(240, 242, 245, 0.5);
 }
 
 html, body {
