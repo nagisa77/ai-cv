@@ -447,7 +447,7 @@ export default {
 .preview-pane {
   position: fixed;
   top: 100px;
-  right: 100px;
+  left: 750px;
   width: 400px;
   overflow-y: auto;
 }
