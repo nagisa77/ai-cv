@@ -62,13 +62,3 @@
     }
   };
   </script>
-  
-  <style scoped>
-  .bullet-point {
-    font-weight: bold;
-  }
-  
-  .bullet-content {
-    margin-left: 4px;
-  }
-  </style>

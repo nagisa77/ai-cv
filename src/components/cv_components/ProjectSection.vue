@@ -45,21 +45,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.bullet-point {
-  font-weight: bold;
-}
-
-.bullet-content {
-  margin-left: 4px;
-}
-
-.bullet-point-prefix {
-  margin-top: 2px;
-}
-
-.bullet-point-content {
-  margin-top: 4px;
-}
-</style>

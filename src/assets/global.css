@@ -6,7 +6,7 @@
   --color-gray: #dddddd;
   --color-gray-dark: #bebdbd;
   --color-header-background: rgba(240, 242, 245, 0.5);
-  --color-session-selected: rgba(90, 161, 236, 0.3);
+  --color-session-selected: rgba(90, 161, 236, 0.2);
 }
 
 html, body {

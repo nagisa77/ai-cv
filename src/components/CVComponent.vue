@@ -1,6 +1,5 @@
-<!-- src/components/CVComponent.vue -->
 <template>
-  <div class="cv-component">
+  <div class="cv-component" ref="cvComponent">
     <div class="cv-page">
       <!-- Personal Information -->
       <PersonalInfo :personalInfo="personalInfo" />
@@ -21,9 +20,13 @@
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
     </div>
   </div>
+
+  <!-- Screenshot Button -->
+  <button @click="captureAndSaveScreenshot">截图并保存</button>
 </template>
 
 <script>
+import html2canvas from 'html2canvas';
 import metadataInstance from '@/models/metadata_model.js';
 import PersonalInfo from '@/components/cv_components/PersonalInfo.vue';
 import EducationSection from '@/components/cv_components/EducationSection.vue';
@@ -69,9 +72,28 @@ export default {
      */
     handleSelectedModuleChanged(payload) {
       this.$emit('selected-module-changed', payload);
+    },
+
+    /**
+     * Capture the component as a screenshot and trigger download.
+     */
+    captureAndSaveScreenshot() {
+      const cvComponent = this.$refs.cvComponent;
+
+      // 使用html2canvas捕捉组件
+      html2canvas(cvComponent).then(canvas => {
+        // 将canvas转化为图片URL
+        const imgUrl = canvas.toDataURL('image/png');
+
+        // 创建下载链接
+        const link = document.createElement('a');
+        link.href = imgUrl;
+        link.download = 'cv-screenshot.png';
+        link.click();
+      });
     }
   }
-};
+}
 </script>
 
 <style>
@@ -161,5 +183,4 @@ export default {
   border-radius: 4px;
   z-index: -1;
 }
-
 </style>
