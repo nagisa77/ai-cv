@@ -117,6 +117,7 @@ export default {
 }
 
 .cv-container {
+  position: relative;
   height: calc(100vh - 60px);
   margin-top: 60px;
 }

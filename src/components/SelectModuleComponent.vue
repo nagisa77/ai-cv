@@ -1,15 +1,14 @@
 <template>
   <div class="select-module">
-    <h2>请选择一个经历，开始与AI聊吧</h2>
-    <ul>
-      <li
-        v-for="module in chatModules"
-        :key="module.title"
-        @click="selectModule(module)"
-      >
+    <div class="select-module-title">请<span class="select-module-title-highlight">选择</span>一个经历...</div>
+    <div class="select-module-subtitle">
+      Hi少侠，欢迎来到神奇的AI简历创建之旅，我是你的好伙伴简历君，你也可以叫我菌菌：）右边已经根据您提供的基础信息生成了初步的简历框架，下面就由俺来协助少侠完善它吧！请选择要先开始攻略的板块：
+    </div>
+    <div class="select-module-list">
+      <div class="select-module-item" v-for="module in chatModules" :key="module.title" @click="selectModule(module)">
         {{ module.title }}
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,34 +32,52 @@ export default {
 </script>
 
 <style scoped>
-.select-module {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
-  flex-direction: column;
+.select-module {
+  padding: 100px 20px;
+  background-color: var(--color-header-background);
+
   height: calc(100vh - 60px);
   width: 38vw;
-  box-shadow: inset 0 0 20px 0 rgba(0, 0, 0, 0.2);
-  justify-content: space-between;
 }
-.select-module h2 {
-  margin-bottom: 20px;
+
+.select-module-title {
+  font-size: 24px;
+  font-weight: bold;
 }
-.select-module ul {
-  list-style: none;
-  padding: 0;
+
+.select-module-title-highlight {
+  color: var(--color-primary);
 }
-.select-module li {
+
+.select-module-subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin-top: 20px;
+  opacity: 0.6;
+  line-height: 1.7;
+}
+
+.select-module-list {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.select-module-item {
   cursor: pointer;
-  margin: 8px 0;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 25px;
   padding: 8px 16px;
-  border: 1px solid #bbb;
-  border-radius: 4px;
-  transition: 0.3s;
+  font-size: 13px;
 }
-.select-module li:hover {
-  background-color: #f5f5f5;
+
+.select-module-item:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transition: all 0.3s ease;
 }
+
 </style>
