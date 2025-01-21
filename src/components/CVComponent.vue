@@ -133,9 +133,10 @@ export default {
   font-size: 8px;
 }
 
-.bullet-point-prefix {
+.bullet-point{
   margin-right: 4px;
   margin-top: 4px;
+  font-weight: bold;
 }
 
 .bullet-point-content {

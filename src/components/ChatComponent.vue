@@ -42,7 +42,7 @@
         <template v-else-if="message.sender === 'choice'">
           <div class="choice-message-container">
             <div class="message choice">
-              <span>简历菌 觉得<span style="color: var(--color-primary); font-weight: bold;">相关资料收集完毕</span>!, 并为您总结出以下几点，你是否满意?</span>
+              <span>根据少侠提供的信息，菌菌已经<span style="color: var(--color-primary); font-weight: bold;">帮你总结</span>了以下要点: </span>
 
               <div class="item-content-item" v-for="(point, i2) in getContentsFromMessage(message)" :key="i2">
                 <div class="bullet-point-content">
@@ -52,8 +52,8 @@
               </div>
 
               <div class="choice-buttons">
-                <button class="choice-button-ok" @click="handleOk(message)">OK, 渲染到右侧简历~! 🎉</button>
-                <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够 :(</button>
+                <button class="choice-button-ok" @click="handleOk(message)">没问题, 展示到右边吧~! 🎉</button>
+                <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够, 继续对话吧:(</button>
               </div>
             </div>
           </div>
@@ -216,7 +216,7 @@ function handleOk(choiceMessage) {
     const parsed = JSON.parse(choiceMessage.text)
     // 如果解析成功，拿到 meta_data，发射事件
     emit('update-resume', parsed.meta_data)
-    emit('close-chat')
+    // emit('close-chat')
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
   }
