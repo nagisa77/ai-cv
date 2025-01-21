@@ -1,12 +1,13 @@
 <template>
   <div class="chat-component">
     <!-- 这里是一个示例区域，用来让用户输入API Key -->
-    <div class="api-key-settings">
+    <div class="debug-settings">
       <input
         v-model="apiKeyInput"
         placeholder="在此粘贴你的 OpenAI API Key"
       />
       <button @click="handleSetApiKey">保存 Key</button>
+      <button @click="handleCopyPrompt">Copy Prompt</button>
     </div>
 
     <!-- 消息区 -->
@@ -31,13 +32,13 @@
         </template>
 
         <!-- 系统消息（system） -->
-        <template v-else-if="message.sender === 'system'">
+        <!-- <template v-else-if="message.sender === 'system'">
           <div class="message system">
             <span>{{ message.text }}</span>
           </div>
-        </template>
+        </template> -->
 
-        <!-- 新增：选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
+        <!-- 选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
         <template v-else-if="message.sender === 'choice'">
           <div class="message choice">
             <span>GPT 觉得已经够了，你是否满意？</span>
@@ -55,7 +56,7 @@
       <div class="input-area-left">
         <input
           v-model="inputValue"
-          placeholder="给“ChatGPT”发送信息"
+          :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
           class="chatgpt-input"
           @keyup.enter="handleSendMessage"
         />
@@ -236,113 +237,32 @@ function handleOk(choiceMessage) {
 </script>
 
 <style scoped>
+
 .chat-component {
-  display: flex;
-  flex-direction: column;
+  background-color: var(--color-header-background);
   height: calc(100vh - 60px);
   width: 38vw;
-  box-shadow: inset 0 0 20px 0 rgba(0, 0, 0, 0.2);
-  justify-content: space-between;
 }
 
-/* 简单示例API Key设置区域 */
-.api-key-settings {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px;
-}
-
-.messages-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow-y: auto;
-  padding-top: 20px;
-}
-
-/* GPT消息容器：头像与消息并列 */
-.gpt-message-container {
-  display: flex;
-  align-items: flex-start;
-  margin-top: 30px;
-  margin-left: 20px;
-}
-
-/* GPT 蓝框消息 */
-.message.gpt {
-  background-color: #e8f0fe;
-  text-align: left;
-  border-radius: 5px;
-  max-width: 300px;
-  word-wrap: break-word;
-  padding: 10px;
-  margin-bottom: 10px; /* 仅留底部间距，去掉原来的 margin-left */
-}
-
-/* 用户(我)的消息 */
-.message.me {
-  background-color: #f1f1f1;
-  text-align: right;
-  margin-left: auto;
-  margin-top: 30px;
-  margin-right: 20px;
-  border-radius: 5px;
-  max-width: 300px;
-  word-wrap: break-word;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-/* 系统消息 */
-.message.system {
-  opacity: 0.3;
-  font-size: 10px;
-  max-width: none;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: 10px;
-}
-
-/* 新增：choice 消息布局 */
-.message.choice {
-  background-color: #fff9e6;
-  color: #333;
-  margin-left: 20px;
-  margin-top: 30px;
-  border-radius: 5px;
-  max-width: 300px;
-  word-wrap: break-word;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-/* 放置选择按钮的区块 */
-.choice-buttons {
+.debug-settings {
+  position: fixed;
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
-.choice-buttons button {
-  padding: 6px 12px;
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
 
 .input-area-container {
+  position: fixed;
   display: flex;
-  bottom: 0;
   justify-content: space-between;
   align-items: center;
   border-radius: 25px;
-  margin: 30px;
+  left: 30px;
+  bottom: 20px;
   width: calc(38vw - 60px);
   max-width: 500px;
   align-self: center;
-  border: 1px solid #ccc;
-  padding: 5px 15px;
+  border: 1px solid var(--color-primary);
 }
 
 .input-area-left {
@@ -353,40 +273,44 @@ function handleOk(choiceMessage) {
 
 .chatgpt-input {
   margin-left: 20px;
-  height: 51px;
+  height: 40px;
   border: none;
   outline: none;
   font-size: 14px;
+  background-color: transparent;
   flex: 1;
 }
 
 .chatgpt-send-button {
   width: 30px;
   height: 30px;
+  margin-right: 6px;
   border-radius: 50%;
-  margin-left: 10px;
+  margin-left: 6px;
   border: none;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
+.chatgpt-send-button:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.3s ease;
+}
+
 .chatgpt-send-icon {
   background-color: transparent;
   filter: brightness(0) invert(1);
-  width: 20px;
-  height: 20px;
-}
-
-/* GPT 消息头像样式 */
-.chatgpt-message-icon {
   width: 30px;
   height: 30px;
-  margin-right: 10px;
-  /* 让头像对齐消息的顶部 */
-  margin-top: 2px;
 }
+
+.messages-container {
+  height: calc(100vh - 60px - 62px);
+  overflow-y: auto;
+}
+
 </style>

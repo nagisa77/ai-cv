@@ -37,8 +37,8 @@ export default {
   padding: 100px 20px;
   background-color: var(--color-header-background);
 
-  height: calc(100vh - 60px);
-  width: 38vw;
+  height: calc(100vh - 60px - 200px);
+  width: calc(38vw - 40px);
 }
 
 .select-module-title {
