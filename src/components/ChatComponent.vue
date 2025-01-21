@@ -2,6 +2,7 @@
   <div class="chat-component">
     <!-- 这里是一个示例区域，用来让用户输入API Key -->
     <div class="debug-settings">
+      <span style="color: red;">[debug_area]:</span>
       <input
         v-model="apiKeyInput"
         placeholder="在此粘贴你的 OpenAI API Key"
@@ -26,8 +27,10 @@
 
         <!-- 用户消息（me） -->
         <template v-else-if="message.sender === 'me'">
-          <div class="message me">
-            <span>{{ message.text }}</span>
+          <div class="me-message-container">
+            <div class="message me">
+              <span>{{ message.text }}</span>
+            </div>
           </div>
         </template>
 
@@ -50,6 +53,8 @@
         </template>
       </div>
     </div>
+
+    <div class="gradient-overlay"></div>
 
     <!-- 输入区（发送给ChatGPT） -->
     <div class="input-area-container">
@@ -239,7 +244,7 @@ function handleOk(choiceMessage) {
 <style scoped>
 
 .chat-component {
-  background-color: var(--color-header-background);
+  background-color: var(--color-background);
   height: calc(100vh - 60px);
   width: 38vw;
 }
@@ -248,6 +253,10 @@ function handleOk(choiceMessage) {
   position: fixed;
   display: flex;
   gap: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: var(--color-header-background);
+  width: 38vw;
 }
 
 
@@ -263,6 +272,15 @@ function handleOk(choiceMessage) {
   max-width: 500px;
   align-self: center;
   border: 1px solid var(--color-primary);
+}
+
+.gradient-overlay {
+  position: fixed;
+  bottom: 62px;
+  left: 0;
+  width: 38vw;
+  height: 80px;
+  background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
 }
 
 .input-area-left {
@@ -309,8 +327,48 @@ function handleOk(choiceMessage) {
 }
 
 .messages-container {
-  height: calc(100vh - 60px - 62px);
+  height: calc(100vh - 60px - 62px - 50px);
   overflow-y: auto;
+  padding-bottom: 50px;
+}
+
+.gpt-message-container {
+  display: flex;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  gap: 10px;
+  align-items: flex-start; /* 使内容靠左 */
+  justify-content: flex-start; /* 确保消息区域靠左 */
+}
+
+.me-message-container {
+  display: flex;
+  padding-right: 20px;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: flex-start; /* 使内容靠右 */
+  justify-content: flex-end; /* 确保消息区域靠右 */
+}
+
+.message {
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 14px;
+}
+
+.message.gpt {
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+
+.message.me {
+  background-color: white;
+}
+
+.chatgpt-message-icon {
+  width: 30px;
+  height: 30px;
 }
 
 </style>

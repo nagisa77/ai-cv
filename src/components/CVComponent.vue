@@ -1,5 +1,9 @@
 <template>
   <div class="cv-component" ref="cvComponent">
+    <div class="cv-debug-settings">
+      <span style="color: red;">[debug_area]:</span>
+      <button @click="captureAndSaveScreenshot">截图并保存</button>
+    </div>
     <div class="cv-page">
       <!-- Personal Information -->
       <PersonalInfo :personalInfo="personalInfo" />
@@ -20,9 +24,6 @@
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
     </div>
   </div>
-
-  <!-- Screenshot Button -->
-  <button @click="captureAndSaveScreenshot">截图并保存</button>
 </template>
 
 <script>
@@ -97,6 +98,18 @@ export default {
 </script>
 
 <style>
+.cv-debug-settings {
+  position: fixed;
+  display: flex;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: var(--color-header-background);
+  top: 60px;
+  left: 38vw;
+  width: 62vw;
+}
+
 .cv-component {
   /* 基础布局 */
   height: calc(100vh - 60px);
