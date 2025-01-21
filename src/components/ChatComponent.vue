@@ -3,10 +3,7 @@
     <!-- 这里是一个示例区域，用来让用户输入API Key -->
     <div class="debug-settings">
       <span style="color: red;">[debug_area]:</span>
-      <input
-        v-model="apiKeyInput"
-        placeholder="在此粘贴你的 OpenAI API Key"
-      />
+      <input v-model="apiKeyInput" placeholder="在此粘贴你的 OpenAI API Key" />
       <button @click="handleSetApiKey">保存 Key</button>
       <button @click="handleCopyPrompt">Copy Prompt</button>
     </div>
@@ -43,11 +40,21 @@
 
         <!-- 选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
         <template v-else-if="message.sender === 'choice'">
-          <div class="message choice">
-            <span>GPT 觉得已经够了，你是否满意？</span>
-            <div class="choice-buttons">
-              <button @click="handleOk(message)">OK</button>
-              <button @click="handleNotEnough">我觉得还不够</button>
+          <div class="choice-message-container">
+            <div class="message choice">
+              <span>简历菌 觉得<span style="color: var(--color-primary); font-weight: bold;">相关资料收集完毕</span>!, 并为您总结出以下几点，你是否满意?</span>
+
+              <div class="item-content-item" v-for="(point, i2) in getContentsFromMessage(message)" :key="i2">
+                <div class="bullet-point-content">
+                  <span class="bullet-point">· {{ point.bullet_point }}:</span>
+                  <span class="bullet-content">{{ point.content }}</span>
+                </div>
+              </div>
+
+              <div class="choice-buttons">
+                <button class="choice-button-ok" @click="handleOk(message)">OK, 渲染到右侧简历~! 🎉</button>
+                <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够 :(</button>
+              </div>
             </div>
           </div>
         </template>
@@ -59,12 +66,9 @@
     <!-- 输入区（发送给ChatGPT） -->
     <div class="input-area-container">
       <div class="input-area-left">
-        <input
-          v-model="inputValue"
+        <input v-model="inputValue"
           :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
-          class="chatgpt-input"
-          @keyup.enter="handleSendMessage"
-        />
+          class="chatgpt-input" @keyup.enter="handleSendMessage" />
       </div>
       <div class="chatgpt-send-button" @click="handleSendMessage">
         <img :src="sendIcon" alt="ChatGPT 图标" class="chatgpt-send-icon" />
@@ -218,12 +222,17 @@ function handleOk(choiceMessage) {
   }
 }
 
+function getContentsFromMessage(message) {
+  const parsed = JSON.parse(message.text)
+  return parsed.meta_data.resumeData.content
+}
+
 /**
  * 用户点击“我觉得还不够”时调用
  */
- function handleNotEnough() {
+function handleNotEnough() {
   const predefinedMessage = '我认为总结还不够，请继续对话'
-  
+
   const { type, title } = activeModule.value
   if (!type || !title) {
     console.error('当前未选择有效的模块')
@@ -232,7 +241,7 @@ function handleOk(choiceMessage) {
 
   // 发送预定义消息到 GPT
   chatgptInstance.sendMessage(type, title, predefinedMessage)
-  
+
   // 可选：清空输入框（如果需要）
   inputValue.value = ''
 
@@ -242,7 +251,6 @@ function handleOk(choiceMessage) {
 </script>
 
 <style scoped>
-
 .chat-component {
   background-color: var(--color-background);
   height: calc(100vh - 60px);
@@ -327,18 +335,22 @@ function handleOk(choiceMessage) {
 }
 
 .messages-container {
-  height: calc(100vh - 60px - 62px - 50px);
+  height: calc(100vh - 60px - 62px - 70px);
   overflow-y: auto;
+  padding-top: 20px;
   padding-bottom: 50px;
 }
 
+.choice-message-container,
 .gpt-message-container {
   display: flex;
   padding-left: 20px;
   margin-bottom: 10px;
   gap: 10px;
-  align-items: flex-start; /* 使内容靠左 */
-  justify-content: flex-start; /* 确保消息区域靠左 */
+  align-items: flex-start;
+  /* 使内容靠左 */
+  justify-content: flex-start;
+  /* 确保消息区域靠左 */
 }
 
 .me-message-container {
@@ -346,8 +358,10 @@ function handleOk(choiceMessage) {
   padding-right: 20px;
   gap: 10px;
   margin-bottom: 10px;
-  align-items: flex-start; /* 使内容靠右 */
-  justify-content: flex-end; /* 确保消息区域靠右 */
+  align-items: flex-start;
+  /* 使内容靠右 */
+  justify-content: flex-end;
+  /* 确保消息区域靠右 */
 }
 
 .message {
@@ -371,4 +385,67 @@ function handleOk(choiceMessage) {
   height: 30px;
 }
 
+.message.choice {
+  max-width: 100%;
+}
+
+.bullet-point-content {
+  font-size: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.bullet-point-prefix {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.bullet-point {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.bullet-content {
+  font-size: 10px;
+  padding-left: 10px;
+}
+
+.choice-buttons {
+  display: flex;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.choice-button-ok {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.choice-button-ok:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.3s ease;
+}
+
+.choice-button-not-enough {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.choice-button-not-enough:hover {
+  background-color: var(--color-secondary-hover);
+  transition: background-color 0.3s ease;
+}
+
 </style>
+
+
