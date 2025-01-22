@@ -62,15 +62,21 @@
           </template>
         </div>
       </div>
-      <div v-else>
-        loading...
+      <div class="chat-loading-container" v-else>
+        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
       </div>
     </div>
 
     <div class="gradient-overlay"></div>
 
     <!-- 输入区（发送给ChatGPT） -->
-    <div class="input-area-container">
+    <div class="input-area-container" v-if="isWaitingForAIResponse">
+      <div class="loading-container">
+        <l-infinity size="20" stroke="4" stroke-length="0.15" bg-opacity="0.5" speed="1.3"
+          color="var(--color-secondary)"></l-infinity>
+      </div>
+    </div>
+    <div v-else class="input-area-container">
       <div class="input-area-left">
         <input v-model="inputValue"
           :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
@@ -86,6 +92,10 @@
 <script setup>
 import { ref, computed, watch, nextTick, defineProps, defineEmits, onMounted } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
+import { infinity } from 'ldrs'
+import { waveform } from 'ldrs'
+waveform.register()
+infinity.register()
 
 // 父组件需传入
 const props = defineProps({
@@ -171,6 +181,10 @@ const messages = computed(() => {
   const { type, title } = activeModule.value
   if (!type || !title) return []
   return chatgptInstance.getMessagesForTitle(type, title)
+})
+
+const isWaitingForAIResponse = computed(() => {
+  return messages.value.length > 1 && messages.value[messages.value.length - 1].sender === 'me'
 })
 
 function handleSendMessage() {
@@ -259,7 +273,7 @@ function handleOk(choiceMessage) {
       title,
       "我现在觉得OK了，已经选择了总结到右边! 你可以继续跟我聊天，发现这份经历的其他亮点，is_enough 请先设置为 false",
       false
-    ) 
+    )
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
   }
@@ -488,4 +502,24 @@ function handleNotEnough() {
   background-color: var(--color-secondary-hover);
   transition: background-color 0.3s ease;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border-radius: 20px;
+}
+
+.chat-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
 </style>
