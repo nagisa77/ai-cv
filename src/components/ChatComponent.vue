@@ -53,7 +53,7 @@
                   </div>
                 </div>
 
-                <div class="choice-buttons">
+                <div v-if="isLastMessage(message)" class="choice-buttons">
                   <button class="choice-button-ok" @click="handleOk(message)">没问题, 展示到右边吧~! 🎉</button>
                   <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够, 继续对话吧:(</button>
                 </div>
@@ -196,6 +196,10 @@ function handleSendMessage() {
 
   // 清空输入框
   inputValue.value = ''
+}
+
+function isLastMessage(message) {
+  return messages.value.length > 0 && messages.value[messages.value.length - 1] === message
 }
 
 /**
