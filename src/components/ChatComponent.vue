@@ -252,6 +252,14 @@ function handleOk(choiceMessage) {
     // 如果解析成功，拿到 meta_data，发射事件
     emit('update-resume', parsed.meta_data)
     // emit('close-chat')
+
+    const { type, title } = activeModule.value
+    chatgptInstance.sendMessage(
+      type,
+      title,
+      "我现在觉得OK了，已经选择了总结到右边! 你可以继续跟我聊天，发现这份经历的其他亮点，is_enough 请先设置为 false",
+      false
+    ) 
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
   }
