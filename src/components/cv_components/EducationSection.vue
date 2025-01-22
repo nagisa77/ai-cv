@@ -2,8 +2,14 @@
 <template>
   <section v-if="educationList && educationList.length" class="education-section session">
     <h2 class="session-title">教育经历</h2>
-    <div class="session-item" v-for="(edu, index) in educationList" :key="index"
-      @click="onTitleClick('education', edu.title)">
+    <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
+      @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
+      <div class="item-hover-overlay" v-if="hoverIndex === index">
+        <div class="overlay-buttons">
+          <button @click.stop="onEditClick(project)">编辑</button>
+          <button @click="onTitleClick('education', edu.title)">AI 对话</button>
+        </div>
+      </div>
       <div class="title-and-time">
         <h3 class="item-title">{{ edu.title }}</h3>
         <p class="item-time">{{ edu.content.from_time }} - {{ edu.content.to_time }}</p>
@@ -37,6 +43,11 @@ export default {
     highlightTitle: {
       type: String,
       default: ''
+    }
+  },
+  data() {
+    return {
+      hoverIndex: null // 记录当前鼠标悬停在哪个项目上
     }
   },
   methods: {

@@ -133,7 +133,7 @@ export default {
   font-size: 8px;
 }
 
-.bullet-point{
+.bullet-point {
   margin-right: 4px;
   margin-top: 4px;
   font-weight: bold;
@@ -196,5 +196,44 @@ export default {
   background-color: var(--color-primary);
   border-radius: 4px;
   z-index: -1;
+}
+
+/* —————————————————————————
+   灰色蒙层 
+   ————————————————————————— */
+.item-hover-overlay {
+  position: absolute;
+  /* 同 highlight 一样的计算方式，以保证区域大于 .session-item 本身 */
+  top: -5px;
+  left: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 10px);
+  border-radius: 4px;
+  z-index: 1;
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: backdrop-filter 0.2s ease;
+}
+
+/* 按钮区域 */
+.overlay-buttons {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  /* 按钮间距 */
+  z-index: 2;
+  /* 按钮更上层，确保可点 */
+}
+
+.overlay-buttons button {
+  cursor: pointer;
+  padding: 4px 8px;
+  border: none;
+  outline: none;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
