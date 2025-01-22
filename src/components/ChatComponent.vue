@@ -138,7 +138,7 @@ function initChat() {
     chatgptInstance.sendMessage(
       type,
       title,
-      "我现在开始讨论这个话题，请你用一句话引导我",
+      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话",
       false
     )
   }
@@ -275,7 +275,7 @@ function handleOk(choiceMessage) {
     chatgptInstance.sendMessage(
       type,
       title,
-      "我现在觉得OK了，已经选择了总结到右边! 你可以继续跟我聊天，发现这份经历的其他亮点，is_enough 请先设置为 false",
+      "我现在觉得OK了，已经选择了总结到右边! 基于现在已有的内容，给出可以进一步优化的建议或进一步挖掘其他的亮点，is_enough 请先设置为 false",
       false
     )
   } catch (e) {
