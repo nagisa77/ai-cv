@@ -123,16 +123,21 @@ ${JSON.stringify(metadata_model.contentForType(type, title))}
       data.conversations[type][title].push(message)
     }
 
-    async function sendMessage(type, title, userText) {
+    async function sendMessage(type, title, userText, display = true) {
       if (!userText.trim()) return
 
       data.conversations[type][title].push({
         text: userText,
         sender: 'me',
+        display: display,
       })
 
       const gptReply = await fetchGptResponse(type, title, userText)
-      data.conversations[type][title].push({ text: gptReply, sender: 'gpt' })
+      data.conversations[type][title].push({
+        text: gptReply,
+        sender: 'gpt',
+        display: true,
+      })
     }
 
     function buildGptMessagesFromData(type, title) {

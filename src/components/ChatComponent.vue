@@ -11,53 +11,59 @@
     <!-- 消息区 -->
     <div class="messages-container" ref="messagesContainer">
       <!-- 使用 v-for 渲染所有消息 -->
-      <div v-for="(message, index) in messages" :key="index">
-        <!-- GPT 消息：头像 + 蓝框并列 -->
-        <template v-if="message.sender === 'gpt'">
-          <div class="gpt-message-container">
-            <img :src="gptMessageIcon" alt="ChatGPT 头像" class="chatgpt-message-icon" />
-            <div class="message gpt">
-              <span>{{ extractMessage(message.text) }}</span>
+      <div v-if="messages.length > 2">
+        <div v-for="(message, index) in messages" :key="index">
+          <!-- GPT 消息：头像 + 蓝框并列 -->
+          <template v-if="message.sender === 'gpt' && message.display">
+            <div class="gpt-message-container">
+              <img :src="gptMessageIcon" alt="ChatGPT 头像" class="chatgpt-message-icon" />
+              <div class="message gpt">
+                <span>{{ extractMessage(message.text) }}</span>
+              </div>
             </div>
-          </div>
-        </template>
+          </template>
 
-        <!-- 用户消息（me） -->
-        <template v-else-if="message.sender === 'me'">
-          <div class="me-message-container">
-            <div class="message me">
-              <span>{{ message.text }}</span>
+          <!-- 用户消息（me） -->
+          <template v-else-if="message.sender === 'me' && message.display">
+            <div class="me-message-container">
+              <div class="message me">
+                <span>{{ message.text }}</span>
+              </div>
             </div>
-          </div>
-        </template>
+          </template>
 
-        <!-- 系统消息（system） -->
-        <!-- <template v-else-if="message.sender === 'system'">
+          <!-- 系统消息（system） -->
+          <!-- <template v-else-if="message.sender === 'system'">
           <div class="message system">
             <span>{{ message.text }}</span>
           </div>
         </template> -->
 
-        <!-- 选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
-        <template v-else-if="message.sender === 'choice'">
-          <div class="choice-message-container">
-            <div class="message choice">
-              <span>根据少侠提供的信息，菌菌已经<span style="color: var(--color-primary); font-weight: bold;">帮你总结</span>了以下要点: </span>
+          <!-- 选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
+          <template v-else-if="message.sender === 'choice' && message.display">
+            <div class="choice-message-container">
+              <div class="message choice">
+                <span>根据少侠提供的信息，菌菌已经<span style="color: var(--color-primary); font-weight: bold;">帮你总结</span>了以下要点:
+                </span>
 
-              <div class="item-content-item" v-for="(point, i2) in getContentsFromMessage(message)" :key="i2">
-                <div class="bullet-point-content">
-                  <span class="bullet-point">· {{ point.bullet_point }}:</span>
-                  <span class="bullet-content">{{ point.content }}</span>
+                <div class="item-content-item" v-for="(point, i2) in getContentsFromMessage(message)" :key="i2">
+                  <div class="bullet-point-content">
+                    <span class="bullet-point">· {{ point.bullet_point }}:</span>
+                    <span class="bullet-content">{{ point.content }}</span>
+                  </div>
+                </div>
+
+                <div class="choice-buttons">
+                  <button class="choice-button-ok" @click="handleOk(message)">没问题, 展示到右边吧~! 🎉</button>
+                  <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够, 继续对话吧:(</button>
                 </div>
               </div>
-
-              <div class="choice-buttons">
-                <button class="choice-button-ok" @click="handleOk(message)">没问题, 展示到右边吧~! 🎉</button>
-                <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够, 继续对话吧:(</button>
-              </div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
+      </div>
+      <div v-else>
+        loading...
       </div>
     </div>
 
@@ -110,7 +116,23 @@ onMounted(() => {
     // 同时给 ChatgptModel 设置
     chatgptInstance.setApiKey(storedKey)
   }
+
+  if (props.currentSelectedTitle) {
+    initChat()
+  }
 })
+
+function initChat() {
+  if (messages.value.length == 1) {
+    const { type, title } = activeModule.value
+    chatgptInstance.sendMessage(
+      type,
+      title,
+      "我现在开始讨论这个话题，请你用一句话引导我",
+      false
+    )
+  }
+}
 
 // 点击“保存 Key”按钮时，把 key 存到单例
 function handleSetApiKey() {
@@ -156,7 +178,7 @@ function handleSendMessage() {
   if (!trimmedValue) return
 
   const { type, title } = activeModule.value
-  chatgptInstance.sendMessage(type, title, trimmedValue)
+  chatgptInstance.sendMessage(type, title, trimmedValue, true)
 
   // 清空输入框
   inputValue.value = ''
@@ -192,7 +214,8 @@ watch(
           const { type, title } = activeModule.value
           chatgptInstance.addMessage(type, title, {
             sender: 'choice',
-            text: JSON.stringify({ meta_data: parsedData.meta_data })
+            text: JSON.stringify({ meta_data: parsedData.meta_data }),
+            display: true
           })
         }
       } catch (e) {
@@ -206,6 +229,18 @@ watch(
     }
   },
   { deep: true }
+)
+
+
+/**
+ * 监听 currentSelectedTitle 的变化
+ */
+watch(
+  () => props.currentSelectedTitle,
+  (newTitle, oldTitle) => {
+    console.log(`模块从 "${oldTitle}" 切换到 "${newTitle}"`)
+    initChat()
+  }
 )
 
 /**
@@ -240,7 +275,7 @@ function handleNotEnough() {
   }
 
   // 发送预定义消息到 GPT
-  chatgptInstance.sendMessage(type, title, predefinedMessage)
+  chatgptInstance.sendMessage(type, title, predefinedMessage, true)
 
   // 可选：清空输入框（如果需要）
   inputValue.value = ''
@@ -445,7 +480,4 @@ function handleNotEnough() {
   background-color: var(--color-secondary-hover);
   transition: background-color 0.3s ease;
 }
-
 </style>
-
-
