@@ -8,6 +8,7 @@
   --color-header-background: rgba(240, 242, 245, 0.5);
   --color-background: rgba(240, 242, 245, 1);
   --color-session-selected: rgba(90, 161, 236, 0.2);
+  --color-delete-hover: #ff190036;
 }
 
 html, body {

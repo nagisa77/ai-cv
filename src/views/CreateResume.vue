@@ -4,7 +4,7 @@
     <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
       <template v-if="currentEditingTitle != ''">
-        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType" />
+        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType" @cancel-changes="handleCancelChanges" />
       </template>
       <template v-else-if="currentSelectedTitle != ''">
         <ChatComponent :modules="chatModules" @update-resume="handleUpdateResume"
@@ -18,7 +18,7 @@
 
     <!-- 右侧 -->
     <div class="right-container cv-container">
-      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" />
+      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" />
     </div>
   </div>
 </template>
@@ -124,6 +124,15 @@ export default {
       console.log('handleEditTitle', type, title)
       this.currentEditingTitle = title
       this.currentEditingType = type
+    },
+
+    /**
+     * 接收从 EditTitleComponent 发射的 "cancel-changes" 事件
+     * 取消当前正在编辑的标题
+     */
+    handleCancelChanges() {
+      this.currentEditingTitle = ''
+      this.currentEditingType = ''
     }
   }
 }
