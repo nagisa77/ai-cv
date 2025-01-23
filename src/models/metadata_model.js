@@ -33,21 +33,21 @@ class MetadataModel {
     switch (type) {
       case 'education':
         return `
-        - meta_data 中的 title 是用户的教育经历标题， 不做改动。
+        - meta_data 中的 title 是用户的教育经历标题， 注意该字段不要做任何改动。
         - meta_data 中的 content 是AI需要通过对话，总结出的教育经历内容（亮点），需总结为2-4点，突出学习成果和相关课程, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是用户的入学时间。
         - meta_data 中的 to_time 是用户的毕业时间。
         `;
       case 'workExperience':
         return `
-        - meta_data 中的 title 是用户的工作经历标题, 不做改动。
+        - meta_data 中的 title 是用户的工作经历标题, 注意该字段不要做任何改动。
         - meta_data 中的 content 是AI需要通过对话，总结出的工作经历内容（亮点），需总结为2-4点，强调职责、成就和量化成果, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是用户的入职时间。
         - meta_data 中的 to_time 是用户的离职时间。
         `;
       case 'projectExperience':
         return `
-        - meta_data 中的 title 是用户的项目经历标题，不做改动。
+        - meta_data 中的 title 是用户的项目经历标题，注意该字段不要做任何改动。
         - meta_data 中的 content 是AI需要通过对话，总结出的项目经历内容（亮点），需总结为2-4点，突出项目目标、所用技术和取得的成果, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是项目开始时间。
         - meta_data 中的 to_time 是项目结束时间。

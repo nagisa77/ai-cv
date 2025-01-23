@@ -4,46 +4,55 @@
             您正在编辑的是 <span class="title-highlight">{{ currentEditingTitle }}</span>
         </div>
 
-        <div class="session-edit-title">基础信息</div>
-        <div class="session-edit" v-if="currentEditingType === 'education'">
-            <div class="form-line">
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.from_time" />
-                    <label class="form-label">开始时间</label>
+        <!-- ================== Education ================== -->
+        <div v-if="currentEditingType === 'education'">
+            <div class="session-edit-title">基础信息</div>
+            <div class="session-edit">
+                <div class="form-line">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.from_time" />
+                        <label class="form-label">开始时间</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.to_time" />
+                        <label class="form-label">结束时间</label>
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.to_time" />
-                    <label class="form-label">结束时间</label>
+                    <input type="text" class="form-input" placeholder=" " required 
+                           v-model="localContent.content.major" />
+                    <label class="form-label">专业</label>
                 </div>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder=" " required v-model="localContent.content.major" />
-                <label class="form-label">专业</label>
-            </div>
-            <div class="form-line">
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.degree" />
-                    <label class="form-label">学历</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " v-model="localContent.content.gpa" />
-                    <label class="form-label">GPA (选填)</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.city" />
-                    <label class="form-label">城市</label>
+
+                <div class="form-line">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.degree" />
+                        <label class="form-label">学历</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " v-model="localContent.content.gpa" />
+                        <label class="form-label">GPA (选填)</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.city" />
+                        <label class="form-label">城市</label>
+                    </div>
                 </div>
             </div>
 
             <div class="session-edit-title">Bullet Points</div>
-            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index" >
+            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
                 <div class="button-container">
-                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave"
-                        type="button" class="remove-button" @click="removeBulletPoint(index)">
+                    <button v-on:mouseenter="handleMouseEnter(index)" 
+                            v-on:mouseleave="handleMouseLeave"
+                            type="button" 
+                            class="remove-button" 
+                            @click="removeBulletPoint(index)">
                         x
                     </button>
                 </div>
@@ -55,21 +64,116 @@
                     <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
                     <label class="form-label">内容</label>
                 </div>
-                <!-- Remove bullet point button -->
             </div>
-
-            <button class="add-button" type="button" @click="addEducationBulletPoint">
+            <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point
             </button>
         </div>
 
+        <!-- ================== Work Experience ================== -->
         <div v-if="currentEditingType === 'workExperience'">
-            workExperience
-        </div>
-        <div v-if="currentEditingType === 'projectExperience'">
-            projectExperience
+            <div class="session-edit-title">基础信息</div>
+            <div class="session-edit">
+                <div class="form-line">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.from_time" />
+                        <label class="form-label">开始时间</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.to_time" />
+                        <label class="form-label">结束时间</label>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required 
+                               v-model="localContent.content.title" />
+                        <label class="form-label">职位</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" "
+                            v-model="localContent.content.city" />
+                        <label class="form-label">城市</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="session-edit-title">Bullet Points</div>
+            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
+                <div class="button-container">
+                    <button v-on:mouseenter="handleMouseEnter(index)"
+                            v-on:mouseleave="handleMouseLeave"
+                            type="button"
+                            class="remove-button"
+                            @click="removeBulletPoint(index)">
+                        x
+                    </button>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required v-model="point.bullet_point" />
+                    <label class="form-label">Bullet Point</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
+                    <label class="form-label">内容</label>
+                </div>
+            </div>
+            <button class="add-button" type="button" @click="addBulletPoint">
+                + 新增Bullet Point
+            </button>
         </div>
 
+        <!-- ================== Project Experience ================== -->
+        <div v-if="currentEditingType === 'projectExperience'">
+            <div class="session-edit-title">基础信息</div>
+            <div class="session-edit">
+                <div class="form-line">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.from_time" />
+                        <label class="form-label">开始时间</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.to_time" />
+                        <label class="form-label">结束时间</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required
+                        v-model="localContent.content.role" />
+                    <label class="form-label">职位/角色</label>
+                </div>
+            </div>
+
+            <div class="session-edit-title">Bullet Points</div>
+            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
+                <div class="button-container">
+                    <button v-on:mouseenter="handleMouseEnter(index)"
+                            v-on:mouseleave="handleMouseLeave"
+                            type="button"
+                            class="remove-button"
+                            @click="removeBulletPoint(index)">
+                        x
+                    </button>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required v-model="point.bullet_point" />
+                    <label class="form-label">Bullet Point</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
+                    <label class="form-label">内容</label>
+                </div>
+            </div>
+            <button class="add-button" type="button" @click="addBulletPoint">
+                + 新增Bullet Point
+            </button>
+        </div>
+
+        <!-- ================== Footer 操作按钮 ================== -->
         <div class="edit-title-component-footer">
             <div class="edit-cancel-btn" @click="cancelChanges">
                 取消
@@ -105,15 +209,19 @@ export default {
     },
     created() {
         // 深拷贝 metadataInstance 原始数据，赋值给 localContent
+        // 注意：ResumeForm.vue 中 setContentForType 时，把真正要存的结构都放在 content 里了
+        // 比如： { from_time: '', to_time: '', content: [] } 等等
+        // 因此这里需要根据 ResumeForm.vue 实际写入的结构来匹配
         const originalContent = metadataInstance.contentForType(
             this.currentEditingType,
             this.currentEditingTitle
         );
+        // 深拷贝
         this.localContent = JSON.parse(JSON.stringify(originalContent));
     },
     methods: {
-        // 新增 Bullet Point
-        addEducationBulletPoint() {
+        // 新增 Bullet Point：各类型共用
+        addBulletPoint() {
             this.localContent.content.content.push({
                 bullet_point: '',
                 content: ''
@@ -125,14 +233,20 @@ export default {
         },
         // “提交”按钮：此时才更新 metadataInstance 的数据
         submitChanges() {
-            // 根据自身业务需要，把本地修改写回 metadataInstance
-            // 假设模型里有类似 updateContentForType 的方法，可以把数据写回去
-            metadataInstance.setContentForTitle(this.currentEditingTitle, this.localContent.content)
+            // 将本地修改内容写回 metadataInstance
+            metadataInstance.setContentForTitle(
+                this.currentEditingTitle,
+                this.localContent.content
+            );
+            // 提交后可根据需要进行其他跳转或提示等操作
+            this.$emit("changes-submitted");
         },
-        // “取消”按钮：还原 localContent
+        // “取消”按钮：还原 or 关闭编辑
         cancelChanges() {
-            this.$emit("cancel-changes")
+            // 可以根据需要进行更多处理，这里仅做关闭编辑的示例
+            this.$emit("cancel-changes");
         },
+        // Hover 效果（若有定制化需求）
         handleMouseEnter(index) {
             this.mouseHoverIndex = index;   
         },
@@ -157,14 +271,6 @@ export default {
     font-weight: bold;
 }
 
-.session-edit {
-    /* Custom styling */
-}
-
-.title-highlight {
-    color: var(--color-primary);
-}
-
 .session-edit-title {
     margin-top: 20px;
     font-size: 14px;
@@ -172,9 +278,19 @@ export default {
     opacity: 0.6;
 }
 
+.form-line {
+    display: flex;
+    gap: 10px;
+}
+
+.title-highlight {
+    color: var(--color-primary);
+}
+
 .edit-title-component-footer {
     display: flex;
     justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .edit-cancel-btn {
@@ -209,6 +325,21 @@ export default {
 .add-button {
     margin-top: 10px;
     cursor: pointer;
+    color: var(--color-primary);
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.bullet-point-container {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .remove-button {
@@ -219,20 +350,6 @@ export default {
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 4px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.bullet-point-container {
-    margin-bottom: 10px;
-    border-radius: 10px;
-}
-
-.bullet-point-container:hover {
-    transition: background-color 0.3s ease;
 }
 
 </style>

@@ -181,6 +181,7 @@ export default {
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  margin-bottom: 10px;
 }
 
 .highlight {
@@ -240,4 +241,12 @@ export default {
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
+
+.bullet-point-prefix {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 2px;
+  margin-right: 4px;
+}
+
 </style>
