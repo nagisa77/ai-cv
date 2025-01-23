@@ -414,7 +414,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .container {
   background-color: var(--color-white);
   margin-left: 100px;
@@ -458,27 +458,27 @@ export default {
 }
 
 /* Existing styles remain unchanged */
-.container .title {
+.title {
   margin-top: 20px;
   font-size: 24px;
   font-weight: bold;
   color: var(--color-black);
 }
 
-.container .subtitle {
+.subtitle {
   font-size: 14px;
   color: var(--color-black);
   opacity: 0.5;
 }
 
-.container .form-group {
+.form-group {
   position: relative;
   width: 100%;
   height: 50px;
   margin-bottom: 10px;
 }
 
-.container .form-input {
+.form-input {
   width: calc(100% - 24px);
   height: calc(100% - 12px);
   padding: 12px 12px 0 12px;
@@ -488,16 +488,16 @@ export default {
   display: block;
 }
 
-.container .highlight-content {
+.highlight-content {
   color: var(--color-primary);
 }
 
-.container .form-input:focus {
+.form-input:focus {
   outline: none;
   border: 2px solid var(--color-primary);
 }
 
-.container .form-label {
+.form-label {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -508,18 +508,18 @@ export default {
   transition: all 0.3s ease;
 }
 
-.container .form-input:focus+.form-label,
-.container .form-input:not(:placeholder-shown)+.form-label {
+.form-input:focus+.form-label,
+.form-input:not(:placeholder-shown)+.form-label {
   top: 10px;
   left: 12px;
   font-size: 10px;
 }
 
-.container .form-input:focus+.form-label {
+.form-input:focus+.form-label {
   color: var(--color-primary);
 }
 
-.container .card {
+.card {
   position: relative;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -527,7 +527,7 @@ export default {
   transition: box-shadow 0.3s ease;
 }
 
-.container .remove-btn {
+.remove-btn {
   font-size: 12px;
   cursor: pointer;
   border: none;
@@ -537,7 +537,7 @@ export default {
   right: -3px;
 }
 
-.container .add-button {
+.add-button {
   color: var(--color-primary);
   background-color: transparent;
   border: none;
@@ -547,7 +547,7 @@ export default {
   font-size: 14px;
 }
 
-.container .submit-btn {
+.submit-btn {
   width: 100%;
   background-color: var(--color-primary);
   color: var(--color-secondary);
@@ -560,27 +560,27 @@ export default {
   margin-top: 30px;
 }
 
-.container .submit-btn:hover {
+.submit-btn:hover {
   background-color: var(--color-primary-hover);
 }
 
-.container .form-line {
+.form-line {
   display: flex;
   gap: 10px;
 }
 
-.container .block-title {
+.block-title {
   font-size: 15px;
   margin-bottom: 10px;
   margin-top: 20px;
 }
 
-.container .card-title {
+.card-title {
   font-size: 12px;
   opacity: 0.5;
 }
 
-.container .card-header {
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;

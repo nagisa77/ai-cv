@@ -8,7 +8,7 @@
       <div class="item-hover-overlay" v-if="hoverIndex === index">
         <!-- 按钮区域 -->
         <div class="overlay-buttons">
-          <button @click.stop="onEditClick(project)">编辑</button>
+          <button @click.stop="onEditClick('projectExperience', project.title)">编辑</button>
           <button @click="onTitleClick('projectExperience', project.title)">AI 对话</button>
         </div>
       </div>
@@ -55,6 +55,10 @@ export default {
   methods: {
     onTitleClick(type, title) {
       this.$emit('selected-module-changed', { type, title });
+    },
+
+    onEditClick(type, title) {
+      this.$emit('edit-title', type, title);
     }
   }
 };

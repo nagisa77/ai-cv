@@ -3,7 +3,10 @@
     <!-- 左侧 -->
     <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
-      <template v-if="currentSelectedTitle != ''">
+      <template v-if="currentEditingTitle != ''">
+        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType" />
+      </template>
+      <template v-else-if="currentSelectedTitle != ''">
         <ChatComponent :modules="chatModules" @update-resume="handleUpdateResume"
           :currentSelectedTitle="currentSelectedTitle" @close-chat="handleCloseChat" />
       </template>
@@ -15,7 +18,7 @@
 
     <!-- 右侧 -->
     <div class="right-container cv-container">
-      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" />
+      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" />
     </div>
   </div>
 </template>
@@ -24,6 +27,7 @@
 import ChatComponent from '@/components/ChatComponent.vue'
 import CVComponent from '@/components/CVComponent.vue'
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue' // <-- 新增引入
+import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
 
 export default {
@@ -31,12 +35,17 @@ export default {
   components: {
     ChatComponent,
     CVComponent,
-    SelectModuleComponent
+    SelectModuleComponent,
+    EditTitleComponent
   },
   data() {
     return {
       // 当前正在讨论的标题，用于在 CV 中高亮
-      currentSelectedTitle: ''
+      currentSelectedTitle: '',
+      // 当前正在编辑的标题
+      currentEditingTitle: '',
+      // 当前正在编辑的类型
+      currentEditingType: ''
     }
   },
   computed: {
@@ -105,6 +114,16 @@ export default {
      */
     handleCloseChat() {
       this.currentSelectedTitle = ''
+    },
+
+    /**
+     * 接收从 CVComponent 发射的 "edit-title" 事件
+     * 更新当前正在编辑的标题
+     */
+    handleEditTitle(type, title) {
+      console.log('handleEditTitle', type, title)
+      this.currentEditingTitle = title
+      this.currentEditingType = type
     }
   }
 }

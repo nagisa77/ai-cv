@@ -10,15 +10,15 @@
 
       <!-- Education Section -->
       <EducationSection :educationList="educationList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
 
       <!-- Work Experience Section -->
       <WorkSection :workList="workList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
 
       <!-- Project Experience Section -->
       <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
 
       <!-- Personal Summary -->
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
@@ -92,6 +92,10 @@ export default {
         link.download = 'cv-screenshot.png';
         link.click();
       });
+    },
+
+    handleEdit(type, title) {
+      this.$emit('edit-title', type, title);
     }
   }
 }
