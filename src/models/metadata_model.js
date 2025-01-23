@@ -133,6 +133,28 @@ class MetadataModel {
   }
 
   /**
+   * 根据 type 和 title 删除对应的数据
+   */
+  deleteContentForTitle(type, title) {
+    switch (type) {
+      case 'education': {
+        this.data.education = this.data.education.filter(item => item.title !== title);
+        break;
+      }
+      case 'workExperience': {
+        this.data.workExperience = this.data.workExperience.filter(item => item.title !== title);
+        break;
+      }
+      case 'projectExperience': {
+        this.data.projectExperience = this.data.projectExperience.filter(item => item.title !== title);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  /**
    * setContentForType
    * （示例只演示一下内部访问方式，逻辑和你原来类似）
    */

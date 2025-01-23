@@ -10,15 +10,15 @@
 
       <!-- Education Section -->
       <EducationSection :educationList="educationList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
 
       <!-- Work Experience Section -->
       <WorkSection :workList="workList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
 
       <!-- Project Experience Section -->
       <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
 
       <!-- Personal Summary -->
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
@@ -96,6 +96,10 @@ export default {
 
     handleEdit(type, title) {
       this.$emit('edit-title', type, title);
+    },
+
+    handleDelete(type, title) {
+      this.$emit('delete-title', type, title);
     }
   }
 }
@@ -232,7 +236,7 @@ export default {
   /* 按钮更上层，确保可点 */
 }
 
-.overlay-buttons button {
+.overlay-button {
   cursor: pointer;
   padding: 4px 8px;
   border: none;
@@ -240,6 +244,16 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.ai-dialog-button {
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+
+.ai-dialog-button:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.2s ease;
 }
 
 .bullet-point-prefix {

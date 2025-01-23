@@ -18,7 +18,7 @@
 
     <!-- 右侧 -->
     <div class="right-container cv-container">
-      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" />
+      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete" />
     </div>
   </div>
 </template>
@@ -133,6 +133,14 @@ export default {
     handleCancelChanges() {
       this.currentEditingTitle = ''
       this.currentEditingType = ''
+    },
+
+    /**
+     * 接收从 CVComponent 发射的 "delete-title" 事件
+     * 删除当前正在编辑的标题
+     */
+    handleDelete(type, title) {
+      metadataInstance.deleteContentForTitle(type, title)
     }
   }
 }

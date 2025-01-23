@@ -6,8 +6,9 @@
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
       <div class="item-hover-overlay" v-if="hoverIndex === index">
         <div class="overlay-buttons">
-          <button @click.stop="onEditClick('education', edu.title)">编辑</button>
-          <button @click="onTitleClick('education', edu.title)">AI 对话</button>
+          <button class="overlay-button" @click.stop="onEditClick('education', edu.title)">编辑</button>
+          <button class="overlay-button ai-dialog-button" @click="onTitleClick('education', edu.title)">AI 对话</button>
+          <button class="overlay-button delete-button" @click="onTitleDelete('education', edu.title)">删除</button>
         </div>
       </div>
       <div class="title-and-time">
@@ -57,6 +58,10 @@ export default {
 
     onEditClick(type, title) {
       this.$emit('edit-title', type, title);
+    },
+
+    onTitleDelete(type, title) {
+      this.$emit('delete-title', type, title);
     }
   }
 };

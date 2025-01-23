@@ -8,8 +8,9 @@
       <div class="item-hover-overlay" v-if="hoverIndex === index">
         <!-- 按钮区域 -->
         <div class="overlay-buttons">
-          <button @click.stop="onEditClick('projectExperience', project.title)">编辑</button>
-          <button @click="onTitleClick('projectExperience', project.title)">AI 对话</button>
+          <button class="overlay-button" @click.stop="onEditClick('projectExperience', project.title)">编辑</button>
+          <button class="overlay-button ai-dialog-button" @click="onTitleClick('projectExperience', project.title)">AI 对话</button>
+          <button class="overlay-button delete-button" @click="onTitleDelete('projectExperience', project.title)">删除</button>
         </div>
       </div>
 
@@ -59,6 +60,10 @@ export default {
 
     onEditClick(type, title) {
       this.$emit('edit-title', type, title);
+    },
+
+    onTitleDelete(type, title) {
+      this.$emit('delete-title', type, title);
     }
   }
 };
