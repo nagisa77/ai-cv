@@ -57,6 +57,7 @@ class MetadataModel {
         - meta_data 中的 name 是用户姓名，你需要根据用户的对话，总结出name的内容，是用户的姓名。
         - meta_data 中的 email 是用户邮箱，你需要根据用户的对话，总结出email的内容，是用户的邮箱。
         - meta_data 中的 phone 是用户的联系电话，你需要根据用户的对话，总结出phone的内容，是用户的联系电话。
+        - meta_data 中的 desiredPosition 是用户的目标岗位，你需要根据用户的对话，总结出desiredPosition的内容，是用户的目标岗位。
         `;
       case 'personalSummary':
         return `

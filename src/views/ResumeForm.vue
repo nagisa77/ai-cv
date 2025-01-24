@@ -24,6 +24,12 @@
           <input type="email" id="email" class="form-input" placeholder=" " v-model="basicInfo.email" />
           <label class="form-label" for="email">邮箱 (选填)</label>
         </div>
+
+        <!-- 新增的意向岗位字段 -->
+        <div class="form-group">
+          <input type="text" id="desiredPosition" class="form-input" placeholder=" " v-model="basicInfo.desiredPosition" />
+          <label class="form-label" for="desiredPosition">意向岗位 (选填)</label>
+        </div>
       </div>
 
       <!-- 教育经历 -->
@@ -187,7 +193,8 @@ export default {
       basicInfo: {
         name: 'Tim',
         phone: '13800000000',
-        email: 'tim@example.com'
+        email: 'tim@example.com',
+        desiredPosition: '前端工程师 - 负责设计和开发用户友好的网页应用，优化前端性能，确保跨浏览器兼容性，参与需求分析和技术评审，协作与后端开发团队，使用Vue.js和React等现代框架实现高效的前端解决方案。'
       },
       educationList: [
         {
@@ -269,7 +276,7 @@ export default {
     // ========= 提交按钮处理 =========
     handleSubmit() {
       // 1. 采集表单数据
-      const { name, phone, email } = this.basicInfo
+      const { name, phone, email, desiredPosition } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
@@ -282,7 +289,8 @@ export default {
       metadataInstance.setContentForType('personalInfo', {
         name,
         phone,
-        email
+        email,
+        desiredPosition
       })
 
       // ---- 2.2 填写 education(educationList) ----
@@ -340,6 +348,7 @@ export default {
         name,
         phone,
         email,
+        desiredPosition,
         educationList,
         workList,
         projectList,

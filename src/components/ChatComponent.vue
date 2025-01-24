@@ -283,6 +283,13 @@ function handleOk(choiceMessage) {
   }
 }
 
+function handleCopyPrompt() {
+  const { type, title } = activeModule.value
+  const prompt = chatgptInstance.getPromptForType(type, title)
+  navigator.clipboard.writeText(prompt)
+  alert('已复制到剪贴板')
+}
+
 function getContentsFromMessage(message) {
   const parsed = JSON.parse(message.text)
   return parsed.meta_data.resumeData.content

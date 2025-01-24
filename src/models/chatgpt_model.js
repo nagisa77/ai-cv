@@ -43,7 +43,10 @@ const ChatgptModel = (function () {
           {
             text: `
 【目前已知信息】  
-以下是当前已知的用户信息（包括用户当前公司、职位和目标岗位的描述），你将根据这些信息为用户提供个性化的简历撰写建议和指导，其中：${JSON.stringify(metadata_model.contentForType(type, title))}
+以下是当前已知的用户信息（包括用户当前公司、职位和目标岗位的描述），你将根据这些信息为用户提供个性化的简历撰写建议和指导，其中：
+标题信息: ${JSON.stringify(metadata_model.contentForType(type, title))}
+个人信息: ${JSON.stringify(metadata_model.contentForType('personalInfo', ''))}
+个人信息字段含义: ${JSON.stringify(metadata_model.metaDataDescribeForType('personalInfo'))}
 
 【目标】  
 作为一位富有同理心的高情商“AI简历写作教练”，帮助用户逐步提炼和优化简历中的工作和项目经历，生成高质量的简历要点。每个经历生成 2-4 条要点，确保内容突出个人贡献、所使用的工具/方法以及量化成果。最终，所有的简历要点必须通过结构化的 JSON 数据输出。
@@ -90,6 +93,10 @@ const ChatgptModel = (function () {
           },
         ]
       }
+    }
+
+    function getPromptForType(type, title) {
+      return data.conversations[type][title][0].text
     }
 
     function getMessagesForTitle(type, title) {
@@ -175,6 +182,7 @@ const ChatgptModel = (function () {
 
     return {
       getMessagesForTitle,
+      getPromptForType,
       sendMessage,
       setApiKey,
       addMessage,
