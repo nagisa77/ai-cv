@@ -3,8 +3,9 @@
     <!-- 左侧 -->
     <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
-      <template v-if="currentEditingTitle != ''">
-        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType" @cancel-changes="handleCancelChanges" />
+      <template v-if="currentEditingType != ''">
+        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType"
+          @cancel-changes="handleCloseEdit" :isNewTitle="isNewTitle" @changes-submitted="handleCloseEdit" />
       </template>
       <template v-else-if="currentSelectedTitle != ''">
         <ChatComponent :modules="chatModules" @update-resume="handleUpdateResume"
@@ -18,7 +19,9 @@
 
     <!-- 右侧 -->
     <div class="right-container cv-container">
-      <CVComponent :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete" />
+      <CVComponent  :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
+        @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
     </div>
   </div>
 </template>
@@ -45,7 +48,9 @@ export default {
       // 当前正在编辑的标题
       currentEditingTitle: '',
       // 当前正在编辑的类型
-      currentEditingType: ''
+      currentEditingType: '',
+      // 是否是新添加的标题
+      isNewTitle: false
     }
   },
   computed: {
@@ -122,6 +127,7 @@ export default {
      */
     handleEditTitle(type, title) {
       console.log('handleEditTitle', type, title)
+      this.isNewTitle = false
       this.currentEditingTitle = title
       this.currentEditingType = type
     },
@@ -130,9 +136,20 @@ export default {
      * 接收从 EditTitleComponent 发射的 "cancel-changes" 事件
      * 取消当前正在编辑的标题
      */
-    handleCancelChanges() {
+    handleCloseEdit() {
+      this.isNewTitle = false
       this.currentEditingTitle = ''
       this.currentEditingType = ''
+    },
+
+    /**
+     * 接收从 CVComponent 发射的 "add-title" 事件
+     * 添加一个新的标题
+     */
+    handleAddTitle(type) {
+      this.isNewTitle = true
+      this.currentEditingTitle = ''
+      this.currentEditingType = type
     },
 
     /**

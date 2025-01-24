@@ -1,6 +1,9 @@
 <template>
     <div class="edit-title-component" v-if="localContent">
-        <div class="edit-title-component-title">
+        <div v-if="isNewTitle" class="edit-title-component-title">
+            您正在添加一个新的<span class="title-highlight">{{ currentEditingType }}</span>项目
+        </div>
+        <div v-else class="edit-title-component-title">
             您正在编辑的是 <span class="title-highlight">{{ currentEditingTitle }}</span>
         </div>
 
@@ -8,6 +11,11 @@
         <div v-if="currentEditingType === 'education'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
+                <div v-if="isNewTitle" class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required
+                        v-model="localContent.content.title" />
+                    <label class="form-label">主题</label>
+                </div>
                 <div class="form-line">
                     <div class="form-group">
                         <input type="text" class="form-input" placeholder=" " required
@@ -22,8 +30,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required 
-                           v-model="localContent.content.major" />
+                    <input type="text" class="form-input" placeholder=" " required
+                        v-model="localContent.content.major" />
                     <label class="form-label">专业</label>
                 </div>
 
@@ -48,11 +56,8 @@
             <div class="session-edit-title">Bullet Points</div>
             <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
                 <div class="button-container">
-                    <button v-on:mouseenter="handleMouseEnter(index)" 
-                            v-on:mouseleave="handleMouseLeave"
-                            type="button" 
-                            class="remove-button" 
-                            @click="removeBulletPoint(index)">
+                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave" type="button"
+                        class="remove-button" @click="removeBulletPoint(index)">
                         x
                     </button>
                 </div>
@@ -74,6 +79,11 @@
         <div v-if="currentEditingType === 'workExperience'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
+                <div v-if="isNewTitle" class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required
+                        v-model="localContent.content.title" />
+                    <label class="form-label">主题</label>
+                </div>
                 <div class="form-line">
                     <div class="form-group">
                         <input type="text" class="form-input" placeholder=" " required
@@ -88,13 +98,12 @@
                 </div>
                 <div class="form-line">
                     <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required 
-                               v-model="localContent.content.title" />
+                        <input type="text" class="form-input" placeholder=" " required
+                            v-model="localContent.content.title" />
                         <label class="form-label">职位</label>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" "
-                            v-model="localContent.content.city" />
+                        <input type="text" class="form-input" placeholder=" " v-model="localContent.content.city" />
                         <label class="form-label">城市</label>
                     </div>
                 </div>
@@ -103,11 +112,8 @@
             <div class="session-edit-title">Bullet Points</div>
             <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
                 <div class="button-container">
-                    <button v-on:mouseenter="handleMouseEnter(index)"
-                            v-on:mouseleave="handleMouseLeave"
-                            type="button"
-                            class="remove-button"
-                            @click="removeBulletPoint(index)">
+                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave" type="button"
+                        class="remove-button" @click="removeBulletPoint(index)">
                         x
                     </button>
                 </div>
@@ -129,6 +135,11 @@
         <div v-if="currentEditingType === 'projectExperience'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
+                <div v-if="isNewTitle" class="form-group">
+                    <input type="text" class="form-input" placeholder=" " required
+                        v-model="localContent.content.title" />
+                    <label class="form-label">主题</label>
+                </div>
                 <div class="form-line">
                     <div class="form-group">
                         <input type="text" class="form-input" placeholder=" " required
@@ -151,11 +162,8 @@
             <div class="session-edit-title">Bullet Points</div>
             <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
                 <div class="button-container">
-                    <button v-on:mouseenter="handleMouseEnter(index)"
-                            v-on:mouseleave="handleMouseLeave"
-                            type="button"
-                            class="remove-button"
-                            @click="removeBulletPoint(index)">
+                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave" type="button"
+                        class="remove-button" @click="removeBulletPoint(index)">
                         x
                     </button>
                 </div>
@@ -198,6 +206,10 @@ export default {
         currentEditingType: {
             type: String,
             default: ''
+        },
+        isNewTitle: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -207,17 +219,55 @@ export default {
             mouseHoverIndex: null
         };
     },
-    created() {
-        // 深拷贝 metadataInstance 原始数据，赋值给 localContent
-        // 注意：ResumeForm.vue 中 setContentForType 时，把真正要存的结构都放在 content 里了
-        // 比如： { from_time: '', to_time: '', content: [] } 等等
-        // 因此这里需要根据 ResumeForm.vue 实际写入的结构来匹配
-        const originalContent = metadataInstance.contentForType(
-            this.currentEditingType,
-            this.currentEditingTitle
-        );
-        // 深拷贝
-        this.localContent = JSON.parse(JSON.stringify(originalContent));
+    mounted() {
+        if (this.isNewTitle) {
+            if (this.currentEditingType === 'education') {
+                this.localContent = {
+                    title: '',
+                    content: {
+                        from_time: '',
+                        to_time: '',
+                        major: '',
+                        degree: '',
+                        gpa: '',
+                        city: '',
+                        content: []
+                    }
+                }
+            } else if (this.currentEditingType === 'workExperience') {
+                this.localContent = {
+                    title: '',
+                    content: {
+                        from_time: '',
+                        to_time: '',
+                        title: '',
+                        city: '',
+                        content: []
+                    }
+                }
+            } else if (this.currentEditingType === 'projectExperience') {
+                this.localContent = {
+                    title: '',
+                    content: {
+                        from_time: '',
+                        to_time: '',
+                        title: '',
+                        content: []
+                    }
+                }
+            }
+        } else {
+            // 深拷贝 metadataInstance 原始数据，赋值给 localContent
+            // 注意：ResumeForm.vue 中 setContentForType 时，把真正要存的结构都放在 content 里了
+            // 比如： { from_time: '', to_time: '', content: [] } 等等
+            // 因此这里需要根据 ResumeForm.vue 实际写入的结构来匹配
+            const originalContent = metadataInstance.contentForType(
+                this.currentEditingType,
+                this.currentEditingTitle
+            );
+            // 深拷贝
+            this.localContent = JSON.parse(JSON.stringify(originalContent));
+        }
     },
     methods: {
         // 新增 Bullet Point：各类型共用
@@ -234,10 +284,11 @@ export default {
         // “提交”按钮：此时才更新 metadataInstance 的数据
         submitChanges() {
             // 将本地修改内容写回 metadataInstance
-            metadataInstance.setContentForTitle(
-                this.currentEditingTitle,
-                this.localContent.content
-            );
+            metadataInstance.setContentForType(
+                this.currentEditingType,
+                this.localContent.content,
+                this.localContent.content.title,
+            )
             // 提交后可根据需要进行其他跳转或提示等操作
             this.$emit("changes-submitted");
         },
@@ -248,7 +299,7 @@ export default {
         },
         // Hover 效果（若有定制化需求）
         handleMouseEnter(index) {
-            this.mouseHoverIndex = index;   
+            this.mouseHoverIndex = index;
         },
         handleMouseLeave() {
             this.mouseHoverIndex = null;
@@ -351,5 +402,4 @@ export default {
     cursor: pointer;
     border-radius: 4px;
 }
-
 </style>

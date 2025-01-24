@@ -1,7 +1,16 @@
 <!-- src/components/WorkSection.vue -->
 <template>
-  <section v-if="workList && workList.length" class="work-section session">
-    <h2 class="session-title">工作经历</h2>
+  <section class="work-section session">
+    <h2 class="session-title" @mouseenter="titleHover = true" @mouseleave="titleHover = false">工作经历
+      <span v-if="titleHover" class="session-title-add-icon" @click="onAddTitleClick">
+        <svg enable-background="new 0 0 512 512" fill="var(--color-primary)" height="10px" id="Layer_1" version="1.1"
+          viewBox="0 0 512 512" width="10px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+          <path d="M256,512C114.625,512,0,397.391,0,256C0,114.609,114.625,0,256,0c141.391,0,256,114.609,256,256  
+        C512,397.391,397.391,512,256,512z M256,64C149.969,64,64,149.969,64,256s85.969,192,192,192c106.047,0,192-85.969,192-192  
+        S362.047,64,256,64z M288,384h-64v-96h-96v-64h96v-96h64v96h96v64h-96V384z" />
+        </svg>
+      </span>
+    </h2>
     <div class="session-item" v-for="(work, index) in workList" :key="index" @mouseenter="hoverIndex = index"
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
       <!-- 灰色蒙层（hover时出现） -->
@@ -58,7 +67,8 @@ export default {
   },
   data() {
     return {
-      hoverIndex: null // 记录当前鼠标悬停在哪个项目上
+      hoverIndex: null, // 记录当前鼠标悬停在哪个项目上
+      titleHover: false
     }
   },
   methods: {
@@ -72,6 +82,10 @@ export default {
 
     onTitleDelete(type, title) {
       this.$emit('delete-title', type, title);
+    },
+
+    onAddTitleClick() {
+      this.$emit('add-title', 'workExperience');
     }
   }
 };

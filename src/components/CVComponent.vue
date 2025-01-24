@@ -10,15 +10,15 @@
 
       <!-- Education Section -->
       <EducationSection :educationList="educationList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
 
       <!-- Work Experience Section -->
       <WorkSection :workList="workList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
 
       <!-- Project Experience Section -->
       <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
 
       <!-- Personal Summary -->
       <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
@@ -100,6 +100,10 @@ export default {
 
     handleDelete(type, title) {
       this.$emit('delete-title', type, title);
+    },
+
+    handleAddTitle(type) {
+      this.$emit('add-title', type);
     }
   }
 }
@@ -283,6 +287,11 @@ export default {
 .delete-button {
   color: var(--color-secondary);
   background-color: rgba(255, 0, 0, 0.485);
+}
+
+.session-title-add-icon {
+  margin-left: 4px;
+  cursor: pointer;
 }
 
 </style>
