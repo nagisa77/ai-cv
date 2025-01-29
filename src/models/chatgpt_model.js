@@ -42,6 +42,9 @@ const ChatgptModel = (function () {
         data.conversations[type][title] = [
           {
             text: `
+【用户输入描述】
+${describeForSenderMessage()}
+
 【目前已知信息】  
 以下是当前已知的用户信息（包括用户当前公司、职位和目标岗位的描述），你将根据这些信息为用户提供个性化的简历撰写建议和指导，其中：
 标题信息: ${JSON.stringify(metadata_model.contentForType(type, title))}
@@ -75,16 +78,18 @@ const ChatgptModel = (function () {
 你的回复必须是一个 JSON 字符串，并包含 message（与用户的对话内容，包括激励与引导、进展总结与反馈等信息）、meta_data（简历要点的结构化数据，2-4条，根据实际情况自行判定）和is_enough（判断信息是否足够），且遵循以下结构：
 
     {
-      "message": "与用户的对话内容，包括激励与引导、进展总结与反馈等信息，不应该包含简历要点信息",
+      "message": String,
       "meta_data": {
         "resumeData": ${metadata_model.formatForType(type)}  
       },
-      "is_enough": true or false
+      "is_enough": Boolean,
+      "prompt_hint": [...]
     }
 字段说明：
 -message：给用户的提示或引导信息，用来进行有效的对话并引导用户继续提供信息以及给予用户更多建议。这里不应该包含简历要点信息。
 -is_enough：表示AI是否已经收集到足够的信息。如果为 true，表示AI认为信息已充分，可以生成简历要点，但也可以继续给用户更多建议与引导；如果为 false，则表示信息仍不足，需要继续引导用户补充。
 -meta_data：如果is_enough为false，下面的resumeData则为空；如果is_enough为true，下面的resumeData则会包含简历要点的结构化数据，这部分将作为简历中的内容呈现出来。每个要点会根据用户提供的细节生成，并确保简明扼要、突出成果。简历要点只能在这里出现，不能重复出现在message里。
+-prompt_hint：如果用户输入的need_prompt_hint为true，则需要给出3条提示追问，内容需要有3点，否则数组为空
 以下是对于回复的meta_data的描述: ${metadata_model.metaDataDescribeForType(type)}
 注意：简历要点需要严格遵循“简洁总结：详细工作内容 + 量化成果”这样的格式，内容需要足够详实，以下是一个比较符合的案例：
 主导跨部门协作：带领10人跨部门团队，通过A/B测试优化推荐算法，成功提升平台用户活跃度20%，提高了用户留存率，并优化了个性化推荐内容的精准度和匹配度，显著提升了用户体验和转化率
@@ -108,21 +113,33 @@ const ChatgptModel = (function () {
       data.conversations[type][title].push(message)
     }
 
-    async function sendMessage(type, title, userText, display = true) {
+    async function sendMessage(type, title, userText, display = true, needPromptHint = false) {
       if (!userText.trim()) return
 
+      const gptText = JSON.stringify({
+        user_text: userText,
+        need_prompt_hint: needPromptHint,
+      });
+
       data.conversations[type][title].push({
-        text: userText,
+        text: gptText,
         sender: 'me',
         display: display,
       })
 
-      const gptReply = await fetchGptResponse(type, title, userText)
+      const gptReply = await fetchGptResponse(type, title, gptText)
       data.conversations[type][title].push({
         text: gptReply,
         sender: 'gpt',
         display: true,
       })
+    }
+
+    function describeForSenderMessage() {
+      return `
+        user_text: 是用户输入的内容
+        need_prompt_hint: 是用户是否需要提示追问，如果为true，结果的meta_data中需要包含prompt_hint字段，内容为接下来我可以探讨的方向, 不要你我他这种主语，采用一句简洁陈述句, 需要有3点
+      `;
     }
 
     function buildGptMessagesFromData(type, title) {
@@ -142,7 +159,7 @@ const ChatgptModel = (function () {
     }
 
     function clearConversations() {
-      data.conversations = {} 
+      data.conversations = {}
     }
 
     // 核心: 调用 GPT 接口时，使用 userApiKey (由用户输入)

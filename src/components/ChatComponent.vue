@@ -21,13 +21,18 @@
                 <span>{{ extractMessage(message.text) }}</span>
               </div>
             </div>
+
+            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint" :key="index"
+              @click="handlePromptHintClick(hint)">
+              {{ hint }}
+            </div>
           </template>
 
           <!-- 用户消息（me） -->
           <template v-else-if="message.sender === 'me' && message.display">
             <div class="me-message-container">
               <div class="message me">
-                <span>{{ message.text }}</span>
+                <span>{{ JSON.parse(message.text).user_text }}</span>
               </div>
             </div>
           </template>
@@ -63,7 +68,8 @@
         </div>
       </div>
       <div class="chat-loading-container" v-else>
-        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
+        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1"
+          color="var(--color-primary)"></l-waveform>
       </div>
     </div>
 
@@ -261,6 +267,20 @@ watch(
   }
 )
 
+function handlePromptHintClick(hint) {
+  try {
+    const { type, title } = activeModule.value
+    chatgptInstance.sendMessage(
+      type,
+      title,
+      "接下来我要讨论 " + hint,
+      true
+    )
+  } catch (e) {
+    console.error('choiceMessage.text 不是 JSON', e)
+  }
+}
+
 /**
  * 用户点击“OK”时调用
  */
@@ -276,7 +296,8 @@ function handleOk(choiceMessage) {
       type,
       title,
       "我现在觉得OK了，已经选择了总结到右边! 基于现在已有的内容，给出可以进一步优化的建议或进一步挖掘其他的亮点，is_enough 请先设置为 false",
-      false
+      false,
+      true
     )
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
@@ -531,6 +552,25 @@ function handleNotEnough() {
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+.prompt-hint {
+  width: fit-content;
+  font-size: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--color-primary);
+  padding: 3px 10px;
+  color: var(--color-primary);
+  margin-left: 10px;
+  cursor: pointer;
+  margin-left: 60px;
+  opacity: 0.7;
+}
+
+.prompt-hint:hover {
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 </style>
