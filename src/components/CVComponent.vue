@@ -1,9 +1,9 @@
 <template>
   <div class="cv-component" ref="cvComponent">
-    <div class="cv-debug-settings">
+    <!-- <div class="cv-debug-settings">
       <span style="color: red;">[debug_area]:</span>
       <button @click="captureAndSaveScreenshot">截图并保存</button>
-    </div>
+    </div> -->
     <div class="cv-page">
       <!-- Personal Information -->
       <PersonalInfo :personalInfo="personalInfo" />

@@ -194,7 +194,7 @@ export default {
         name: 'Tim',
         phone: '13800000000',
         email: 'tim@example.com',
-        desiredPosition: '前端工程师 - 负责设计和开发用户友好的网页应用，优化前端性能，确保跨浏览器兼容性，参与需求分析和技术评审，协作与后端开发团队，使用Vue.js和React等现代框架实现高效的前端解决方案。'
+        desiredPosition: '前端工程师'
       },
       educationList: [
         {

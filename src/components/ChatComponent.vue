@@ -8,11 +8,20 @@
       <button @click="handleCopyPrompt">Copy Prompt</button>
     </div>
 
+    <div class="state-area">
+      <div>
+        当前意向岗位: {{ currentJobTitle }}
+      </div>
+      <div>
+        当前正在攻略的模块: {{ currentSelectedTitle }}
+      </div>
+    </div>
+
     <!-- 消息区 -->
     <div class="messages-container" ref="messagesContainer">
       <!-- 使用 v-for 渲染所有消息 -->
       <div v-if="messages.length > 2">
-        <div v-for="(message, index) in messages" :key="index">
+        <div v-for="(message, index) in messages" :key="index" :style="{ marginTop: index === 0 ? '80px' : '0px' }">
           <!-- GPT 消息：头像 + 蓝框并列 -->
           <template v-if="message.sender === 'gpt' && message.display">
             <div class="gpt-message-container">
@@ -22,8 +31,8 @@
               </div>
             </div>
 
-            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint" :key="index"
-              @click="handlePromptHintClick(hint)">
+            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
+              :key="index" @click="handlePromptHintClick(hint)">
               {{ hint }}
             </div>
           </template>
@@ -82,11 +91,16 @@
           color="var(--color-secondary)"></l-infinity>
       </div>
     </div>
-    <div v-else class="input-area-container">
+    <div class="input-area-container" v-else>
       <div class="input-area-left">
-        <input v-model="inputValue"
+        <!-- 使用 textarea 替换 input -->
+        <textarea
+          v-model="inputValue"
           :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
-          class="chatgpt-input" @keyup.enter="handleSendMessage" />
+          class="chatgpt-input"
+          rows="1"
+          @keydown.ctrl.enter="handleSendMessage"
+        ></textarea>
       </div>
       <div class="chatgpt-send-button" @click="handleSendMessage">
         <img :src="sendIcon" alt="ChatGPT 图标" class="chatgpt-send-icon" />
@@ -100,6 +114,7 @@ import { ref, computed, watch, nextTick, defineProps, defineEmits, onMounted } f
 import ChatgptModel from '@/models/chatgpt_model.js'
 import { infinity } from 'ldrs'
 import { waveform } from 'ldrs'
+import metadataInstance from '@/models/metadata_model.js'
 waveform.register()
 infinity.register()
 
@@ -178,6 +193,10 @@ const activeModule = computed(() => {
     props.modules.find((m) => m.title === props.currentSelectedTitle) ||
     { type: '', title: '' }
   )
+})
+
+const currentJobTitle = computed(() => {
+  return metadataInstance.contentForType('personalInfo')['desiredPosition'];
 })
 
 /**
@@ -354,14 +373,17 @@ function handleNotEnough() {
   -webkit-backdrop-filter: blur(10px);
   background-color: var(--color-header-background);
   width: 38vw;
+
+  display: none;
 }
 
 
 .input-area-container {
   position: fixed;
   display: flex;
+  flex-direction: column;
+  padding: 10px;
   justify-content: space-between;
-  align-items: center;
   border-radius: 25px;
   left: 30px;
   bottom: 20px;
@@ -373,7 +395,7 @@ function handleNotEnough() {
 
 .gradient-overlay {
   position: fixed;
-  bottom: 62px;
+  bottom: 116px;
   left: 0;
   width: 38vw;
   height: 80px;
@@ -388,12 +410,15 @@ function handleNotEnough() {
 
 .chatgpt-input {
   margin-left: 20px;
-  height: 40px;
+  min-height: 40px;
+  max-height: calc(40px * 5);
   border: none;
   outline: none;
   font-size: 14px;
   background-color: transparent;
   flex: 1;
+  overflow-y: auto;
+  resize: none;
 }
 
 .chatgpt-send-button {
@@ -409,6 +434,10 @@ function handleNotEnough() {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .chatgpt-send-button:hover {
@@ -424,10 +453,9 @@ function handleNotEnough() {
 }
 
 .messages-container {
-  height: calc(100vh - 60px - 62px - 70px);
+  height: calc(100vh - 60px - 62px - 74px);
   overflow-y: auto;
   padding-top: 20px;
-  padding-bottom: 50px;
 }
 
 .choice-message-container,
@@ -573,4 +601,18 @@ function handleNotEnough() {
   transition: opacity 0.3s ease;
 }
 
+.state-area {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: calc(38vw - 40px);
+  font-size: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
 </style>

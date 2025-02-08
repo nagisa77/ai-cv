@@ -111,6 +111,7 @@ export default {
      */
     handleSelectedModuleChanged(moduleItem) {
       this.currentSelectedTitle = moduleItem.title
+      this.currentEditingType = ''
     },
 
     /**
