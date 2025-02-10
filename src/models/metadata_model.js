@@ -1,5 +1,8 @@
-// metadata_model.js
+import axios from 'axios'
 import { reactive, watch } from 'vue'
+
+// 云函数接口地址（元数据）
+const META_API_URL = 'http://localhost:9000/default_user/meta_data'
 
 class MetadataModel {
   constructor() {
@@ -7,23 +10,32 @@ class MetadataModel {
       return MetadataModel.instance;
     }
 
-    /**
-     * 重点：使用 Vue.observable() 包装 data
-     * 使得此对象具备 Vue 的响应式检测能力
-     */
-    // 尝试从 localStorage 加载数据
-    const storedData = localStorage.getItem('metadata');
-    this.data = reactive(storedData ? JSON.parse(storedData) : {
+    // 初始默认数据结构
+    const defaultData = {
       education: [],
       workExperience: [],
       projectExperience: [],
       personalInfo: {},
       personalSummary: ''
-    });
+    };
 
-    // 监听数据变化并保存到 localStorage
+    // 先构造一个响应式对象，后续会通过接口更新数据
+    this.data = reactive(defaultData);
+
+    // 尝试从云函数加载数据
+    axios.get(META_API_URL)
+      .then(response => {
+        // 如果云端有数据，则合并到 this.data 中
+        Object.assign(this.data, response.data);
+      })
+      .catch(error => {
+        console.error('加载 metadata 失败，使用默认数据:', error);
+      });
+
+    // 监听数据变化并通过 PUT 请求保存到云函数
     watch(this.data, (newData) => {
-      localStorage.setItem('metadata', JSON.stringify(newData));
+      axios.put(META_API_URL, newData)
+        .catch(error => console.error('保存 metadata 失败:', error));
     }, { deep: true });
 
     MetadataModel.instance = this;
@@ -69,7 +81,7 @@ class MetadataModel {
     }
   }
 
-  // 返回不同type的数据组织格式，留给用户填充
+  // 返回不同 type 的数据组织格式
   formatForType(type) {
     switch (type) {
       case 'education':
@@ -106,10 +118,7 @@ class MetadataModel {
     }
   }
 
-  /**
-   * 根据 type 获取数据
-   * 注意：现在要访问时，用 this.data[type]
-   */
+  // 根据 type 获取数据
   contentForType(type, title = null) {
     switch (type) {
       case 'education':
@@ -133,9 +142,7 @@ class MetadataModel {
     }
   }
 
-  /**
-   * 根据 type 和 title 删除对应的数据
-   */
+  // 根据 type 和 title 删除对应的数据
   deleteContentForTitle(type, title) {
     switch (type) {
       case 'education': {
@@ -155,10 +162,7 @@ class MetadataModel {
     }
   }
 
-  /**
-   * setContentForType
-   * （示例只演示一下内部访问方式，逻辑和你原来类似）
-   */
+  // 设置数据（示例逻辑）
   setContentForType(type, content, title = null) {
     switch (type) {
       case 'education': {
@@ -211,17 +215,12 @@ class MetadataModel {
     }
   }
 
-
-  /**
-   * setContentForTitle
-   * 根据标题更新某项的 content
-   */
+  // 根据标题更新对应的 content
   setContentForTitle(title, content) {
     const types = ['education', 'workExperience', 'projectExperience'];
     for (const type of types) {
       const arr = this.data[type];
       if (!arr || !Array.isArray(arr)) continue;
-      // 查找符合 title 的项并更新
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].title === title) {
           arr[i].content = content;
@@ -232,23 +231,18 @@ class MetadataModel {
   }
 
   clearMetadata() {
-    // Clear the localStorage
-    localStorage.removeItem('metadata');
-
-    // Reset the data to its initial state
+    // 清除云端存储（本地重置后，通过 watch 自动更新）
     this.data.education = [];
     this.data.workExperience = [];
     this.data.projectExperience = [];
     this.data.personalInfo = {};
     this.data.personalSummary = '';
-
-    // Optionally, you could log this or return a confirmation
     console.log("Metadata cleared and state reset to default.");
   }
 }
 
-// 只实例化一次
+// 单例模式
 const metadataInstance = new MetadataModel();
-Object.freeze(metadataInstance); // 防止修改实例
+Object.freeze(metadataInstance);
 
-export default metadataInstance
+export default metadataInstance;

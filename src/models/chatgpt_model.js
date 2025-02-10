@@ -1,13 +1,14 @@
-// chatgpt_model.js
-
 import axios from 'axios'
 import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 
+// 云函数接口地址（聊天数据）
+const CHAT_API_URL = 'http://localhost:9000/default_user/chat'
+
 const ChatgptModel = (function () {
   let instance
 
-  // 增加一个变量来存储用户输入的 API Key
+  // 用于存储用户输入的 API Key
   let userApiKey = ''
 
   function createInstance() {
@@ -15,21 +16,23 @@ const ChatgptModel = (function () {
       conversations: {}
     })
 
-    // 尝试从 localStorage 加载聊天记录
-    const storedConversations = localStorage.getItem('conversations')
-    if (storedConversations) {
-      try {
-        Object.assign(data.conversations, JSON.parse(storedConversations))
-      } catch (error) {
-        console.error('加载聊天记录时出错:', error)
-      }
-    }
+    // 从云函数加载聊天记录（GET 请求）
+    axios.get(CHAT_API_URL)
+      .then(response => {
+        // 若返回数据为空，则保持空对象
+        data.conversations = response.data || {}
+      })
+      .catch(error => {
+        console.error('加载聊天记录出错:', error)
+        data.conversations = {}
+      })
 
-    // 监听 conversations 的变化并保存到 localStorage
+    // 监听 conversations 的变化并通过 PUT 请求保存到云函数
     watch(
       () => data.conversations,
       (newConversations) => {
-        localStorage.setItem('conversations', JSON.stringify(newConversations))
+        axios.put(CHAT_API_URL, newConversations)
+          .catch(error => console.error('保存聊天记录出错:', error))
       },
       { deep: true }
     )
@@ -162,12 +165,11 @@ ${describeForSenderMessage()}
       data.conversations = {}
     }
 
-    // 核心: 调用 GPT 接口时，使用 userApiKey (由用户输入)
+    // 核心: 调用 GPT 接口时，使用用户提供的 API Key
     async function fetchGptResponse(type, title, userText) {
       const apiUrl = 'https://api.openai.com/v1/chat/completions'
 
-      // 这里从 userApiKey 中获取用户提供的 key
-      // 如果没提供，则为空字符串。
+      // 从 userApiKey 中获取用户提供的 key
       const apiKey = userApiKey || ''
 
       try {
@@ -177,7 +179,7 @@ ${describeForSenderMessage()}
         const response = await axios.post(
           apiUrl,
           {
-            model: 'gpt-4o', // 你的 model
+            model: 'gpt-4o', // 使用的模型
             messages,
             temperature: 0.7,
           },
