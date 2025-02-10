@@ -15,7 +15,7 @@
         该工具帮助用户轻松<span class="home-title-highlight">创建专业简历</span>，输入个人信息、教育背景和工作经历，自动生成<span class="home-title-highlight">美观简历</span>，助您求职成功！
       </p>
       <!-- 通过 router-link 跳转到填写表单页面 -->
-      <router-link to="/resume-form">
+      <router-link to="/template-selection">
         <button
           class="create-resume-button animate-on-scroll"
           data-animation="fade-in-up-delay2"

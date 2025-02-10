@@ -18,10 +18,10 @@
     </div>
 
     <!-- 右侧 -->
-    <div class="right-container cv-container">
-      <CVComponent  :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
+    <div v-if="templateType == 'default'" class="right-container cv-container">
+      <component :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
+        @add-title="handleAddTitle"/>
     </div>
   </div>
 </template>
@@ -41,6 +41,12 @@ export default {
     SelectModuleComponent,
     EditTitleComponent
   },
+  props: {
+    templateType: {
+      type: String,
+      default: 'default'
+    }
+  },
   data() {
     return {
       // 当前正在讨论的标题，用于在 CV 中高亮
@@ -54,6 +60,13 @@ export default {
     }
   },
   computed: {
+    currentTemplateComponent() {
+      if (this.templateType == 'default') {
+        return CVComponent
+      } 
+
+      return CVComponent;
+    },
     /**
      * 动态生成聊天模块 tabs
      * （依然从 metadata_model 中取数据，自动生成教育/工作/项目等标签）

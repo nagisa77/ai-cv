@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import ResumeForm from '@/views/ResumeForm.vue'
 import CreateResume from '@/views/CreateResume.vue'
+import TemplateSelection from '@/views/TemplateSelection.vue'
 
 const routes = [
   {
@@ -19,7 +20,12 @@ const routes = [
     path: '/create-resume',
     name: 'CreateResume',
     component: CreateResume
-  }
+  },
+  {
+    path: '/template-selection',
+    name: 'TemplateSelection',
+    component: TemplateSelection
+  },
 ]
 
 const router = createRouter({

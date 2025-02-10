@@ -30,7 +30,7 @@
       <div class="item-content-item" v-for="(point, i2) in project.content.content" :key="i2">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">
-          <span class="bullet-point">· {{ point.bullet_point }}:</span>
+          <span class="bullet-point">{{ point.bullet_point }}:</span>
           <span class="bullet-content">{{ point.content }}</span>
         </div>
       </div>

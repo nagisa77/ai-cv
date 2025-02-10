@@ -20,6 +20,6 @@
   
   <style scoped>
   .summary-section p {
-    font-size: 12px;
+    font-size: 9px;
   }
   </style>
