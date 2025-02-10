@@ -400,7 +400,7 @@ function handleNotEnough() {
   width: 38vw;
   height: 80px;
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
-  pointer-events: none;
+  pointer-events: none; /* 不相应鼠标事件 */
 }
 
 .input-area-left {
