@@ -9,27 +9,14 @@
       <div class="card" @click="handleCardClick('personalInfo', '')">
         <div class="block-title">基础信息</div>
         <div class="form-line">
-          <div class="form-group">
-            <input type="text" id="name" class="form-input" placeholder=" " required v-model="basicInfo.name" />
-            <label class="form-label" for="name">姓名</label>
-          </div>
-
-          <div class="form-group">
-            <input type="tel" id="phone" class="form-input" placeholder=" " v-model="basicInfo.phone" />
-            <label class="form-label" for="phone">手机号 (选填)</label>
-          </div>
+          <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
+          <AppleStyleInput id="phone" labelText="手机号 (选填)" inputType="tel" v-model="basicInfo.phone" />
         </div>
 
-        <div class="form-group">
-          <input type="email" id="email" class="form-input" placeholder=" " v-model="basicInfo.email" />
-          <label class="form-label" for="email">邮箱 (选填)</label>
-        </div>
+        <AppleStyleInput id="email" labelText="邮箱 (选填)" inputType="email" v-model="basicInfo.email" />
 
-        <!-- 新增的意向岗位字段 -->
-        <div class="form-group">
-          <input type="text" id="desiredPosition" class="form-input" placeholder=" " v-model="basicInfo.desiredPosition" />
-          <label class="form-label" for="desiredPosition">意向岗位 (选填)</label>
-        </div>
+        <AppleStyleInput id="desiredPosition" labelText="意向岗位 (选填)" inputType="text"
+          v-model="basicInfo.desiredPosition" />
       </div>
 
       <!-- 教育经历 -->
@@ -43,33 +30,26 @@
               ×
             </button>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="edu.school" required />
-            <label class="form-label">学校名</label>
-          </div>
+
+          <AppleStyleInput :id="`school-${index}`" labelText="学校名" inputType="text" :required="true"
+            v-model="edu.school" />
+
           <div class="form-line">
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.time" required />
-              <label class="form-label">时间</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.major" required />
-              <label class="form-label">专业</label>
-            </div>
+            <AppleStyleInput :id="`edu-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="edu.time" />
+
+            <AppleStyleInput :id="`major-${index}`" labelText="专业" inputType="text" :required="true"
+              v-model="edu.major" />
           </div>
+
           <div class="form-line">
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.degree" required />
-              <label class="form-label">学历</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.gpa" />
-              <label class="form-label">GPA (选填)</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="edu.city" required />
-              <label class="form-label">城市</label>
-            </div>
+            <AppleStyleInput :id="`degree-${index}`" labelText="学历" inputType="text" :required="true"
+              v-model="edu.degree" />
+
+            <AppleStyleInput :id="`gpa-${index}`" labelText="GPA (选填)" inputType="text" v-model="edu.gpa" />
+
+            <AppleStyleInput :id="`edu-city-${index}`" labelText="城市" inputType="text" :required="true"
+              v-model="edu.city" />
           </div>
         </div>
       </div>
@@ -90,23 +70,19 @@
               ×
             </button>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="work.company" required />
-            <label class="form-label">公司名</label>
-          </div>
+
+          <AppleStyleInput :id="`company-${index}`" labelText="公司名" inputType="text" :required="true"
+            v-model="work.company" />
+
           <div class="form-line">
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.time" required />
-              <label class="form-label">时间</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.title" required />
-              <label class="form-label">职位</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="work.city" required />
-              <label class="form-label">城市</label>
-            </div>
+            <AppleStyleInput :id="`work-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="work.time" />
+
+            <AppleStyleInput :id="`title-${index}`" labelText="职位" inputType="text" :required="true"
+              v-model="work.title" />
+
+            <AppleStyleInput :id="`work-city-${index}`" labelText="城市" inputType="text" :required="true"
+              v-model="work.city" />
           </div>
         </div>
       </div>
@@ -127,19 +103,16 @@
               ×
             </button>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-input" placeholder=" " v-model="proj.projectName" required />
-            <label class="form-label">项目名</label>
-          </div>
+
+          <AppleStyleInput :id="`project-${index}`" labelText="项目名" inputType="text" :required="true"
+            v-model="proj.projectName" />
+
           <div class="form-line">
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="proj.time" required />
-              <label class="form-label">时间</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" placeholder=" " v-model="proj.role" required />
-              <label class="form-label">职位/角色</label>
-            </div>
+            <AppleStyleInput :id="`project-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="proj.time" />
+
+            <AppleStyleInput :id="`role-${index}`" labelText="职位/角色" inputType="text" :required="true"
+              v-model="proj.role" />
           </div>
         </div>
       </div>
@@ -168,13 +141,14 @@
 </template>
 
 <script>
+import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
 import EducationSection from '@/components/cv_components/EducationSection.vue'
 import WorkSection from '@/components/cv_components/WorkSection.vue'
 import ProjectSection from '@/components/cv_components/ProjectSection.vue'
 import PersonalInfo from '@/components/cv_components/PersonalInfo.vue'
 import SummarySection from '@/components/cv_components/SummarySection.vue'
 
-import metadataInstance from '@/models/metadata_model.js' // 这行是你需要新增的导入
+import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
 
 const chatgptInstance = ChatgptModel.getInstance()
@@ -182,6 +156,7 @@ const chatgptInstance = ChatgptModel.getInstance()
 export default {
   name: 'ResumeForm',
   components: {
+    AppleStyleInput,
     EducationSection,
     WorkSection,
     ProjectSection,
@@ -221,7 +196,7 @@ export default {
           role: '项目经理'
         }
       ],
-      personalSummary: '', // 如果有个人总结，可以在表单中添加相应的输入项
+      personalSummary: '',
       selectedModule: {
         type: '',
         title: ''
@@ -229,7 +204,6 @@ export default {
     }
   },
   computed: {
-    // 映射教育经历数据
     mappedEducationList() {
       return this.educationList.map(edu => {
         const [from_time, to_time] = edu.time.split(' - ')
@@ -243,7 +217,6 @@ export default {
         }
       })
     },
-    // 映射工作经历数据
     mappedWorkList() {
       return this.workList.map(work => {
         const [from_time, to_time] = work.time.split(' - ')
@@ -257,7 +230,6 @@ export default {
         }
       })
     },
-    // 映射项目经历数据
     mappedProjectList() {
       return this.projectList.map(proj => {
         const [from_time, to_time] = proj.time.split(' - ')
@@ -273,9 +245,7 @@ export default {
     }
   },
   methods: {
-    // ========= 提交按钮处理 =========
     handleSubmit() {
-      // 1. 采集表单数据
       const { name, phone, email, desiredPosition } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
@@ -284,8 +254,6 @@ export default {
       metadataInstance.clearMetadata()
       chatgptInstance.clearConversations()
 
-      // 2. 写入 metadata_model
-      // ---- 2.1 填写 personalInfo ----
       metadataInstance.setContentForType('personalInfo', {
         name,
         phone,
@@ -293,9 +261,7 @@ export default {
         desiredPosition
       })
 
-      // ---- 2.2 填写 education(educationList) ----
       educationList.forEach((edu) => {
-        // 假设 time 是 "2016.09 - 2020.06" 格式
         const [fromTime, toTime] = edu.time.split(' - ')
         const title = `${edu.school} - ${edu.degree}`
         metadataInstance.setContentForType(
@@ -304,14 +270,12 @@ export default {
             title,
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
-            // 初始化一个空数组或占位内容，后续可由 AI 进行亮点总结
             content: []
           },
-          title // 同步作为title索引
+          title
         )
       })
 
-      // ---- 2.3 填写 workExperience(workList) ----
       workList.forEach((work) => {
         const [fromTime, toTime] = work.time.split(' - ')
         const title = `${work.company} - ${work.title}`
@@ -327,7 +291,6 @@ export default {
         )
       })
 
-      // ---- 2.4 填写 projectExperience(projectList) ----
       projectList.forEach((proj) => {
         const [fromTime, toTime] = proj.time.split(' - ')
         const title = `${proj.projectName}`
@@ -343,7 +306,6 @@ export default {
         )
       })
 
-      // 3. 将原始表单数据（非 metadata_model 结构）继续存入 localStorage，方便后续使用
       const formData = {
         name,
         phone,
@@ -356,11 +318,8 @@ export default {
       }
       localStorage.setItem('resumeFormData', JSON.stringify(formData))
 
-      // 4. 跳转到创建简历的页面
       this.$router.push('/create-resume')
     },
-
-    // ================== 教育经历 ==================
     addEducationExperience() {
       this.educationList.push({
         school: '',
@@ -371,8 +330,6 @@ export default {
         city: ''
       })
     },
-
-    // ================== 工作经历 ==================
     addWorkExperience() {
       this.workList.push({
         company: '',
@@ -381,8 +338,6 @@ export default {
         city: ''
       })
     },
-
-    // ================== 项目经历 ==================
     addProjectExperience() {
       this.projectList.push({
         projectName: '',
@@ -390,19 +345,12 @@ export default {
         role: ''
       })
     },
-
-    // ================== 删除卡片 ==================
     removeCard(listName, index) {
       this[listName].splice(index, 1)
     },
-
-    // ================== 点击卡片处理 ==================
     handleCardClick(type, name) {
-      console.log(`Currently editing ${type}: ${name}`)
       this.selectedModule = { type, title: name }
     },
-
-    // 动态获取组件
     getComponent(type) {
       switch (type) {
         case 'educationExperience':

@@ -8,9 +8,9 @@
         <img src="@/assets/icon/logo1.png" alt="logo"
           class="header-logo">首页</router-link>
       <router-link class="header-link" to="/create-resume">创建简历</router-link>
+      <router-link class="header-link" to="/auth">登录</router-link>
     </header>
 
-    <!-- 路由出口：这里会动态展示 Home.vue 或 CreateResume.vue -->
     <router-view class="router-view" />
   </div>
 </template>
@@ -27,7 +27,6 @@ header {
   height: 60px;
   display: flex;
   justify-content: flex-start;
-  /* 从左向右排 */
   align-items: center;
   position: fixed;
   top: 0;
@@ -35,10 +34,9 @@ header {
   right: 0;
   z-index: 1000;
   backdrop-filter: blur(10px);
-  /* 毛玻璃效果 */
   -webkit-backdrop-filter: blur(10px);
-  /* Safari 浏览器支持 */
   background-color: var(--color-header-background);
+  padding: 0 25px; /* 添加容器两侧内边距 */
 }
 
 .header-link {
@@ -49,6 +47,11 @@ header {
   display: flex;
   gap: 5px;
   align-items: center;
+}
+
+.header-link:last-child {
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .header-logo {
