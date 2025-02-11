@@ -1,19 +1,32 @@
 <template>
   <div class="template-select">
-    <h1 class="template-select-title">选择<span class="template-select-title-highlight">简历模板</span></h1>
-    <div class="category-select">
-      <div class="category-select-item" v-for="category in categories" :key="category.id"
-        :class="{ 'active': selectedCategory === category.id }" @click="selectCategory(category.id)">
-        {{ category.name }}
-      </div>
+    <h1 class="title">选择<span style="color: #409eff;">简历模板</span></h1>
+
+    <!-- 类别选项卡 -->
+    <div class="category-tabs">
+      <button v-for="category in categories" :key="category"
+        :class="['tab-button', { active: currentCategory === category }]" @click="currentCategory = category">
+        {{ category }}
+      </button>
     </div>
 
-    <div class="template-card-container">
+    <!-- 模板展示区 -->
+    <div class="template-container">
       <div v-for="template in filteredTemplates" :key="template.id" class="template-card"
         @click="selectTemplate(template.id)">
-        <img class="template-card-preview" :src="template.preview" alt="模板预览">
-        <h3 class="template-card-name">{{ template.name }}</h3>
-        <p class="template-card-description">{{ template.description }}</p>
+        <div class="preview-wrapper">
+          <img :src="template.preview" alt="模板预览" class="preview-image">
+          <div class="badge" v-if="template.isNew">NEW</div>
+        </div>
+        <div class="template-info">
+          <h3>{{ template.name }}</h3>
+          <p class="description">{{ template.description }}</p>
+          <div class="tags">
+            <span v-for="tag in template.tags" :key="tag" class="tag">
+              {{ tag }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,88 +37,58 @@ export default {
   name: 'TemplateSelection',
   data() {
     return {
-      selectedCategory: 'hot',  // 默认选择热门分类
-      categories: [
-        { id: 'hot', name: '热门' },
-        { id: 'general', name: '通用' },
-        { id: 'experienced', name: '社招' },
-        { id: 'freshgraduate', name: '校招/实习' },
-        { id: 'zeroexperience', name: '零经验' },
-        { id: 'english', name: '英文' }
-      ],
-      templates: [
-        {
-          id: 'default',
-          category: 'hot',
-          name: '经典模板',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '标准简历格式，适合大多数求职场景'
-        },
-        {
-          id: 'default',
-          category: 'hot',
-          name: '经典模板2',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '标准简历格式，适合大多数求职场景'
-        },
-        {
-          id: 'default',
-          category: 'hot',
-          name: '经典模板3',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '标准简历格式，适合大多数求职场景'
-        },
-        {
-          id: 'modern',
-          category: 'general',
-          name: '现代风格',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '简洁现代的设计风格，突出核心信息'
-        },
-        {
-          id: 'creative',
-          category: 'experienced',
-          name: '创意模板',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '适合设计类岗位的创意版式'
-        },
-        {
-          id: 'simple',
-          category: 'freshgraduate',
-          name: '简约模板',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '简约大气，适合应届生'
-        },
-        {
-          id: 'elegant',
-          category: 'zeroexperience',
-          name: '优雅模板',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '适合零经验的求职者，简洁美观'
-        },
-        {
-          id: 'bilingual',
-          category: 'english',
-          name: '双语模板',
-          preview: require('../../img/model_preview/template-default.png'),
-          description: '适合申请国际职位的简历'
-        }
-      ]
+      currentCategory: '热门',
+      categories: ['热门', '通用', '社招', '校招/实习', '零经验', '英文'],
+      templatesByCategory: {
+        '热门': [
+          {
+            id: 'modern',
+            name: '现代极简',
+            preview: require('../../img/model_preview/template-default.png'), description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['热门', '通用'],
+            isNew: true
+          },
+          {
+            id: 'professional',
+            name: '专业经典',
+            preview: require('../../img/model_preview/template-default.png'), description: '传统稳重的版式设计，适合金融、法律等传统行业',
+            tags: ['社招', '通用']
+          }
+        ],
+        '通用': [
+          // 通用模板数据...
+        ],
+        '社招': [
+          // 社招模板数据...
+        ],
+        '校招/实习': [
+          {
+            id: 'campus',
+            name: '应届生专用',
+            preview: require('../../img/model_preview/template-default.png'), description: '突出教育经历和实习经验，适合应届毕业生',
+            tags: ['校招', '实习'],
+            isNew: true
+          }
+        ],
+        // '零经验': [
+        //   // 零经验模板数据...
+        // ],
+        // '英文': [
+        //   // 英文模板数据...
+        // ]
+      }
     }
   },
   computed: {
     filteredTemplates() {
-      return this.templates.filter(template => template.category === this.selectedCategory);
+      return this.templatesByCategory[this.currentCategory]
     }
   },
   methods: {
-    selectCategory(categoryId) {
-      this.selectedCategory = categoryId;
-    },
     selectTemplate(templateId) {
-      console.log(templateId);
       this.$router.push({
         name: 'ResumeForm',
+        params: { templateType: templateId }
       })
     }
   }
@@ -114,76 +97,125 @@ export default {
 
 <style scoped>
 .template-select {
+  max-width: 1200px;
+  margin: 40px auto;
   margin-top: 100px;
-  margin-left: 50px;
+  padding: 0 20px;
 }
 
-.template-select-title {
-  font-size: 24px;
-  font-weight: bold;
+.title {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #2c3e50;
 }
 
-.template-select-title-highlight {
-  color: var(--color-primary);
-}
-
-.category-select {
+.category-tabs {
   display: flex;
-  margin-top: 40px;
-  flex-direction: row;
-  gap: 50px;
+  gap: 15px;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
-.category-select-item {
+.tab-button {
+  flex-shrink: 0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  background: #f0f0f0;
+  color: #666;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
-.category-select-item.active {
-  color: var(--color-primary);
+.tab-button.active {
+  background: #409eff;
+  color: white;
 }
 
-.template-card-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 40px;
+.template-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
 .template-card {
-  display: flex;
-  flex-direction: column;
-  margin-top: 40px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  width: 190px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .template-card:hover {
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  scale: 1.05;
-  transition: all 0.3s ease;
-} 
-
-.template-card-preview {
-  width: 170px;
-  margin-left: 10px;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.template-card-name {
-  font-size: 16px;
-  font-weight: bold;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-top: 0px;
-  margin-bottom: 0px;
+.preview-wrapper {
+  position: relative;
+  height: 350px;
+  background: #f8f9fa;
 }
 
-.template-card-description {
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4757;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 3px;
   font-size: 12px;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-top: 6px;
-  margin-bottom: 20px;
-  opacity: 0.7;
+}
+
+.template-info {
+  padding: 20px;
+}
+
+.template-info h3 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.description {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #e8f4ff;
+  color: #409eff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .template-container {
+    grid-template-columns: 1fr;
+  }
+
+  .category-tabs {
+    gap: 10px;
+  }
+
+  .tab-button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
 }
 </style>
