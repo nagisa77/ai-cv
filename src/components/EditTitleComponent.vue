@@ -56,8 +56,10 @@
                 </div>
 
                 <div class="form-line">
-                    <AppleStyleInput id="work-position" labelText="职位" inputType="text" :required="true"
+                    <AppleStyleInput id="work-company" labelText="公司" inputType="text" :required="true"
                         v-model:modelValue="localContent.content.title" />
+                    <AppleStyleInput id="work-position" labelText="职位" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.sub_title" />
                     <AppleStyleInput id="work-city" labelText="城市" inputType="text" :required="false"
                         v-model:modelValue="localContent.content.city" />
                 </div>
@@ -177,6 +179,7 @@ export default {
                         from_time: '',
                         to_time: '',
                         title: '',
+                        sub_title: '',
                         city: '',
                         content: []
                     }

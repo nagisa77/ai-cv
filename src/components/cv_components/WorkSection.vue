@@ -26,6 +26,10 @@
         <h3 class="item-title">{{ work.title }}</h3>
         <p class="item-time">{{ work.content.from_time }} - {{ work.content.to_time }}</p>
       </div>
+      <div class="sub-title-and-city">
+        <div>{{ work.content.sub_title }}</div>
+        <div>{{ work.content.city }}</div>
+      </div>
       <div class="item-content-item" v-for="(point, i2) in work.content.content" :key="i2">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">

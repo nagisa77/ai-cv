@@ -293,16 +293,17 @@ export default {
 
       workList.forEach((work) => {
         const [fromTime, toTime] = work.time.split(' - ')
-        const title = `${work.company} - ${work.title}`
         metadataInstance.setContentForType(
           'workExperience',
           {
-            title,
+            title: work.company,
+            sub_title: work.title,
+            city: work.city,
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
             content: []
           },
-          title
+          work.company
         )
       })
 

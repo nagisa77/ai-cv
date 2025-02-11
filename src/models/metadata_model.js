@@ -43,16 +43,11 @@ class MetadataModel {
 
   metaDataDescribeForType(type) {
     switch (type) {
-      case 'education':
-        return `
-        - meta_data 中的 title 是用户的教育经历标题， 注意该字段不要做任何改动。
-        - meta_data 中的 content 是AI需要通过对话，总结出的教育经历内容（亮点），需总结为2-4点，突出学习成果和相关课程, bullet_point 是总结小标题，content 是总结内容
-        - meta_data 中的 from_time 是用户的入学时间。
-        - meta_data 中的 to_time 是用户的毕业时间。
-        `;
       case 'workExperience':
         return `
-        - meta_data 中的 title 是用户的工作经历标题, 注意该字段不要做任何改动。
+        - meta_data 中的 title 是用户的工作经历的公司名称, 注意该字段不要做任何改动。
+        - meta_data 中的 sub_title 是用户的工作经历的职位名称, 注意该字段不要做任何改动。
+        - meta_data 中的 city 是用户的工作经历的城市名称.
         - meta_data 中的 content 是AI需要通过对话，总结出的工作经历内容（亮点），需总结为2-4点，强调职责、成就和量化成果, bullet_point 是总结小标题，content 是总结内容
         - meta_data 中的 from_time 是用户的入职时间。
         - meta_data 中的 to_time 是用户的离职时间。
@@ -64,18 +59,6 @@ class MetadataModel {
         - meta_data 中的 from_time 是项目开始时间。
         - meta_data 中的 to_time 是项目结束时间。
         `;
-      case 'personalInfo':
-        return `
-        - meta_data 中的 name 是用户姓名，你需要根据用户的对话，总结出name的内容，是用户的姓名。
-        - meta_data 中的 email 是用户邮箱，你需要根据用户的对话，总结出email的内容，是用户的邮箱。
-        - meta_data 中的 phone 是用户的联系电话，你需要根据用户的对话，总结出phone的内容，是用户的联系电话。
-        - meta_data 中的 desiredPosition 是用户的目标岗位，你需要根据用户的对话，总结出desiredPosition的内容，是用户的目标岗位。
-        `;
-      case 'personalSummary':
-        return `
-        - meta_data 中的 content 是用户填写的个人总结，你需要根据用户的对话，总结出content的内容，是用户的个人总结。
-        - meta_data 中的 skills 是用户的技能列表，你需要根据用户的对话，总结出skills的内容，是用户的技能。
-        `;
       default:
         return '';
     }
@@ -84,11 +67,11 @@ class MetadataModel {
   // 返回不同 type 的数据组织格式
   formatForType(type) {
     switch (type) {
-      case 'education':
       case 'workExperience':
       case 'projectExperience':
         return JSON.stringify({
           "title": "",
+          "sub_title": "",
           "from_time": "",
           "to_time": "",
           "content": [
@@ -106,13 +89,6 @@ class MetadataModel {
             },
           ],
         });
-      case 'personalInfo':
-        return JSON.stringify({
-          "name": "",
-          "email": "",
-          "phone": "",
-        });
-      case 'personalSummary':
       default:
         return '{}';
     }
