@@ -44,17 +44,17 @@ export default {
           {
             id: 'modern',
             name: '现代极简',
-            preview: require('../../img/model_preview/template-default.png'), 
+            preview: require('@/assets/model_preview/template-default.png'), 
             description: '2024年最受欢迎设计，适合大多数求职场景',
-            tags: ['热门', '通用'],
+            tags: ['有趣', 'crazy'],
             isNew: true
           },
           {
             id: 'professional',
             name: '专业经典',
-            preview: require('../../img/model_preview/template-default.png'), 
+            preview: require('@/assets/model_preview/template-default.png'), 
             description: '传统稳重的版式设计，适合金融、法律等传统行业',
-            tags: ['社招', '通用']
+            tags: ['好玩', 'shit']
           }
         ],
         '通用': [
@@ -67,18 +67,18 @@ export default {
           {
             id: 'campus',
             name: '应届生专用',
-            preview: require('../../img/model_preview/template-default.png'), 
+            preview: require('@/assets/model_preview/template-default.png'), 
             description: '突出教育经历和实习经验，适合应届毕业生',
             tags: ['校招', '实习'],
             isNew: true
           }
         ],
-        // '零经验': [
-        //   // 零经验模板数据...
-        // ],
-        // '英文': [
-        //   // 英文模板数据...
-        // ]
+        '零经验': [
+          // 零经验模板数据...
+        ],
+        '英文': [
+          // 英文模板数据...
+        ]
       }
     }
   },

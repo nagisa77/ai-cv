@@ -13,31 +13,49 @@
     </h2>
     <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
-      <div class="item-hover-overlay" v-if="hoverIndex === index">
+      <!-- <div class="item-hover-overlay" v-if="hoverIndex === index">
         <div class="overlay-buttons">
           <button class="overlay-button" @click.stop="onEditClick('education', edu.title)">编辑</button>
           <button class="overlay-button ai-dialog-button" @click="onTitleClick('education', edu.title)">AI 对话</button>
           <button class="overlay-button delete-button" @click="onTitleDelete('education', edu.title)">删除</button>
         </div>
-      </div>
+      </div> -->
       <div class="title-and-time">
         <h3 class="item-title">{{ edu.title }}</h3>
         <p class="item-time">{{ edu.content.from_time }} - {{ edu.content.to_time }}</p>
       </div>
-      <div class="item-content-item" v-for="(point, i2) in edu.content.content" :key="i2">
+      <div class="sub-title-and-city">
+        <div>{{ edu.content.major }} {{ edu.content.degree }}</div>
+        <div>{{ edu.content.city }}</div>
+      </div>
+
+      <div class="item-content-item">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">
-          <span class="bullet-point">{{ point.bullet_point }}:</span>
-          <span class="bullet-content">{{ point.content }}</span>
+          <span class="bullet-point">GPA:</span>
+          <span class="bullet-content">{{ edu.content.gpa }}</span>
         </div>
       </div>
 
-      <div class="item-content-item" v-if="edu.content.content.length === 0" style="opacity: 0.5;">
-        (这里是描述，您可以在这里详细描述您的教育经历，包括所学课程、获得的荣誉、参与的活动以及取得的成就等。)
+      <div class="item-content-item">
+        <div class="bullet-point-prefix">·</div>
+        <div class="bullet-point-content">
+          <span class="bullet-point">荣誉奖项:</span>
+          <span class="bullet-content">{{ edu.content.honors }}</span>
+        </div>
       </div>
-      <div class="highlight" v-if="edu.title === highlightTitle">
+
+      <div class="item-content-item">
+        <div class="bullet-point-prefix">·</div>
+        <div class="bullet-point-content">
+          <span class="bullet-point">相关课程:</span>
+          <span class="bullet-content">{{ edu.content.courses }}</span>
+        </div>
+      </div>
+
+      <!-- <div class="highlight" v-if="edu.title === highlightTitle">
         <div class="highlight-left"></div>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>

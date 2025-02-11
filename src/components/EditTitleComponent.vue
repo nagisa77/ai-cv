@@ -11,101 +11,55 @@
         <div v-if="currentEditingType === 'education'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
-                <div v-if="isNewTitle" class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.title" />
-                    <label class="form-label">主题</label>
-                </div>
-                <div class="form-line">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.from_time" />
-                        <label class="form-label">开始时间</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.to_time" />
-                        <label class="form-label">结束时间</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.major" />
-                    <label class="form-label">专业</label>
-                </div>
+                <AppleStyleInput v-if="isNewTitle" id="edu-title" labelText="主题" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.title" />
 
                 <div class="form-line">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.degree" />
-                        <label class="form-label">学历</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " v-model="localContent.content.gpa" />
-                        <label class="form-label">GPA (选填)</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.city" />
-                        <label class="form-label">城市</label>
-                    </div>
+                    <AppleStyleInput id="edu-from" labelText="开始时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.from_time" />
+                    <AppleStyleInput id="edu-to" labelText="结束时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.to_time" />
                 </div>
-            </div>
 
-            <div class="session-edit-title">Bullet Points</div>
-            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
-                <div class="button-container">
-                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave" type="button"
-                        class="remove-button" @click="removeBulletPoint(index)">
-                        x
-                    </button>
+                <AppleStyleInput id="edu-major" labelText="专业" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.major" />
+
+                <div class="form-line">
+                    <AppleStyleInput id="edu-degree" labelText="学历" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.degree" />
+                    <AppleStyleInput id="edu-gpa" labelText="GPA (选填)" inputType="text" :required="false"
+                        v-model:modelValue="localContent.content.gpa" />
+                    <AppleStyleInput id="edu-city" labelText="城市" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.city" />
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.bullet_point" />
-                    <label class="form-label">Bullet Point</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
-                    <label class="form-label">内容</label>
-                </div>
+
+                <AppleStyleInput id="edu-honors" labelText="荣誉奖项 (选填)" inputType="text" :required="false"
+                    v-model:modelValue="localContent.content.honors" />
+
+                <AppleStyleInput id="edu-courses" labelText="相关课程 (选填)" inputType="text" :required="false"
+                    v-model:modelValue="localContent.content.courses" />
             </div>
-            <button class="add-button" type="button" @click="addBulletPoint">
-                + 新增Bullet Point
-            </button>
         </div>
 
         <!-- ================== Work Experience ================== -->
         <div v-if="currentEditingType === 'workExperience'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
-                <div v-if="isNewTitle" class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.title" />
-                    <label class="form-label">主题</label>
-                </div>
+                <AppleStyleInput v-if="isNewTitle" id="work-title" labelText="主题" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.title" />
+
                 <div class="form-line">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.from_time" />
-                        <label class="form-label">开始时间</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.to_time" />
-                        <label class="form-label">结束时间</label>
-                    </div>
+                    <AppleStyleInput id="work-from" labelText="开始时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.from_time" />
+                    <AppleStyleInput id="work-to" labelText="结束时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.to_time" />
                 </div>
+
                 <div class="form-line">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.title" />
-                        <label class="form-label">职位</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " v-model="localContent.content.city" />
-                        <label class="form-label">城市</label>
-                    </div>
+                    <AppleStyleInput id="work-position" labelText="职位" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.title" />
+                    <AppleStyleInput id="work-city" labelText="城市" inputType="text" :required="false"
+                        v-model:modelValue="localContent.content.city" />
                 </div>
             </div>
 
@@ -117,14 +71,10 @@
                         x
                     </button>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.bullet_point" />
-                    <label class="form-label">Bullet Point</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
-                    <label class="form-label">内容</label>
-                </div>
+                <AppleStyleInput :id="`bullet-point-${index}`" labelText="Bullet Point" inputType="text"
+                    :required="true" v-model:modelValue="point.bullet_point" />
+                <AppleStyleInput :id="`bullet-content-${index}`" labelText="内容" inputType="text" :required="true"
+                    v-model:modelValue="point.content" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point
@@ -135,28 +85,18 @@
         <div v-if="currentEditingType === 'projectExperience'">
             <div class="session-edit-title">基础信息</div>
             <div class="session-edit">
-                <div v-if="isNewTitle" class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.title" />
-                    <label class="form-label">主题</label>
-                </div>
+                <AppleStyleInput v-if="isNewTitle" id="project-title" labelText="主题" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.title" />
+
                 <div class="form-line">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.from_time" />
-                        <label class="form-label">开始时间</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder=" " required
-                            v-model="localContent.content.to_time" />
-                        <label class="form-label">结束时间</label>
-                    </div>
+                    <AppleStyleInput id="project-from" labelText="开始时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.from_time" />
+                    <AppleStyleInput id="project-to" labelText="结束时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.to_time" />
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required
-                        v-model="localContent.content.role" />
-                    <label class="form-label">职位/角色</label>
-                </div>
+
+                <AppleStyleInput id="project-role" labelText="职位/角色" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.role" />
             </div>
 
             <div class="session-edit-title">Bullet Points</div>
@@ -167,14 +107,10 @@
                         x
                     </button>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.bullet_point" />
-                    <label class="form-label">Bullet Point</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder=" " required v-model="point.content" />
-                    <label class="form-label">内容</label>
-                </div>
+                <AppleStyleInput :id="`proj-bullet-${index}`" labelText="Bullet Point" inputType="text" :required="true"
+                    v-model:modelValue="point.bullet_point" />
+                <AppleStyleInput :id="`proj-content-${index}`" labelText="内容" inputType="text" :required="true"
+                    v-model:modelValue="point.content" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point
@@ -183,20 +119,20 @@
 
         <!-- ================== Footer 操作按钮 ================== -->
         <div class="edit-title-component-footer">
-            <div class="edit-cancel-btn" @click="cancelChanges">
-                取消
-            </div>
-            <div class="edit-submit-btn" @click="submitChanges">
-                提交
-            </div>
+            <div class="edit-cancel-btn" @click="cancelChanges">取消</div>
+            <div class="edit-submit-btn" @click="submitChanges">提交</div>
         </div>
     </div>
 </template>
 
 <script>
-import metadataInstance from '@/models/metadata_model.js'
+import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'; // 确保路径正确
+import metadataInstance from '@/models/metadata_model.js';
 
 export default {
+    components: {
+        AppleStyleInput
+    },
     name: 'EditTitleComponent',
     props: {
         currentEditingTitle: {

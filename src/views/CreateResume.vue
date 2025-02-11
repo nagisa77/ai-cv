@@ -74,15 +74,15 @@ export default {
     chatModules() {
       const result = []
 
-      // 1) 遍历教育经历
-      const educationList = metadataInstance.contentForType('education') || []
-      educationList.forEach((edu, index) => {
-        const eduTitle = edu.title || `教育经历-${index + 1}`
-        result.push({
-          type: 'education',
-          title: eduTitle
-        })
-      })
+      // // 1) 遍历教育经历
+      // const educationList = metadataInstance.contentForType('education') || []
+      // educationList.forEach((edu, index) => {
+      //   const eduTitle = edu.title || `教育经历-${index + 1}`
+      //   result.push({
+      //     type: 'education',
+      //     title: eduTitle
+      //   })
+      // })
 
       // 2) 遍历工作经历
       const workList = metadataInstance.contentForType('workExperience') || []

@@ -156,7 +156,7 @@ export default {
 }
 
 .session-title {
-  font-size: 12px;
+  font-size: 10px;
   position: relative;
 }
 
@@ -174,11 +174,18 @@ export default {
   height: 12px;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+}
+
+.sub-title-and-city {
+  display: flex;
+  height: 12px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
 }
 
 .item-title {
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .item-time {

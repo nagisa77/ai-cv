@@ -51,6 +51,8 @@
             <AppleStyleInput :id="`edu-city-${index}`" labelText="城市" inputType="text" :required="true"
               v-model="edu.city" />
           </div>
+            <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
+            <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
         </div>
       </div>
       <div>
@@ -178,7 +180,9 @@ export default {
           major: '软件工程',
           degree: '本科',
           gpa: '3.9',
-          city: '北京'
+          city: '北京',
+          honors: '优秀学生干部',
+          courses: '数据结构, 操作系统, 计算机网络'
         }
       ],
       workList: [
@@ -210,6 +214,12 @@ export default {
         return {
           title: edu.school,
           content: {
+            major: edu.major,
+            degree: edu.degree,
+            gpa: edu.gpa,
+            city: edu.city,
+            honors: edu.honors,
+            courses: edu.courses,
             from_time: from_time ? from_time.trim() : '',
             to_time: to_time ? to_time.trim() : '',
             content: []
@@ -263,16 +273,21 @@ export default {
 
       educationList.forEach((edu) => {
         const [fromTime, toTime] = edu.time.split(' - ')
-        const title = `${edu.school} - ${edu.degree}`
         metadataInstance.setContentForType(
           'education',
           {
-            title,
+            title: edu.school,
+            major: edu.major,
+            degree: edu.degree,
+            gpa: edu.gpa,
+            city: edu.city,
+            honors: edu.honors,
+            courses: edu.courses,
             from_time: fromTime ? fromTime.trim() : '',
             to_time: toTime ? toTime.trim() : '',
             content: []
           },
-          title
+          edu.school
         )
       })
 
