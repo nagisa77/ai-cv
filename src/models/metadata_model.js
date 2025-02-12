@@ -2,7 +2,7 @@ import axios from 'axios'
 import { reactive, watch } from 'vue'
 
 // 云函数接口地址（元数据）
-const META_API_URL = 'http://localhost:9000/user/default_user/meta_data'
+const META_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/meta_data'
 
 class MetadataModel {
   constructor() {

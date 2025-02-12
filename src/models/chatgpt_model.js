@@ -3,7 +3,7 @@ import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 
 // 云函数接口地址（聊天数据）
-const CHAT_API_URL = 'http://localhost:9000/user/default_user/chat'
+const CHAT_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/chat'
 
 const ChatgptModel = (function () {
   let instance
