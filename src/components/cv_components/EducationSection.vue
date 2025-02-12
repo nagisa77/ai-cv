@@ -13,13 +13,13 @@
     </h2>
     <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
-      <!-- <div class="item-hover-overlay" v-if="hoverIndex === index">
+      <div class="item-hover-overlay" v-if="hoverIndex === index">
         <div class="overlay-buttons">
           <button class="overlay-button" @click.stop="onEditClick('education', edu.title)">编辑</button>
-          <button class="overlay-button ai-dialog-button" @click="onTitleClick('education', edu.title)">AI 对话</button>
+          <!-- <button class="overlay-button ai-dialog-button" @click="onTitleClick('education', edu.title)">AI 对话</button> -->
           <button class="overlay-button delete-button" @click="onTitleDelete('education', edu.title)">删除</button>
         </div>
-      </div> -->
+      </div>
       <div class="title-and-time">
         <h3 class="item-title">{{ edu.title }}</h3>
         <p class="item-time">{{ edu.content.from_time }} - {{ edu.content.to_time }}</p>

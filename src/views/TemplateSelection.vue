@@ -50,6 +50,30 @@ export default {
             isNew: true
           },
           {
+            id: 'modern',
+            name: '现代极简',
+            preview: require('@/assets/model_preview/template-default.png'), 
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['有趣', 'crazy'],
+            isNew: true
+          },
+          {
+            id: 'modern',
+            name: '现代极简',
+            preview: require('@/assets/model_preview/template-default.png'), 
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['有趣', 'crazy'],
+            isNew: true
+          },
+          {
+            id: 'modern',
+            name: '现代极简',
+            preview: require('@/assets/model_preview/template-default.png'), 
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['有趣', 'crazy'],
+            isNew: true
+          },
+          {
             id: 'professional',
             name: '专业经典',
             preview: require('@/assets/model_preview/template-default.png'), 
