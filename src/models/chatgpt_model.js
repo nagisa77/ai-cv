@@ -3,7 +3,8 @@ import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 
 // 云函数接口地址（聊天数据）
-const CHAT_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/chat'
+// const CHAT_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/chat'
+const CHAT_API_URL = 'http://localhost:9000/user/default_user/chat'
 
 const ChatgptModel = (function () {
   let instance
@@ -13,18 +14,22 @@ const ChatgptModel = (function () {
 
   function createInstance() {
     const data = reactive({
-      conversations: {}
+      conversations: {},
+      isFetching: false
     })
 
+    data.isFetching = true
     // 从云函数加载聊天记录（GET 请求）
     axios.get(CHAT_API_URL)
       .then(response => {
         // 若返回数据为空，则保持空对象
         data.conversations = response.data || {}
+        data.isFetching = false
       })
       .catch(error => {
         console.error('加载聊天记录出错:', error)
         data.conversations = {}
+        data.isFetching = false
       })
 
     // 监听 conversations 的变化并通过 PUT 请求保存到云函数
@@ -110,6 +115,10 @@ ${describeForSenderMessage()}
     function getMessagesForTitle(type, title) {
       initConversation(type, title)
       return data.conversations[type][title]
+    }
+
+    function getIsFetching() {
+      return data.isFetching
     }
 
     function addMessage(type, title, message) {
@@ -207,6 +216,7 @@ ${describeForSenderMessage()}
     }
 
     return {
+      getIsFetching,
       getMessagesForTitle,
       getPromptForType,
       sendMessage,

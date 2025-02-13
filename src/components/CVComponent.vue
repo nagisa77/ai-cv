@@ -4,7 +4,11 @@
       <span style="color: red;">[debug_area]:</span>
       <button @click="captureAndSaveScreenshot">截图并保存</button>
     </div> -->
-    <div class="cv-page">
+    <div class="cv-page loading-container" v-if="isFetching">
+      <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1"
+        color="var(--color-primary)"></l-waveform>
+    </div>
+    <div v-else class="cv-page">
       <!-- Personal Information -->
       <PersonalInfo :personalInfo="personalInfo" />
 
@@ -51,6 +55,9 @@ export default {
     }
   },
   computed: {
+    isFetching() {
+      return metadataInstance.getIsFetching()
+    },
     personalInfo() {
       return metadataInstance.data.personalInfo;
     },
@@ -301,4 +308,9 @@ export default {
   cursor: pointer;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

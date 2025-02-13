@@ -3,7 +3,11 @@
     <!-- 左侧 -->
     <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
-      <template v-if="currentEditingType != ''">
+      <div class="loading-container" v-if="isFetching">
+        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1"
+        color="var(--color-primary)"></l-waveform>
+      </div>
+      <template v-else-if="currentEditingType != ''">
         <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType"
           @cancel-changes="handleCloseEdit" :isNewTitle="isNewTitle" @changes-submitted="handleCloseEdit" />
       </template>
@@ -32,6 +36,11 @@ import CVComponent from '@/components/CVComponent.vue'
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue' // <-- 新增引入
 import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
+import ChatgptModel from '@/models/chatgpt_model.js'
+import { waveform } from 'ldrs'
+
+waveform.register()
+const chatgptInstance = ChatgptModel.getInstance()
 
 export default {
   name: 'CreateResume',
@@ -60,6 +69,9 @@ export default {
     }
   },
   computed: {
+    isFetching() {
+      return chatgptInstance.getIsFetching()
+    },
     currentTemplateComponent() {
       if (this.templateType == 'default') {
         return CVComponent
@@ -187,5 +199,14 @@ export default {
   position: relative;
   height: calc(100vh - 60px);
   margin-top: 60px;
+}
+
+.loading-container {
+  background-color: var(--color-background);
+  height: calc(100vh - 60px);
+  width: 38vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
 }
 </style>

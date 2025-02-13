@@ -2,8 +2,8 @@ import axios from 'axios'
 import { reactive, watch } from 'vue'
 
 // 云函数接口地址（元数据）
-const META_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/meta_data'
-
+// const META_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/meta_data'
+const META_API_URL = 'http://localhost:9000/user/default_user/meta_data'
 class MetadataModel {
   constructor() {
     if (MetadataModel.instance) {
@@ -16,20 +16,25 @@ class MetadataModel {
       workExperience: [],
       projectExperience: [],
       personalInfo: {},
-      personalSummary: ''
+      personalSummary: '',
+
+      isFetching: false,
     };
 
     // 先构造一个响应式对象，后续会通过接口更新数据
     this.data = reactive(defaultData);
 
     // 尝试从云函数加载数据
+    this.data.isFetching = true
     axios.get(META_API_URL)
       .then(response => {
         // 如果云端有数据，则合并到 this.data 中
         Object.assign(this.data, response.data);
+        this.data.isFetching = false
       })
       .catch(error => {
         console.error('加载 metadata 失败，使用默认数据:', error);
+        this.data.isFetching = false
       });
 
     // 监听数据变化并通过 PUT 请求保存到云函数
@@ -136,6 +141,10 @@ class MetadataModel {
       default:
         break;
     }
+  }
+
+  getIsFetching() {
+    return this.data.isFetching
   }
 
   // 设置数据（示例逻辑）
