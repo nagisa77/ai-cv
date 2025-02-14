@@ -4,7 +4,10 @@
             <div class="auth-title">欢迎回来</div>
             <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
 
-            <button class="continue-button">继续</button>
+            <button class="continue-button" @click="continueToSecondStep" :disabled="isLoading">
+                <span v-if="!isLoading">继续</span>
+                <span v-else>发送中...</span>
+            </button>
 
             <div class="question-area">
                 <div class="question-text">还没有账户?</div>
@@ -12,18 +15,21 @@
             </div>
 
             <div class="spilter-line">
-                <div class="spilter-line-left"/>
+                <div class="spilter-line-left" />
                 <div class="spilter-line-text">或</div>
-                <div class="spilter-line-right"/>
+                <div class="spilter-line-right" />
             </div>
 
             <div class="login-with-area">
                 <div class="login-with-button">
-                    <img class="login-with-button-icon" src="https://cdn-teams-slug.flaticon.com/google.jpg" alt="google" />
+                    <img class="login-with-button-icon" src="https://cdn-teams-slug.flaticon.com/google.jpg"
+                        alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
                 <div class="login-with-button">
-                    <img class="login-with-button-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s" alt="apple" />
+                    <img class="login-with-button-icon"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
+                        alt="apple" />
                     <div class="login-with-button-text">继续使用 Apple 登录</div>
                 </div>
             </div>
@@ -38,16 +44,62 @@
 </template>
 
 <script>
-
+import { useToast } from 'vue-toastification'
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue';
+import axios from 'axios';
+
 
 export default {
     components: {
         AppleStyleInput
     },
+    setup() {
+        const toast = useToast()
+
+        return { toast }
+    },
     data() {
         return {
-            email: ''
+            email: '',
+            isLoading: false,
+        }
+    },
+    methods: {
+        async continueToSecondStep() {
+            // 基本格式验证
+            if (!this.validateEmail(this.email)) {
+                alert('请输入有效的电子邮件地址');
+                return;
+            }
+
+            this.isLoading = true;
+
+            try {
+                const response = await axios.post('http://localhost:9000/auth/captcha/send', {
+                    email: this.email
+                });
+
+                if (response.data.code === 200) {
+                    this.$router.push({
+                        name: 'AuthSecondStep',
+                        params: { email: this.email }
+                    });
+                } else {
+                    this.toast.error(`发送失败: ${response.data.message}`);
+                }
+            } catch (error) {
+                if (error.response) {
+                    this.toast.error(`请求错误: ${error.response.data.message}`);
+                } else {
+                    this.toast.error('网络错误，请检查连接');
+                }
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
     }
 }
@@ -89,6 +141,16 @@ export default {
     font-size: 15px;
 }
 
+.continue-button:hover {
+    background-color: var(--color-primary-hover);
+    transition: background-color 0.3s ease;
+}
+
+.continue-button:disabled {
+    background-color: var(--color-primary-disabled);
+    cursor: not-allowed;
+}
+
 .question-area {
     display: flex;
     justify-content: center;
@@ -111,7 +173,8 @@ export default {
     margin-top: 20px;
 }
 
-.spilter-line-left, .spilter-line-right {
+.spilter-line-left,
+.spilter-line-right {
     width: 100px;
     height: 1px;
     background-color: rgba(0, 0, 0, 0.3);
@@ -173,5 +236,4 @@ export default {
 .footer-text-right {
     margin-left: 10px;
 }
-
 </style>
