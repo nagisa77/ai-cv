@@ -83,7 +83,7 @@ export default {
             isNew: false
           },
           {
-            id: 'simple',
+            id: 'general_simple',
             name: '简约现代模板',
             preview: require('@/assets/model_preview/template-general2.png'),
             description: '2024年最受欢迎设计，适合大多数求职场景',

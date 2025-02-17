@@ -14,14 +14,16 @@ const routes = [
     component: Home
   },
   {
-    path: '/resume-form',
+    path: '/resume-form/:templateType',
     name: 'ResumeForm',
-    component: ResumeForm
+    component: ResumeForm,
+    props: true
   },
   {
-    path: '/create-resume',
+    path: '/create-resume/:templateType',
     name: 'CreateResume',
-    component: CreateResume
+    component: CreateResume,
+    props: true
   },
   {
     path: '/template-selection',
@@ -37,7 +39,7 @@ const routes = [
     path: '/auth-second-step/:email',
     name: 'AuthSecondStep',
     component: AuthSecondStepPage,
-    props: true // 启用props接收路由参数
+    props: true 
   }
 ]
 

@@ -165,6 +165,12 @@ export default {
     PersonalInfo,
     SummarySection
   },
+  props: {
+    templateType: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       basicInfo: {
@@ -322,19 +328,10 @@ export default {
         )
       })
 
-      const formData = {
-        name,
-        phone,
-        email,
-        desiredPosition,
-        educationList,
-        workList,
-        projectList,
-        personalSummary: this.personalSummary
-      }
-      localStorage.setItem('resumeFormData', JSON.stringify(formData))
-
-      this.$router.push('/create-resume')
+      this.$router.push({
+        name: 'CreateResume',
+        params: { templateType: this.templateType }
+      });
     },
     addEducationExperience() {
       this.educationList.push({
