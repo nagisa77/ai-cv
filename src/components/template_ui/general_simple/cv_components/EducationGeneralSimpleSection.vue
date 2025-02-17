@@ -1,8 +1,9 @@
 <!-- src/components/EducationGeneralSimpleSection.vue -->
 <template>
   <section class="education-section session">
-    <h2 class="session-title" @mouseenter="titleHover = true" @mouseleave="titleHover = false">教育经历
-      <span v-if="titleHover" class="session-title-add-icon" @click="onAddTitleClick">
+    <div class="session-title-and-background">
+      <h2 class="session-title" @mouseenter="titleHover = true" @mouseleave="titleHover = false">教育经历
+        <span v-if="titleHover" class="session-title-add-icon" @click="onAddTitleClick">
         <svg enable-background="new 0 0 512 512" fill="var(--color-primary)" height="10px" id="Layer_1" version="1.1"
           viewBox="0 0 512 512" width="10px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
           <path d="M256,512C114.625,512,0,397.391,0,256C0,114.609,114.625,0,256,0c141.391,0,256,114.609,256,256  
@@ -10,7 +11,10 @@
         S362.047,64,256,64z M288,384h-64v-96h-96v-64h96v-96h64v96h96v64h-96V384z" />
         </svg>
       </span>
-    </h2>
+      </h2>
+    </div>
+    <div class="session-title-underline"></div>
+
     <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
       <div class="item-hover-overlay" v-if="hoverIndex === index">

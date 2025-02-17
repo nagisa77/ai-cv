@@ -1,12 +1,15 @@
 <template>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
   <div class="cv-component" ref="cvComponent">
     <!-- <div class="cv-debug-settings">
       <span style="color: red;">[debug_area]:</span>
       <button @click="captureAndSaveScreenshot">截图并保存</button>
     </div> -->
     <div class="cv-page loading-container" v-if="isFetching">
-      <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1"
-        color="var(--color-primary)"></l-waveform>
+      <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
     </div>
     <div v-else class="cv-page">
       <!-- Personal Information -->
@@ -14,15 +17,18 @@
 
       <!-- Education Section -->
       <EducationGeneralSimpleSection :educationList="educationList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
       <!-- Work Experience Section -->
       <WorkGeneralSimpleSection :workList="workList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
       <!-- Project Experience Section -->
       <ProjectGeneralSimpleSection :projectList="projectList" :highlightTitle="highlightTitle"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete" @add-title="handleAddTitle" />
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
       <!-- Personal Summary -->
       <SummaryGeneralSimpleSection v-if="personalSummary" :personalSummary="personalSummary" />
@@ -145,7 +151,7 @@ export default {
   /* 3:4纸张比例，可按需调整 */
   padding: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  font-family: '楷体', SimKai, serif; 
+  font-family: "Ma Shan Zheng", sans-serif;
 }
 
 ::v-deep .item-content-item {
@@ -163,18 +169,28 @@ export default {
   margin-top: 2px;
 }
 
+::v-deep .session-title-and-background {
+  display: flex;
+  padding: 0px;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+::v-deep .session-title-underline {
+  width: 100%;
+  height: 1px;
+  margin-top: 0px;
+  background-color: var(--color-primary);
+}
+
 ::v-deep .session-title {
   font-size: 10px;
   position: relative;
   font-weight: bold;
-}
-
-::v-deep .session-title::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 1px;
-  background-color: #000;
+  margin: 0; 
+  padding: 4px 8px;
+  background-color: var(--color-primary);
+  color: #fff;
 }
 
 ::v-deep .title-and-time {
@@ -201,10 +217,11 @@ export default {
 }
 
 ::v-deep .session-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 10px;
 }
 
 ::v-deep .highlight {
@@ -237,10 +254,10 @@ export default {
   height: calc(100% + 10px);
   border-radius: 4px;
   z-index: 1;
-  
+
   /* 整体应用模糊滤镜 */
   backdrop-filter: blur(20px);
-  
+
   /* 背景色等其它需求 */
   background-color: rgba(0, 0, 0, 0.3);
   transition: backdrop-filter 0.2s ease;
@@ -248,16 +265,15 @@ export default {
   /* 关键：使用渐变遮罩控制模糊的可见区域
      #000 表示该区域不透明（会显示blur），
      transparent 表示透明（不显示或不被遮罩） */
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 0%,       /* 左侧开始完全被遮罩，可见模糊 */
-    transparent 100%  /* 右侧逐渐过渡到完全透明，不会显示模糊 */
-  );
-  mask-image: linear-gradient(
-    to left,
-    #000 0%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to left,
+      #000 0%,
+      /* 左侧开始完全被遮罩，可见模糊 */
+      transparent 100%
+      /* 右侧逐渐过渡到完全透明，不会显示模糊 */
+    );
+  mask-image: linear-gradient(to left,
+      #000 0%,
+      transparent 100%);
 }
 
 /* 按钮区域 */

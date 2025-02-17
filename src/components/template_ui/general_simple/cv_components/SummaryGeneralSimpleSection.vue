@@ -1,9 +1,12 @@
 <!-- src/components/SummaryGeneralSimpleSection.vue -->
 <template>
-    <section v-if="personalSummary" class="summary-section session">
+  <section v-if="personalSummary" class="summary-section session">
+    <div class="session-title-and-background">
       <h2 class="session-title">个人总结</h2>
-      <p>{{ personalSummary }}</p>
-    </section>
+    </div>
+    <div class="session-title-underline"></div>
+    <p>{{ personalSummary }}</p>
+  </section>
   </template>
   
   <script>
