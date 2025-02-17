@@ -6,9 +6,6 @@ import apiClient from '@/api/axios'
 const ChatgptModel = (function () {
   let instance
 
-  // 用于存储用户输入的 API Key
-  let userApiKey = ''
-
   function createInstance() {
     const data = reactive({
       conversations: {},
@@ -163,39 +160,21 @@ ${describeForSenderMessage()}
       })
     }
 
-    function setApiKey(key) {
-      userApiKey = key
-    }
-
     function clearConversations() {
       data.conversations = {}
     }
 
     // 核心: 调用 GPT 接口时，使用用户提供的 API Key
     async function fetchGptResponse(type, title, userText) {
-      const apiUrl = 'https://api.openai.com/v1/chat/completions'
-
-      // 从 userApiKey 中获取用户提供的 key
-      const apiKey = userApiKey || ''
-
       try {
         let messages = buildGptMessagesFromData(type, title)
         messages.push({ role: 'user', content: userText })
 
-        const response = await apiClient.post(
-          apiUrl,
-          {
-            model: 'gpt-4o', // 使用的模型
-            messages,
-            temperature: 0.7,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${apiKey}`,
-            },
-          }
-        )
+        const response = await apiClient.post('/chat/completions', {
+          messages,
+          model: 'gpt-4o',
+          temperature: 0.7
+        });
 
         const gptContent = response.data.choices[0].message.content.trim()
         return gptContent
@@ -210,7 +189,6 @@ ${describeForSenderMessage()}
       getMessagesForTitle,
       getPromptForType,
       sendMessage,
-      setApiKey,
       addMessage,
       clearConversations,
     }
