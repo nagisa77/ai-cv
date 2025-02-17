@@ -33,7 +33,7 @@
 
     <!-- 类别选项卡 -->
     <div class="category-tabs">
-      <button v-for="category in categories" :key="category"
+      <button v-for="category in filteredCategories" :key="category"
         :class="['tab-button', { active: currentCategory === category }]" @click="currentCategory = category">
         {{ category }}
       </button>
@@ -66,80 +66,71 @@ export default {
   name: 'TemplateSelection',
   data() {
     return {
-      currentCategory: '热门',
+      currentCategory: null,
       selectedTemplate: null,
       isConfirmPopupVisible: false,
       categories: ['热门', '通用', '社招', '校招/实习', '零经验', '英文'],
       templatesByCategory: {
         '热门': [
-          {
-            id: 'modern',
-            name: '现代极简',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '2024年最受欢迎设计，适合大多数求职场景',
-            tags: ['有趣', 'crazy'],
-            isNew: true
-          },
-          {
-            id: 'modern',
-            name: '现代极简',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '2024年最受欢迎设计，适合大多数求职场景',
-            tags: ['有趣', 'crazy'],
-            isNew: true
-          },
-          {
-            id: 'modern',
-            name: '现代极简',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '2024年最受欢迎设计，适合大多数求职场景',
-            tags: ['有趣', 'crazy'],
-            isNew: true
-          },
-          {
-            id: 'modern',
-            name: '现代极简',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '2024年最受欢迎设计，适合大多数求职场景',
-            tags: ['有趣', 'crazy'],
-            isNew: true
-          },
-          {
-            id: 'professional',
-            name: '专业经典',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '传统稳重的版式设计，适合金融、法律等传统行业',
-            tags: ['好玩', 'shit']
-          }
         ],
         '通用': [
-          // 通用模板数据...
+          {
+            id: 'modern',
+            name: '现代极简',
+            preview: require('@/assets/model_preview/template-general1.png'),
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['通用', '现代'],
+            isNew: false
+          },
+          {
+            id: 'simple',
+            name: '简约现代模板',
+            preview: require('@/assets/model_preview/template-general2.png'),
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['通用', '简约'],
+            isNew: false
+          },
+          {
+            id: 'creative',
+            name: '创意模板, 现代',
+            preview: require('@/assets/model_preview/template-general3.png'),
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['创意', '独特'],
+            isNew: false
+          },
         ],
         '社招': [
-          // 社招模板数据...
+          {
+            id: 'social',
+            name: '社招模板, 现代',
+            preview: require('@/assets/model_preview/template-social-recruitment1.png'),
+            description: '社招模板, 适合社招场景',
+            tags: ['有趣', '社招'],
+            isNew: false
+          },
         ],
         '校招/实习': [
-          {
-            id: 'campus',
-            name: '应届生专用',
-            preview: require('@/assets/model_preview/template-default.png'),
-            description: '突出教育经历和实习经验，适合应届毕业生',
-            tags: ['校招', '实习'],
-            isNew: true
-          }
         ],
         '零经验': [
-          // 零经验模板数据...
         ],
         '英文': [
-          // 英文模板数据...
         ]
       }
     }
   },
   computed: {
+    filteredCategories() {
+      return Object.keys(this.templatesByCategory).filter(
+        category => this.templatesByCategory[category].length > 0
+      )
+    },
     filteredTemplates() {
       return this.templatesByCategory[this.currentCategory]
+    }
+  },
+  created() {
+    if (this.filteredCategories.length > 0) {
+      this.currentCategory = this.filteredCategories[0]
     }
   },
   methods: {
