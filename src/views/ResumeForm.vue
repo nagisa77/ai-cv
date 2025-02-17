@@ -144,11 +144,11 @@
 
 <script>
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
-import EducationSection from '@/components/cv_components/EducationSection.vue'
-import WorkSection from '@/components/cv_components/WorkSection.vue'
-import ProjectSection from '@/components/cv_components/ProjectSection.vue'
-import PersonalInfo from '@/components/cv_components/PersonalInfo.vue'
-import SummarySection from '@/components/cv_components/SummarySection.vue'
+import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue'
+import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue'
+import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue'
+import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue'
+import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue'
 
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'

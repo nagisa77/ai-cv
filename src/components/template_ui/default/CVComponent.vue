@@ -33,11 +33,11 @@
 <script>
 import html2canvas from 'html2canvas';
 import metadataInstance from '@/models/metadata_model.js';
-import PersonalInfo from '@/components/cv_components/PersonalInfo.vue';
-import EducationSection from '@/components/cv_components/EducationSection.vue';
-import WorkSection from '@/components/cv_components/WorkSection.vue';
-import ProjectSection from '@/components/cv_components/ProjectSection.vue';
-import SummarySection from '@/components/cv_components/SummarySection.vue';
+import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue';
+import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue';
+import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue';
+import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue';
+import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue';
 
 export default {
   name: "CVComponent",
@@ -116,7 +116,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .cv-debug-settings {
   position: fixed;
   display: flex;
@@ -147,27 +147,27 @@ export default {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.item-content-item {
+::v-deep .item-content-item {
   display: flex;
   font-size: 8px;
 }
 
-.bullet-point {
+::v-deep .bullet-point {
   margin-right: 4px;
   margin-top: 4px;
   font-weight: bold;
 }
 
-.bullet-point-content {
+::v-deep .bullet-point-content {
   margin-top: 2px;
 }
 
-.session-title {
+::v-deep .session-title {
   font-size: 10px;
   position: relative;
 }
 
-.session-title::after {
+::v-deep .session-title::after {
   content: "";
   display: block;
   width: 100%;
@@ -176,14 +176,14 @@ export default {
   margin-top: 4px;
 }
 
-.title-and-time {
+::v-deep .title-and-time {
   display: flex;
   height: 12px;
   justify-content: space-between;
   align-items: center;
 }
 
-.sub-title-and-city {
+::v-deep .sub-title-and-city {
   display: flex;
   height: 12px;
   justify-content: space-between;
@@ -191,22 +191,22 @@ export default {
   font-size: 8px;
 }
 
-.item-title {
+::v-deep .item-title {
   font-size: 8px;
 }
 
-.item-time {
+::v-deep .item-time {
   font-size: 8px;
 }
 
-.session-item {
+::v-deep .session-item {
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-bottom: 10px;
 }
 
-.highlight {
+::v-deep .highlight {
   position: absolute;
   width: calc(100% + 40px);
   height: calc(100% + 10px);
@@ -217,7 +217,7 @@ export default {
   z-index: -1;
 }
 
-.highlight-left {
+::v-deep .highlight-left {
   width: 5px;
   height: 100%;
   background-color: var(--color-primary);
@@ -228,7 +228,7 @@ export default {
 /* —————————————————————————
    灰色蒙层 
    ————————————————————————— */
-   .item-hover-overlay {
+::v-deep .item-hover-overlay {
   position: absolute;
   top: -5px;
   left: -20px;
@@ -260,7 +260,7 @@ export default {
 }
 
 /* 按钮区域 */
-.overlay-buttons {
+::v-deep .overlay-buttons {
   position: absolute;
   top: 5px;
   right: 10px;
@@ -271,7 +271,7 @@ export default {
   /* 按钮更上层，确保可点 */
 }
 
-.overlay-button {
+::v-deep .overlay-button {
   cursor: pointer;
   padding: 4px 8px;
   border: none;
@@ -281,34 +281,34 @@ export default {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.ai-dialog-button {
+::v-deep .ai-dialog-button {
   color: var(--color-secondary);
   background-color: var(--color-primary);
 }
 
-.ai-dialog-button:hover {
+::v-deep .ai-dialog-button:hover {
   background-color: var(--color-primary-hover);
   transition: background-color 0.2s ease;
 }
 
-.bullet-point-prefix {
+::v-deep .bullet-point-prefix {
   font-size: 10px;
   font-weight: bold;
   margin-top: 2px;
   margin-right: 4px;
 }
 
-.delete-button {
+::v-deep .delete-button {
   color: var(--color-secondary);
   background-color: rgba(255, 0, 0, 0.485);
 }
 
-.session-title-add-icon {
+::v-deep .session-title-add-icon {
   margin-left: 4px;
   cursor: pointer;
 }
 
-.loading-container {
+::v-deep .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;

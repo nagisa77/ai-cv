@@ -32,8 +32,9 @@
 
 <script>
 import ChatComponent from '@/components/ChatComponent.vue'
-import CVComponent from '@/components/CVComponent.vue'
-import SelectModuleComponent from '@/components/SelectModuleComponent.vue' // <-- 新增引入
+import CVComponent from '@/components/template_ui/default/CVComponent.vue'
+import CVGeneralSimpleComponent from '@/components/template_ui/general_simple/CVGeneralSimpleComponent.vue'
+import SelectModuleComponent from '@/components/SelectModuleComponent.vue' 
 import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
@@ -53,7 +54,7 @@ export default {
   props: {
     templateType: {
       type: String,
-      default: 'default'
+      default: 'general_simple'
     }
   },
   data() {
@@ -75,7 +76,9 @@ export default {
     currentTemplateComponent() {
       if (this.templateType == 'default') {
         return CVComponent
-      } 
+      } else if (this.templateType == 'general_simple') {
+        return CVGeneralSimpleComponent
+      }
 
       return CVComponent;
     },
