@@ -1,10 +1,7 @@
-import axios from 'axios'
 import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
+import apiClient from '@/api/axios'
 
-// 云函数接口地址（聊天数据）
-// const CHAT_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/chat'
-const CHAT_API_URL = 'http://localhost:9000/user/default_user/chat'
 
 const ChatgptModel = (function () {
   let instance
@@ -20,7 +17,7 @@ const ChatgptModel = (function () {
 
     data.isFetching = true
     // 从云函数加载聊天记录（GET 请求）
-    axios.get(CHAT_API_URL)
+    apiClient.get('/user/default_user/chat')
       .then(response => {
         // 若返回数据为空，则保持空对象
         data.conversations = response.data || {}
@@ -36,7 +33,7 @@ const ChatgptModel = (function () {
     watch(
       () => data.conversations,
       (newConversations) => {
-        axios.put(CHAT_API_URL, newConversations)
+        apiClient.put('/user/default_user/chat', newConversations)
           .catch(error => console.error('保存聊天记录出错:', error))
       },
       { deep: true }
@@ -185,7 +182,7 @@ ${describeForSenderMessage()}
         let messages = buildGptMessagesFromData(type, title)
         messages.push({ role: 'user', content: userText })
 
-        const response = await axios.post(
+        const response = await apiClient.post(
           apiUrl,
           {
             model: 'gpt-4o', // 使用的模型
@@ -204,14 +201,7 @@ ${describeForSenderMessage()}
         return gptContent
       } catch (error) {
         console.error('调用 GPT API 出错：', error)
-        return {
-          message: 'GPT 接口调用失败，请检查 API Key 或稍后重试。',
-          meta_data: {
-            resumeData: {}
-          },
-          is_enough: false,
-          prompt_hint: []
-        }
+        return 'GPT 接口调用失败，请检查 API Key 或稍后重试。'
       }
     }
 

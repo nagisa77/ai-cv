@@ -46,7 +46,7 @@
 <script>
 import { useToast } from 'vue-toastification'
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue';
-import axios from 'axios';
+import apiClient from '@/api/axios';
 
 
 export default {
@@ -75,7 +75,7 @@ export default {
             this.isLoading = true;
 
             try {
-                const response = await axios.post('http://localhost:9000/auth/captcha/send', {
+                const response = await apiClient.post('http://localhost:9000/auth/captcha/send', {
                     email: this.email
                 });
 

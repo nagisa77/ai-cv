@@ -1,9 +1,6 @@
-import axios from 'axios'
 import { reactive, watch } from 'vue'
+import apiClient from '@/api/axios'
 
-// 云函数接口地址（元数据）
-// const META_API_URL = 'https://1307107697-43msnpr4a9.ap-guangzhou.tencentscf.com/user/default_user/meta_data'
-const META_API_URL = 'http://localhost:9000/user/default_user/meta_data'
 class MetadataModel {
   constructor() {
     if (MetadataModel.instance) {
@@ -26,7 +23,7 @@ class MetadataModel {
 
     // 尝试从云函数加载数据
     this.data.isFetching = true
-    axios.get(META_API_URL)
+    apiClient.get('/user/default_user/meta_data')
       .then(response => {
         // 如果云端有数据，则合并到 this.data 中
         Object.assign(this.data, response.data);
@@ -39,7 +36,7 @@ class MetadataModel {
 
     // 监听数据变化并通过 PUT 请求保存到云函数
     watch(this.data, (newData) => {
-      axios.put(META_API_URL, newData)
+      apiClient.put('/user/default_user/meta_data', newData)
         .catch(error => console.error('保存 metadata 失败:', error));
     }, { deep: true });
 

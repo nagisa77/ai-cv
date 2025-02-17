@@ -31,10 +31,10 @@
               </div>
             </div>
 
-            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
+            <!-- <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
               :key="index" @click="handlePromptHintClick(hint)">
               {{ hint }}
-            </div>
+            </div> -->
           </template>
 
           <!-- 用户消息（me） -->
@@ -286,19 +286,19 @@ watch(
   }
 )
 
-function handlePromptHintClick(hint) {
-  try {
-    const { type, title } = activeModule.value
-    chatgptInstance.sendMessage(
-      type,
-      title,
-      "接下来我要讨论 " + hint,
-      true
-    )
-  } catch (e) {
-    console.error('choiceMessage.text 不是 JSON', e)
-  }
-}
+// function handlePromptHintClick(hint) {
+//   try {
+//     const { type, title } = activeModule.value
+//     chatgptInstance.sendMessage(
+//       type,
+//       title,
+//       "接下来我要讨论 " + hint,
+//       true
+//     )
+//   } catch (e) {
+//     console.error('choiceMessage.text 不是 JSON', e)
+//   }
+// }
 
 /**
  * 用户点击“OK”时调用
