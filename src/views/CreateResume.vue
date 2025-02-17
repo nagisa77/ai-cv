@@ -22,7 +22,7 @@
     </div>
 
     <!-- 右侧 -->
-    <div v-if="templateType == 'default'" class="right-container cv-container">
+    <div class="right-container cv-container">
       <component :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete"
         @add-title="handleAddTitle"/>

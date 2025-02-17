@@ -68,7 +68,7 @@ export default {
         async continueToSecondStep() {
             // 基本格式验证
             if (!this.validateEmail(this.email)) {
-                alert('请输入有效的电子邮件地址');
+                this.toast.error('请输入有效的电子邮件地址');
                 return;
             }
 

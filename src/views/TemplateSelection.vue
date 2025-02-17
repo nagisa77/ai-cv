@@ -75,7 +75,7 @@ export default {
         ],
         '通用': [
           {
-            id: 'modern',
+            id: 'default',
             name: '现代极简',
             preview: require('@/assets/model_preview/template-general1.png'),
             description: '2024年最受欢迎设计，适合大多数求职场景',
