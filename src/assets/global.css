@@ -2,11 +2,12 @@
   --color-primary: #5aa1ec;
   --color-secondary: #f0f2f5;
   --color-primary-hover: #4a8dd0;
+  --color-primary-dark: #003c74;
   --color-primary-disabled: #8bc7ff90;
   --color-black: #000000;
   --color-gray: #dddddd;
   --color-gray-dark: #bebdbd;
-  --color-header-background: rgba(240, 242, 245, 0.5);
+  --color-header-background: rgba(236, 244, 255, 0.472);
   --color-background: rgba(240, 242, 245, 1);
   --color-session-selected: rgba(90, 161, 236, 0.2);
   --color-delete-hover: #ff190036;
