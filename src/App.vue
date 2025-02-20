@@ -1,17 +1,17 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <!-- 可以放一些全局导航或头部信息 -->
     <header class="header">
       <router-link class="header-link" to="/">
         <img src="@/assets/icon/logo1.png" alt="logo" class="header-logo">首页
       </router-link>
       <router-link class="header-link" to="/create-resume">创建简历</router-link>
 
-      <!-- 修改后的登录状态区域 -->
-      <div v-if="isLoggedIn" class="user-menu-container" @mouseenter="showMenu = true" @mouseleave="showMenu = false">
+      <div v-if="isLoggedIn" class="user-menu-container" 
+           @mouseenter="showMenu = true" 
+           @mouseleave="showMenu = false">
         <div class="header-link username">
-          {{ getUsername }}
+          {{ username }}
         </div>
         <transition name="fade">
           <ul v-show="showMenu" class="dropdown-menu">
@@ -30,6 +30,7 @@
 <script>
 import AuthService from '@/utils/auth'
 import { useToast } from 'vue-toastification'
+
 export default {
   name: 'App',
   data() {
@@ -45,14 +46,15 @@ export default {
     isLoggedIn() {
       return AuthService.isLoggedIn()
     },
-    getUsername() {
+    username() {
       return AuthService.getUserContact()
     }
   },
   methods: {
     handleLogout() {
       AuthService.logout()
-      this.toast.success('退出登陆成功')
+      this.toast.success('退出登录成功')
+      this.showMenu = false
       this.$router.push('/')
     }
   }

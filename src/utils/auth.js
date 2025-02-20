@@ -1,36 +1,50 @@
+// src/utils/auth.js
+import { reactive } from 'vue'
 import apiClient from '@/api/axios'
 
+// 创建响应式状态对象
+const authState = reactive({
+  currentUser: JSON.parse(localStorage.getItem('currentUser') || 'null')
+})
+
 class AuthService {
-  constructor() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null')
+  // 获取当前用户（响应式）
+  getCurrentUser() {
+    return authState.currentUser
   }
 
+  // src/utils/auth.js 修改login方法
   async login(email, code) {
     try {
       const response = await apiClient.post('/auth/captcha/login', {
         email,
         captcha: code
-      })
+      });
 
       if (response.data.code === 200) {
-        const { token, user } = response.data.data
-        this.currentUser = user
-        localStorage.setItem('currentUser', JSON.stringify(user))
-        localStorage.setItem('token', token)
-        return { success: true, user }
+        const { token, user } = response.data.data;
+        authState.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        return {
+          success: true,
+          user
+        };
       }
-      return { success: false, error: response.data.message }
+      return {
+        success: false,
+        error: response.data.message
+      };
     } catch (error) {
-      console.error('Login error:', error)
-      return { 
+      console.error('Login error:', error);
+      return {
         success: false,
         error: error.response?.data?.message || '登录失败，请检查网络连接'
-      }
+      };
     }
   }
-
   logout() {
-    this.currentUser = null
+    authState.currentUser = null
     localStorage.removeItem('currentUser')
     localStorage.removeItem('token')
   }
@@ -40,17 +54,16 @@ class AuthService {
   }
 
   isLoggedIn() {
-    return this.currentUser !== null
+    return authState.currentUser !== null
   }
 
   getUserId() {
-    return this.currentUser?.user_id || null
+    return authState.currentUser?.user_id || null
   }
 
   getUserContact() {
-    return this.currentUser?.contact || null
+    return authState.currentUser?.contact || null
   }
 }
 
-// 单例模式导出
 export default new AuthService()
