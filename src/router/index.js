@@ -1,6 +1,5 @@
-// src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '@/views/Home.vue'
+import HomeWrapper from '@/views/HomeWrapper.vue'
 import ResumeForm from '@/views/resume_forms/ResumeForm.vue'
 import ResumeFormGeneralSimple from '@/views/resume_forms/ResumeFormGeneralSimple.vue'
 import CreateResume from '@/views/CreateResume.vue'
@@ -12,7 +11,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: HomeWrapper
   },
   {
     path: '/resume-form/',
@@ -50,6 +49,14 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(),
+//   scrollBehavior(to, from, savedPosition) {
+//     // 保持滚动位置
+//     if (savedPosition) {
+//       return savedPosition
+//     } else {
+//       return { top: 0 }
+//     }
+//   },
   routes
 })
 
