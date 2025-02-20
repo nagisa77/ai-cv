@@ -1,0 +1,752 @@
+<!-- src/views/ResumeForm.vue -->
+<template>
+  <div class="scroll-container">
+    <!-- 主体容器 -->
+    <div class="container">
+      <h1 class="title">你好，欢迎来到 <span class="highlight-content">AI 简历君</span></h1>
+      <p class="subtitle">在开始为您创建 AI 智能简历前，请先完善以下基础信息：</p>
+
+      <div class="card" @click="handleCardClick('personalInfo', '')">
+        <div class="block-title">基础信息</div>
+        <div class="avatar-upload">
+          <UploadableImage 
+            v-model="basicInfo.avatar"
+            width="80"
+            height="120"
+            default-image="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5908.jpg?t=st=1739814132~exp=1739817732~hmac=b5e4446e51b3443a870f48dbc4ab042cfa46753d667a76d85b953cfa6ee0f8ee&w=1800"
+          />
+        </div>
+        <div class="form-line">
+          <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
+          <AppleStyleInput id="phone" labelText="手机号 (选填)" inputType="tel" v-model="basicInfo.phone" />
+        </div>
+
+        <AppleStyleInput id="email" labelText="邮箱 (选填)" inputType="email" v-model="basicInfo.email" />
+
+        <AppleStyleInput id="desiredPosition" labelText="意向岗位 (选填)" inputType="text"
+          v-model="basicInfo.desiredPosition" />
+      </div>
+
+      <!-- 教育经历 -->
+      <div class="block-title">教育经历</div>
+      <div id="education-experience" class="education-list">
+        <div class="card" v-for="(edu, index) in educationList" :key="index"
+          @click="handleCardClick('educationExperience', edu.school)">
+          <div class="card-header">
+            <div class="card-title">教育经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click.stop="removeCard('educationList', index)">
+              ×
+            </button>
+          </div>
+
+          <AppleStyleInput :id="`school-${index}`" labelText="学校名" inputType="text" :required="true"
+            v-model="edu.school" />
+
+          <div class="form-line">
+            <AppleStyleInput :id="`edu-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="edu.time" />
+
+            <AppleStyleInput :id="`major-${index}`" labelText="专业" inputType="text" :required="true"
+              v-model="edu.major" />
+          </div>
+
+          <div class="form-line">
+            <AppleStyleInput :id="`degree-${index}`" labelText="学历" inputType="text" :required="true"
+              v-model="edu.degree" />
+
+            <AppleStyleInput :id="`gpa-${index}`" labelText="GPA (选填)" inputType="text" v-model="edu.gpa" />
+
+            <AppleStyleInput :id="`edu-city-${index}`" labelText="城市" inputType="text" :required="true"
+              v-model="edu.city" />
+          </div>
+            <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
+            <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
+        </div>
+      </div>
+      <div>
+        <button class="add-button" type="button" @click="addEducationExperience">
+          + 新增教育经历
+        </button>
+      </div>
+
+      <!-- 工作经历 -->
+      <div class="block-title">工作经历</div>
+      <div id="work-experience" class="experience-list">
+        <div class="card" v-for="(work, index) in workList" :key="index"
+          @click="handleCardClick('workExperience', work.company)">
+          <div class="card-header">
+            <div class="card-title">工作经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click.stop="removeCard('workList', index)">
+              ×
+            </button>
+          </div>
+
+          <AppleStyleInput :id="`company-${index}`" labelText="公司名" inputType="text" :required="true"
+            v-model="work.company" />
+
+          <div class="form-line">
+            <AppleStyleInput :id="`work-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="work.time" />
+
+            <AppleStyleInput :id="`title-${index}`" labelText="职位" inputType="text" :required="true"
+              v-model="work.title" />
+
+            <AppleStyleInput :id="`work-city-${index}`" labelText="城市" inputType="text" :required="true"
+              v-model="work.city" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="add-button" type="button" @click="addWorkExperience">
+          + 新增工作经历
+        </button>
+      </div>
+
+      <!-- 项目经历 -->
+      <div class="block-title">项目经历</div>
+      <div id="project-experience" class="project-list">
+        <div class="card" v-for="(proj, index) in projectList" :key="index"
+          @click="handleCardClick('projectExperience', proj.projectName)">
+          <div class="card-header">
+            <div class="card-title">项目经历{{ index + 1 }}</div>
+            <button class="remove-btn" type="button" @click.stop="removeCard('projectList', index)">
+              ×
+            </button>
+          </div>
+
+          <AppleStyleInput :id="`project-${index}`" labelText="项目名" inputType="text" :required="true"
+            v-model="proj.projectName" />
+
+          <div class="form-line">
+            <AppleStyleInput :id="`project-time-${index}`" labelText="时间" inputType="text" :required="true"
+              v-model="proj.time" />
+
+            <AppleStyleInput :id="`role-${index}`" labelText="职位/角色" inputType="text" :required="true"
+              v-model="proj.role" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="add-button" type="button" @click="addProjectExperience">
+          + 新增项目经历
+        </button>
+      </div>
+
+      <!-- 提交按钮 -->
+      <button class="submit-btn" type="button" @click="handleSubmit">
+        开始创建我的简历
+      </button>
+    </div>
+
+    <!-- 预览窗格 -->
+    <div class="preview-pane">
+      <div v-if="selectedModule.type">
+        <div class="preview-title"> 这是您的输入在简历的大致样子，您可以在此基础上进行修改 </div>
+        <component class="preview-component" :is="getComponent(selectedModule.type)"
+          :educationList="mappedEducationList" :workList="mappedWorkList" :projectList="mappedProjectList"
+          :personalInfo="basicInfo" :personalSummary="personalSummary" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
+import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue'
+import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue'
+import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue'
+import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue'
+import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue'
+
+import metadataInstance from '@/models/metadata_model.js'
+import ChatgptModel from '@/models/chatgpt_model.js'
+import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
+
+const chatgptInstance = ChatgptModel.getInstance()
+
+export default {
+  name: 'ResumeForm',
+  components: {
+    AppleStyleInput,
+    EducationSection,
+    WorkSection,
+    ProjectSection,
+    PersonalInfo,
+    SummarySection,
+    UploadableImage
+  },
+  data() {
+    return {
+      basicInfo: {
+        name: 'Tim',
+        avatar: '', 
+        phone: '13800000000',
+        email: 'tim@example.com',
+        desiredPosition: '前端工程师'
+      },
+      educationList: [
+        {
+          school: '清华大学',
+          time: '2018.09 - 2022.06',
+          major: '软件工程',
+          degree: '本科',
+          gpa: '3.9',
+          city: '北京',
+          honors: '优秀学生干部',
+          courses: '数据结构, 操作系统, 计算机网络'
+        }
+      ],
+      workList: [
+        {
+          company: '阿里巴巴',
+          time: '2020.07 - 2023.01',
+          title: '全栈工程师',
+          city: '北京'
+        }
+      ],
+      projectList: [
+        {
+          projectName: '智能推荐系统',
+          time: '2021.02 - 2021.04',
+          role: '项目经理'
+        }
+      ],
+      personalSummary: '',
+      selectedModule: {
+        type: '',
+        title: ''
+      },
+    }
+  },
+  computed: {
+    mappedEducationList() {
+      return this.educationList.map(edu => {
+        const [from_time, to_time] = edu.time.split(' - ')
+        return {
+          title: edu.school,
+          content: {
+            major: edu.major,
+            degree: edu.degree,
+            gpa: edu.gpa,
+            city: edu.city,
+            honors: edu.honors,
+            courses: edu.courses,
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            content: []
+          }
+        }
+      })
+    },
+    mappedWorkList() {
+      return this.workList.map(work => {
+        const [from_time, to_time] = work.time.split(' - ')
+        return {
+          title: work.company,
+          content: {
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            title: work.company,
+            sub_title: work.title,
+            city: work.city,
+            content: []
+          }
+        }
+      })
+    },
+    mappedProjectList() {
+      return this.projectList.map(proj => {
+        const [from_time, to_time] = proj.time.split(' - ')
+        return {
+          title: proj.projectName,
+          content: {
+            from_time: from_time ? from_time.trim() : '',
+            to_time: to_time ? to_time.trim() : '',
+            content: []
+          }
+        }
+      })
+    }
+  },
+  methods: {
+    handleSubmit() {
+      const { name, phone, email, desiredPosition } = this.basicInfo
+      const educationList = this.educationList
+      const workList = this.workList
+      const projectList = this.projectList
+
+      metadataInstance.clearMetadata()
+      chatgptInstance.clearConversations()
+
+      metadataInstance.setContentForType('personalInfo', {
+        name,
+        phone,
+        email,
+        desiredPosition
+      })
+
+      educationList.forEach((edu) => {
+        const [fromTime, toTime] = edu.time.split(' - ')
+        metadataInstance.setContentForType(
+          'education',
+          {
+            title: edu.school,
+            major: edu.major,
+            degree: edu.degree,
+            gpa: edu.gpa,
+            city: edu.city,
+            honors: edu.honors,
+            courses: edu.courses,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            content: []
+          },
+          edu.school
+        )
+      })
+
+      workList.forEach((work) => {
+        const [fromTime, toTime] = work.time.split(' - ')
+        metadataInstance.setContentForType(
+          'workExperience',
+          {
+            title: work.company,
+            sub_title: work.title,
+            city: work.city,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            content: []
+          },
+          work.company
+        )
+      })
+
+      projectList.forEach((proj) => {
+        const [fromTime, toTime] = proj.time.split(' - ')
+        const title = `${proj.projectName}`
+        metadataInstance.setContentForType(
+          'projectExperience',
+          {
+            title,
+            from_time: fromTime ? fromTime.trim() : '',
+            to_time: toTime ? toTime.trim() : '',
+            content: []
+          },
+          title
+        )
+      })
+
+      this.$router.push({
+        name: 'CreateResume',
+        params: { templateType: 'default' }
+      });
+    },
+    addEducationExperience() {
+      this.educationList.push({
+        school: '',
+        time: '',
+        major: '',
+        degree: '',
+        gpa: '',
+        city: ''
+      })
+    },
+    addWorkExperience() {
+      this.workList.push({
+        company: '',
+        time: '',
+        title: '',
+        city: ''
+      })
+    },
+    addProjectExperience() {
+      this.projectList.push({
+        projectName: '',
+        time: '',
+        role: ''
+      })
+    },
+    removeCard(listName, index) {
+      this[listName].splice(index, 1)
+    },
+    handleCardClick(type, name) {
+      this.selectedModule = { type, title: name }
+    },
+    getComponent(type) {
+      switch (type) {
+        case 'educationExperience':
+          return 'EducationSection'
+        case 'workExperience':
+          return 'WorkSection'
+        case 'projectExperience':
+          return 'ProjectSection'
+        case 'personalInfo':
+          return 'PersonalInfo'
+        case 'personalSummary':
+          return 'SummarySection'
+        default:
+          return null
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.container {
+  background-color: var(--color-white);
+  margin-left: 100px;
+  margin-top: 100px;
+  padding-bottom: 60px;
+  max-width: 600px;
+}
+
+.preview-pane {
+  position: fixed;
+  top: 100px;
+  left: 750px;
+  width: 400px;
+  overflow-y: auto;
+}
+
+.preview-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.no-selection {
+  text-align: center;
+  color: #888;
+  margin-top: 50px;
+}
+
+@media (max-width: 1200px) {
+  .scroll-container {
+    flex-direction: column;
+  }
+
+  .preview-pane {
+    border-left: none;
+    border-top: 1px solid #ccc;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Existing styles remain unchanged */
+.title {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-black);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--color-black);
+  opacity: 0.5;
+}
+
+.form-group {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: calc(100% - 24px);
+  height: calc(100% - 12px);
+  padding: 12px 12px 0 12px;
+  border: 1px solid var(--color-gray);
+  border-radius: 10px;
+  font-size: 14px;
+  display: block;
+}
+
+.avatar-upload {
+  margin-bottom: 10px;
+}
+
+.highlight-content {
+  color: var(--color-primary);
+}
+
+.form-input:focus {
+  outline: none;
+  border: 2px solid var(--color-primary);
+}
+
+.form-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: 14px;
+  color: var(--color-gray-dark);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus+.form-label,
+.form-input:not(:placeholder-shown)+.form-label {
+  top: 10px;
+  left: 12px;
+  font-size: 10px;
+}
+
+.form-input:focus+.form-label {
+  color: var(--color-primary);
+}
+
+.card {
+  position: relative;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.remove-btn {
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: red;
+  position: relative;
+  right: -3px;
+}
+
+.add-button {
+  color: var(--color-primary);
+  background-color: transparent;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  padding: 15px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.submit-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.form-line {
+  display: flex;
+  gap: 10px;
+}
+
+.block-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.card-title {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.preview-component {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.preview-title {
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+::v-deep .item-content-item {
+  display: flex;
+  font-size: 8px;
+}
+
+::v-deep .bullet-point {
+  margin-right: 4px;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+::v-deep .bullet-point-content {
+  margin-top: 2px;
+}
+
+::v-deep .session-title {
+  font-size: 10px;
+  position: relative;
+}
+
+::v-deep .session-title::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  margin-top: 4px;
+}
+
+::v-deep .title-and-time {
+  display: flex;
+  height: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+::v-deep .sub-title-and-city {
+  display: flex;
+  height: 12px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+}
+
+::v-deep .item-title {
+  font-size: 8px;
+}
+
+::v-deep .item-time {
+  font-size: 8px;
+}
+
+::v-deep .session-item {
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 10px;
+}
+
+::v-deep .highlight {
+  position: absolute;
+  width: calc(100% + 40px);
+  height: calc(100% + 10px);
+  top: -5px;
+  left: -20px;
+  background-color: var(--color-session-selected);
+  border-radius: 4px;
+  z-index: -1;
+}
+
+::v-deep .highlight-left {
+  width: 5px;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  z-index: -1;
+}
+
+/* —————————————————————————
+   灰色蒙层 
+   ————————————————————————— */
+::v-deep .item-hover-overlay {
+  position: absolute;
+  top: -5px;
+  left: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 10px);
+  border-radius: 4px;
+  z-index: 1;
+  
+  /* 整体应用模糊滤镜 */
+  backdrop-filter: blur(20px);
+  
+  /* 背景色等其它需求 */
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: backdrop-filter 0.2s ease;
+
+  /* 关键：使用渐变遮罩控制模糊的可见区域
+     #000 表示该区域不透明（会显示blur），
+     transparent 表示透明（不显示或不被遮罩） */
+  -webkit-mask-image: linear-gradient(
+    to left,
+    #000 0%,       /* 左侧开始完全被遮罩，可见模糊 */
+    transparent 100%  /* 右侧逐渐过渡到完全透明，不会显示模糊 */
+  );
+  mask-image: linear-gradient(
+    to left,
+    #000 0%,
+    transparent 100%
+  );
+}
+
+/* 按钮区域 */
+::v-deep .overlay-buttons {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  /* 按钮间距 */
+  z-index: 2;
+  /* 按钮更上层，确保可点 */
+}
+
+::v-deep .overlay-button {
+  cursor: pointer;
+  padding: 4px 8px;
+  border: none;
+  outline: none;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+::v-deep .ai-dialog-button {
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+
+::v-deep .ai-dialog-button:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.2s ease;
+}
+
+::v-deep .bullet-point-prefix {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 2px;
+  margin-right: 4px;
+}
+
+::v-deep .delete-button {
+  color: var(--color-secondary);
+  background-color: rgba(255, 0, 0, 0.485);
+}
+
+::v-deep .session-title-add-icon {
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+::v-deep .loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

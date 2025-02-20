@@ -141,10 +141,17 @@ export default {
     },
     confirmTemplate() {
       this.isConfirmPopupVisible = false
-      this.$router.push({
-        name: 'ResumeForm',
-        params: { templateType: this.selectedTemplate.id }
-      })
+      if (this.selectedTemplate.id === 'general_simple') {
+        this.$router.push({
+          name: 'ResumeFormGeneralSimple',
+        })
+      } else if (this.selectedTemplate.id === 'default') {
+        this.$router.push({
+          name: 'ResumeForm',
+        })
+      } else {
+        console.error('未找到对应的模板')
+      }
     }
   }
 }

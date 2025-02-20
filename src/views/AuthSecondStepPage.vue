@@ -25,16 +25,11 @@
 <script>
 import { useToast } from 'vue-toastification'
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
-import apiClient from '@/api/axios'
+import auth from '@/utils/auth'
 
 export default {
     components: { AppleStyleInput },
-    props: {
-        email: {
-            type: String,
-            required: true,
-        }
-    },
+    props: { email: String },
     setup() {
         const toast = useToast()
         return { toast }
@@ -59,37 +54,18 @@ export default {
             }
 
             this.isLoading = true
-
             try {
-                const response = await apiClient.post('http://localhost:9000/auth/captcha/login', {
-                    email: this.localEmail,
-                    captcha: this.code
-                })
+                const { success, error, user } = await auth.login(this.localEmail, this.code)
 
-                if (response.data.code === 200) {
-                    this.toast.success('登录成功')
-                    // 存储token
-                    localStorage.setItem('token', response.data.data.token)
-                    // 跳转到主页
+                if (success) {
+                    this.toast.success(`欢迎回来，${user.contact}`)
                     this.$router.push('/')
+                } else {
+                    this.toast.error(error)
                 }
-            } catch (error) {
-                this.handleLoginError(error)
             } finally {
                 this.isLoading = false
             }
-        },
-        handleLoginError(error) {
-            const errorCode = error.response?.data?.code
-            const defaultMessage = '验证失败，请重试'
-
-            const errorMessages = {
-                40101: '验证码已过期，请重新获取',
-                40102: '验证码不正确',
-                50002: '服务器错误，请稍后再试'
-            }
-
-            this.toast.error(errorMessages[errorCode] || defaultMessage)
         },
         backToFirstStep() {
             this.$router.go(-1)

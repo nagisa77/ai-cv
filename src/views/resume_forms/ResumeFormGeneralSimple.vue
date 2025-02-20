@@ -1,5 +1,9 @@
-<!-- src/views/ResumeForm.vue -->
+<!-- src/views/ResumeFormGeneralSimple.vue -->
 <template>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
   <div class="scroll-container">
     <!-- 主体容器 -->
     <div class="container">
@@ -144,11 +148,11 @@
 
 <script>
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
-import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue'
-import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue'
-import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue'
-import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue'
-import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue'
+import EducationGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/EducationGeneralSimpleSection.vue'
+import WorkGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/WorkGeneralSimpleSection.vue'
+import ProjectGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/ProjectGeneralSimpleSection.vue'
+import PersonalGeneralSimpleInfo from '@/components/template_ui/general_simple/cv_components/PersonalGeneralSimpleInfo.vue'
+import SummaryGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/SummaryGeneralSimpleSection.vue'
 
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
@@ -156,20 +160,14 @@ import ChatgptModel from '@/models/chatgpt_model.js'
 const chatgptInstance = ChatgptModel.getInstance()
 
 export default {
-  name: 'ResumeForm',
+  name: 'ResumeFormGeneralSimple',
   components: {
     AppleStyleInput,
-    EducationSection,
-    WorkSection,
-    ProjectSection,
-    PersonalInfo,
-    SummarySection
-  },
-  props: {
-    templateType: {
-      type: String,
-      required: true
-    }
+    EducationGeneralSimpleSection,
+    WorkGeneralSimpleSection,
+    ProjectGeneralSimpleSection,
+    PersonalGeneralSimpleInfo,
+    SummaryGeneralSimpleSection
   },
   data() {
     return {
@@ -330,7 +328,7 @@ export default {
 
       this.$router.push({
         name: 'CreateResume',
-        params: { templateType: this.templateType }
+        params: { templateType: 'general_simple' }
       });
     },
     addEducationExperience() {
@@ -367,15 +365,15 @@ export default {
     getComponent(type) {
       switch (type) {
         case 'educationExperience':
-          return 'EducationSection'
+          return 'EducationGeneralSimpleSection'
         case 'workExperience':
-          return 'WorkSection'
+          return 'WorkGeneralSimpleSection'
         case 'projectExperience':
-          return 'ProjectSection'
+          return 'ProjectGeneralSimpleSection'
         case 'personalInfo':
-          return 'PersonalInfo'
+          return 'PersonalGeneralSimpleInfo'
         case 'personalSummary':
-          return 'SummarySection'
+          return 'SummaryGeneralSimpleSection'
         default:
           return null
       }
@@ -562,6 +560,7 @@ export default {
   margin: 10px;
   padding: 10px;
   transition: all 0.3s ease;
+  font-family: "Ma Shan Zheng", sans-serif;
 }
 
 .preview-title {
@@ -586,18 +585,28 @@ export default {
   margin-top: 2px;
 }
 
+::v-deep .session-title-and-background {
+  display: flex;
+  padding: 0px;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+::v-deep .session-title-underline {
+  width: 100%;
+  height: 1px;
+  margin-top: 0px;
+  background-color: var(--color-primary);
+}
+
 ::v-deep .session-title {
   font-size: 10px;
   position: relative;
-}
-
-::v-deep .session-title::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 1px;
-  background-color: #000;
-  margin-top: 4px;
+  font-weight: bold;
+  margin: 0; 
+  padding: 4px 8px;
+  background-color: var(--color-primary);
+  color: #fff;
 }
 
 ::v-deep .title-and-time {
@@ -624,10 +633,11 @@ export default {
 }
 
 ::v-deep .session-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 10px;
 }
 
 ::v-deep .highlight {
@@ -660,10 +670,10 @@ export default {
   height: calc(100% + 10px);
   border-radius: 4px;
   z-index: 1;
-  
+
   /* 整体应用模糊滤镜 */
   backdrop-filter: blur(20px);
-  
+
   /* 背景色等其它需求 */
   background-color: rgba(0, 0, 0, 0.3);
   transition: backdrop-filter 0.2s ease;
@@ -671,16 +681,15 @@ export default {
   /* 关键：使用渐变遮罩控制模糊的可见区域
      #000 表示该区域不透明（会显示blur），
      transparent 表示透明（不显示或不被遮罩） */
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 0%,       /* 左侧开始完全被遮罩，可见模糊 */
-    transparent 100%  /* 右侧逐渐过渡到完全透明，不会显示模糊 */
-  );
-  mask-image: linear-gradient(
-    to left,
-    #000 0%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to left,
+      #000 0%,
+      /* 左侧开始完全被遮罩，可见模糊 */
+      transparent 100%
+      /* 右侧逐渐过渡到完全透明，不会显示模糊 */
+    );
+  mask-image: linear-gradient(to left,
+      #000 0%,
+      transparent 100%);
 }
 
 /* 按钮区域 */

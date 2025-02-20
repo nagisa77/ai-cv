@@ -1,13 +1,5 @@
 <template>
   <div class="chat-component">
-    <!-- 这里是一个示例区域，用来让用户输入API Key -->
-    <div class="debug-settings">
-      <span style="color: red;">[debug_area]:</span>
-      <input v-model="apiKeyInput" placeholder="在此粘贴你的 OpenAI API Key" />
-      <button @click="handleSetApiKey">保存 Key</button>
-      <button @click="handleCopyPrompt">Copy Prompt</button>
-    </div>
-
     <div class="state-area">
       <div>
         当前意向岗位: {{ currentJobTitle }}
@@ -136,18 +128,8 @@ const emit = defineEmits(['update-resume'])
 // ChatGPT 实例 (单例)
 const chatgptInstance = ChatgptModel.getInstance()
 
-// 用户输入的 API Key
-const apiKeyInput = ref('')
-
 // 在组件初始化时，可以从 localStorage 中尝试读取
 onMounted(() => {
-  const storedKey = localStorage.getItem('openaiApiKey')
-  if (storedKey) {
-    apiKeyInput.value = storedKey
-    // 同时给 ChatgptModel 设置
-    chatgptInstance.setApiKey(storedKey)
-  }
-
   if (props.currentSelectedTitle) {
     initChat()
   }
@@ -163,14 +145,6 @@ function initChat() {
       false
     )
   }
-}
-
-// 点击“保存 Key”按钮时，把 key 存到单例
-function handleSetApiKey() {
-  chatgptInstance.setApiKey(apiKeyInput.value)
-  // 同时存到 localStorage（可选）
-  localStorage.setItem('openaiApiKey', apiKeyInput.value)
-  alert('已设置 API Key')
 }
 
 // 输入框内容
@@ -321,13 +295,6 @@ function handleOk(choiceMessage) {
   } catch (e) {
     console.error('choiceMessage.text 不是 JSON', e)
   }
-}
-
-function handleCopyPrompt() {
-  const { type, title } = activeModule.value
-  const prompt = chatgptInstance.getPromptForType(type, title)
-  navigator.clipboard.writeText(prompt)
-  alert('已复制到剪贴板')
 }
 
 function getContentsFromMessage(message) {

@@ -18,6 +18,12 @@ apiClient.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${token}`
     console.log('[AXIOS] Authorization header set')
   }
+
+  // 如果是FormData，删除Content-Type头，让浏览器自动处理
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type']
+  }
+
   return config
 })
 

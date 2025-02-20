@@ -3,12 +3,24 @@
   <div id="app">
     <!-- 可以放一些全局导航或头部信息 -->
     <header class="header">
-      <!-- 跳转首页 -->
-      <router-link class="header-link" to="/"> 
-        <img src="@/assets/icon/logo1.png" alt="logo"
-          class="header-logo">首页</router-link>
+      <router-link class="header-link" to="/">
+        <img src="@/assets/icon/logo1.png" alt="logo" class="header-logo">首页
+      </router-link>
       <router-link class="header-link" to="/create-resume">创建简历</router-link>
-      <router-link class="header-link" to="/auth">登录</router-link>
+
+      <!-- 修改后的登录状态区域 -->
+      <div v-if="isLoggedIn" class="user-menu-container" @mouseenter="showMenu = true" @mouseleave="showMenu = false">
+        <div class="header-link username">
+          {{ getUsername }}
+        </div>
+        <transition name="fade">
+          <ul v-show="showMenu" class="dropdown-menu">
+            <li @click="handleLogout">退出登录</li>
+          </ul>
+        </transition>
+      </div>
+
+      <router-link v-else class="header-link" to="/auth">登录</router-link>
     </header>
 
     <router-view class="router-view" />
@@ -16,8 +28,34 @@
 </template>
 
 <script>
+import AuthService from '@/utils/auth'
+import { useToast } from 'vue-toastification'
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      showMenu: false
+    }
+  },
+  setup() {
+    const toast = useToast()
+    return { toast }
+  },
+  computed: {
+    isLoggedIn() {
+      return AuthService.isLoggedIn()
+    },
+    getUsername() {
+      return AuthService.getUserContact()
+    }
+  },
+  methods: {
+    handleLogout() {
+      AuthService.logout()
+      this.toast.success('退出登陆成功')
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 
@@ -36,7 +74,8 @@ header {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background-color: var(--color-header-background);
-  padding: 0 25px; /* 添加容器两侧内边距 */
+  padding: 0 25px;
+  /* 添加容器两侧内边距 */
 }
 
 .header-link {
@@ -59,4 +98,55 @@ header {
   height: 20px;
 }
 
+
+/* 新增下拉菜单样式 */
+.user-menu-container {
+  position: relative;
+  margin-left: auto;
+}
+
+.username {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.username:hover {
+  color: var(--color-primary);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 8px 0;
+  margin: 5px 0 0;
+  min-width: 120px;
+  border-radius: 10px;
+}
+
+.dropdown-menu li {
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dropdown-menu li:hover {
+  background: #f5f5f5;
+  color: var(--color-primary);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
