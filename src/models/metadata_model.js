@@ -1,5 +1,6 @@
 import { reactive, watch } from 'vue'
 import apiClient from '@/api/axios'
+import { resumeModel } from './resume_model.js'
 
 class MetadataModel {
   constructor() {
@@ -23,24 +24,52 @@ class MetadataModel {
 
     // 尝试从云函数加载数据
     this.data.isFetching = true
-    apiClient.get('/user/default_user/meta_data')
-      .then(response => {
-        // 如果云端有数据，则合并到 this.data 中
-        Object.assign(this.data, response.data);
-        this.data.isFetching = false
-      })
-      .catch(error => {
-        console.error('加载 metadata 失败，使用默认数据:', error);
-        this.data.isFetching = false
-      });
+    if (resumeModel.currentResumeId) {
+      apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/meta_data`)
+        .then(response => {
+          // 如果云端有数据，则合并到 this.data 中
+          Object.assign(this.data, response.data);
+          this.data.isFetching = false
+        })
+        .catch(error => {
+          console.error('加载 metadata 失败，使用默认数据:', error);
+          this.data.isFetching = false
+        });
+    }
 
     // 监听数据变化并通过 PUT 请求保存到云函数
     watch(this.data, (newData) => {
-      apiClient.put('/user/default_user/meta_data', newData)
-        .catch(error => console.error('保存 metadata 失败:', error));
+      if (resumeModel.currentResumeId) {  
+        apiClient.put(`/user/resumes/${resumeModel.currentResumeId}/meta_data`, newData)
+          .catch(error => console.error('保存 metadata 失败:', error));
+      }
     }, { deep: true });
 
+    // 使用watch监听resumeId变化
+    watch(
+      () => resumeModel.currentResumeId,
+      (newResumeId) => {
+        if (newResumeId) {
+          this.loadData(newResumeId)
+        }
+      },
+      { immediate: true }
+    )
+
     MetadataModel.instance = this;
+  }
+
+  // 新增加载数据方法
+  async loadData(resumeId) {
+    if (!resumeId) return
+    this.data.isFetching = true
+    try {
+      const response = await apiClient.get(`/user/resumes/${resumeId}/meta_data`)
+      Object.assign(this.data, response.data)
+    } catch (error) {
+      console.error('加载 metadata 失败:', error)
+    }
+    this.data.isFetching = false
   }
 
   metaDataDescribeForType(type) {

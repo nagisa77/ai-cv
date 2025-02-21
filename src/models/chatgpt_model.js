@@ -1,7 +1,7 @@
 import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 import apiClient from '@/api/axios'
-
+import resumeModel from './resume_model.js'
 
 const ChatgptModel = (function () {
   let instance
@@ -14,26 +14,52 @@ const ChatgptModel = (function () {
 
     data.isFetching = true
     // 从云函数加载聊天记录（GET 请求）
-    apiClient.get('/user/default_user/chat')
-      .then(response => {
-        // 若返回数据为空，则保持空对象
-        data.conversations = response.data || {}
-        data.isFetching = false
-      })
-      .catch(error => {
-        console.error('加载聊天记录出错:', error)
-        data.conversations = {}
-        data.isFetching = false
-      })
+    if (resumeModel.currentResumeId) {
+      apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/chat`)
+        .then(response => {
+          // 若返回数据为空，则保持空对象
+          data.conversations = response.data || {}
+          data.isFetching = false
+        })
+        .catch(error => {
+          console.error('加载聊天记录出错:', error)
+          data.conversations = {}
+          data.isFetching = false
+        })
+    }
 
     // 监听 conversations 的变化并通过 PUT 请求保存到云函数
     watch(
       () => data.conversations,
       (newConversations) => {
-        apiClient.put('/user/default_user/chat', newConversations)
-          .catch(error => console.error('保存聊天记录出错:', error))
+        if (resumeModel.currentResumeId) {  
+          apiClient.put(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
+            .catch(error => console.error('保存聊天记录出错:', error))
+        }
       },
       { deep: true }
+    )
+
+    async function loadChatData(resumeId) {
+      if (!resumeId) return
+      data.isFetching = true
+      try {
+        const response = await apiClient.get(`/user/resumes/${resumeId}/chat`)
+        data.conversations = response.data || {}
+      } catch (error) {
+        console.error('加载聊天记录出错:', error)
+      }
+      data.isFetching = false
+    }
+
+    watch(
+      () => resumeModel.currentResumeId,
+      (newResumeId) => {
+        if (newResumeId) {
+          loadChatData(newResumeId)
+        }
+      },
+      { immediate: true }
     )
 
     function initConversation(type, title) {
