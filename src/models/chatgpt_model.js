@@ -33,7 +33,7 @@ const ChatgptModel = (function () {
       () => data.conversations,
       (newConversations) => {
         if (resumeModel.currentResumeId) {  
-          apiClient.put(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
+          apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
             .catch(error => console.error('保存聊天记录出错:', error))
         }
       },

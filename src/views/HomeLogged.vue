@@ -2,7 +2,7 @@
 <template>
   <div class="logged-home">
     <div class="page-left">
-      <button class="create-resume-button">创建简历 🎉</button>
+      <button class="create-resume-button" @click="createResume">创建简历 🎉</button>
 
       <div class="resume-list-empty">
         <div class="resume-list-empty-title">最近简历</div>
@@ -106,6 +106,12 @@ export default {
   computed: {
     username() {
       return AuthService.getUserContact()
+    }
+  },
+  methods: {
+    createResume() {
+      this.$router.push('/template-selection');
+      console.log('创建简历');
     }
   }
 }

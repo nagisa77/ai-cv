@@ -15,7 +15,6 @@ class MetadataModel {
       projectExperience: [],
       personalInfo: {},
       personalSummary: '',
-
       isFetching: false,
     };
 
@@ -30,6 +29,7 @@ class MetadataModel {
           // 如果云端有数据，则合并到 this.data 中
           Object.assign(this.data, response.data);
           this.data.isFetching = false
+          console.log('加载 metadata 成功:', response.data);
         })
         .catch(error => {
           console.error('加载 metadata 失败，使用默认数据:', error);
@@ -40,8 +40,13 @@ class MetadataModel {
     // 监听数据变化并通过 PUT 请求保存到云函数
     watch(this.data, (newData) => {
       if (resumeModel.currentResumeId) {  
-        apiClient.put(`/user/resumes/${resumeModel.currentResumeId}/meta_data`, newData)
+        apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/meta_data`, newData)
+          .then(() => {
+            console.log('保存 metadata 成功:', newData);
+          })
           .catch(error => console.error('保存 metadata 失败:', error));
+      } else {
+        console.log('没有当前简历id，不保存metadata');
       }
     }, { deep: true });
 
@@ -66,6 +71,7 @@ class MetadataModel {
     try {
       const response = await apiClient.get(`/user/resumes/${resumeId}/meta_data`)
       Object.assign(this.data, response.data)
+      console.log('加载 metadata 成功:', response.data);
     } catch (error) {
       console.error('加载 metadata 失败:', error)
     }
@@ -154,14 +160,17 @@ class MetadataModel {
     switch (type) {
       case 'education': {
         this.data.education = this.data.education.filter(item => item.title !== title);
+        console.log(`删除教育经历: ${title}`);
         break;
       }
       case 'workExperience': {
         this.data.workExperience = this.data.workExperience.filter(item => item.title !== title);
+        console.log(`删除工作经历: ${title}`);
         break;
       }
       case 'projectExperience': {
         this.data.projectExperience = this.data.projectExperience.filter(item => item.title !== title);
+        console.log(`删除项目经历: ${title}`);
         break;
       }
       default:
@@ -181,11 +190,14 @@ class MetadataModel {
           const existing = this.data.education.find(item => item.title === title);
           if (existing) {
             existing.content = content;
+            console.log(`更新教育经历: ${title}`);
           } else {
             this.data.education.push({ title, content });
+            console.log(`添加教育经历: ${title}`);
           }
         } else {
           this.data.education.push({ content });
+          console.log(`添加教育经历: 新内容`);
         }
         break;
       }
@@ -194,11 +206,14 @@ class MetadataModel {
           const existing = this.data.workExperience.find(item => item.title === title);
           if (existing) {
             existing.content = content;
+            console.log(`更新工作经历: ${title}`);
           } else {
             this.data.workExperience.push({ title, content });
+            console.log(`添加工作经历: ${title}`);
           }
         } else {
           this.data.workExperience.push({ content });
+          console.log(`添加工作经历: 新内容`);
         }
         break;
       }
@@ -207,19 +222,24 @@ class MetadataModel {
           const existing = this.data.projectExperience.find(item => item.title === title);
           if (existing) {
             existing.content = content;
+            console.log(`更新项目经历: ${title}`);
           } else {
             this.data.projectExperience.push({ title, content });
+            console.log(`添加项目经历: ${title}`);
           }
         } else {
           this.data.projectExperience.push({ content });
+          console.log(`添加项目经历: 新内容`);
         }
         break;
       }
       case 'personalInfo':
         this.data.personalInfo = content;
+        console.log(`更新个人信息`);
         break;
       case 'personalSummary':
         this.data.personalSummary = content;
+        console.log(`更新个人总结`);
         break;
       default:
         break;
@@ -235,6 +255,7 @@ class MetadataModel {
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].title === title) {
           arr[i].content = content;
+          console.log(`更新标题为 ${title} 的内容`);
           return;
         }
       }

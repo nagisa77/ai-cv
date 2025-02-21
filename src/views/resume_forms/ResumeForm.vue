@@ -9,12 +9,8 @@
       <div class="card" @click="handleCardClick('personalInfo', '')">
         <div class="block-title">基础信息</div>
         <div class="avatar-upload">
-          <UploadableImage 
-            v-model="basicInfo.avatar"
-            width="80"
-            height="120"
-            default-image="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5908.jpg?t=st=1739814132~exp=1739817732~hmac=b5e4446e51b3443a870f48dbc4ab042cfa46753d667a76d85b953cfa6ee0f8ee&w=1800"
-          />
+          <UploadableImage v-model="basicInfo.avatar" width="80" height="120"
+            default-image="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5908.jpg?t=st=1739814132~exp=1739817732~hmac=b5e4446e51b3443a870f48dbc4ab042cfa46753d667a76d85b953cfa6ee0f8ee&w=1800" />
         </div>
         <div class="form-line">
           <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
@@ -59,8 +55,8 @@
             <AppleStyleInput :id="`edu-city-${index}`" labelText="城市" inputType="text" :required="true"
               v-model="edu.city" />
           </div>
-            <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
-            <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
+          <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
+          <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
         </div>
       </div>
       <div>
@@ -133,8 +129,8 @@
       </div>
 
       <!-- 提交按钮 -->
-      <button class="submit-btn" type="button" @click="handleSubmit">
-        开始创建我的简历
+      <button :disabled="isCreatingResume" class="submit-btn" type="button" @click="handleSubmit">
+        {{ isCreatingResume ? '正在创建...' : '开始创建我的简历' }}
       </button>
     </div>
 
@@ -161,6 +157,8 @@ import SummarySection from '@/components/template_ui/default/cv_components/Summa
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
 import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
+import { resumeModel } from '@/models/resume_model.js'
+import { useToast } from 'vue-toastification'
 
 const chatgptInstance = ChatgptModel.getInstance()
 
@@ -175,11 +173,15 @@ export default {
     SummarySection,
     UploadableImage
   },
+  setup() {
+    const toast = useToast()
+    return { toast }
+  },
   data() {
     return {
       basicInfo: {
         name: 'Tim',
-        avatar: '', 
+        avatar: '',
         phone: '13800000000',
         email: 'tim@example.com',
         desiredPosition: '前端工程师'
@@ -219,6 +221,9 @@ export default {
     }
   },
   computed: {
+    isCreatingResume() {
+      return resumeModel.isFetching
+    },
     mappedEducationList() {
       return this.educationList.map(edu => {
         const [from_time, to_time] = edu.time.split(' - ')
@@ -269,7 +274,11 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
+      await resumeModel.createResume()
+
+      this.toast.success('简历创建成功, id: ' + resumeModel.currentResumeId)
+
       const { name, phone, email, desiredPosition } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
@@ -542,6 +551,11 @@ export default {
   margin-top: 30px;
 }
 
+.submit-btn:disabled {
+  background-color: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
 .submit-btn:hover {
   background-color: var(--color-primary-hover);
 }
@@ -672,10 +686,10 @@ export default {
   height: calc(100% + 10px);
   border-radius: 4px;
   z-index: 1;
-  
+
   /* 整体应用模糊滤镜 */
   backdrop-filter: blur(20px);
-  
+
   /* 背景色等其它需求 */
   background-color: rgba(0, 0, 0, 0.3);
   transition: backdrop-filter 0.2s ease;
@@ -683,16 +697,15 @@ export default {
   /* 关键：使用渐变遮罩控制模糊的可见区域
      #000 表示该区域不透明（会显示blur），
      transparent 表示透明（不显示或不被遮罩） */
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 0%,       /* 左侧开始完全被遮罩，可见模糊 */
-    transparent 100%  /* 右侧逐渐过渡到完全透明，不会显示模糊 */
-  );
-  mask-image: linear-gradient(
-    to left,
-    #000 0%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to left,
+      #000 0%,
+      /* 左侧开始完全被遮罩，可见模糊 */
+      transparent 100%
+      /* 右侧逐渐过渡到完全透明，不会显示模糊 */
+    );
+  mask-image: linear-gradient(to left,
+      #000 0%,
+      transparent 100%);
 }
 
 /* 按钮区域 */
