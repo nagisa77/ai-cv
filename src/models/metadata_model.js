@@ -27,9 +27,9 @@ class MetadataModel {
       apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/meta_data`)
         .then(response => {
           // 如果云端有数据，则合并到 this.data 中
-          Object.assign(this.data, response.data);
+          Object.assign(this.data, response.data.data);
           this.data.isFetching = false
-          console.log('加载 metadata 成功:', response.data);
+          console.log('加载 metadata 成功:', response.data.data);
         })
         .catch(error => {
           console.error('加载 metadata 失败，使用默认数据:', error);

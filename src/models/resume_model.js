@@ -1,9 +1,15 @@
 import { reactive } from 'vue';
 import apiClient from '@/api/axios';
 
+// 初始化时从localStorage读取并转换类型
+const initialCurrentResumeId = (() => {
+  const storedId = localStorage.getItem('currentResumeId');
+  return storedId ? storedId : null;
+})();
+
 export const resumeModel = reactive({
   resumes: [],
-  currentResumeId: null,
+  currentResumeId: initialCurrentResumeId, // 使用本地存储初始化
   isFetching: false,
   error: null,
 
@@ -12,7 +18,7 @@ export const resumeModel = reactive({
     this.error = null;
     try {
       const response = await apiClient.get('/user/resumes');
-      this.resumes = response.data.data; // 根据服务端返回结构调整
+      this.resumes = response.data.data;
       this.isFetching = false;
     } catch (error) {
       this.error = error;
@@ -27,7 +33,7 @@ export const resumeModel = reactive({
       const response = await apiClient.post('/user/resumes', { name });
       const newResume = response.data.data;
       this.resumes.push(newResume);
-      this.currentResumeId = newResume.resumeId;
+      this.setCurrentResumeId(newResume.resumeId);
       this.isFetching = false;
       return newResume;
     } catch (error) {
@@ -39,6 +45,12 @@ export const resumeModel = reactive({
 
   setCurrentResumeId(resumeId) {
     this.currentResumeId = resumeId;
+    // 持久化到localStorage
+    if (resumeId !== null) {
+      localStorage.setItem('currentResumeId', resumeId.toString());
+    } else {
+      localStorage.removeItem('currentResumeId');
+    }
   },
 });
 
