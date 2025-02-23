@@ -4,17 +4,16 @@ import router from './router'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
 import './assets/global.css'
-import axios from 'axios'
+import apiClient from './api/axios'
 
 const app = createApp(App)
 
 // 配置Axios全局默认值
-axios.defaults.baseURL = 'http://localhost:9000' 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+apiClient.defaults.headers.post['Content-Type'] = 'application/json'
 
 // 请求拦截器（处理Token添加）
 // 修改请求拦截器
-axios.interceptors.request.use(config => {
+apiClient.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   console.log('[AXIOS] Intercepting request to:', config.url)
   console.log('[AXIOS] Current token:', token)
@@ -27,7 +26,7 @@ axios.interceptors.request.use(config => {
 })
 
 // 响应拦截器（处理Token过期）
-axios.interceptors.response.use(
+apiClient.interceptors.response.use(
   response => {
     return response
   },
@@ -67,6 +66,3 @@ app.use(Toast, toastOptions)
 
 // 挂载应用
 app.mount('#app')
-
-// 将axios挂载到Vue实例（可选）
-app.config.globalProperties.$axios = axios

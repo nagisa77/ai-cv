@@ -75,7 +75,7 @@ export default {
             this.isLoading = true;
 
             try {
-                const response = await apiClient.post('http://localhost:9000/auth/captcha/send', {
+                const response = await apiClient.post('/auth/captcha/send', {
                     email: this.email
                 });
 
