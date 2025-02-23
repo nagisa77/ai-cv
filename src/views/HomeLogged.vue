@@ -13,7 +13,7 @@
     <div class="page-right">
       <div class="page-right-card">
         <div class="page-ad-container">
-          <div class="page-ad-title">😆👉🏾🤡试用AI简历菌高级版，为期30天</div>
+          <div class="page-ad-title">试用AI简历菌高级版，为期30天</div>
           <button class="page-ad-button">立即试用 🔥</button>
         </div>
 
@@ -76,18 +76,17 @@
 
         <div class="resume-list-container">
           <div class="resume-list-title">最近简历</div>
-          <div v-if="loading" class="loading-text">加载中...</div>
+          <div class="empty-tip" v-if="loading">
+            <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1"
+              color="var(--color-primary)"></l-waveform>
+          </div>
           <div v-else-if="resumes.length === 0" class="empty-tip">
             <div class="empty-tip-title">暂无简历</div>
             <div class="empty-tip-subtitle">点击上方按钮创建</div>
           </div>
           <div v-else class="resume-item-list-container">
-            <div 
-              v-for="resume in resumes" 
-              :key="resume.resumeId"
-              class="resume-item-list-item"
-              @click="openResume(resume.resumeId)"
-            >
+            <div v-for="resume in resumes" :key="resume.resumeId" class="resume-item-list-item"
+              @click="openResume(resume)">
               <div class="resume-pic-container">
                 <img class="resume-pic" src="@/assets/model_preview/template-general3.png" alt="resume-pic">
               </div>
@@ -104,6 +103,10 @@
 <script>
 import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
+import { waveform } from 'ldrs'
+import { resumeModel } from '@/models/resume_model.js'
+
+waveform.register()
 
 export default {
   data() {
@@ -138,11 +141,19 @@ export default {
     formatDate(isoString) {
       return new Date(isoString).toLocaleDateString()
     },
-    openResume(resumeId) {
-      this.$router.push(`/resume/${resumeId}`)
+    openResume(resume) {
+      resumeModel.setCurrentResumeId(resume.resumeId)
+      // 路由跳转
+      this.$router.push({
+        name: 'CreateResume',
+        params: {
+          templateType: resume.templateType,
+        }
+      })
     },
     createResume() {
       this.$router.push('/template-selection')
+
     }
   }
 }
@@ -384,5 +395,27 @@ export default {
   margin-left: 12px;
   margin-top: 6px;
   margin-bottom: 12px;
+}
+
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-secondary);
+  border-radius: 10px;
+  height: 200px;
+  margin-top: 20px;
+}
+
+.empty-tip-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.empty-tip-subtitle {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.5;
 }
 </style>

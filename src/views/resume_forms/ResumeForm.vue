@@ -281,9 +281,9 @@ export default {
       const workList = this.workList
       const projectList = this.projectList
 
-      resumeModel.isFetching = true 
+      resumeModel.isFetching = true
 
-      apiClient.post('/user/resumes', {})
+      apiClient.post('/user/resumes', { templateType: 'default' })
         .then(response => {
           const newResume = response.data.data
 
