@@ -18,7 +18,7 @@ const ChatgptModel = (function () {
       apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/chat`)
         .then(response => {
           // 若返回数据为空，则保持空对象
-          data.conversations = response.data || {}
+          data.conversations = response.data.data || {}
           data.isFetching = false
         })
         .catch(error => {
@@ -45,7 +45,7 @@ const ChatgptModel = (function () {
       data.isFetching = true
       try {
         const response = await apiClient.get(`/user/resumes/${resumeId}/chat`)
-        data.conversations = response.data || {}
+        data.conversations = response.data.data || {}
       } catch (error) {
         console.error('加载聊天记录出错:', error)
       }

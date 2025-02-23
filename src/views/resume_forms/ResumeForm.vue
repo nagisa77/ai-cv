@@ -159,6 +159,7 @@ import ChatgptModel from '@/models/chatgpt_model.js'
 import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
 import { resumeModel } from '@/models/resume_model.js'
 import { useToast } from 'vue-toastification'
+import apiClient from '@/api/axios'
 
 const chatgptInstance = ChatgptModel.getInstance()
 
@@ -274,81 +275,105 @@ export default {
     }
   },
   methods: {
-    async handleSubmit() {
-      await resumeModel.createResume()
-
-      this.toast.success('简历创建成功, id: ' + resumeModel.currentResumeId)
-
+    handleSubmit() {
       const { name, phone, email, desiredPosition } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
 
-      metadataInstance.clearMetadata()
-      chatgptInstance.clearConversations()
+      resumeModel.isFetching = true 
 
-      metadataInstance.setContentForType('personalInfo', {
-        name,
-        phone,
-        email,
-        desiredPosition
+      apiClient.post('/user/resumes', {
+        name: this.basicInfo.name
       })
+        .then(response => {
+          const newResume = response.data.data
 
-      educationList.forEach((edu) => {
-        const [fromTime, toTime] = edu.time.split(' - ')
-        metadataInstance.setContentForType(
-          'education',
-          {
-            title: edu.school,
-            major: edu.major,
-            degree: edu.degree,
-            gpa: edu.gpa,
-            city: edu.city,
-            honors: edu.honors,
-            courses: edu.courses,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          edu.school
-        )
-      })
+          // 设置元数据
+          metadataInstance.clearMetadata()
+          chatgptInstance.clearConversations()
+          resumeModel.setCurrentResumeId(newResume.resumeId)
 
-      workList.forEach((work) => {
-        const [fromTime, toTime] = work.time.split(' - ')
-        metadataInstance.setContentForType(
-          'workExperience',
-          {
-            title: work.company,
-            sub_title: work.title,
-            city: work.city,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          work.company
-        )
-      })
+          metadataInstance.setContentForType('personalInfo', {
+            name,
+            phone,
+            email,
+            desiredPosition
+          })
 
-      projectList.forEach((proj) => {
-        const [fromTime, toTime] = proj.time.split(' - ')
-        const title = `${proj.projectName}`
-        metadataInstance.setContentForType(
-          'projectExperience',
-          {
-            title,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          title
-        )
-      })
+          // 处理教育经历
+          educationList.forEach((edu) => {
+            const [fromTime, toTime] = edu.time.split(' - ')
+            metadataInstance.setContentForType(
+              'education',
+              {
+                title: edu.school,
+                major: edu.major,
+                degree: edu.degree,
+                gpa: edu.gpa,
+                city: edu.city,
+                honors: edu.honors,
+                courses: edu.courses,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              edu.school
+            )
+          })
 
-      this.$router.push({
-        name: 'CreateResume',
-        params: { templateType: 'default' }
-      });
+          // 处理工作经历
+          workList.forEach((work) => {
+            const [fromTime, toTime] = work.time.split(' - ')
+            metadataInstance.setContentForType(
+              'workExperience',
+              {
+                title: work.company,
+                sub_title: work.title,
+                city: work.city,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              work.company
+            )
+          })
+
+          // 处理项目经历
+          projectList.forEach((proj) => {
+            const [fromTime, toTime] = proj.time.split(' - ')
+            const title = `${proj.projectName}`
+            metadataInstance.setContentForType(
+              'projectExperience',
+              {
+                title,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              title
+            )
+          })
+
+          // 路由跳转
+          this.$router.push({
+            name: 'CreateResume',
+            params: {
+              templateType: 'default',
+              resumeId: newResume.resumeId
+            }
+          })
+
+          this.toast.success('简历创建成功！')
+        })
+        .catch(error => {
+          console.error('简历创建失败:', error)
+          const errorMsg = error.response?.data?.message || '创建失败，请重试'
+          this.toast.error(errorMsg)
+        })
+        .finally(() => {
+          resumeModel.isFetching = false
+        })
     },
     addEducationExperience() {
       this.educationList.push({
@@ -551,14 +576,15 @@ export default {
   margin-top: 30px;
 }
 
+.submit-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
 .submit-btn:disabled {
   background-color: var(--color-primary-disabled);
   cursor: not-allowed;
 }
 
-.submit-btn:hover {
-  background-color: var(--color-primary-hover);
-}
 
 .form-line {
   display: flex;

@@ -70,8 +70,8 @@ class MetadataModel {
     this.data.isFetching = true
     try {
       const response = await apiClient.get(`/user/resumes/${resumeId}/meta_data`)
-      Object.assign(this.data, response.data)
-      console.log('加载 metadata 成功:', response.data);
+      Object.assign(this.data, response.data.data)
+      console.log('加载 metadata 成功:', response.data.data);
     } catch (error) {
       console.error('加载 metadata 失败:', error)
     }
