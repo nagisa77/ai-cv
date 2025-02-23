@@ -88,7 +88,11 @@
             <div v-for="resume in resumes" :key="resume.resumeId" class="resume-item-list-item"
               @click="openResume(resume)">
               <div class="resume-pic-container">
-                <img class="resume-pic" src="@/assets/model_preview/template-general3.png" alt="resume-pic">
+                <img v-if="resume.templateType === 'default'" class="resume-pic"
+                  src="@/assets/model_preview/template-general1.png" alt="resume-pic">
+                <img v-else-if="resume.templateType === 'general_simple'" class="resume-pic"
+                  src="@/assets/model_preview/template-general2.png" alt="resume-pic">
+                <img v-else class="resume-pic" src="@/assets/model_preview/template-general3.png" alt="resume-pic">
               </div>
               <div class="resume-item-list-item-title">{{ resume.name }}</div>
               <div class="resume-item-list-item-subtitle">{{ formatDate(resume.createdAt) }}</div>
@@ -118,7 +122,7 @@ export default {
   computed: {
     username() {
       return AuthService.getUserContact()
-    }
+    }, 
   },
   mounted() {
     this.fetchResumes()

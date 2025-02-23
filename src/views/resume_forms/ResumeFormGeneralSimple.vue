@@ -12,6 +12,10 @@
 
       <div class="card" @click="handleCardClick('personalInfo', '')">
         <div class="block-title">基础信息</div>
+        <div class="avatar-upload">
+          <UploadableImage v-model="basicInfo.avatar" width="80" height="120"
+            default-image="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5908.jpg?t=st=1739814132~exp=1739817732~hmac=b5e4446e51b3443a870f48dbc4ab042cfa46753d667a76d85b953cfa6ee0f8ee&w=1800" />
+        </div>
         <div class="form-line">
           <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
           <AppleStyleInput id="phone" labelText="手机号 (选填)" inputType="tel" v-model="basicInfo.phone" />
@@ -55,8 +59,8 @@
             <AppleStyleInput :id="`edu-city-${index}`" labelText="城市" inputType="text" :required="true"
               v-model="edu.city" />
           </div>
-            <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
-            <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
+          <AppleStyleInput :id="`honors-${index}`" labelText="荣誉奖项 (选填)" inputType="text" v-model="edu.honors" />
+          <AppleStyleInput :id="`courses-${index}`" labelText="相关课程 (选填)" inputType="text" v-model="edu.courses" />
         </div>
       </div>
       <div>
@@ -129,8 +133,8 @@
       </div>
 
       <!-- 提交按钮 -->
-      <button class="submit-btn" type="button" @click="handleSubmit">
-        开始创建我的简历
+      <button :disabled="isCreatingResume" class="submit-btn" type="button" @click="handleSubmit">
+        {{ isCreatingResume ? '正在创建...' : '开始创建我的简历' }}
       </button>
     </div>
 
@@ -156,6 +160,10 @@ import SummaryGeneralSimpleSection from '@/components/template_ui/general_simple
 
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
+import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
+import { resumeModel } from '@/models/resume_model.js'
+import { useToast } from 'vue-toastification'
+import apiClient from '@/api/axios'
 
 const chatgptInstance = ChatgptModel.getInstance()
 
@@ -167,12 +175,18 @@ export default {
     WorkGeneralSimpleSection,
     ProjectGeneralSimpleSection,
     PersonalGeneralSimpleInfo,
-    SummaryGeneralSimpleSection
+    SummaryGeneralSimpleSection,
+    UploadableImage
+  },
+  setup() {
+    const toast = useToast()
+    return { toast }
   },
   data() {
     return {
       basicInfo: {
         name: 'Tim',
+        avatar: '',
         phone: '13800000000',
         email: 'tim@example.com',
         desiredPosition: '前端工程师'
@@ -212,6 +226,9 @@ export default {
     }
   },
   computed: {
+    isCreatingResume() {
+      return resumeModel.isFetching
+    },
     mappedEducationList() {
       return this.educationList.map(edu => {
         const [from_time, to_time] = edu.time.split(' - ')
@@ -239,6 +256,9 @@ export default {
           content: {
             from_time: from_time ? from_time.trim() : '',
             to_time: to_time ? to_time.trim() : '',
+            title: work.company,
+            sub_title: work.title,
+            city: work.city,
             content: []
           }
         }
@@ -265,71 +285,93 @@ export default {
       const workList = this.workList
       const projectList = this.projectList
 
-      metadataInstance.clearMetadata()
-      chatgptInstance.clearConversations()
+      resumeModel.isFetching = true
 
-      metadataInstance.setContentForType('personalInfo', {
-        name,
-        phone,
-        email,
-        desiredPosition
-      })
+      apiClient.post('/user/resumes', { templateType: 'general_simple' })
+        .then(response => {
+          const newResume = response.data.data
 
-      educationList.forEach((edu) => {
-        const [fromTime, toTime] = edu.time.split(' - ')
-        metadataInstance.setContentForType(
-          'education',
-          {
-            title: edu.school,
-            major: edu.major,
-            degree: edu.degree,
-            gpa: edu.gpa,
-            city: edu.city,
-            honors: edu.honors,
-            courses: edu.courses,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          edu.school
-        )
-      })
+          metadataInstance.clearMetadata()
+          chatgptInstance.clearConversations()
+          resumeModel.setCurrentResumeId(newResume.resumeId)
 
-      workList.forEach((work) => {
-        const [fromTime, toTime] = work.time.split(' - ')
-        metadataInstance.setContentForType(
-          'workExperience',
-          {
-            title: work.company,
-            sub_title: work.title,
-            city: work.city,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          work.company
-        )
-      })
+          metadataInstance.setContentForType('personalInfo', {
+            name,
+            phone,
+            email,
+            desiredPosition
+          })
 
-      projectList.forEach((proj) => {
-        const [fromTime, toTime] = proj.time.split(' - ')
-        const title = `${proj.projectName}`
-        metadataInstance.setContentForType(
-          'projectExperience',
-          {
-            title,
-            from_time: fromTime ? fromTime.trim() : '',
-            to_time: toTime ? toTime.trim() : '',
-            content: []
-          },
-          title
-        )
-      })
+          educationList.forEach((edu) => {
+            const [fromTime, toTime] = edu.time.split(' - ')
+            metadataInstance.setContentForType(
+              'education',
+              {
+                title: edu.school,
+                major: edu.major,
+                degree: edu.degree,
+                gpa: edu.gpa,
+                city: edu.city,
+                honors: edu.honors,
+                courses: edu.courses,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              edu.school
+            )
+          })
 
-      this.$router.push({
-        name: 'CreateResume',
-        params: { templateType: 'general_simple' }
-      });
+          workList.forEach((work) => {
+            const [fromTime, toTime] = work.time.split(' - ')
+            metadataInstance.setContentForType(
+              'workExperience',
+              {
+                title: work.company,
+                sub_title: work.title,
+                city: work.city,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              work.company
+            )
+          })
+
+          projectList.forEach((proj) => {
+            const [fromTime, toTime] = proj.time.split(' - ')
+            const title = `${proj.projectName}`
+            metadataInstance.setContentForType(
+              'projectExperience',
+              {
+                title,
+                from_time: fromTime ? fromTime.trim() : '',
+                to_time: toTime ? toTime.trim() : '',
+                content: []
+              },
+              title
+            )
+          })
+
+          // 路由跳转
+          this.$router.push({
+            name: 'CreateResume',
+            params: {
+              templateType: 'general_simple',
+              resumeId: newResume.resumeId
+            }
+          })
+
+          this.toast.success('简历创建成功！')
+        })
+        .catch(error => {
+          console.error('简历创建失败:', error)
+          const errorMsg = error.response?.data?.message || '创建失败，请重试'
+          this.toast.error(errorMsg)
+        })
+        .finally(() => {
+          resumeModel.isFetching = false
+        })
     },
     addEducationExperience() {
       this.educationList.push({
@@ -456,6 +498,10 @@ export default {
   display: block;
 }
 
+.avatar-upload {
+  margin-bottom: 10px;
+}
+
 .highlight-content {
   color: var(--color-primary);
 }
@@ -532,6 +578,11 @@ export default {
   background-color: var(--color-primary-hover);
 }
 
+.submit-btn:disabled {
+  background-color: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
 .form-line {
   display: flex;
   gap: 10px;
@@ -603,7 +654,7 @@ export default {
   font-size: 10px;
   position: relative;
   font-weight: bold;
-  margin: 0; 
+  margin: 0;
   padding: 4px 8px;
   background-color: var(--color-primary);
   color: #fff;

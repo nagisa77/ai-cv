@@ -287,7 +287,6 @@ export default {
         .then(response => {
           const newResume = response.data.data
 
-          // 设置元数据
           metadataInstance.clearMetadata()
           chatgptInstance.clearConversations()
           resumeModel.setCurrentResumeId(newResume.resumeId)
@@ -299,7 +298,6 @@ export default {
             desiredPosition
           })
 
-          // 处理教育经历
           educationList.forEach((edu) => {
             const [fromTime, toTime] = edu.time.split(' - ')
             metadataInstance.setContentForType(
@@ -320,7 +318,6 @@ export default {
             )
           })
 
-          // 处理工作经历
           workList.forEach((work) => {
             const [fromTime, toTime] = work.time.split(' - ')
             metadataInstance.setContentForType(
@@ -337,7 +334,6 @@ export default {
             )
           })
 
-          // 处理项目经历
           projectList.forEach((proj) => {
             const [fromTime, toTime] = proj.time.split(' - ')
             const title = `${proj.projectName}`
