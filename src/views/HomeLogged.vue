@@ -76,21 +76,23 @@
 
         <div class="resume-list-container">
           <div class="resume-list-title">最近简历</div>
-          <div class="resume-item-list-container">
-            <div class="resume-item-list-item">
+          <div v-if="loading" class="loading-text">加载中...</div>
+          <div v-else-if="resumes.length === 0" class="empty-tip">
+            <div class="empty-tip-title">暂无简历</div>
+            <div class="empty-tip-subtitle">点击上方按钮创建</div>
+          </div>
+          <div v-else class="resume-item-list-container">
+            <div 
+              v-for="resume in resumes" 
+              :key="resume.resumeId"
+              class="resume-item-list-item"
+              @click="openResume(resume.resumeId)"
+            >
               <div class="resume-pic-container">
                 <img class="resume-pic" src="@/assets/model_preview/template-general3.png" alt="resume-pic">
               </div>
-              <div class="resume-item-list-item-title">简历1</div>
-              <div class="resume-item-list-item-subtitle">2024-01-01</div>
-            </div>
-
-            <div class="resume-item-list-item">
-              <div class="resume-pic-container">
-                <img class="resume-pic" src="@/assets/model_preview/template-general3.png" alt="resume-pic">
-              </div>
-              <div class="resume-item-list-item-title">简历1</div>
-              <div class="resume-item-list-item-subtitle">2024-01-01</div>
+              <div class="resume-item-list-item-title">{{ resume.name }}</div>
+              <div class="resume-item-list-item-subtitle">{{ formatDate(resume.createdAt) }}</div>
             </div>
           </div>
         </div>
@@ -101,22 +103,50 @@
 
 <script>
 import AuthService from '@/utils/auth'
+import apiClient from '@/api/axios'
 
 export default {
+  data() {
+    return {
+      resumes: [],
+      loading: false
+    }
+  },
   computed: {
     username() {
       return AuthService.getUserContact()
     }
   },
+  mounted() {
+    this.fetchResumes()
+  },
   methods: {
+    async fetchResumes() {
+      try {
+        this.loading = true
+        const response = await apiClient.get('/user/resumes')
+        if (response.data.code === 20002) {
+          this.resumes = response.data.data
+        }
+      } catch (error) {
+        console.error('获取简历列表失败:', error)
+        this.$message.error('获取简历列表失败')
+      } finally {
+        this.loading = false
+      }
+    },
+    formatDate(isoString) {
+      return new Date(isoString).toLocaleDateString()
+    },
+    openResume(resumeId) {
+      this.$router.push(`/resume/${resumeId}`)
+    },
     createResume() {
-      this.$router.push('/template-selection');
-      console.log('创建简历');
+      this.$router.push('/template-selection')
     }
   }
 }
 </script>
-
 <style scoped>
 .logged-home {
   padding-top: 60px;

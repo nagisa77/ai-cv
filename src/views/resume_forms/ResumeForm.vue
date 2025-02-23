@@ -283,9 +283,7 @@ export default {
 
       resumeModel.isFetching = true 
 
-      apiClient.post('/user/resumes', {
-        name: this.basicInfo.name
-      })
+      apiClient.post('/user/resumes', {})
         .then(response => {
           const newResume = response.data.data
 
