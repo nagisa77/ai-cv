@@ -87,6 +87,21 @@
           <div v-else class="resume-item-list-container">
             <div v-for="resume in resumes" :key="resume.resumeId" class="resume-item-list-item"
               @click="openResume(resume)">
+              <!-- 新增删除按钮 -->
+              <div class="delete-btn" @click.stop="deleteResume(resume.resumeId)">
+                <svg class="svg-icon"
+                  style="width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;"
+                  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M938.667 202.667h-160v-32A117.547 117.547 0 0 0 661.333 53.333H362.667a117.547 117.547 0 0 0-117.334 117.334v32h-160a32 32 0 0 0 0 64h853.334a32 32 0 0 0 0-64z m-629.334-32a53.333 53.333 0 0 1 53.334-53.334h298.666a53.333 53.333 0 0 1 53.334 53.334v32H309.333z m128 618.666V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z m213.334 0V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z" 
+                    fill="var(--color-secondary)"
+                  />
+                  <path
+                    d="M832 330.667a32 32 0 0 0-32 32v490.666a53.333 53.333 0 0 1-53.333 53.334H277.333A53.333 53.333 0 0 1 224 853.333V362.667a32 32 0 0 0-64 0v490.666a117.547 117.547 0 0 0 117.333 117.334h469.334A117.547 117.547 0 0 0 864 853.333V362.667a32 32 0 0 0-32-32z"
+                    fill="var(--color-secondary)"
+                  />
+                </svg>
+              </div>
               <div class="resume-pic-container">
                 <img v-if="resume.templateType === 'default'" class="resume-pic"
                   src="@/assets/model_preview/template-general1.png" alt="resume-pic">
@@ -109,6 +124,7 @@ import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { resumeModel } from '@/models/resume_model.js'
+import { useToast } from 'vue-toastification'
 
 waveform.register()
 
@@ -119,10 +135,14 @@ export default {
       loading: false
     }
   },
+  setup() {
+    const toast = useToast()
+    return { toast }
+  },
   computed: {
     username() {
       return AuthService.getUserContact()
-    }, 
+    },
   },
   mounted() {
     this.fetchResumes()
@@ -137,11 +157,25 @@ export default {
         }
       } catch (error) {
         console.error('获取简历列表失败:', error)
-        this.$message.error('获取简历列表失败')
+        this.toast.error('获取简历列表失败')
       } finally {
         this.loading = false
       }
     },
+
+    async deleteResume(resumeId) {
+      if (!confirm('确定要永久删除这个简历吗？')) return
+
+      try {
+        await apiClient.delete(`/user/resumes/${resumeId}`)
+        this.resumes = this.resumes.filter(r => r.resumeId !== resumeId)
+        this.toast.success('删除成功')
+      } catch (error) {
+        console.error('删除失败:', error)
+        this.toast.error('删除失败')
+      }
+    },
+
     formatDate(isoString) {
       return new Date(isoString).toLocaleDateString()
     },
@@ -421,5 +455,28 @@ export default {
   margin-top: 10px;
   font-size: 12px;
   opacity: 0.5;
+}
+
+/* 添加删除按钮样式 */
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.delete-btn:hover {
+  background: #ff7878;
+}
+
+.resume-item-list-item {
+  position: relative;
 }
 </style>
