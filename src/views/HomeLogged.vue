@@ -109,7 +109,7 @@ import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { resumeModel } from '@/models/resume_model.js'
-
+import { useToast } from 'vue-toastification'
 waveform.register()
 
 export default {
@@ -127,6 +127,10 @@ export default {
   mounted() {
     this.fetchResumes()
   },
+  setup() {
+    const toast = useToast()
+    return { toast }
+  },
   methods: {
     async fetchResumes() {
       try {
@@ -137,7 +141,7 @@ export default {
         }
       } catch (error) {
         console.error('获取简历列表失败:', error)
-        this.$message.error('获取简历列表失败')
+        this.toast.error('获取简历列表失败')
       } finally {
         this.loading = false
       }
