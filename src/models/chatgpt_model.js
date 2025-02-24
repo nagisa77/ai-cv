@@ -32,7 +32,7 @@ const ChatgptModel = (function () {
     watch(
       () => data.conversations,
       (newConversations) => {
-        if (resumeModel.currentResumeId) {  
+        if (resumeModel.currentResumeId) {
           apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
             .catch(error => console.error('保存聊天记录出错:', error))
         }
@@ -190,23 +190,49 @@ ${describeForSenderMessage()}
       data.conversations = {}
     }
 
+    // 新增内容清洗逻辑
+    function extractJsonContent(gptContent) {
+      const text = gptContent.trim();
+
+      // 直接返回完整 JSON 对象的情况
+      if (text.startsWith('{') && text.endsWith('}')) {
+        return text;
+      }
+
+      // 匹配 ```json 代码块
+      const jsonBlockMatch = text.match(/```json([\s\S]*?)```/);
+      if (jsonBlockMatch && jsonBlockMatch[1]) {
+        return jsonBlockMatch[1].trim();
+      }
+
+      // 匹配通用代码块
+      const genericBlockMatch = text.match(/```([\s\S]*?)```/);
+      if (genericBlockMatch && genericBlockMatch[1]) {
+        return genericBlockMatch[1].trim();
+      }
+
+      return text;
+    }
+
     // 核心: 调用 GPT 接口时，使用用户提供的 API Key
     async function fetchGptResponse(type, title, userText) {
       try {
-        let messages = buildGptMessagesFromData(type, title)
-        messages.push({ role: 'user', content: userText })
+        let messages = buildGptMessagesFromData(type, title);
+        messages.push({ role: 'user', content: userText });
 
         const response = await apiClient.post('/chat/completions', {
           messages,
-          model: 'gpt-4o',
-          temperature: 0.7
         });
 
-        const gptContent = response.data.choices[0].message.content.trim()
-        return gptContent
+        let gptContent = response.data.choices[0].message.content.trim();
+
+        // 清洗内容
+        gptContent = extractJsonContent(gptContent);
+
+        return gptContent;
       } catch (error) {
-        console.error('调用 GPT API 出错：', error)
-        return 'GPT 接口调用失败，请检查 API Key 或稍后重试。'
+        console.error('调用 GPT API 出错：', error);
+        return 'GPT 接口调用失败，请检查 API Key 或稍后重试。';
       }
     }
 
