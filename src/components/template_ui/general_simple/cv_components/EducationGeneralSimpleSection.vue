@@ -33,7 +33,7 @@
         <div>{{ edu.content.city }}</div>
       </div>
 
-      <div class="item-content-item">
+      <div class="item-content-item" v-if="edu.content.gpa">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">
           <span class="bullet-point">GPA:</span>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="item-content-item">
+      <div class="item-content-item" v-if="edu.content.honors">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">
           <span class="bullet-point">荣誉奖项:</span>
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <div class="item-content-item">
+      <div class="item-content-item" v-if="edu.content.courses">
         <div class="bullet-point-prefix">·</div>
         <div class="bullet-point-content">
           <span class="bullet-point">相关课程:</span>

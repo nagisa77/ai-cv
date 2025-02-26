@@ -34,6 +34,7 @@
 import ChatComponent from '@/components/ChatComponent.vue'
 import CVComponent from '@/components/template_ui/default/CVComponent.vue'
 import CVGeneralSimpleComponent from '@/components/template_ui/general_simple/CVGeneralSimpleComponent.vue'
+import CreativeModernCVComponent from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue'
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue' 
 import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
@@ -78,6 +79,8 @@ export default {
         return CVComponent
       } else if (this.templateType == 'general_simple') {
         return CVGeneralSimpleComponent
+      } else if (this.templateType == 'creative_modern') {
+        return CreativeModernCVComponent
       }
 
       return CVComponent;

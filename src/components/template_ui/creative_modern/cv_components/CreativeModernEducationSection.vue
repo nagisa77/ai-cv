@@ -10,6 +10,7 @@
         S362.047,64,256,64z M288,384h-64v-96h-96v-64h96v-96h64v96h96v64h-96V384z" />
         </svg>
       </span>
+      <div class="session-title-left-line"></div>
     </h2>
     <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
       @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
@@ -62,7 +63,7 @@
 
 <script>
 export default {
-  name: "EducationSection",
+  name: "CreativeModernEducationSection",
   props: {
     educationList: {
       type: Array,

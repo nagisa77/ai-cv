@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeWrapper from '@/views/HomeWrapper.vue'
 import ResumeForm from '@/views/resume_forms/ResumeForm.vue'
 import ResumeFormGeneralSimple from '@/views/resume_forms/ResumeFormGeneralSimple.vue'
+import ResumeFormCreativeModern from '@/views/resume_forms/ResumeFormCreativeModern.vue'
 import CreateResume from '@/views/CreateResume.vue'
 import TemplateSelection from '@/views/TemplateSelection.vue'
 import AuthPage from '@/views/AuthPage.vue'
@@ -22,6 +23,11 @@ const routes = [
     path: '/resume-form-general-simple',
     name: 'ResumeFormGeneralSimple',
     component: ResumeFormGeneralSimple,
+  },
+  {
+    path: '/resume-form-creative-modern',
+    name: 'ResumeFormCreativeModern',
+    component: ResumeFormCreativeModern,
   },
   {
     path: '/create-resume/:templateType',

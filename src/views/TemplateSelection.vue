@@ -13,8 +13,11 @@
                 <h3>您确认要选择此模版吗？</h3>
               </div>
 
-              <div class="modal-body">
-                <img v-if="selectedTemplate" :src="selectedTemplate.preview" alt="模板预览" class="modal-preview">
+              <div class="modal-body" @wheel.prevent="handleWheel">
+                <img ref="previewImage" :src="selectedTemplate.preview" alt="模板预览" class="modal-preview" :style="{
+                  transform: `scale(${scale})`,
+                  transformOrigin: transformOrigin
+                }">
               </div>
 
               <div class="modal-footer">
@@ -69,6 +72,8 @@ export default {
       currentCategory: null,
       selectedTemplate: null,
       isConfirmPopupVisible: false,
+      scale: 1,
+      transformOrigin: '0 0',
       categories: ['热门', '通用', '社招', '校招/实习', '零经验', '英文'],
       templatesByCategory: {
         '热门': [
@@ -91,7 +96,7 @@ export default {
             isNew: false
           },
           {
-            id: 'creative',
+            id: 'creative_modern',
             name: '创意模板, 现代',
             preview: require('@/assets/model_preview/template-general3.png'),
             description: '2024年最受欢迎设计，适合大多数求职场景',
@@ -134,7 +139,33 @@ export default {
     }
   },
   methods: {
+    handleWheel(event) {
+      const img = this.$refs.previewImage
+      if (!img) return
+
+      const rect = img.getBoundingClientRect()
+      const offsetX = event.clientX - rect.left
+      const offsetY = event.clientY - rect.top
+
+      // 计算缩放中心点百分比
+      const originX = (offsetX / rect.width) * 100
+      const originY = (offsetY / rect.height) * 100
+
+      // 调整缩放比例（步长0.1）
+      const delta = event.deltaY > 0 ? -0.05 : 0.05
+      let newScale = this.scale + delta
+
+      // 限制最小缩放比例为1
+      newScale = Math.max(newScale, 1)
+
+      // 更新状态
+      this.transformOrigin = `${originX}% ${originY}%`
+      this.scale = newScale
+    },
+
     selectTemplate(templateId) {
+      this.scale = 1
+      this.transformOrigin = '0 0'
       // 找到选中的模板
       this.selectedTemplate = this.filteredTemplates.find(t => t.id === templateId)
       this.isConfirmPopupVisible = true
@@ -148,6 +179,10 @@ export default {
       } else if (this.selectedTemplate.id === 'default') {
         this.$router.push({
           name: 'ResumeForm',
+        })
+      } else if (this.selectedTemplate.id === 'creative_modern') {
+        this.$router.push({
+          name: 'ResumeFormCreativeModern',
         })
       } else {
         console.error('未找到对应的模板')
@@ -202,6 +237,8 @@ export default {
 
 .modal-body {
   margin: 20px 0;
+  overflow: auto;
+  max-height: 60vh;
 }
 
 .modal-preview {

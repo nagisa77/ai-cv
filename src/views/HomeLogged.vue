@@ -147,10 +147,6 @@ export default {
   mounted() {
     this.fetchResumes()
   },
-  setup() {
-    const toast = useToast()
-    return { toast }
-  },
   methods: {
     async fetchResumes() {
       try {
