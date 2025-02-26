@@ -36,9 +36,8 @@ apiClient.interceptors.response.use(
     // 处理401未授权
     if (response && response.status === 401) {
       localStorage.removeItem('token')
-      router.push('/auth').then(() => {
-        // 可以在这里添加跳转后的额外操作
-      })
+      const redirect = encodeURIComponent(router.currentRoute.value.fullPath)
+      router.push(`/auth?redirect=${redirect}`)
     }
     
     // 处理其他错误

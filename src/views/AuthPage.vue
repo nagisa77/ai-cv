@@ -82,7 +82,8 @@ export default {
                 if (response.data.code === 200) {
                     this.$router.push({
                         name: 'AuthSecondStep',
-                        params: { email: this.email }
+                        params: { email: this.email },
+                        query: this.$route.query
                     });
                 } else {
                     this.toast.error(`发送失败: ${response.data.message}`);
