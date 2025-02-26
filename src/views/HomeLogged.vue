@@ -410,9 +410,11 @@ export default {
   border-radius: 10px;
 }
 
+/* 调整悬停缩放效果 */
 .resume-item-list-item:hover {
-  scale: 1.05;
-  transition: scale 0.3s ease;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+  z-index: 2; /* 确保悬停项在上层 */
 }
 
 .resume-pic {
@@ -470,6 +472,8 @@ export default {
   justify-content: center;
   cursor: pointer;
   z-index: 1;
+  opacity: 0; /* 初始完全透明 */
+  transition: opacity 0.2s ease; /* 添加过渡效果 */
 }
 
 .delete-btn:hover {
@@ -479,4 +483,10 @@ export default {
 .resume-item-list-item {
   position: relative;
 }
+
+/* 当鼠标悬停在简历项上时显示删除按钮 */
+.resume-item-list-item:hover .delete-btn {
+  opacity: 1; /* 完全不透明 */
+}
+
 </style>
