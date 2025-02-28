@@ -65,8 +65,21 @@
 </template>
 
 <script>
+import apiClient from '@/utils/apiClient'
+import { useToast } from 'vue-toastification'
+
 export default {
   name: 'TemplateSelection',
+  props: {
+    selectionType: {
+      type: String,
+      default: 'create_resume'
+    },
+    resumeId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       currentCategory: null,
@@ -138,6 +151,12 @@ export default {
       this.currentCategory = this.filteredCategories[0]
     }
   },
+  setup() {
+    const toast = useToast()
+    return {
+      toast
+    }
+  },
   methods: {
     handleWheel(event) {
       const img = this.$refs.previewImage
@@ -170,22 +189,40 @@ export default {
       this.selectedTemplate = this.filteredTemplates.find(t => t.id === templateId)
       this.isConfirmPopupVisible = true
     },
-    confirmTemplate() {
-      this.isConfirmPopupVisible = false
-      if (this.selectedTemplate.id === 'general_simple') {
+    async confirmTemplate() {
+      if (this.selectionType === 'create_resume') {
+        this.isConfirmPopupVisible = false
+        if (this.selectedTemplate.id === 'general_simple') {
+          this.$router.push({
+            name: 'ResumeFormGeneralSimple',
+          })
+        } else if (this.selectedTemplate.id === 'default') {
+          this.$router.push({
+            name: 'ResumeForm',
+          })
+        } else if (this.selectedTemplate.id === 'creative_modern') {
+          this.$router.push({
+            name: 'ResumeFormCreativeModern',
+          })
+        } else {
+          console.error('未找到对应的模板')
+        }
+      } else if (this.selectionType === 'change_resume') {
+        // 调用修改简历接口
+        await apiClient.patch(`/user/resumes/${this.resumeId}`, {
+          templateType: this.selectedTemplate.id
+        });
+
+        this.toast.success('模板修改成功');
+        this.isConfirmPopupVisible = false;
+
         this.$router.push({
-          name: 'ResumeFormGeneralSimple',
-        })
-      } else if (this.selectedTemplate.id === 'default') {
-        this.$router.push({
-          name: 'ResumeForm',
-        })
-      } else if (this.selectedTemplate.id === 'creative_modern') {
-        this.$router.push({
-          name: 'ResumeFormCreativeModern',
-        })
-      } else {
-        console.error('未找到对应的模板')
+          name: 'CreateResume',
+          params: {
+            templateType: this.selectedTemplate.id,
+            resumeId: this.resumeId
+          }
+        });
       }
     }
   }

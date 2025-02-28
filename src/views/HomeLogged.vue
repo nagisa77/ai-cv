@@ -93,13 +93,11 @@
                   style="width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;"
                   viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                   <path
-                    d="M938.667 202.667h-160v-32A117.547 117.547 0 0 0 661.333 53.333H362.667a117.547 117.547 0 0 0-117.334 117.334v32h-160a32 32 0 0 0 0 64h853.334a32 32 0 0 0 0-64z m-629.334-32a53.333 53.333 0 0 1 53.334-53.334h298.666a53.333 53.333 0 0 1 53.334 53.334v32H309.333z m128 618.666V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z m213.334 0V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z" 
-                    fill="var(--color-secondary)"
-                  />
+                    d="M938.667 202.667h-160v-32A117.547 117.547 0 0 0 661.333 53.333H362.667a117.547 117.547 0 0 0-117.334 117.334v32h-160a32 32 0 0 0 0 64h853.334a32 32 0 0 0 0-64z m-629.334-32a53.333 53.333 0 0 1 53.334-53.334h298.666a53.333 53.333 0 0 1 53.334 53.334v32H309.333z m128 618.666V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z m213.334 0V384a32 32 0 0 0-64 0v405.333a32 32 0 0 0 64 0z"
+                    fill="var(--color-secondary)" />
                   <path
                     d="M832 330.667a32 32 0 0 0-32 32v490.666a53.333 53.333 0 0 1-53.333 53.334H277.333A53.333 53.333 0 0 1 224 853.333V362.667a32 32 0 0 0-64 0v490.666a117.547 117.547 0 0 0 117.333 117.334h469.334A117.547 117.547 0 0 0 864 853.333V362.667a32 32 0 0 0-32-32z"
-                    fill="var(--color-secondary)"
-                  />
+                    fill="var(--color-secondary)" />
                 </svg>
               </div>
               <div class="resume-pic-container">
@@ -123,7 +121,6 @@
 import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
-import { resumeModel } from '@/models/resume_model.js'
 import { useToast } from 'vue-toastification'
 
 waveform.register()
@@ -180,15 +177,14 @@ export default {
       return new Date(isoString).toLocaleDateString()
     },
     openResume(resume) {
-      resumeModel.setCurrentResumeId(resume.resumeId)
-      // 路由跳转
       this.$router.push({
         name: 'CreateResume',
         params: {
           templateType: resume.templateType,
+          resumeId: resume.resumeId  // 新增参数
         }
       })
-    },
+    }, 
     createResume() {
       this.$router.push('/template-selection')
 
@@ -414,7 +410,8 @@ export default {
 .resume-item-list-item:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
-  z-index: 2; /* 确保悬停项在上层 */
+  z-index: 2;
+  /* 确保悬停项在上层 */
 }
 
 .resume-pic {
@@ -472,8 +469,10 @@ export default {
   justify-content: center;
   cursor: pointer;
   z-index: 1;
-  opacity: 0; /* 初始完全透明 */
-  transition: opacity 0.2s ease; /* 添加过渡效果 */
+  opacity: 0;
+  /* 初始完全透明 */
+  transition: opacity 0.2s ease;
+  /* 添加过渡效果 */
 }
 
 .delete-btn:hover {
@@ -486,7 +485,7 @@ export default {
 
 /* 当鼠标悬停在简历项上时显示删除按钮 */
 .resume-item-list-item:hover .delete-btn {
-  opacity: 1; /* 完全不透明 */
+  opacity: 1;
+  /* 完全不透明 */
 }
-
 </style>

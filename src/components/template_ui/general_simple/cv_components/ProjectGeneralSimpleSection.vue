@@ -14,8 +14,8 @@
       </h2>
     </div>
     <div class="session-title-underline"></div>
-    <div class="session-item" v-for="(project, index) in projectList" :key="index" @mouseenter="hoverIndex = index"
-      @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
+    <div class="session-item" v-for="(project, index) in projectList" :key="index" @mouseenter="handleMouseEnter(index)"
+      @mouseleave="handleMouseLeave" :class="{ 'is-hovered': hoverIndex === index }">
       <!-- 灰色蒙层（hover时出现） -->
       <div class="item-hover-overlay" v-if="hoverIndex === index">
         <!-- 按钮区域 -->
@@ -60,6 +60,10 @@ export default {
     highlightTitle: {
       type: String,
       default: ''
+    },
+    enableHover: {  
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -69,6 +73,18 @@ export default {
     }
   },
   methods: {
+    handleMouseEnter(index) {
+      if (this.enableHover) {
+        this.hoverIndex = index;
+      }
+    },
+
+    handleMouseLeave() {
+      if (this.enableHover) {
+        this.hoverIndex = null;
+      }
+    },
+    
     onTitleClick(type, title) {
       this.$emit('selected-module-changed', { type, title });
     },

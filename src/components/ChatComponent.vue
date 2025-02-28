@@ -23,10 +23,10 @@
               </div>
             </div>
 
-            <!-- <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
+            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
               :key="index" @click="handlePromptHintClick(hint)">
               {{ hint }}
-            </div> -->
+            </div>
           </template>
 
           <!-- 用户消息（me） -->
@@ -191,7 +191,11 @@ function handleSendMessage() {
   if (!trimmedValue) return
 
   const { type, title } = activeModule.value
-  chatgptInstance.sendMessage(type, title, trimmedValue, true)
+  let extra_message = ''
+  if (messages.value[messages.value.length - 1].sender === 'choice') {
+    extra_message = '用户没有点OK，或者Not Enough，尝试继续跟用户聊，先不再觉得is_enough, 过一会信息再次充足时，再将is_enough设置为true' 
+  }
+  chatgptInstance.sendMessage(type, title, trimmedValue, true, false, extra_message) 
 
   // 清空输入框
   inputValue.value = ''
@@ -260,19 +264,19 @@ watch(
   }
 )
 
-// function handlePromptHintClick(hint) {
-//   try {
-//     const { type, title } = activeModule.value
-//     chatgptInstance.sendMessage(
-//       type,
-//       title,
-//       "接下来我要讨论 " + hint,
-//       true
-//     )
-//   } catch (e) {
-//     console.error('choiceMessage.text 不是 JSON', e)
-//   }
-// }
+function handlePromptHintClick(hint) {
+  try {
+    const { type, title } = activeModule.value
+    chatgptInstance.sendMessage(
+      type,
+      title,
+      "接下来我要讨论 " + hint,
+      true
+    )
+  } catch (e) {
+    console.error('choiceMessage.text 不是 JSON', e)
+  }
+}
 
 /**
  * 用户点击“OK”时调用
@@ -365,7 +369,7 @@ function handleNotEnough() {
   bottom: 116px;
   left: 0;
   width: 38vw;
-  height: 80px;
+  height: 20px;
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
   pointer-events: none; /* 不相应鼠标事件 */
 }

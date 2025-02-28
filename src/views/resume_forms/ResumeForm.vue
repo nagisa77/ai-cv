@@ -140,7 +140,7 @@
         <div class="preview-title"> 这是您的输入在简历的大致样子，您可以在此基础上进行修改 </div>
         <component class="preview-component" :is="getComponent(selectedModule.type)"
           :educationList="mappedEducationList" :workList="mappedWorkList" :projectList="mappedProjectList"
-          :personalInfo="basicInfo" :personalSummary="personalSummary" />
+          :personalInfo="basicInfo" :personalSummary="personalSummary" :enableHover="false" />
       </div>
     </div>
   </div>

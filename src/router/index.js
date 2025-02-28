@@ -30,15 +30,16 @@ const routes = [
     component: ResumeFormCreativeModern,
   },
   {
-    path: '/create-resume/:templateType',
+    path: '/create-resume/:templateType/:resumeId?', // 添加可选参数
     name: 'CreateResume',
     component: CreateResume,
     props: true
   },
   {
-    path: '/template-selection',
+    path: '/template-selection/:selectionType/:resumeId?',
     name: 'TemplateSelection',
-    component: TemplateSelection
+    component: TemplateSelection,
+    props: true
   },
   {
     path: '/auth',
@@ -49,20 +50,20 @@ const routes = [
     path: '/auth-second-step/:email',
     name: 'AuthSecondStep',
     component: AuthSecondStepPage,
-    props: true 
+    props: true
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-//   scrollBehavior(to, from, savedPosition) {
-//     // 保持滚动位置
-//     if (savedPosition) {
-//       return savedPosition
-//     } else {
-//       return { top: 0 }
-//     }
-//   },
+  //   scrollBehavior(to, from, savedPosition) {
+  //     // 保持滚动位置
+  //     if (savedPosition) {
+  //       return savedPosition
+  //     } else {
+  //       return { top: 0 }
+  //     }
+  //   },
   routes
 })
 

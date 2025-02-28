@@ -12,8 +12,8 @@
       </span>
       <div class="session-title-left-line"></div>
     </h2>
-    <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="hoverIndex = index"
-      @mouseleave="hoverIndex = null" :class="{ 'is-hovered': hoverIndex === index }">
+    <div class="session-item" v-for="(edu, index) in educationList" :key="index" @mouseenter="handleMouseEnter(index)"
+      @mouseleave="handleMouseLeave" :class="{ 'is-hovered': hoverIndex === index }">
       <div class="item-hover-overlay" v-if="hoverIndex === index">
         <div class="overlay-buttons">
           <button class="overlay-button" @click.stop="onEditClick('education', edu.title)">编辑</button>
@@ -72,6 +72,10 @@ export default {
     highlightTitle: {
       type: String,
       default: ''
+    },
+    enableHover: {  
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -81,8 +85,16 @@ export default {
     }
   },
   methods: {
-    onTitleClick(type, title) {
-      this.$emit('selected-module-changed', { type, title });
+    handleMouseEnter(index) {
+      if (this.enableHover) {
+        this.hoverIndex = index;
+      }
+    },
+
+    handleMouseLeave() {
+      if (this.enableHover) {
+        this.hoverIndex = null;
+      }
     },
 
     onEditClick(type, title) {

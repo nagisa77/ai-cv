@@ -145,12 +145,13 @@ ${describeForSenderMessage()}
       data.conversations[type][title].push(message)
     }
 
-    async function sendMessage(type, title, userText, display = true, needPromptHint = false) {
+    async function sendMessage(type, title, userText, display = true, needPromptHint = false, extra_message = '') {
       if (!userText.trim()) return
 
       const gptText = JSON.stringify({
         user_text: userText,
         need_prompt_hint: needPromptHint,
+        extra_message: extra_message,
       });
 
       data.conversations[type][title].push({
@@ -171,6 +172,7 @@ ${describeForSenderMessage()}
       return `
         user_text: 是用户输入的内容
         need_prompt_hint: 是用户是否需要提示追问，如果为true，结果的meta_data中需要包含prompt_hint字段，内容为接下来我可以探讨的方向, 不要你我他这种主语，采用一句简洁陈述句, 需要有3点
+        extra_message: 表示提醒大模型的额外信息。
       `;
     }
 

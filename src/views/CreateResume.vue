@@ -40,6 +40,7 @@ import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
 import { waveform } from 'ldrs'
+import { resumeModel } from '@/models/resume_model.js'
 
 waveform.register()
 const chatgptInstance = ChatgptModel.getInstance()
@@ -56,6 +57,15 @@ export default {
     templateType: {
       type: String,
       default: 'general_simple'
+    }
+  },
+  created() {
+    // 从路由参数获取 resumeId
+    const resumeId = this.$route.params.resumeId;
+    if (resumeId) {
+      resumeModel.setCurrentResumeId(resumeId);
+    } else {
+      resumeModel.setCurrentResumeId(null);    
     }
   },
   data() {
