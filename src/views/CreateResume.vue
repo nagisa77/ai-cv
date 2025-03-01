@@ -19,6 +19,8 @@
       <template v-else>
         <SelectModuleComponent :chatModules="chatModules" @selected-module-changed="handleSelectedModuleChanged" />
       </template>
+
+      <button @click="handleChangeTemplate">修改模板</button>
     </div>
 
     <!-- 右侧 -->
@@ -200,6 +202,13 @@ export default {
      */
     handleDelete(type, title) {
       metadataInstance.deleteContentForTitle(type, title)
+    },
+
+    handleChangeTemplate() {
+      this.$router.push({
+        name: 'TemplateSelection',
+        params: { selectionType: 'change_resume', resumeId: this.$route.params.resumeId }
+      })
     }
   }
 }

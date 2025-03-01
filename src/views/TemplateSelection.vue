@@ -24,8 +24,10 @@
                 <button class="modal-button cancel" @click="isConfirmPopupVisible = false">
                   取消
                 </button>
-                <button class="modal-button confirm" @click="confirmTemplate">
+                <button class="modal-button confirm" @click="confirmTemplate" :disabled="isModifying"
+                  :class="{ modifying: isModifying }">
                   确认选择
+                  <span v-if="isModifying" class="loading"></span>
                 </button>
               </div>
             </div>
@@ -65,7 +67,7 @@
 </template>
 
 <script>
-import apiClient from '@/utils/apiClient'
+import apiClient from '@/api/axios'
 import { useToast } from 'vue-toastification'
 
 export default {
@@ -84,6 +86,7 @@ export default {
     return {
       currentCategory: null,
       selectedTemplate: null,
+      isModifying: false,
       isConfirmPopupVisible: false,
       scale: 1,
       transformOrigin: '0 0',
@@ -208,21 +211,26 @@ export default {
           console.error('未找到对应的模板')
         }
       } else if (this.selectionType === 'change_resume') {
-        // 调用修改简历接口
-        await apiClient.patch(`/user/resumes/${this.resumeId}`, {
-          templateType: this.selectedTemplate.id
-        });
-
-        this.toast.success('模板修改成功');
-        this.isConfirmPopupVisible = false;
-
-        this.$router.push({
-          name: 'CreateResume',
-          params: {
-            templateType: this.selectedTemplate.id,
-            resumeId: this.resumeId
-          }
-        });
+        this.isModifying = true // 进入修改状态
+        try {
+          await apiClient.patch(`/user/resumes/${this.resumeId}`, {
+            templateType: this.selectedTemplate.id
+          });
+          this.toast.success('模板修改成功');
+          this.isConfirmPopupVisible = false;
+          this.$router.push({
+            name: 'CreateResume',
+            params: {
+              templateType: this.selectedTemplate.id,
+              resumeId: this.resumeId
+            }
+          });
+        } catch (error) {
+          this.toast.error('模板修改失败，请重试');
+          console.error('模板修改失败:', error);
+        } finally {
+          this.isModifying = false // 无论成功失败都重置状态
+        }
       }
     }
   }
@@ -301,6 +309,32 @@ export default {
   background: var(--color-primary);
   color: white;
   border: none;
+}
+
+/* 在原有样式基础上增加禁用状态样式 */
+.modal-button.confirm:disabled {
+  background: #a0cfff;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* 增加加载动画 */
+.modal-button.confirm.modifying::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .modal-button.confirm:hover {
