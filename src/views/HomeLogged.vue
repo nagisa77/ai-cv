@@ -184,10 +184,12 @@ export default {
           resumeId: resume.resumeId  // 新增参数
         }
       })
-    }, 
+    },
     createResume() {
-      this.$router.push('/template-selection')
-
+      this.$router.push({
+        name: 'TemplateSelection',
+        params: { selectionType: 'create_resume' }
+      })
     }
   }
 }
