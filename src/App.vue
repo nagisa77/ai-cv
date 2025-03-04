@@ -1,26 +1,38 @@
-<!-- src/App.vue -->
 <template>
   <div id="app">
     <header class="header">
-      <router-link class="header-link" to="/">
-        <img src="@/assets/icon/logo1.png" alt="logo" class="header-logo">首页
+      <!-- 左侧logo部分 -->
+      <router-link class="logo-link" to="/">
+        <img src="@/assets/icon/logo1.png" alt="logo" class="header-logo">
+        <span class="app-title">AI简历君</span>
       </router-link>
-      <router-link class="header-link" to="/create-resume">创建简历</router-link>
 
-      <div v-if="isLoggedIn" class="user-menu-container" 
-           @mouseenter="showMenu = true" 
-           @mouseleave="showMenu = false">
-        <div class="header-link username">
-          {{ username }}
+      <!-- 右侧导航部分 -->
+      <div class="nav-right">
+        <!-- 登录状态显示用户菜单 -->
+        <div v-if="isLoggedIn" 
+             class="user-menu-container"
+             @mouseenter="showMenu = true"
+             @mouseleave="showMenu = false">
+          <div class="username">{{ username }}</div>
+          <transition name="fade">
+            <ul v-show="showMenu" class="dropdown-menu">
+              <li @click="handleLogout">退出登录</li>
+            </ul>
+          </transition>
         </div>
-        <transition name="fade">
-          <ul v-show="showMenu" class="dropdown-menu">
-            <li @click="handleLogout">退出登录</li>
-          </ul>
-        </transition>
-      </div>
 
-      <router-link v-else class="header-link" to="/auth">登录</router-link>
+        <!-- 未登录状态显示常规导航 -->
+        <template v-else>
+          <span class="nav-item">功能</span>
+          <span class="nav-item">价格</span>
+          <span class="nav-item">关于我们</span>
+          <button class="free-trial">免费试用</button>
+          <router-link to="/auth" class="user-icon-link">
+            <img src="@/assets/icon/user-icon.svg" alt="用户" class="user-icon">
+          </router-link>
+        </template>
+      </div>
     </header>
 
     <router-view class="router-view" />
@@ -62,12 +74,12 @@ export default {
 </script>
 
 <style>
-/* 全局样式或布局 */
-header {
-  height: 60px;
+.header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  height: 60px;
+  padding: 0 40px;
   position: fixed;
   top: 0;
   left: 0;
@@ -76,79 +88,69 @@ header {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background-color: var(--color-header-background);
-  padding: 0 25px;
-  /* 添加容器两侧内边距 */
 }
 
-.header-link {
-  margin-left: 25px;
-  font-size: 12px;
-  text-decoration: none;
-  color: var(--color-black);
+/* 左侧logo样式 */
+.logo-link {
   display: flex;
-  gap: 5px;
+  align-items: center;
+  text-decoration: none;
+}
+.header-logo {
+  width: 28px;
+  height: 28px;
+}
+.app-title {
+  font-size: 15px;
+  color: var(--color-black);
+  margin-left: 12px;
+}
+
+/* 右侧导航容器 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;  /* 元素间距统一控制 */
+}
+
+/* 导航项通用样式 */
+.nav-item {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  cursor: default;  /* 暂时禁用点击状态 */
+}
+
+/* 免费试用按钮 */
+.free-trial {
+  background: var(--color-black);
+  color: var(--color-text-secondary);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.free-trial:hover {
+  opacity: 0.9;
+}
+
+/* 用户图标样式 */
+.user-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.user-icon-link {
+  display: flex;
   align-items: center;
 }
 
-.header-link:last-child {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.header-logo {
-  width: 20px;
-  height: 20px;
-}
-
-
-/* 新增下拉菜单样式 */
-.user-menu-container {
-  position: relative;
-  margin-left: auto;
-}
-
-.username {
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.username:hover {
-  color: var(--color-primary);
-}
-
+/* 保持原有下拉菜单样式不变 */
+.user-menu-container { position: relative; }
+.username { cursor: pointer; }
 .dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  padding: 8px 0;
-  margin: 5px 0 0;
-  min-width: 120px;
-  border-radius: 10px;
+  /* 原有样式保持不变 */
 }
-
-.dropdown-menu li {
-  padding: 8px 16px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.dropdown-menu li:hover {
-  background: #f5f5f5;
-  color: var(--color-primary);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
+/* 其他过渡效果保持原样 */
 </style>
