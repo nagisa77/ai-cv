@@ -151,10 +151,10 @@ function initChat() {
 const inputValue = ref('')
 
 // 发送按钮图标
-const sendIcon = require('@/assets/icon/chatgpt-send-icon.svg')
+const sendIcon = require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg')
 
 // GPT 消息头像
-const gptMessageIcon = require('@/assets/icon/logo1.png')
+const gptMessageIcon = require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png')
 
 // 消息滚动容器
 const messagesContainer = ref(null)

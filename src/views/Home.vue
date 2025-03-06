@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="session1-right">
-      <img src="@/assets/icon/home-paint.png" alt="home-image" class="home-image">
+      <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/home-paint.png" alt="home-image" class="home-image">
       </div>
     </div>
 
@@ -80,12 +80,12 @@ export default {
   name: 'HomePage',
   data() {
     return {
-      imChatConversationIcon: require('@/assets/icon/im-chat-conversation-1.svg'),
-      formIcon: require('@/assets/icon/form-7.svg'),
-      arrowIcon: require('@/assets/icon/arrow-142.svg'),
-      createResumeIcon: require('@/assets/icon/create-7.svg'),
-      importResumeIcon: require('@/assets/icon/import-19.svg'),
-      modelIcon: require('@/assets/icon/model-24.svg')
+      imChatConversationIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg'),
+      formIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg'),
+      arrowIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg'),
+      createResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/create-7.svg'),
+      importResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg'),
+      modelIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg')
     }
   },
   mounted() {

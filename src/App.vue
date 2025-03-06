@@ -3,7 +3,7 @@
     <header class="header">
       <!-- 左侧logo部分 -->
       <router-link class="logo-link" to="/">
-        <img src="@/assets/icon/logo1.png" alt="logo" class="header-logo">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo" class="header-logo">
         <span class="app-title">AI简历君</span>
       </router-link>
 
@@ -28,7 +28,7 @@
           <span class="nav-item">价格</span>
           <span class="nav-item">关于我们</span>
           <router-link to="/auth" class="user-icon-link">
-            <img src="@/assets/icon/user-icon.svg" alt="用户" class="user-icon">
+            <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户" class="user-icon">
           </router-link>
           <button class="free-trial">免费试用</button>
         </template>
