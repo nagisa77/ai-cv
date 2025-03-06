@@ -3,72 +3,142 @@
   <div class="home">
     <div class="session1">
       <div class="session1-left">
-      <h1 class="home-title animate-on-scroll" data-animation="fade-in-up">
-        AI 懂你所想，<br>让简历
-        <span class="home-title-highlight">更出众</span>
-      </h1>
+        <h1 class="home-title animate-on-scroll" data-animation="fade-in-up">
+          AI 懂你所想，<br>让简历
+          <span class="home-title-highlight">更出众</span>
+        </h1>
 
-      <div class="home-button-content animate-on-scroll" data-animation="fade-in-up-delay">
-        <div class="home-description" >AI对话式简历撰写</div>
-        <p class="home-description">
-          <strong>Deepseek V3/R1 支持</strong>
-        </p>
-  
-        <router-link to="/template-selection">
-          <button class="create-resume-button animate-on-scroll" data-animation="fade-in-up-delay2">
-            与AI简历君聊聊吧 🎉
-          </button>
-        </router-link>
+        <div class="home-button-content animate-on-scroll" data-animation="fade-in-up-delay">
+          <div class="home-description">AI对话式简历撰写</div>
+          <p class="home-description">
+            <strong>Deepseek V3/R1 支持</strong>
+          </p>
+
+          <router-link to="/template-selection">
+            <button class="create-resume-button animate-on-scroll" data-animation="fade-in-up-delay2">
+              与AI简历君聊聊吧 🎉
+            </button>
+          </router-link>
+        </div>
       </div>
-    </div>
-    <div class="session1-right">
-      <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/home-paint.png" alt="home-image" class="home-image">
+      <div class="session1-right">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/home-paint.png" alt="home-image"
+          class="home-image">
       </div>
     </div>
 
     <div class="session2">
-      <div class="session2-icon-content animate-on-scroll" data-animation="slide-in-left">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg" alt="im-chat-conversation-1 图标" class="session2-icon" />
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg" alt="arrow-142 图标" class="arrow-icon" />
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg" alt="form-7 图标" class="session2-icon" />
+      <div class="session2-left">
+        <transition name="fade" mode="out-in">
+          <div :key="currentText" class="carousel-text">{{ currentText }}</div>
+        </transition>
+
+        <transition name="fade" mode="out-in">
+          <div :key="currentSubText" class="carousel-sub-text">{{ currentSubText }}</div>
+        </transition>
       </div>
 
-      <h2 class="session2-title animate-on-scroll" data-animation="fade-in">
-        通过对话
-      </h2>
-      <div class="session2-description animate-on-scroll" data-animation="fade-in-delay">
-        我们会通过对话的方式，与您沟通简历内容，并生成简历。我们的系统会根据您提供的信息，自动生成一份专业的简历，确保您的简历在求职过程中脱颖而出。无论是教育背景、工作经历还是个人技能，我们都会为您精心编排，打造一份完美的简历，助您在职场中取得成功。
+      <div class="session2-right">
+        <!-- <transition name="fade" mode="out-in"> -->
+        <img class="session2-image" :key="currentImage" :src="currentImage">
+        <!-- </transition> -->
       </div>
     </div>
 
     <div class="session3">
-      <div class="session3-title-content animate-on-scroll" data-animation="fade-in-up">
-        <div class="session3-title">我们会处理困难的事情</div>
-        <div class="session3-title-sub">
-          通过以下三种方式生成简历：对话沟通、导入文件、使用模版。
-        </div>
-      </div>
-      <div class="session3-button-content">
-        <div class="session3-button animate-on-scroll" data-animation="fade-in-left">
-          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg" alt="form-7 图标" class="session3-icon" />
-          <div class="session3-button-title">创建简历</div>
-          <div class="session3-button-description">
-            通过对话的方式，与您沟通简历内容，并生成简历
+      <div class="session3-title">套餐价格 (限时优惠👀)</div>
+      <div class="pay-card-content">
+        <div class="pay-card">
+          <div class="pay-card-title">免费版</div>
+          <div class="pay-card-subtitle">适用于体验用户</div>
+          <div class="pay-acitvity">
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">每日20次AI对话</div>
+            </div>
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">每日1次简历下载</div>
+            </div>
           </div>
-        </div>
-        <div class="session3-button animate-on-scroll" data-animation="fade-in-up">
-          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg" alt="form-7 图标" class="session3-icon" />
-          <div class="session3-button-title">导入简历</div>
-          <div class="session3-button-description">
-            通过导入已有的简历文件，系统会自动解析并生成一份新的简历，帮助您节省时间和精力。
+          <div class="pay-price-title">
+            0 元
           </div>
-        </div>
-        <div class="session3-button animate-on-scroll" data-animation="fade-in-right">
-          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg" alt="form-7 图标" class="session3-icon" />
-          <div class="session3-button-title">简历模版</div>
-          <div class="session3-button-description">
-            通过简历模版，您可以快速生成一份专业的简历，节省时间并确保简历的质量和美观度。
+          <div class="pay-price-subtitle">
+            对所有人免费
           </div>
+          <button :disabled="true" class="pay-button">立即购买</button>
+        </div>
+        <div class="pay-card">
+          <div class="pay-card-title">Pro版</div>
+          <div class="pay-card-subtitle">适用于专业用户</div>
+          <div class="pay-acitvity">
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">每日50次AI对话</div>
+            </div>
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">每日5次简历下载</div>
+            </div>
+
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">可保存5份简历</div>
+            </div>
+          </div>
+
+          <div class="pay-price-title">
+            9.9 元
+          </div>
+          <div class="pay-price-subtitle">
+            每月价格，包年享8折优惠
+          </div>
+
+          <button class="pay-button">立即购买</button>
+
+        </div>
+
+
+        <div class="pay-card">
+          <div class="pay-card-title">Plus版</div>
+          <div class="pay-card-subtitle">适用于职场达人</div>
+          <div class="pay-acitvity">
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">无限次AI对话</div>
+            </div>
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">无限次简历下载</div>
+            </div>
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">可保存10份简历</div>
+            </div>
+            <div class="pay-acitvity-item">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
+                alt="check-circle" class="pay-acitvity-item-icon">
+              <div class="pay-acitvity-item-title">支持一键模版、字体切换</div>
+            </div>
+          </div>
+
+          <div class="pay-price-title">
+            19.9 元
+          </div>
+          <div class="pay-price-subtitle">
+            每月价格，包年享8折优惠
+          </div>
+
+          <button class="pay-button">立即购买</button>
         </div>
       </div>
     </div>
@@ -80,15 +150,55 @@ export default {
   name: 'HomePage',
   data() {
     return {
-      // imChatConversationIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg'),
-      // formIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg'),
-      // arrowIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg'),
-      // createResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/create-7.svg'),
-      // importResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg'),
-      // modelIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg')
+      texts: [
+        'AI对话式简历撰写',
+        '数十种简历模版随便选',
+        'AI模拟面试体验',
+      ],
+      subTexts: [
+        '通过自然对话方式快速生成专业简历内容，智能优化工作经历描述',
+        '涵盖互联网、金融、教育等行业模板，支持一键切换风格',
+        '智能面试官模拟真实面试场景，提供面试建议和评分反馈',
+      ],
+      images: [
+        'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/show1.png',
+        'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/show2.png',
+      ],
+      currentIndex: 0,
+      currentImageIndex: 0,
+      interval: null
+    }
+  },
+  computed: {
+    currentText() {
+      return this.texts[this.currentIndex];
+    },
+    currentSubText() {
+      return this.subTexts[this.currentIndex];
+    },
+    currentImage() {
+      return this.images[this.currentImageIndex];
+    }
+  },
+  beforeUnmount() {
+    this.stopCarousel();
+  },
+  methods: {
+    startCarousel() {
+      this.interval = setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % this.texts.length;
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+      }, 3000);
+    },
+    stopCarousel() {
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
     }
   },
   mounted() {
+    this.startCarousel();
+
     const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
 
     const observerOptions = {
@@ -183,7 +293,8 @@ export default {
   flex-direction: column;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
-  width: fit-content; /* 根据内容自适应宽度 */
+  width: fit-content;
+  /* 根据内容自适应宽度 */
 }
 
 .session1-left {
@@ -283,6 +394,7 @@ export default {
 .home-title-highlight {
   color: var(--color-primary);
   position: relative;
+
   &::after {
     content: '';
     position: absolute;
@@ -293,6 +405,44 @@ export default {
     background: currentColor;
     opacity: 0.2;
   }
+}
+
+.text-carousel {
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.session2-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50vw;
+  height: 100vh;
+}
+
+.carousel-text {
+  margin-left: 100px;
+  color: var(--color-secondary);
+  font-size: 50px;
+}
+
+.carousel-sub-text {
+  margin-top: 20px;
+  margin-left: 100px;
+  font-size: 20px;
+  color: var(--color-secondary);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .home-title {
@@ -339,12 +489,25 @@ export default {
   height: calc(100vh);
   width: 100vw;
   background-color: var(--color-primary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.session3 {
-  height: calc(100vh);
-  width: 100vw;
-  background-color: var(--color-secondary);
+.session2-image {
+  width: 40vw;
+  height: 80vh;
+  object-fit: contain;
+}
+
+.session2-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+  height: 100vh;
 }
 
 .session2-icon {
@@ -425,26 +588,107 @@ export default {
   color: var(--color-black);
 }
 
-.session3-title-content {
+.session3 {
+  height: calc(100vh);
+  width: 100vw;
+  background-color: var(--color-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+
 .session3-title {
   font-size: 30px;
   font-weight: bold;
   color: var(--color-black);
-  margin-top: 210px;
 }
 
-.session3-title-sub {
-  font-size: 16px;
-  color: var(--color-black);
-  opacity: 0.3;
-  margin-top: 10px;
-  text-align: center;
-  max-width: 600px;
+.pay-card-content {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
 }
+
+.pay-card {
+  background-color: var(--color-white);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.pay-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.pay-card-subtitle {
+  margin-top: 5px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  opacity: 0.5;
+}
+
+.pay-acitvity {
+  margin-top: 20px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pay-acitvity-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pay-acitvity-item-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  fill: var(--color-primary);
+}
+
+.pay-price-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.pay-price-subtitle {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  opacity: 0.5;
+}
+
+.pay-button {
+  position: relative;
+  left: -3px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pay-button:disabled {
+  background-color: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.pay-button:hover {
+}
+
 </style>
