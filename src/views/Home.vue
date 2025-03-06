@@ -5,7 +5,7 @@
       <div class="session1-left">
       <h1 class="home-title animate-on-scroll" data-animation="fade-in-up">
         AI 懂你所想，<br>让简历
-        <span class="home-title-highlight">更出众</span>！
+        <span class="home-title-highlight">更出众</span>
       </h1>
 
       <div class="home-button-content animate-on-scroll" data-animation="fade-in-up-delay">
@@ -176,19 +176,23 @@ export default {
 }
 
 .home-button-content {
-  padding: 30px 45px;
+  padding: 40px 60px;
   background-color: var(--color-white);
   border-radius: 30px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  width: fit-content; /* 根据内容自适应宽度 */
 }
 
 .session1-left {
-  width: 60vw;
+  padding-left: 100px;
+  width: calc(60vw - 100px);
   height: calc(100vh);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
 }
 
@@ -278,6 +282,17 @@ export default {
 
 .home-title-highlight {
   color: var(--color-primary);
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25em;
+    left: 0;
+    width: 100%;
+    height: 0.2em;
+    background: currentColor;
+    opacity: 0.2;
+  }
 }
 
 .home-title {
@@ -287,6 +302,7 @@ export default {
 
 .create-resume-button {
   padding: 10px 40px;
+  margin-top: 8px;
   font-size: 20px;
   background-color: var(--color-primary);
   color: white;

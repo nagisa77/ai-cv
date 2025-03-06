@@ -27,10 +27,10 @@
           <span class="nav-item">功能</span>
           <span class="nav-item">价格</span>
           <span class="nav-item">关于我们</span>
-          <button class="free-trial">免费试用</button>
           <router-link to="/auth" class="user-icon-link">
             <img src="@/assets/icon/user-icon.svg" alt="用户" class="user-icon">
           </router-link>
+          <button class="free-trial">免费试用</button>
         </template>
       </div>
     </header>
