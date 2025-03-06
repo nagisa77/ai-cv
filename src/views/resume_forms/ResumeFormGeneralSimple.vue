@@ -23,8 +23,13 @@
 
         <AppleStyleInput id="email" labelText="邮箱 (选填)" inputType="email" v-model="basicInfo.email" />
 
-        <AppleStyleInput id="desiredPosition" labelText="意向岗位 (选填)" inputType="text"
-          v-model="basicInfo.desiredPosition" />
+        <div class="form-line">
+          <AppleStyleInput id="targetCompany" labelText="目标公司 (选填)" inputType="text"
+            v-model="basicInfo.targetCompany" />
+          <AppleStyleInput id="jobTitle" labelText="岗位名称 (选填)" inputType="text" v-model="basicInfo.jobTitle" />
+        </div>
+        <AppleStyleInput id="jobDescription" labelText="岗位描述 (选填)" inputType="text"
+          v-model="basicInfo.jobDescription" />
       </div>
 
       <!-- 教育经历 -->
@@ -189,7 +194,9 @@ export default {
         avatar: '',
         phone: '13800000000',
         email: 'tim@example.com',
-        desiredPosition: '前端工程师'
+        targetCompany: '阿里巴巴',
+        jobTitle: '前端工程师',
+        jobDescription: '负责前端开发相关工作'
       },
       educationList: [
         {
@@ -280,7 +287,7 @@ export default {
   },
   methods: {
     handleSubmit() {
-      const { name, phone, email, desiredPosition } = this.basicInfo
+      const { name, phone, email, targetCompany, jobTitle, jobDescription } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
@@ -299,7 +306,9 @@ export default {
             name,
             phone,
             email,
-            desiredPosition
+            targetCompany,
+            jobTitle,
+            jobDescription
           })
 
           educationList.forEach((edu) => {

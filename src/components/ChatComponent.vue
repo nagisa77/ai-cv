@@ -170,7 +170,7 @@ const activeModule = computed(() => {
 })
 
 const currentJobTitle = computed(() => {
-  return metadataInstance.contentForType('personalInfo')['desiredPosition'];
+  return metadataInstance.contentForType('personalInfo')['jobTitle'];
 })
 
 /**

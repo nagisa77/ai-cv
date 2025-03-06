@@ -96,6 +96,15 @@ class MetadataModel {
         - meta_data 中的 from_time 是项目开始时间。
         - meta_data 中的 to_time 是项目结束时间。
         `;
+      case 'personalInfo':
+        return `
+        - meta_data 中的 name 是用户的姓名。
+        - meta_data 中的 phone 是用户的手机号码。
+        - meta_data 中的 email 是用户的邮箱。
+        - meta_data 中的 targetCompany 是用户的目标公司。
+        - meta_data 中的 jobTitle 是用户的目标岗位。
+        - meta_data 中的 jobDescription 是用户的目标岗位描述。
+        `;
       default:
         return '';
     }

@@ -52,7 +52,7 @@ export default {
 
 .select-module-subtitle {
   font-size: 16px;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   margin-top: 20px;
   opacity: 0.6;
   line-height: 1.7;
