@@ -98,7 +98,7 @@ export default {
           {
             id: 'default',
             name: '现代极简',
-            preview: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png'),
+            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '现代'],
             isNew: false
@@ -106,7 +106,7 @@ export default {
           {
             id: 'general_simple',
             name: '简约现代模板',
-            preview: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png'),
+            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '简约'],
             isNew: false
@@ -114,7 +114,7 @@ export default {
           {
             id: 'creative_modern',
             name: '创意模板, 现代',
-            preview: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png'),
+            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['创意', '独特'],
             isNew: false
@@ -124,7 +124,7 @@ export default {
           {
             id: 'social',
             name: '社招模板, 现代',
-            preview: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1.png'),
+            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1.png',
             description: '社招模板, 适合社招场景',
             tags: ['有趣', '社招'],
             isNew: false

@@ -28,9 +28,9 @@
 
     <div class="session2">
       <div class="session2-icon-content animate-on-scroll" data-animation="slide-in-left">
-        <img :src="imChatConversationIcon" alt="im-chat-conversation-1 图标" class="session2-icon" />
-        <img :src="arrowIcon" alt="arrow-142 图标" class="arrow-icon" />
-        <img :src="formIcon" alt="form-7 图标" class="session2-icon" />
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg" alt="im-chat-conversation-1 图标" class="session2-icon" />
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg" alt="arrow-142 图标" class="arrow-icon" />
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg" alt="form-7 图标" class="session2-icon" />
       </div>
 
       <h2 class="session2-title animate-on-scroll" data-animation="fade-in">
@@ -50,21 +50,21 @@
       </div>
       <div class="session3-button-content">
         <div class="session3-button animate-on-scroll" data-animation="fade-in-left">
-          <img :src="createResumeIcon" alt="form-7 图标" class="session3-icon" />
+          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg" alt="form-7 图标" class="session3-icon" />
           <div class="session3-button-title">创建简历</div>
           <div class="session3-button-description">
             通过对话的方式，与您沟通简历内容，并生成简历
           </div>
         </div>
         <div class="session3-button animate-on-scroll" data-animation="fade-in-up">
-          <img :src="importResumeIcon" alt="form-7 图标" class="session3-icon" />
+          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg" alt="form-7 图标" class="session3-icon" />
           <div class="session3-button-title">导入简历</div>
           <div class="session3-button-description">
             通过导入已有的简历文件，系统会自动解析并生成一份新的简历，帮助您节省时间和精力。
           </div>
         </div>
         <div class="session3-button animate-on-scroll" data-animation="fade-in-right">
-          <img :src="modelIcon" alt="form-7 图标" class="session3-icon" />
+          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg" alt="form-7 图标" class="session3-icon" />
           <div class="session3-button-title">简历模版</div>
           <div class="session3-button-description">
             通过简历模版，您可以快速生成一份专业的简历，节省时间并确保简历的质量和美观度。
@@ -80,12 +80,12 @@ export default {
   name: 'HomePage',
   data() {
     return {
-      imChatConversationIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg'),
-      formIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg'),
-      arrowIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg'),
-      createResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/create-7.svg'),
-      importResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg'),
-      modelIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg')
+      // imChatConversationIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/im-chat-conversation-1.svg'),
+      // formIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/form-7.svg'),
+      // arrowIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/arrow-142.svg'),
+      // createResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/create-7.svg'),
+      // importResumeIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/import-19.svg'),
+      // modelIcon: require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model-24.svg')
     }
   },
   mounted() {

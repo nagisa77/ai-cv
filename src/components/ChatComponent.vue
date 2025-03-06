@@ -17,7 +17,7 @@
           <!-- GPT 消息：头像 + 蓝框并列 -->
           <template v-if="message.sender === 'gpt' && message.display">
             <div class="gpt-message-container">
-              <img :src="gptMessageIcon" alt="ChatGPT 头像" class="chatgpt-message-icon" />
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="ChatGPT 头像" class="chatgpt-message-icon" />
               <div class="message gpt">
                 <span>{{ extractMessage(message.text) }}</span>
               </div>
@@ -95,7 +95,7 @@
         ></textarea>
       </div>
       <div class="chatgpt-send-button" @click="handleSendMessage">
-        <img :src="sendIcon" alt="ChatGPT 图标" class="chatgpt-send-icon" />
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg" alt="ChatGPT 图标" class="chatgpt-send-icon" />
       </div>
     </div>
   </div>
@@ -149,12 +149,6 @@ function initChat() {
 
 // 输入框内容
 const inputValue = ref('')
-
-// 发送按钮图标
-const sendIcon = require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg')
-
-// GPT 消息头像
-const gptMessageIcon = require('https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png')
 
 // 消息滚动容器
 const messagesContainer = ref(null)
