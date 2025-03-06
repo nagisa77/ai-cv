@@ -1,7 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/ai-cv/' 
+    // ? '/ai-cv/' 
+    ? '/' 
     : '/',
   transpileDependencies: true,
   configureWebpack: {
