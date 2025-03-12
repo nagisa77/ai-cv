@@ -25,7 +25,7 @@
 
     <!-- 右侧 -->
     <div class="right-container cv-container">
-      <component :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
+      <component class="resume-container" :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete"
         @add-title="handleAddTitle"/>
     </div>
