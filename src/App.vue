@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <header class="header">
+  <div class="app-container" id="app">
+    <header v-if="showTopHeader" class="header">
       <!-- 左侧logo部分 -->
       <router-link class="logo-link" to="/">
         <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo" class="header-logo">
@@ -35,6 +35,19 @@
       </div>
     </header>
 
+    <header v-if="showLeftHeader" class="header-left">
+      <router-link class="logo-link-left" to="/">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo" class="header-logo">
+        <span class="app-title-left">AI简历君</span>
+      </router-link>
+    
+      <!-- 将底部元素包裹到一个容器中 -->
+      <div class="bottom-section">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/phone_icon.svg" alt="phone" class="phone-icon">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user" class="user-icon">
+      </div>
+    </header>
+
     <router-view class="router-view" />
   </div>
 </template>
@@ -60,6 +73,12 @@ export default {
     },
     username() {
       return AuthService.getUserContact()
+    },
+    showTopHeader() {
+      return !this.isLoggedIn
+    },
+    showLeftHeader() {
+      return this.isLoggedIn
     }
   },
   methods: {
@@ -90,12 +109,58 @@ export default {
   background-color: var(--color-header-background);
 }
 
+.header-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100vh;
+  width: 80px;
+  flex-direction: column;
+  background-color: var(--color-left-header-background);
+  align-items: center;
+}
+
+
+/* 新增底部容器样式 */
+.bottom-section {
+  margin-top: auto;  /* 关键样式 - 将容器推到最底部 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* 底部留白 */
+}
+
+
+.phone-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.user-icon {
+  margin-top: 20px;
+}
+
 /* 左侧logo样式 */
 .logo-link {
   display: flex;
   align-items: center;
   text-decoration: none;
 }
+
+.logo-link-left {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.app-title-left {
+  font-size: 15px;
+  color: var(--color-black);
+}
+
 .header-logo {
   width: 28px;
   height: 28px;
