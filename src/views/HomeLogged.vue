@@ -3,7 +3,7 @@
     <div class="home-logged-left">
       <div class="home-card-left">
         <div class="home-card-left-top-buttons-container">
-          <button class="btn btn-primary">
+          <button class="btn btn-primary" @click="createResume">
             <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/add.svg" alt="icon" class="btn-icon">
             <span>新建简历</span>
           </button>
@@ -30,7 +30,7 @@
           >
             <span class="tab-icon">📄</span>
             我的简历
-            <span class="resume-count" v-if="myResumes.length > 0">{{ myResumes.length }}</span>
+            <span class="resume-count" v-if="resumes.length > 0">{{ resumes.length }}</span>
           </div>
           <div 
             class="resume-tab" 
@@ -61,28 +61,31 @@
               </div>
             </div>
 
-            <div v-if="myResumes.length === 0" class="empty-state">
+            <div v-if="loading" class="empty-state">
+              <l-waveform size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
+            </div>
+            <div v-else-if="resumes.length === 0" class="empty-state">
               <div class="empty-icon">📄</div>
               <h3>暂无简历</h3>
               <p>点击"新建简历"开始创建您的第一份简历</p>
             </div>
             
             <div v-else class="resume-grid">
-              <div class="resume-item" v-for="(resume, index) in myResumes" :key="index">
+              <div class="resume-item" v-for="resume in resumes" :key="resume.resumeId" @click="openResume(resume)">
                 <div class="resume-preview">
-                  <img :src="resume.imageUrl" alt="简历预览">
+                  <img class="resume-pic" :src="getResumeImage(resume)" alt="简历预览">
                   <div class="resume-hover-actions">
-                    <button class="resume-action-icon edit">
+                    <button class="resume-action-icon edit" @click.stop="openResume(resume)">
                       <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                     </button>
-                    <button class="resume-action-icon delete">
+                    <button class="resume-action-icon delete" @click.stop="deleteResume(resume.resumeId)">
                       <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                     </button>
                   </div>
                 </div>
                 <div class="resume-info">
                   <div class="resume-name">{{ resume.name }}</div>
-                  <div class="resume-date">{{ resume.date }}</div>
+                  <div class="resume-date">{{ formatDate(resume.createdAt) }}</div>
                 </div>
               </div>
             </div>
@@ -92,7 +95,7 @@
           <div v-if="activeTab === 'trash'" class="resume-view">
             <div class="resume-header">
               <h2 class="resume-section-title">回收站</h2>
-              <button v-if="trashResumes.length > 0" class="empty-trash-btn">
+              <button v-if="trashResumes.length > 0" class="empty-trash-btn" @click="emptyTrash">
                 清空回收站
               </button>
             </div>
@@ -115,11 +118,11 @@
                   <div class="resume-name">{{ resume.name }}</div>
                   <div class="resume-date">{{ resume.date }}</div>
                   <div class="resume-actions">
-                    <button class="resume-restore-btn">
+                    <button class="resume-restore-btn" @click="restoreResume(resume.id)">
                       <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
                       恢复
                     </button>
-                    <button class="resume-delete-btn">
+                    <button class="resume-delete-btn" @click="permanentDelete(resume.id)">
                       <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                       永久删除
                     </button>
@@ -160,35 +163,144 @@
 </template>
 
 <script>
+import AuthService from '@/utils/auth'
+import apiClient from '@/api/axios'
+import { waveform } from 'ldrs'
+import { useToast } from 'vue-toastification'
+
+waveform.register()
+
 export default {
   name: 'HomeLogged',
   data() {
     return {
       activeTab: 'myResumes', // 默认显示"我的简历"标签页
-      myResumes: [
-        {
-          imageUrl: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png',
-          name: '个人简历',
-          date: '2023-06-15'
-        },
-        {
-          imageUrl: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png',
-          name: '求职简历',
-          date: '2023-06-10'
-        },
-        {
-          imageUrl: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png',
-          name: '实习简历',
-          date: '2023-05-28'
-        }
-      ],
+      resumes: [],
+      loading: false,
       trashResumes: [
+        // 回收站数据模拟
         {
+          id: 'trash-1',
           imageUrl: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png',
           name: '已删除简历',
           date: '2023-05-20'
         }
       ]
+    }
+  },
+  setup() {
+    const toast = useToast()
+    return { toast }
+  },
+  computed: {
+    username() {
+      return AuthService.getUserContact()
+    }
+  },
+  mounted() {
+    this.fetchResumes()
+  },
+  methods: {
+    async fetchResumes() {
+      try {
+        this.loading = true
+        const response = await apiClient.get('/user/resumes')
+        if (response.data.code === 20002) {
+          this.resumes = response.data.data
+        }
+      } catch (error) {
+        console.error('获取简历列表失败:', error)
+        this.toast.error('获取简历列表失败')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    getResumeImage(resume) {
+      if (resume.screenshotUrl) {
+        return resume.screenshotUrl
+      }
+      
+      // 根据模板类型返回不同的默认图片
+      if (resume.templateType === 'default') {
+        return 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png'
+      } else if (resume.templateType === 'general_simple') {
+        return 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png'
+      } else {
+        return 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png'
+      }
+    },
+
+    async deleteResume(resumeId) {
+      if (!confirm('确定要删除这个简历吗？')) return
+
+      try {
+        await apiClient.delete(`/user/resumes/${resumeId}`)
+        // 将删除的简历从列表中移除
+        const deletedResume = this.resumes.find(r => r.resumeId === resumeId)
+        if (deletedResume) {
+          // 模拟添加到回收站
+          this.trashResumes.unshift({
+            id: deletedResume.resumeId,
+            imageUrl: this.getResumeImage(deletedResume),
+            name: deletedResume.name,
+            date: new Date().toLocaleDateString()
+          })
+        }
+        this.resumes = this.resumes.filter(r => r.resumeId !== resumeId)
+        this.toast.success('删除成功')
+      } catch (error) {
+        console.error('删除失败:', error)
+        this.toast.error('删除失败')
+      }
+    },
+
+    formatDate(isoString) {
+      return new Date(isoString).toLocaleDateString()
+    },
+
+    openResume(resume) {
+      this.$router.push({
+        name: 'CreateResume',
+        params: {
+          templateType: resume.templateType,
+          resumeId: resume.resumeId
+        }
+      })
+    },
+
+    createResume() {
+      this.$router.push({
+        name: 'TemplateSelection',
+        params: { selectionType: 'create_resume' }
+      })
+    },
+
+    // 回收站功能 - 这些是模拟功能
+    restoreResume(resumeId) {
+      const resumeIndex = this.trashResumes.findIndex(r => r.id === resumeId)
+      if (resumeIndex !== -1) {
+        this.trashResumes.splice(resumeIndex, 1)
+        this.toast.success('已恢复简历')
+        this.fetchResumes() // 重新获取简历列表
+      }
+    },
+
+    permanentDelete(resumeId) {
+      if (!confirm('确定要永久删除这个简历吗？此操作无法撤销')) return
+      
+      const resumeIndex = this.trashResumes.findIndex(r => r.id === resumeId)
+      if (resumeIndex !== -1) {
+        this.trashResumes.splice(resumeIndex, 1)
+        this.toast.success('已永久删除简历')
+      }
+    },
+
+    emptyTrash() {
+      if (!confirm('确定要清空回收站吗？此操作无法撤销')) return
+      
+      this.trashResumes = []
+      this.toast.success('回收站已清空')
     }
   }
 }
@@ -402,15 +514,6 @@ export default {
   gap: 16px;
 }
 
-.resume-sort-select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background-color: white;
-  font-size: 14px;
-  outline: none;
-}
-
 .view-toggle {
   display: flex;
   background-color: #f0f0f0;
@@ -503,6 +606,7 @@ export default {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   position: relative;
+  cursor: pointer;
 }
 
 .resume-item:hover {
@@ -521,8 +625,15 @@ export default {
 .resume-preview img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* 改为 contain 确保图片完整显示 */
   transition: transform 0.3s ease;
+}
+
+.resume-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 确保不裁剪图片 */
+  background-color: #f5f5f5;
 }
 
 .resume-item:hover .resume-preview img {
@@ -593,6 +704,7 @@ export default {
 /* 已删除简历样式 */
 .resume-item.deleted {
   opacity: 0.9;
+  cursor: default;
 }
 
 .resume-deleted-overlay {
