@@ -100,12 +100,20 @@
                     fill="var(--color-secondary)" />
                 </svg>
               </div>
-              <div class="resume-pic-container">
+
+              <div v-if="resume.screenshotUrl" class="resume-pic-container">
+                <img class="resume-pic" :src="resume.screenshotUrl" alt="resume-pic">
+              </div>
+              <div v-else class="resume-pic-container">
                 <img v-if="resume.templateType === 'default'" class="resume-pic"
-                  src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png" alt="resume-pic">
+                  src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png"
+                  alt="resume-pic">
                 <img v-else-if="resume.templateType === 'general_simple'" class="resume-pic"
-                  src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png" alt="resume-pic">
-                <img v-else class="resume-pic" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png" alt="resume-pic">
+                  src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png"
+                  alt="resume-pic">
+                <img v-else class="resume-pic"
+                  src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png"
+                  alt="resume-pic">
               </div>
               <div class="resume-item-list-item-title">{{ resume.name }}</div>
               <div class="resume-item-list-item-subtitle">{{ formatDate(resume.createdAt) }}</div>
