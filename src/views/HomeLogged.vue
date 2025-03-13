@@ -312,21 +312,31 @@ export default {
   background-color: var(--color-background);
   height: 100vh;
   display: flex;
+  flex-direction: row; /* 明确设置为行布局 */
+  overflow: hidden; /* 防止溢出 */
 }
 
 .home-logged-left {
   height: 100vh;
   width: calc(60vw - 40px);
+  transition: width 0.3s ease; /* 添加过渡效果 */
+}
+
+.home-logged-right {
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  transition: width 0.3s ease; /* 添加过渡效果 */
 }
 
 .home-logged-right-top {
   height: 40vh;
-  width: 40vw;
+  width: 100%;
 }
 
 .home-logged-right-bottom {
   height: 60vh;
-  width: 40vw;
+  width: 100%;
 }
 
 .home-card-left {
@@ -359,6 +369,7 @@ export default {
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  margin-top: 40px;
 }
 
 /* 顶部按钮容器 */
@@ -582,19 +593,141 @@ export default {
 /* 简历网格样式优化 */
 .resume-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
 
+/* 添加响应式布局媒体查询 */
 @media (max-width: 1200px) {
+  .home-logged {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+  }
+  
+  .home-logged-left,
+  .home-logged-right {
+    width: calc(100vw - 80px);
+    height: auto;
+  }
+  
+  .home-card-left {
+    margin-right: 40px;
+    height: auto;
+    min-height: 600px;
+  }
+  
+  .home-card-right-top,
+  .home-card-right-bottom {
+    width: calc(100% - 80px);
+    margin-left: 40px;
+   }
+  
+  .home-card-right-top {
+    height: 400px;
+    margin-top: 40px;
+  }
+  
+  .home-logged-right-top {
+    height: auto;
+  }
+  
+  .home-logged-right-bottom {
+    height: auto;
+  }
+  
+  .home-card-right-bottom {
+    margin-bottom: 40px;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-logged {
+    margin-left: 0;
+  }
+  
+  .home-logged-left,
+  .home-logged-right {
+    width: 100vw;
+  }
+  
+  .home-card-left,
+  .home-card-right-top,
+  .home-card-right-bottom {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .home-card-left-top-buttons-container {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 20px;
+  }
+  
+  .btn {
+    min-width: calc(50% - 10px);
+    margin-bottom: 10px;
+  }
+  
   .resume-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (min-width: 1600px) {
-  .resume-grid {
-    grid-template-columns: repeat(3, 1fr);
+/* 优化顶部按钮区域的响应式布局 */
+@media (max-width: 576px) {
+  .home-card-left-top-buttons-container {
+    gap: 10px;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .resume-tabs {
+    padding: 0 10px;
+  }
+  
+  .resume-tab {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .resume-view {
+    padding: 16px;
+  }
+  
+  .resume-section-title {
+    font-size: 18px;
+  }
+}
+
+/* 简历网格布局的优化 */
+.resume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* 优化悬停操作按钮在触摸设备上的显示 */
+@media (hover: none) {
+  .resume-hover-actions {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .resume-action-icon {
+    width: 36px;
+    height: 36px;
   }
 }
 
