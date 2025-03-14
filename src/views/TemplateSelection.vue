@@ -1,7 +1,7 @@
 <template>
   <div class="template-select">
-    <h1 class="title">选择<span style="color: #409eff;">简历模板</span></h1>
-
+    <h1 class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
+    <h2 class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
     <!-- 新增确认弹窗 -->
     <teleport to="body">
       <transition name="fade">
@@ -268,16 +268,18 @@ export default {
 .modal-container {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  width: 400px;
-  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  width: 450px;
+  padding: 25px;
   transition: all 0.3s ease;
 }
 
 .modal-header h3 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--color-primary);
   text-align: center;
+  font-weight: 500;
+  font-size: 1.3rem;
 }
 
 .modal-body {
@@ -309,11 +311,14 @@ export default {
   background: var(--color-primary);
   color: white;
   border: none;
+  font-weight: 500;
+  padding: 12px 28px;
+  box-shadow: 0 4px 10px rgba(204, 124, 94, 0.25);
 }
 
 /* 在原有样式基础上增加禁用状态样式 */
 .modal-button.confirm:disabled {
-  background: #a0cfff;
+  background: var(--color-primary-disabled);
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -342,9 +347,11 @@ export default {
 }
 
 .modal-button.cancel {
-  background: #f0f0f0;
+  background: #f6f6f6;
   color: #606266;
   border: 1px solid #dcdfe6;
+  font-weight: 500;
+  padding: 12px 28px;
 }
 
 .modal-button.cancel:hover {
@@ -362,16 +369,24 @@ export default {
 }
 
 .template-select {
-  max-width: 1200px;
-  margin: 40px auto;
-  margin-top: 100px;
-  padding: 0 20px;
+  padding-left: 80px;
+  padding-top: 80px;
+  margin-left: 80px;
+  background-color: var(--color-background);
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .title {
-  text-align: center;
+  color: var(--color-black);
+}
+
+.subtitle {
   margin-bottom: 40px;
-  color: #2c3e50;
+  font-weight: 350;
+  font-size: 18px;
+  color: var(--color-black);
 }
 
 .category-tabs {
@@ -384,37 +399,49 @@ export default {
 
 .tab-button {
   flex-shrink: 0;
-  padding: 10px 20px;
-  border: none;
+  padding: 10px 22px;
+  border: 1px solid var(--color-primary);
   border-radius: 25px;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--color-secondary);
+  color: var(--color-primary);
   cursor: pointer;
   transition: all 0.3s;
+  font-weight: 500;
+}
+
+.tab-button:hover:not(.active) {
+  background: rgba(204, 124, 94, 0.05);
+  transform: translateY(-2px);
 }
 
 .tab-button.active {
-  background: #409eff;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  box-shadow: 0 4px 10px rgba(204, 124, 94, 0.25);
 }
 
 .template-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 20px;
+  padding-right: 80px;
+  padding-bottom: 80px;
 }
 
 .template-card {
-  border: 1px solid #eee;
+  border: 1px solid #eaeaea;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.25s ease-in-out;
+  background: white;
 }
 
 .template-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 25px rgba(204, 124, 94, 0.1);
+  border-color: var(--color-primary-light);
 }
 
 .preview-wrapper {
@@ -426,26 +453,36 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.template-card:hover .preview-image {
+  transform: scale(1.03);
 }
 
 .badge {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ff4757;
+  background: var(--color-primary);
   color: white;
-  padding: 4px 10px;
-  border-radius: 3px;
-  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 8px rgba(204, 124, 94, 0.3);
 }
 
 .template-info {
   padding: 20px;
+  border-top: 1px solid #f5f5f5;
 }
 
 .template-info h3 {
   margin: 0 0 10px;
   color: #333;
+  font-weight: 500;
 }
 
 .description {
@@ -461,25 +498,78 @@ export default {
 }
 
 .tag {
-  background: #e8f4ff;
-  color: #409eff;
-  padding: 4px 10px;
-  border-radius: 4px;
+  background: rgba(204, 124, 94, 0.1);
+  color: var(--color-primary);
+  padding: 4px 12px;
+  border-radius: 6px;
   font-size: 12px;
+  transition: all 0.2s;
+}
+
+.tag:hover {
+  background: rgba(204, 124, 94, 0.2);
 }
 
 @media (max-width: 768px) {
+  .template-select {
+    padding-left: 20px;
+    margin-left: 0;
+    padding-top: 60px;
+  }
+  
   .template-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding-right: 20px;
   }
 
   .category-tabs {
     gap: 10px;
+    padding-right: 20px;
+    overflow-x: auto;
   }
 
   .tab-button {
     padding: 8px 15px;
     font-size: 14px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .template-select {
+    padding-left: 15px;
+    padding-top: 40px;
+  }
+  
+  .template-container {
+    grid-template-columns: 1fr;
+    padding-right: 15px;
+  }
+  
+  .modal-container {
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .modal-preview {
+    width: 100%;
+  }
+  
+  .title {
+    font-size: 22px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 }
 </style>
