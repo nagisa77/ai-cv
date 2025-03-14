@@ -514,7 +514,7 @@ export default {
   .template-select {
     padding-left: 20px;
     margin-left: 0;
-    padding-top: 60px;
+    padding-top: 80px;
   }
   
   .template-container {
@@ -546,7 +546,7 @@ export default {
 @media (max-width: 480px) {
   .template-select {
     padding-left: 15px;
-    padding-top: 40px;
+    padding-top: 70px;
   }
   
   .template-container {

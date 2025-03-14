@@ -24,3 +24,27 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+/* 响应式布局基础样式 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.router-view {
+  flex: 1;
+}
+
+@media (min-width: 769px) {
+  .router-view {
+    margin-left: 80px; /* 为左侧导航栏留出空间 */
+  }
+}
+
+@media (max-width: 768px) {
+  .router-view {
+    margin-left: 0;
+    margin-top: 60px; /* 为顶部导航栏留出空间 */
+  }
+}

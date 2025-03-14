@@ -110,7 +110,7 @@ export default {
 }
 
 .header-left {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
@@ -119,8 +119,8 @@ export default {
   flex-direction: column;
   background-color: var(--color-left-header-background);
   align-items: center;
+  z-index: 1000;
 }
-
 
 /* 新增底部容器样式 */
 .bottom-section {
@@ -130,7 +130,6 @@ export default {
   align-items: center;
   margin-bottom: 20px; /* 底部留白 */
 }
-
 
 .phone-icon {
   width: 40px;
@@ -218,4 +217,45 @@ export default {
   /* 原有样式保持不变 */
 }
 /* 其他过渡效果保持原样 */
+
+/* 响应式设计：在小屏幕上将左侧导航栏转为顶部导航栏 */
+@media (max-width: 768px) {
+  .header-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  
+  .logo-link-left {
+    flex-direction: row;
+    margin-top: 0;
+  }
+  
+  .app-title-left {
+    margin-left: 10px;
+  }
+  
+  .bottom-section {
+    margin-top: 0;
+    flex-direction: row;
+    margin-bottom: 0;
+    gap: 20px;
+  }
+  
+  .user-icon {
+    margin-top: 0;
+  }
+  
+  .router-view {
+    padding-top: 60px !important;
+    padding-left: 0 !important;
+  }
+}
 </style>
