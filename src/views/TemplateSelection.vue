@@ -1,5 +1,14 @@
 <template>
   <div class="template-select">
+    <!-- 添加返回按钮 -->
+    <button class="back-button" @click="goBack">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      返回
+    </button>
+    
     <h1 class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
     <h2 class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
     <!-- 新增确认弹窗 -->
@@ -231,6 +240,19 @@ export default {
         } finally {
           this.isModifying = false // 无论成功失败都重置状态
         }
+      }
+    },
+    // 添加返回方法
+    goBack() {
+      if (this.selectionType === 'change_resume' && this.resumeId) {
+        // 如果是从简历编辑页来的，返回到简历编辑页
+        this.$router.push({
+          name: 'CreateResume',
+          params: { resumeId: this.resumeId }
+        });
+      } else {
+        // 否则返回上一页
+        this.$router.go(-1);
       }
     }
   }
@@ -534,12 +556,17 @@ export default {
   }
   
   .title {
-    font-size: 24px;
+    margin-top: 50px;
   }
   
   .subtitle {
     font-size: 16px;
     margin-bottom: 30px;
+  }
+
+  .back-button {
+    left: 20px;
+    top: 15px;
   }
 }
 
@@ -571,5 +598,32 @@ export default {
     font-size: 14px;
     margin-bottom: 20px;
   }
+}
+
+/* 返回按钮样式 */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 100px; /* 考虑到左侧菜单栏 */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(204, 124, 94, 0.1);
+}
+
+.back-button svg {
+  width: 20px;
+  height: 20px;
 }
 </style>

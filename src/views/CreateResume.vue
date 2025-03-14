@@ -20,7 +20,7 @@
         <SelectModuleComponent :chatModules="chatModules" @selected-module-changed="handleSelectedModuleChanged" />
       </template>
 
-      <button @click="handleChangeTemplate">修改模板</button>
+      <!-- <button @click="handleChangeTemplate">修改模板</button> -->
     </div>
 
     <!-- 右侧 -->
@@ -218,17 +218,19 @@ export default {
 .app {
   display: flex;
   height: 100vh;
+  width: 100vw - 80px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .cv-container {
   position: relative;
-  height: calc(100vh - 60px);
-  margin-top: 60px;
+  height: 100vh;
 }
 
 .loading-container {
   background-color: var(--color-background);
-  height: calc(100vh - 60px);
+  height: 100vh;
   width: 38vw;
   display: flex;
   justify-content: center;

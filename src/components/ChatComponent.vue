@@ -326,7 +326,7 @@ function handleNotEnough() {
 <style scoped>
 .chat-component {
   background-color: var(--color-background);
-  height: calc(100vh - 60px);
+  height: 100vh;
   width: 38vw;
 }
 
@@ -350,7 +350,7 @@ function handleNotEnough() {
   padding: 10px;
   justify-content: space-between;
   border-radius: 25px;
-  left: 30px;
+  left: 110px;
   bottom: 20px;
   width: calc(38vw - 60px);
   max-width: 500px;
@@ -419,7 +419,7 @@ function handleNotEnough() {
 }
 
 .messages-container {
-  height: calc(100vh - 60px - 62px - 74px);
+  height: calc(100vh - 62px - 74px);
   overflow-y: auto;
   padding-top: 20px;
 }
