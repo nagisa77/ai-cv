@@ -45,7 +45,7 @@
           </div>
         </template> -->
 
-          <!-- 选择消息（choice），用户可以点击“OK”或者“我觉得还不够” -->
+          <!-- 选择消息（choice），用户可以点击"OK"或者"我觉得还不够" -->
           <template v-else-if="message.sender === 'choice' && message.display">
             <div class="choice-message-container">
               <div class="message choice">
@@ -90,8 +90,9 @@
           v-model="inputValue"
           :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
           class="chatgpt-input"
-          rows="1"
-          @keydown.ctrl.enter="handleSendMessage"
+          ref="textareaInput"
+          @input="adjustTextareaHeight"
+          @keydown="handleKeyDown"
         ></textarea>
       </div>
       <div class="chatgpt-send-button" @click="handleSendMessage">
@@ -122,7 +123,7 @@ const props = defineProps({
   }
 })
 
-// 只向父组件发射 “update-resume” 事件
+// 只向父组件发射 "update-resume" 事件
 const emit = defineEmits(['update-resume'])
 
 // ChatGPT 实例 (单例)
@@ -133,6 +134,9 @@ onMounted(() => {
   if (props.currentSelectedTitle) {
     initChat()
   }
+  nextTick(() => {
+    adjustTextareaHeight()
+  })
 })
 
 function initChat() {
@@ -152,6 +156,9 @@ const inputValue = ref('')
 
 // 消息滚动容器
 const messagesContainer = ref(null)
+
+// 引用 textarea 元素
+const textareaInput = ref(null)
 
 /**
  * 计算：根据 currentSelectedTitle，找到对应模块
@@ -213,7 +220,7 @@ function extractMessage(gptText) {
 
 /**
  * 监听 messages 变化，一旦 GPT 发来新消息，就检查 is_enough 逻辑；
- * 如果 is_enough=true，则插入一个“choice”类型的消息，让用户选择
+ * 如果 is_enough=true，则插入一个"choice"类型的消息，让用户选择
  */
 watch(
   () => messages.value,
@@ -273,7 +280,7 @@ function handlePromptHintClick(hint) {
 }
 
 /**
- * 用户点击“OK”时调用
+ * 用户点击"OK"时调用
  */
 function handleOk(choiceMessage) {
   try {
@@ -301,7 +308,7 @@ function getContentsFromMessage(message) {
 }
 
 /**
- * 用户点击“我觉得还不够”时调用
+ * 用户点击"我觉得还不够"时调用
  */
 function handleNotEnough() {
   const predefinedMessage = '我认为总结还不够，请继续对话'
@@ -321,6 +328,34 @@ function handleNotEnough() {
   // 可选：提示用户消息已发送
   console.log('已发送预定义消息给GPT')
 }
+
+// 处理键盘事件：Enter 发送，Shift+Enter 换行
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault() // 阻止默认的换行行为
+    handleSendMessage()
+  }
+}
+
+// 调整 textarea 高度以适应内容
+function adjustTextareaHeight() {
+  const textarea = textareaInput.value
+  if (!textarea) return
+  
+  // 重置高度以便正确计算
+  textarea.style.height = 'auto'
+  
+  // 计算新高度，限制最大高度
+  const newHeight = Math.min(Math.max(textarea.scrollHeight, 40), 120) // 初始约2行(40px)，最多约6行(120px)
+  textarea.style.height = `${newHeight}px`
+}
+
+// 在输入值改变时调整高度
+watch(inputValue, () => {
+  nextTick(() => {
+    adjustTextareaHeight()
+  })
+})
 </script>
 
 <style scoped>
@@ -346,8 +381,8 @@ function handleNotEnough() {
 .input-area-container {
   position: fixed;
   display: flex;
-  flex-direction: column;
-  padding: 10px;
+  align-items: center;
+  padding: 10px 15px;
   justify-content: space-between;
   border-radius: 25px;
   left: 110px;
@@ -356,43 +391,45 @@ function handleNotEnough() {
   max-width: 500px;
   align-self: center;
   border: 1px solid var(--color-primary);
+  background-color: var(--color-white);
 }
 
 .gradient-overlay {
   position: fixed;
   left: 80px;
-  bottom: 116px;
+  bottom: 80px;  /* 调整位置确保在聊天框之上 */
   width: calc(50vw - 40px);
-  height: 20px;
+  height: 40px;  /* 增加高度使过渡更明显 */
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
-  pointer-events: none; /* 不相应鼠标事件 */
+  pointer-events: none; /* 不响应鼠标事件 */
+  z-index: 5;  /* 确保在消息上层但在输入框下层 */
 }
 
 .input-area-left {
   display: flex;
   align-items: center;
   flex: 1;
+  margin-right: 15px;
 }
 
 .chatgpt-input {
-  margin-left: 20px;
-  min-height: 40px;
-  max-height: calc(40px * 5);
+  width: 100%;
+  min-height: 40px;  /* 初始约2行高度 */
+  max-height: 120px; /* 最多约6行高度 */
   border: none;
   outline: none;
   font-size: 14px;
   background-color: transparent;
-  flex: 1;
-  overflow-y: auto;
+  padding: 8px 10px;
   resize: none;
+  overflow-y: auto;
+  line-height: 1.4;
 }
 
 .chatgpt-send-button {
-  width: 30px;
-  height: 30px;
-  margin-right: 6px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  margin-left: 6px;
   border: none;
   background-color: var(--color-primary);
   color: var(--color-secondary);
@@ -400,10 +437,7 @@ function handleNotEnough() {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+  flex-shrink: 0;
 }
 
 .chatgpt-send-button:hover {
@@ -419,9 +453,10 @@ function handleNotEnough() {
 }
 
 .messages-container {
-  height: calc(100vh - 62px - 74px);
+  height: calc(100vh - 62px - 100px);  /* 调整高度以适应更大的输入框 */
   overflow-y: auto;
   padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .choice-message-container,
