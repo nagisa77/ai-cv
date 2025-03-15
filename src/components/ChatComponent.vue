@@ -17,7 +17,8 @@
           <!-- GPT 消息：头像 + 蓝框并列 -->
           <template v-if="message.sender === 'gpt' && message.display">
             <div class="gpt-message-container">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="ChatGPT 头像" class="chatgpt-message-icon" />
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="ChatGPT 头像"
+                class="chatgpt-message-icon" />
               <div class="message gpt">
                 <span>{{ extractMessage(message.text) }}</span>
               </div>
@@ -81,17 +82,13 @@
           color="var(--color-secondary)"></l-infinity>
       </div>
     </div>
+    <!-- 输入区（发送给ChatGPT） -->
     <div class="input-area-container" v-else>
       <div class="input-area-left">
-        <!-- 使用 textarea 替换 input -->
-        <textarea
-          v-model="inputValue"
+        <!-- ① 新增 rows="1" -->
+        <textarea rows="1" v-model="inputValue"
           :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
-          class="chatgpt-input"
-          ref="textareaInput"
-          @input="adjustTextareaHeight"
-          @keydown="handleKeyDown"
-        ></textarea>
+          class="chatgpt-input" ref="textareaInput" @input="adjustTextareaHeight" @keydown="handleKeyDown"></textarea>
       </div>
       <div class="chatgpt-send-button" @click="handleSendMessage">
         <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg" alt="ChatGPT 图标" class="chatgpt-send-icon" />
@@ -192,9 +189,9 @@ function handleSendMessage() {
   const { type, title } = activeModule.value
   let extra_message = ''
   if (messages.value[messages.value.length - 1].sender === 'choice') {
-    extra_message = '用户没有点OK，或者Not Enough，尝试继续跟用户聊，先不再觉得is_enough, 过一会信息再次充足时，再将is_enough设置为true' 
+    extra_message = '用户没有点OK，或者Not Enough，尝试继续跟用户聊，先不再觉得is_enough, 过一会信息再次充足时，再将is_enough设置为true'
   }
-  chatgptInstance.sendMessage(type, title, trimmedValue, true, false, extra_message) 
+  chatgptInstance.sendMessage(type, title, trimmedValue, true, false, extra_message)
 
   // 清空输入框
   inputValue.value = ''
@@ -336,15 +333,17 @@ function handleKeyDown(e) {
 }
 
 // 调整 textarea 高度以适应内容
+// ② 调整 adjustTextareaHeight，去掉 20 的下限或者改小
 function adjustTextareaHeight() {
   const textarea = textareaInput.value
   if (!textarea) return
-  
-  // 重置高度以便正确计算
+
+  // 先清空高度，让浏览器根据内容计算
   textarea.style.height = 'auto'
-  
-  // 计算新高度，限制最大高度
-  const newHeight = Math.min(Math.max(textarea.scrollHeight, 20), 120) // 初始约1行(20px)，最多约6行(120px)
+
+  // 只用 scrollHeight 来决定
+  // 如果想保留最小高度，也可把 16 改大或改小
+  const newHeight = Math.min(Math.max(textarea.scrollHeight, 16), 120)
   textarea.style.height = `${newHeight}px`
 }
 
@@ -395,13 +394,18 @@ watch(inputValue, () => {
 .input-area-container:before {
   content: '';
   position: absolute;
-  left: -15px; /* 弥补padding和定位差异 */
-  bottom: calc(100% + 1px); /* 放置在容器上方 */
-  width: calc(100% + 30px); /* 考虑padding */
+  left: -15px;
+  /* 弥补padding和定位差异 */
+  bottom: calc(100% + 1px);
+  /* 放置在容器上方 */
+  width: calc(100% + 30px);
+  /* 考虑padding */
   height: 40px;
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
-  pointer-events: none; /* 不响应鼠标事件 */
-  z-index: -1; /* 确保在消息上层但在输入框下层 */
+  pointer-events: none;
+  /* 不响应鼠标事件 */
+  z-index: -1;
+  /* 确保在消息上层但在输入框下层 */
 }
 
 .input-area-left {
@@ -413,18 +417,21 @@ watch(inputValue, () => {
   margin-right: 15px;
 }
 
+/* ③ 减少一下 padding，让 1 行不会显得太空 */
 .chatgpt-input {
   width: 100%;
-  min-height: 20px;  /* 初始约1行高度 */
-  max-height: 120px; /* 最多约6行高度 */
+  /* min-height 去掉或设为 16px */
+  min-height: auto; 
+  /* 行高减小一点，避免过高 */
+  line-height: 1.2;
+  /* 内边距适度减小 */
+  padding: 4px 8px;
   border: none;
   outline: none;
   font-size: 14px;
   background-color: transparent;
-  padding: 8px 10px;
   resize: none;
   overflow-y: auto;
-  line-height: 1.4;
   /* 隐藏滚动条 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -446,7 +453,8 @@ watch(inputValue, () => {
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
-  margin-left: auto; /* 添加这一行使按钮对齐到最右边 */
+  margin-left: auto;
+  /* 添加这一行使按钮对齐到最右边 */
 }
 
 .chatgpt-send-button:hover {
@@ -462,7 +470,8 @@ watch(inputValue, () => {
 }
 
 .messages-container {
-  height: calc(100vh - 62px - 100px);  /* 调整高度以适应更大的输入框 */
+  height: calc(100vh - 62px - 100px);
+  /* 调整高度以适应更大的输入框 */
   overflow-y: auto;
   padding-top: 20px;
   padding-bottom: 20px;
