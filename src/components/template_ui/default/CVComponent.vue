@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import html2canvas from 'html2canvas';
 import metadataInstance from '@/models/metadata_model.js';
 import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue';
 import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue';
@@ -100,24 +99,7 @@ export default {
      * Capture the component as a screenshot and trigger download.
      */
     captureAndSaveScreenshot() {
-        // const type = 'default'; // 或其他类型
-        // const id = localStorage.getItem('currentResumeId'); // 从localStorage获取当前简历ID
-        
-        // fetch(`/api/screenshot/${type}/${id}`, {
-        //   method: 'GET',
-        //   headers: {
-        //     'Authorization': token
-        //   }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //   if(data.code === 0) {
-        //     console.log('截图已保存到服务器:', data.data.url);
-        //   }
-        // })
-        // .catch(error => {
-        //   console.error('保存截图失败:', error);
-        // });
+      this.$emit('capture-and-save-screenshot');
     },
 
     handleEdit(type, title) {

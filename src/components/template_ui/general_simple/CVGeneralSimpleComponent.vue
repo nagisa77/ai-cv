@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import html2canvas from 'html2canvas';
 import metadataInstance from '@/models/metadata_model.js';
 import PersonalGeneralSimpleInfo from '@/components/template_ui/general_simple/cv_components/PersonalGeneralSimpleInfo.vue';
 import EducationGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/EducationGeneralSimpleSection.vue';
@@ -106,19 +105,7 @@ export default {
      * Capture the component as a screenshot and trigger download.
      */
     captureAndSaveScreenshot() {
-      const cvComponent = this.$refs.cvComponent;
-
-      // 使用html2canvas捕捉组件
-      html2canvas(cvComponent).then(canvas => {
-        // 将canvas转化为图片URL
-        const imgUrl = canvas.toDataURL('image/png');
-
-        // 创建下载链接
-        const link = document.createElement('a');
-        link.href = imgUrl;
-        link.download = 'cv-screenshot.png';
-        link.click();
-      });
+      this.$emit('capture-and-save-screenshot');
     },
 
     handleEdit(type, title) {

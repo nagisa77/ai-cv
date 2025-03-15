@@ -26,8 +26,8 @@
     <!-- 右侧 -->
     <div class="right-container cv-container">
       <component class="resume-container" :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete"
-        @add-title="handleAddTitle"/>
+        @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete" 
+        @add-title="handleAddTitle" @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"/>
     </div>
   </div>
 </template>
@@ -43,6 +43,7 @@ import metadataInstance from '@/models/metadata_model.js'
 import ChatgptModel from '@/models/chatgpt_model.js'
 import { waveform } from 'ldrs'
 import { resumeModel } from '@/models/resume_model.js'
+import apiClient from '@/api/axios'
 
 waveform.register()
 const chatgptInstance = ChatgptModel.getInstance()
@@ -163,6 +164,34 @@ export default {
      */
     handleCloseChat() {
       this.currentSelectedTitle = ''
+    },
+
+    /**
+     * 接收从 CVComponent 发射的 "capture-and-save-screenshot" 事件
+     * 捕获当前页面并保存为图片
+     */
+    handleCaptureAndSaveScreenshot() {
+      // 获取当前简历ID
+      const resumeId = this.$route.params.resumeId;
+      
+      // 发送请求获取简历信息
+      apiClient.get(`/user/resumes/${resumeId}`)
+        .then(response => {
+          if (response.data.code === 20003 && response.data.data.screenshotUrl) {
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.href = response.data.data.screenshotUrl;
+            link.download = `${response.data.data.name || '简历'}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            console.error('获取简历截图失败:', response.data.message);
+          }
+        })
+        .catch(error => {
+          console.error('下载简历截图时出错:', error);
+        });
     },
 
     /**
