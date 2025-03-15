@@ -75,23 +75,23 @@
       </div>
     </div>
 
-    <!-- 输入区（发送给ChatGPT） -->
-    <div class="input-area-container" v-if="isWaitingForAIResponse">
-      <div class="loading-container">
-        <l-infinity size="20" stroke="4" stroke-length="0.15" bg-opacity="0.5" speed="1.3"
-          color="var(--color-secondary)"></l-infinity>
-      </div>
-    </div>
-    <!-- 输入区（发送给ChatGPT） -->
-    <div class="input-area-container" v-else>
+    <!-- 输入区域 - 合并两个条件分支，保持单一结构 -->
+    <div class="input-area-container">
       <div class="input-area-left">
-        <!-- ① 新增 rows="1" -->
         <textarea rows="1" v-model="inputValue"
-          :placeholder="'请探讨和 “' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '” 有关的事情'"
-          class="chatgpt-input" ref="textareaInput" @input="adjustTextareaHeight" @keydown="handleKeyDown"></textarea>
+          :placeholder="'请探讨和 &quot;' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '&quot; 有关的事情'"
+          class="chatgpt-input" ref="textareaInput" @input="adjustTextareaHeight" @keydown="handleKeyDown"
+          :disabled="isWaitingForAIResponse"></textarea>
       </div>
-      <div class="chatgpt-send-button" @click="handleSendMessage">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg" alt="ChatGPT 图标" class="chatgpt-send-icon" />
+      <!-- 发送按钮/加载状态 -->
+      <div class="chatgpt-send-button" @click="!isWaitingForAIResponse && handleSendMessage" 
+           :class="{'loading-state': isWaitingForAIResponse}">
+        <!-- 加载状态显示loading动画 -->
+        <l-infinity v-if="isWaitingForAIResponse" size="20" stroke="3" stroke-length="0.15" 
+           bg-opacity="0.5" speed="1.3" color="var(--color-secondary)"></l-infinity>
+        <!-- 非加载状态显示发送图标 -->
+        <img v-else src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg" 
+             alt="ChatGPT 图标" class="chatgpt-send-icon" />
       </div>
     </div>
   </div>
@@ -357,7 +357,6 @@ watch(inputValue, () => {
 
 <style scoped>
 .chat-component {
-  background-color: rgba(235, 250, 255, 0.897);
   height: 100vh;
   width: calc(50vw - 40px);
 }
@@ -387,7 +386,8 @@ watch(inputValue, () => {
   width: calc(50vw - 40px - 30px - 30px);
   align-self: center;
   border: 1px solid var(--color-primary);
-  background-color: var(--color-white);
+  background-color: var(--color-background);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* 使用input-area-container的伪元素创建渐变遮罩 */
@@ -401,7 +401,7 @@ watch(inputValue, () => {
   width: calc(100% + 30px);
   /* 考虑padding */
   height: 40px;
-  background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
+  background: linear-gradient(to top, var(--color-white), rgba(255, 255, 255, 0));
   pointer-events: none;
   /* 不响应鼠标事件 */
   z-index: -1;
@@ -411,7 +411,6 @@ watch(inputValue, () => {
 .input-area-left {
   display: flex;
   align-items: center;
-  background-color: azure;
   width: 100%;
   flex: 1;
   margin-right: 15px;
@@ -513,7 +512,7 @@ watch(inputValue, () => {
 }
 
 .message.me {
-  background-color: white;
+  background-color: var(--color-background);
 }
 
 .chatgpt-message-icon {
@@ -582,15 +581,15 @@ watch(inputValue, () => {
   transition: background-color 0.3s ease;
 }
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-  width: 100%;
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
-  border-radius: 20px;
+.chatgpt-send-button.loading-state {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.chatgpt-input:disabled {
+  background-color: rgba(245, 243, 240, 0.3);
+  color: var(--color-gray-dark);
+  cursor: not-allowed;
 }
 
 .chat-loading-container {
@@ -630,7 +629,7 @@ watch(inputValue, () => {
   border-radius: 10px;
   margin-bottom: 10px;
 
-  background-color: var(--color-white);
+  background-color: var(--color-background);
   font-size: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
