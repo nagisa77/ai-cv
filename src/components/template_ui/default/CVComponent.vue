@@ -1,3 +1,4 @@
+<!-- Default CV Component -->
 <template>
   <div class="cv-component" ref="cvComponent">
     <!-- <div class="cv-debug-settings">

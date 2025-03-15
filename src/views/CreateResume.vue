@@ -34,9 +34,11 @@
 
 <script>
 import ChatComponent from '@/components/ChatComponent.vue'
-import CVComponent from '@/components/template_ui/default/CVComponent.vue'
-import CVGeneralSimpleComponent from '@/components/template_ui/general_simple/CVGeneralSimpleComponent.vue'
-import CreativeModernCVComponent from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue'
+
+import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue'
+import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue'
+import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue'
+
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue' 
 import EditTitleComponent from '@/components/EditTitleComponent.vue'
 import metadataInstance from '@/models/metadata_model.js'
@@ -52,7 +54,9 @@ export default {
   name: 'CreateResume',
   components: {
     ChatComponent,
-    CVComponent,
+    DefaultCV,
+    GeneralSimpleCV,
+    CreativeModernCV,
     SelectModuleComponent,
     EditTitleComponent
   },
@@ -89,14 +93,14 @@ export default {
     },
     currentTemplateComponent() {
       if (this.templateType == 'default') {
-        return CVComponent
+        return DefaultCV
       } else if (this.templateType == 'general_simple') {
-        return CVGeneralSimpleComponent
+        return GeneralSimpleCV
       } else if (this.templateType == 'creative_modern') {
-        return CreativeModernCVComponent
+        return CreativeModernCV
       }
 
-      return CVComponent;
+      return DefaultCV
     },
     /**
      * 动态生成聊天模块 tabs
