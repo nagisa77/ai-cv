@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     displayImage() {
-      return this.currentImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwVLdSDmgrZN7TkzbHJb8dD0_7ASUQuERL2A&s'
+      return this.currentImage || 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png'
     }
   },
   methods: {

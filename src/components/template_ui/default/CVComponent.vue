@@ -4,6 +4,20 @@
       <span style="color: red;">[debug_area]:</span>
       <button @click="captureAndSaveScreenshot">截图并保存</button>
     </div> -->
+    <div class="cv-top-buttons">
+      <button class="cv-top-button" @click="handleAddModule">
+        <i class="fas fa-plus-circle"></i> 添加模块
+      </button>
+      <button class="cv-top-button" @click="handleChangeFont">
+        <i class="fas fa-font"></i> 更换字体
+      </button>
+      <button class="cv-top-button" @click="handleSmartFit">
+        <i class="fas fa-compress-alt"></i> 智能一页
+      </button>
+      <button class="cv-top-button" @click="captureAndSaveScreenshot">
+        <i class="fas fa-download"></i> 下载
+      </button>
+    </div>
     <div class="cv-page loading-container" v-if="isFetching">
       <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1"
         color="var(--color-primary)"></l-waveform>
@@ -86,19 +100,24 @@ export default {
      * Capture the component as a screenshot and trigger download.
      */
     captureAndSaveScreenshot() {
-      const cvComponent = this.$refs.cvComponent;
-
-      // 使用html2canvas捕捉组件
-      html2canvas(cvComponent).then(canvas => {
-        // 将canvas转化为图片URL
-        const imgUrl = canvas.toDataURL('image/png');
-
-        // 创建下载链接
-        const link = document.createElement('a');
-        link.href = imgUrl;
-        link.download = 'cv-screenshot.png';
-        link.click();
-      });
+        // const type = 'default'; // 或其他类型
+        // const id = localStorage.getItem('currentResumeId'); // 从localStorage获取当前简历ID
+        
+        // fetch(`/api/screenshot/${type}/${id}`, {
+        //   method: 'GET',
+        //   headers: {
+        //     'Authorization': token
+        //   }
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //   if(data.code === 0) {
+        //     console.log('截图已保存到服务器:', data.data.url);
+        //   }
+        // })
+        // .catch(error => {
+        //   console.error('保存截图失败:', error);
+        // });
     },
 
     handleEdit(type, title) {
@@ -111,6 +130,18 @@ export default {
 
     handleAddTitle(type) {
       this.$emit('add-title', type);
+    },
+    
+    handleAddModule() {
+      this.$emit('add-module');
+    },
+    
+    handleChangeFont() {
+      this.$emit('change-font');
+    },
+    
+    handleSmartFit() {
+      this.$emit('smart-fit');
     }
   }
 }
@@ -129,12 +160,42 @@ export default {
   width: 62vw;
 }
 
+
+/* 顶部按钮样式 */
+.cv-top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.cv-top-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.cv-top-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+
 .cv-component {
   /* 基础布局 */
   height: calc(100vh - 60px);
   width: 62vw;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

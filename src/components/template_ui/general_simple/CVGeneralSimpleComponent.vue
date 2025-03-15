@@ -8,6 +8,20 @@
       <span style="color: red;">[debug_area]:</span>
       <button @click="captureAndSaveScreenshot">截图并保存</button>
     </div> -->
+    <div class="cv-top-buttons">
+      <button class="cv-top-button" @click="handleAddModule">
+        <i class="fas fa-plus-circle"></i> 添加模块
+      </button>
+      <button class="cv-top-button" @click="handleChangeFont">
+        <i class="fas fa-font"></i> 更换字体
+      </button>
+      <button class="cv-top-button" @click="handleSmartFit">
+        <i class="fas fa-compress-alt"></i> 智能一页
+      </button>
+      <button class="cv-top-button" @click="captureAndSaveScreenshot">
+        <i class="fas fa-download"></i> 下载
+      </button>
+    </div>
     <div class="cv-page loading-container" v-if="isFetching">
       <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
     </div>
@@ -117,6 +131,19 @@ export default {
 
     handleAddTitle(type) {
       this.$emit('add-title', type);
+    },
+
+    // 新增的方法
+    handleAddModule() {
+      this.$emit('add-module');
+    },
+    
+    handleChangeFont() {
+      this.$emit('change-font');
+    },
+    
+    handleSmartFit() {
+      this.$emit('smart-fit');
     }
   }
 }
@@ -135,12 +162,41 @@ export default {
   width: 62vw;
 }
 
+/* 顶部按钮样式 */
+.cv-top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.cv-top-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.cv-top-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+
 .cv-component {
   /* 基础布局 */
   height: calc(100vh - 60px);
   width: 62vw;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

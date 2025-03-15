@@ -10,7 +10,7 @@
         <div class="block-title">基础信息</div>
         <div class="avatar-upload">
           <UploadableImage v-model="basicInfo.avatar" width="80" height="120"
-            default-image="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5908.jpg?t=st=1739814132~exp=1739817732~hmac=b5e4446e51b3443a870f48dbc4ab042cfa46753d667a76d85b953cfa6ee0f8ee&w=1800" />
+            default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png" />
         </div>
         <div class="form-line">
           <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
@@ -596,7 +596,8 @@ export default {
 }
 
 .block-title {
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: bold;
   margin-bottom: 10px;
   margin-top: 20px;
 }
