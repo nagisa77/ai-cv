@@ -38,7 +38,7 @@ export default {
   background-color: var(--color-background);
 
   height: calc(100vh - 200px);
-  width: calc(38vw - 40px);
+  width: calc(50vw - 40px - 40px);
 }
 
 .select-module-title {

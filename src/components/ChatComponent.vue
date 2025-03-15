@@ -325,9 +325,9 @@ function handleNotEnough() {
 
 <style scoped>
 .chat-component {
-  background-color: var(--color-background);
+  background-color: rgba(235, 250, 255, 0.897);
   height: 100vh;
-  width: 38vw;
+  width: calc(50vw - 40px);
 }
 
 .debug-settings {
@@ -360,9 +360,9 @@ function handleNotEnough() {
 
 .gradient-overlay {
   position: fixed;
+  left: 80px;
   bottom: 116px;
-  left: 0;
-  width: 38vw;
+  width: calc(50vw - 40px);
   height: 20px;
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
   pointer-events: none; /* 不相应鼠标事件 */
@@ -576,7 +576,8 @@ function handleNotEnough() {
   margin: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-  width: calc(38vw - 40px);
+
+  background-color: var(--color-white);
   font-size: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
