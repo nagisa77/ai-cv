@@ -346,7 +346,7 @@ function adjustTextareaHeight() {
   textarea.style.height = 'auto'
   
   // 计算新高度，限制最大高度
-  const newHeight = Math.min(Math.max(textarea.scrollHeight, 40), 120) // 初始约2行(40px)，最多约6行(120px)
+  const newHeight = Math.min(Math.max(textarea.scrollHeight, 20), 120) // 初始约2行(40px)，最多约6行(120px)
   textarea.style.height = `${newHeight}px`
 }
 
@@ -446,6 +446,7 @@ watch(inputValue, () => {
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
+  margin-left: auto; /* 添加这一行使按钮对齐到最右边 */
 }
 
 .chatgpt-send-button:hover {
@@ -576,7 +577,7 @@ watch(inputValue, () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
+  height: 20px;
   width: 100%;
   background-color: var(--color-primary);
   color: var(--color-secondary);
