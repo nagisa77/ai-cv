@@ -629,7 +629,7 @@ watch(inputValue, () => {
   border-radius: 10px;
   margin-bottom: 10px;
 
-  background-color: var(--color-background);
+  background-color: rgba(245, 243, 240, 0.8);
   font-size: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
