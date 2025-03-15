@@ -20,14 +20,19 @@
       </div>
       <!-- 如果在请求数据，显示加载动画 -->
       <div class="cv-page loading-container" v-if="isFetching">
-        <l-waveform class="loading-icon" size="60" stroke="3.5" speed="1" color="var(--color-primary)" />
+        <l-waveform
+          class="loading-icon"
+          size="60"
+          stroke="3.5"
+          speed="1"
+          color="var(--color-primary)"
+        />
       </div>
   
       <!-- 否则，显示插槽内容（即各自简历主体） -->
       <div v-else class="cv-page">
         <!-- 
-          将要在这里渲染不同风格的简历模板（CreativeModern、Default、GeneralSimple 等），
-          由子组件通过 <slot> 注入。
+          不同简历风格（CreativeModern、Default、GeneralSimple 等）通过 <slot> 注入 
         -->
         <slot></slot>
       </div>
@@ -46,10 +51,10 @@
       }
     },
     computed: {
-      // 常用数据，若有更多字段可自行补充
+      // 若有更多字段可自行补充
       isFetching() {
         return metadataInstance.getIsFetching();
-      },
+      }
     },
     methods: {
       handleAddModule() {
@@ -64,13 +69,9 @@
       captureAndSaveScreenshot() {
         this.$emit('capture-and-save-screenshot');
       },
-  
-      // 处理子组件点击某个模块标题时，可能需要告知父级
       handleSelectedModuleChanged(payload) {
         this.$emit('selected-module-changed', payload);
       },
-  
-      // 这些编辑/删除等操作同理，统一做透传
       handleEdit(type, title) {
         this.$emit('edit-title', type, title);
       },
@@ -79,13 +80,16 @@
       },
       handleAddTitle(type) {
         this.$emit('add-title', type);
+      },
+      handleChangeTemplate() {
+        this.$emit('change-template');
       }
     }
-  }
+  };
   </script>
   
   <style scoped>
-  /* 基础布局与公共样式 */
+  /* ===== 基础布局与公共样式 ===== */
   
   /* 外层容器 */
   .cv-component {
@@ -111,8 +115,9 @@
     margin-bottom: 15px;
     width: 100%;
     padding: 0 15px;
+    flex-wrap: wrap; /* 当按钮过多或屏幕变窄时自动换行 */
   }
-
+  
   .cv-top-button {
     padding: 8px 15px;
     border: none;
@@ -133,7 +138,6 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
-  
   .cv-top-button:active {
     transform: translateY(0);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
@@ -142,20 +146,19 @@
   /* 页面主容器 */
   .cv-page {
     height: 80%;
-    aspect-ratio: 3 / 4; /* 3:4纸张比例，可自定义 */
+    aspect-ratio: 3 / 4; /* 3:4 纸张比例，可根据需求定制 */
     padding: 20px;
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
     background-color: white;
     border-radius: 8px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  
   .cv-page:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-3px);
   }
   
-  /* 加载状态 */
+  /* 加载状态时的容器 */
   .loading-container {
     display: flex;
     justify-content: center;
@@ -163,20 +166,28 @@
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
   }
-
+  
+  /* ===== 宽屏适配 ===== */
   @media (max-width: 1024px) {
     .cv-component {
       width: calc(70vw - 40px);
     }
   }
-
+  
+  /* ===== 小屏（移动端）适配 ===== */
   @media (max-width: 768px) {
     .cv-component {
       width: calc(90vw - 40px);
+      margin: 10px auto; /* 居中 */
+      height: auto;      /* 根据内容自适应高度 */
     }
-    
-    .cv-top-buttons {
-      flex-wrap: wrap;
+  
+    /* 如果你希望在小屏也保持固定高度，可以酌情去掉这行 */
+    .cv-page {
+      /* 去掉 aspect-ratio，避免过度拉伸 */
+      aspect-ratio: unset;
+      height: auto;
+      min-height: 60vh; /* 给个最小高度，防止内容太少时页面过小 */
     }
   }
   </style>

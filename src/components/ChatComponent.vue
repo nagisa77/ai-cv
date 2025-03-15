@@ -13,19 +13,30 @@
     <div class="messages-container" ref="messagesContainer">
       <!-- 使用 v-for 渲染所有消息 -->
       <div v-if="messages.length > 2">
-        <div v-for="(message, index) in messages" :key="index" :style="{ marginTop: index === 0 ? '80px' : '0px' }">
+        <div
+          v-for="(message, index) in messages"
+          :key="index"
+          :style="{ marginTop: index === 0 ? '80px' : '0px' }"
+        >
           <!-- GPT 消息：头像 + 蓝框并列 -->
           <template v-if="message.sender === 'gpt' && message.display">
             <div class="gpt-message-container">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="ChatGPT 头像"
-                class="chatgpt-message-icon" />
+              <img
+                src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png"
+                alt="ChatGPT 头像"
+                class="chatgpt-message-icon"
+              />
               <div class="message gpt">
                 <span>{{ extractMessage(message.text) }}</span>
               </div>
             </div>
 
-            <div class="gpt-message-container prompt-hint" v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
-              :key="index" @click="handlePromptHintClick(hint)">
+            <div
+              class="gpt-message-container prompt-hint"
+              v-for="(hint, index) in JSON.parse(message.text).prompt_hint"
+              :key="index"
+              @click="handlePromptHintClick(hint)"
+            >
               {{ hint }}
             </div>
           </template>
@@ -39,59 +50,94 @@
             </div>
           </template>
 
-          <!-- 系统消息（system） -->
-          <!-- <template v-else-if="message.sender === 'system'">
-          <div class="message system">
-            <span>{{ message.text }}</span>
-          </div>
-        </template> -->
-
-          <!-- 选择消息（choice），用户可以点击"OK"或者"我觉得还不够" -->
+          <!-- 选择消息（choice），用户可点"OK"或"不够" -->
           <template v-else-if="message.sender === 'choice' && message.display">
             <div class="choice-message-container">
               <div class="message choice">
-                <span>根据少侠提供的信息，菌菌已经<span style="color: var(--color-primary); font-weight: bold;">帮你总结</span>了以下要点:
+                <span>
+                  根据少侠提供的信息，菌菌已经
+                  <span style="color: var(--color-primary); font-weight: bold;"
+                    >帮你总结</span
+                  >
+                  了以下要点:
                 </span>
 
-                <div class="item-content-item" v-for="(point, i2) in getContentsFromMessage(message)" :key="i2">
+                <div
+                  class="item-content-item"
+                  v-for="(point, i2) in getContentsFromMessage(message)"
+                  :key="i2"
+                >
                   <div class="bullet-point-content">
-                    <span class="bullet-point">· {{ point.bullet_point }}:</span>
+                    <span class="bullet-point"
+                      >· {{ point.bullet_point }}:</span
+                    >
                     <span class="bullet-content">{{ point.content }}</span>
                   </div>
                 </div>
 
                 <div v-if="isLastMessage(message)" class="choice-buttons">
-                  <button class="choice-button-ok" @click="handleOk(message)">没问题, 展示到右边吧~! 🎉</button>
-                  <button class="choice-button-not-enough" @click="handleNotEnough">我觉得还不够, 继续对话吧:(</button>
+                  <button class="choice-button-ok" @click="handleOk(message)">
+                    没问题, 展示到右边吧~! 🎉
+                  </button>
+                  <button class="choice-button-not-enough" @click="handleNotEnough">
+                    我觉得还不够, 继续对话吧:(
+                  </button>
                 </div>
               </div>
             </div>
           </template>
         </div>
       </div>
+
+      <!-- 如果还没有足够消息，显示加载或空状态 -->
       <div class="chat-loading-container" v-else>
-        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1"
-          color="var(--color-primary)"></l-waveform>
+        <l-waveform
+          class="chat-loading-icon"
+          size="60"
+          stroke="3.5"
+          speed="1"
+          color="var(--color-primary)"
+        />
       </div>
     </div>
 
-    <!-- 输入区域 - 合并两个条件分支，保持单一结构 -->
+    <!-- 输入区域 -->
     <div class="input-area-container">
       <div class="input-area-left">
-        <textarea rows="1" v-model="inputValue"
+        <textarea
+          rows="1"
+          v-model="inputValue"
           :placeholder="'请探讨和 &quot;' + (currentSelectedTitle ? currentSelectedTitle : '当前模块') + '&quot; 有关的事情'"
-          class="chatgpt-input" ref="textareaInput" @input="adjustTextareaHeight" @keydown="handleKeyDown"
-          :disabled="isWaitingForAIResponse"></textarea>
+          class="chatgpt-input"
+          ref="textareaInput"
+          @input="adjustTextareaHeight"
+          @keydown="handleKeyDown"
+          :disabled="isWaitingForAIResponse"
+        ></textarea>
       </div>
       <!-- 发送按钮/加载状态 -->
-      <div class="chatgpt-send-button" @click="!isWaitingForAIResponse && handleSendMessage" 
-           :class="{'loading-state': isWaitingForAIResponse}">
+      <div
+        class="chatgpt-send-button"
+        @click="!isWaitingForAIResponse && handleSendMessage"
+        :class="{ 'loading-state': isWaitingForAIResponse }"
+      >
         <!-- 加载状态显示loading动画 -->
-        <l-infinity v-if="isWaitingForAIResponse" size="20" stroke="3" stroke-length="0.15" 
-           bg-opacity="0.5" speed="1.3" color="var(--color-secondary)"></l-infinity>
+        <l-infinity
+          v-if="isWaitingForAIResponse"
+          size="20"
+          stroke="3"
+          stroke-length="0.15"
+          bg-opacity="0.5"
+          speed="1.3"
+          color="var(--color-secondary)"
+        ></l-infinity>
         <!-- 非加载状态显示发送图标 -->
-        <img v-else src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg" 
-             alt="ChatGPT 图标" class="chatgpt-send-icon" />
+        <img
+          v-else
+          src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/chatgpt-send-icon.svg"
+          alt="ChatGPT 图标"
+          class="chatgpt-send-icon"
+        />
       </div>
     </div>
   </div>
@@ -100,13 +146,13 @@
 <script setup>
 import { ref, computed, watch, nextTick, defineProps, defineEmits, onMounted } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
-import { infinity } from 'ldrs'
-import { waveform } from 'ldrs'
+import { infinity, waveform } from 'ldrs'
 import metadataInstance from '@/models/metadata_model.js'
+
 waveform.register()
 infinity.register()
 
-// 父组件需传入
+// 父组件需传入的属性
 const props = defineProps({
   modules: {
     type: Array,
@@ -118,13 +164,13 @@ const props = defineProps({
   }
 })
 
-// 只向父组件发射 "update-resume" 事件
+// 本组件向父组件发射事件
 const emit = defineEmits(['update-resume'])
 
 // ChatGPT 实例 (单例)
 const chatgptInstance = ChatgptModel.getInstance()
 
-// 在组件初始化时，可以从 localStorage 中尝试读取
+// 在组件初始化时，如果已经有选中模块，则初始化对话
 onMounted(() => {
   if (props.currentSelectedTitle) {
     initChat()
@@ -134,8 +180,11 @@ onMounted(() => {
   })
 })
 
+/** 
+ * 如果是首次进入该模块（messages 只有 system 或为空），先触发一次发送 
+ */
 function initChat() {
-  if (messages.value.length == 1) {
+  if (messages.value.length === 1) {
     const { type, title } = activeModule.value
     chatgptInstance.sendMessage(
       type,
@@ -156,7 +205,7 @@ const messagesContainer = ref(null)
 const textareaInput = ref(null)
 
 /**
- * 计算：根据 currentSelectedTitle，找到对应模块
+ * 根据父组件传入的 currentSelectedTitle，找出当前对应模块
  */
 const activeModule = computed(() => {
   return (
@@ -170,7 +219,7 @@ const currentJobTitle = computed(() => {
 })
 
 /**
- * 根据 activeModule 计算出对应的消息
+ * 拿到当前模块的所有消息
  */
 const messages = computed(() => {
   const { type, title } = activeModule.value
@@ -178,31 +227,63 @@ const messages = computed(() => {
   return chatgptInstance.getMessagesForTitle(type, title)
 })
 
+/**
+ * 判断 GPT 是否在处理中（即最后一条消息是用户发的，还没等到 GPT 回复）
+ */
 const isWaitingForAIResponse = computed(() => {
-  return messages.value.length > 1 && messages.value[messages.value.length - 1].sender === 'me'
+  // 简单判断：最后一条消息是 'me' 并且已 display
+  return (
+    messages.value.length > 1 &&
+    messages.value[messages.value.length - 1].sender === 'me'
+  )
 })
 
+/**
+ * 发送消息按钮点击
+ */
 function handleSendMessage() {
   const trimmedValue = inputValue.value.trim()
   if (!trimmedValue) return
 
   const { type, title } = activeModule.value
+  if (!type || !title) {
+    console.warn('当前未选择模块，无法发送聊天内容')
+    return
+  }
+
+  // 如果上一条是 'choice'，说明用户没点 OK 或 Not Enough；可加额外提示
   let extra_message = ''
   if (messages.value[messages.value.length - 1].sender === 'choice') {
-    extra_message = '用户没有点OK，或者Not Enough，尝试继续跟用户聊，先不再觉得is_enough, 过一会信息再次充足时，再将is_enough设置为true'
+    extra_message =
+      '用户没有点OK，或者Not Enough，尝试继续对话，先不判断is_enough，过一会信息充足时再is_enough=true'
   }
-  chatgptInstance.sendMessage(type, title, trimmedValue, true, false, extra_message)
+
+  // 发送给 ChatGPT
+  chatgptInstance.sendMessage(
+    type,
+    title,
+    trimmedValue,
+    true,    // isUser = true
+    false,   // overrideIsEnough
+    extra_message
+  )
 
   // 清空输入框
   inputValue.value = ''
 }
 
+/** 
+ * 是否是最后一条消息
+ */
 function isLastMessage(message) {
-  return messages.value.length > 0 && messages.value[messages.value.length - 1] === message
+  return (
+    messages.value.length > 0 &&
+    messages.value[messages.value.length - 1] === message
+  )
 }
 
-/**
- * 解析 GPT 消息中的 JSON 并提取 message 字段
+/** 
+ * 解析 GPT 返回 JSON 中的 message 字段
  */
 function extractMessage(gptText) {
   try {
@@ -214,8 +295,8 @@ function extractMessage(gptText) {
 }
 
 /**
- * 监听 messages 变化，一旦 GPT 发来新消息，就检查 is_enough 逻辑；
- * 如果 is_enough=true，则插入一个"choice"类型的消息，让用户选择
+ * 监听 messages 变化，一旦 GPT 发来新消息，就检查 is_enough；
+ * 如果 is_enough=true，则插入一个 "choice" 消息
  */
 watch(
   () => messages.value,
@@ -227,7 +308,7 @@ watch(
       try {
         const parsedData = JSON.parse(lastMessage.text)
         if (parsedData.is_enough) {
-          // 新增：往消息列表里再插入一个 choice 消息（和聊天内容同级）
+          // 往消息列表里再插入一个 choice 类型消息
           const { type, title } = activeModule.value
           chatgptInstance.addMessage(type, title, {
             sender: 'choice',
@@ -241,16 +322,13 @@ watch(
     }
 
     await nextTick()
-    if (messagesContainer.value) {
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
-    }
+    scrollToBottom()
   },
   { deep: true }
 )
 
-
-/**
- * 监听 currentSelectedTitle 的变化
+/** 
+ * 监听当前选中模块的变化 
  */
 watch(
   () => props.currentSelectedTitle,
@@ -260,35 +338,33 @@ watch(
   }
 )
 
+/** 
+ * 点击提示 hint（相当于快捷输入） 
+ */
 function handlePromptHintClick(hint) {
   try {
     const { type, title } = activeModule.value
-    chatgptInstance.sendMessage(
-      type,
-      title,
-      "接下来我要讨论 " + hint,
-      true
-    )
+    chatgptInstance.sendMessage(type, title, "接下来我要讨论 " + hint, true)
   } catch (e) {
-    console.error('choiceMessage.text 不是 JSON', e)
+    console.error('message.text 不是 JSON', e)
   }
 }
 
-/**
- * 用户点击"OK"时调用
+/** 
+ * 用户点击"OK" 
  */
 function handleOk(choiceMessage) {
   try {
     const parsed = JSON.parse(choiceMessage.text)
-    // 如果解析成功，拿到 meta_data，发射事件
+    // 拿到 meta_data，向父组件发射事件，以更新简历
     emit('update-resume', parsed.meta_data)
-    // emit('close-chat')
 
+    // 同时再和 ChatGPT 互动，告诉它已经选了 OK
     const { type, title } = activeModule.value
     chatgptInstance.sendMessage(
       type,
       title,
-      "我现在觉得OK了，已经选择了总结到右边! 基于现在已有的内容，给出可以进一步优化的建议或进一步挖掘其他的亮点，is_enough 请先设置为 false",
+      "我现在觉得OK了，已经选择了总结到右边! 基于现在已有的内容，给出可以进一步优化的建议或再挖掘亮点，is_enough先设置为false",
       false,
       true
     )
@@ -297,34 +373,39 @@ function handleOk(choiceMessage) {
   }
 }
 
+/** 
+ * 从 "choice" 消息中取出简历的内容
+ */
 function getContentsFromMessage(message) {
-  const parsed = JSON.parse(message.text)
-  return parsed.meta_data.resumeData.content
+  try {
+    const parsed = JSON.parse(message.text)
+    return parsed.meta_data.resumeData.content
+  } catch (e) {
+    console.error('message.text 解析失败', e)
+    return []
+  }
 }
 
-/**
- * 用户点击"我觉得还不够"时调用
+/** 
+ * 用户点击"我觉得还不够"
  */
 function handleNotEnough() {
   const predefinedMessage = '我认为总结还不够，请继续对话'
 
   const { type, title } = activeModule.value
   if (!type || !title) {
-    console.error('当前未选择有效的模块')
+    console.error('当前未选择有效的模块，无法发送')
     return
   }
 
-  // 发送预定义消息到 GPT
+  // 发送预定义消息给 GPT
   chatgptInstance.sendMessage(type, title, predefinedMessage, true)
-
-  // 可选：清空输入框（如果需要）
   inputValue.value = ''
-
-  // 可选：提示用户消息已发送
-  console.log('已发送预定义消息给GPT')
 }
 
-// 处理键盘事件：Enter 发送，Shift+Enter 换行
+/** 
+ * 回车发送，Shift+Enter 换行 
+ */
 function handleKeyDown(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault() // 阻止默认的换行行为
@@ -332,22 +413,31 @@ function handleKeyDown(e) {
   }
 }
 
-// 调整 textarea 高度以适应内容
-// ② 调整 adjustTextareaHeight，去掉 20 的下限或者改小
+/** 
+ * 自动滚动到底部 
+ */
+function scrollToBottom() {
+  if (messagesContainer.value) {
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+  }
+}
+
+/** 
+ * 调整 textarea 高度 
+ */
 function adjustTextareaHeight() {
   const textarea = textareaInput.value
   if (!textarea) return
 
-  // 先清空高度，让浏览器根据内容计算
+  // 先清空高度，让浏览器自动计算
   textarea.style.height = 'auto'
 
-  // 只用 scrollHeight 来决定
-  // 如果想保留最小高度，也可把 16 改大或改小
+  // 只用 scrollHeight 来决定；设置最大高度 120px
   const newHeight = Math.min(Math.max(textarea.scrollHeight, 16), 120)
   textarea.style.height = `${newHeight}px`
 }
 
-// 在输入值改变时调整高度
+// 当 inputValue 改变时，再次自动调整高度
 watch(inputValue, () => {
   nextTick(() => {
     adjustTextareaHeight()
@@ -357,23 +447,39 @@ watch(inputValue, () => {
 
 <style scoped>
 .chat-component {
+  /* 大屏时：占据一半宽度(减去一些外边距) */
   height: 100vh;
   width: calc(50vw - 40px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.debug-settings {
+/* 消息列表区域 */
+.messages-container {
+  height: calc(100vh - 62px - 100px); /* 62 是 state-area 占的高度，100px 预留给底部输入区 */
+  overflow-y: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* state-area 位置固定在顶部 */
+.state-area {
   position: fixed;
   display: flex;
+  flex-direction: column;
   gap: 10px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(245, 243, 240, 0.8);
+  font-size: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background-color: var(--color-header-background);
-  width: 38vw;
-
-  display: none;
 }
 
-
+/* 输入区域固定在底部 */
 .input-area-container {
   position: fixed;
   display: flex;
@@ -390,22 +496,17 @@ watch(inputValue, () => {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-/* 使用input-area-container的伪元素创建渐变遮罩 */
+/* 在输入区域上方做个渐变遮罩，让消息滚动到快底部时有渐变过渡 */
 .input-area-container:before {
   content: '';
   position: absolute;
   left: -15px;
-  /* 弥补padding和定位差异 */
   bottom: calc(100% + 1px);
-  /* 放置在容器上方 */
   width: calc(100% + 30px);
-  /* 考虑padding */
   height: 40px;
   background: linear-gradient(to top, var(--color-white), rgba(255, 255, 255, 0));
   pointer-events: none;
-  /* 不响应鼠标事件 */
   z-index: -1;
-  /* 确保在消息上层但在输入框下层 */
 }
 
 .input-area-left {
@@ -416,14 +517,11 @@ watch(inputValue, () => {
   margin-right: 15px;
 }
 
-/* ③ 减少一下 padding，让 1 行不会显得太空 */
+/* 聊天输入框 */
 .chatgpt-input {
   width: 100%;
-  /* min-height 去掉或设为 16px */
-  min-height: auto; 
-  /* 行高减小一点，避免过高 */
+  min-height: auto;
   line-height: 1.2;
-  /* 内边距适度减小 */
   padding: 4px 8px;
   border: none;
   outline: none;
@@ -435,11 +533,11 @@ watch(inputValue, () => {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }
-
 .chatgpt-input::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* 发送按钮 */
 .chatgpt-send-button {
   width: 36px;
   height: 36px;
@@ -453,14 +551,15 @@ watch(inputValue, () => {
   cursor: pointer;
   flex-shrink: 0;
   margin-left: auto;
-  /* 添加这一行使按钮对齐到最右边 */
 }
-
 .chatgpt-send-button:hover {
   background-color: var(--color-primary-hover);
   transition: background-color 0.3s ease;
 }
-
+.chatgpt-send-button.loading-state {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 .chatgpt-send-icon {
   background-color: transparent;
   filter: brightness(0) invert(1);
@@ -468,136 +567,29 @@ watch(inputValue, () => {
   height: 30px;
 }
 
-.messages-container {
-  height: calc(100vh - 62px - 100px);
-  /* 调整高度以适应更大的输入框 */
-  overflow-y: auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.choice-message-container,
-.gpt-message-container {
-  display: flex;
-  padding-left: 20px;
-  margin-bottom: 10px;
-  gap: 10px;
-  align-items: flex-start;
-  /* 使内容靠左 */
-  justify-content: flex-start;
-  /* 确保消息区域靠左 */
-}
-
-.me-message-container {
-  display: flex;
-  padding-right: 20px;
-  gap: 10px;
-  margin-bottom: 10px;
-  align-items: flex-start;
-  /* 使内容靠右 */
-  justify-content: flex-end;
-  /* 确保消息区域靠右 */
-}
-
-.message {
-  max-width: 300px;
-  padding: 10px;
-  border-radius: 15px;
-  font-size: 14px;
-}
-
-.message.gpt {
-  color: var(--color-secondary);
-  background-color: var(--color-primary);
-}
-
-.message.me {
-  background-color: var(--color-background);
-}
-
-.chatgpt-message-icon {
-  width: 30px;
-  height: 30px;
-}
-
-.message.choice {
-  max-width: 100%;
-}
-
-.bullet-point-content {
-  font-size: 10px;
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-.bullet-point-prefix {
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.bullet-point {
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.bullet-content {
-  font-size: 10px;
-  padding-left: 10px;
-}
-
-.choice-buttons {
-  display: flex;
-  margin-top: 20px;
-  gap: 15px;
-}
-
-.choice-button-ok {
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
-  border: none;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.choice-button-ok:hover {
-  background-color: var(--color-primary-hover);
-  transition: background-color 0.3s ease;
-}
-
-.choice-button-not-enough {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.choice-button-not-enough:hover {
-  background-color: var(--color-secondary-hover);
-  transition: background-color 0.3s ease;
-}
-
-.chatgpt-send-button.loading-state {
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-
-.chatgpt-input:disabled {
-  background-color: rgba(245, 243, 240, 0.3);
-  color: var(--color-gray-dark);
-  cursor: not-allowed;
-}
-
+/* loading 容器 */
 .chat-loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+/* GPT 消息、提示等 */
+.gpt-message-container,
+.prompt-hint {
+  display: flex;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.chatgpt-message-icon {
+  width: 30px;
+  height: 30px;
 }
 
 .prompt-hint {
@@ -608,30 +600,125 @@ watch(inputValue, () => {
   border: 1px solid var(--color-primary);
   padding: 3px 10px;
   color: var(--color-primary);
-  margin-left: 10px;
-  cursor: pointer;
   margin-left: 60px;
   opacity: 0.7;
+  cursor: pointer;
 }
-
 .prompt-hint:hover {
   opacity: 1;
   transition: opacity 0.3s ease;
 }
 
-.state-area {
-  position: fixed;
+/* 用户消息（me） */
+.me-message-container {
   display: flex;
-  flex-direction: column;
+  padding-right: 20px;
   gap: 10px;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
   margin-bottom: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
 
-  background-color: rgba(245, 243, 240, 0.8);
-  font-size: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* 消息内容样式 */
+.message {
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+.message.gpt {
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+.message.me {
+  background-color: var(--color-background);
+}
+.message.choice {
+  max-width: 100%;
+}
+
+/* choice 消息里的内容 */
+.choice-message-container {
+  display: flex;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.bullet-point-content {
+  font-size: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+.bullet-point {
+  font-size: 10px;
+  font-weight: bold;
+}
+.bullet-content {
+  font-size: 10px;
+  padding-left: 10px;
+}
+.choice-buttons {
+  display: flex;
+  margin-top: 20px;
+  gap: 15px;
+}
+.choice-button-ok,
+.choice-button-not-enough {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.choice-button-ok {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+.choice-button-ok:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.3s ease;
+}
+.choice-button-not-enough {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.choice-button-not-enough:hover {
+  background-color: var(--color-secondary-hover);
+  transition: background-color 0.3s ease;
+}
+
+/* ============== 移动端自适应 ============== */
+@media screen and (max-width: 768px) {
+  .chat-component {
+    width: 100vw; /* 占满宽度 */
+    height: 100vh; 
+    padding: 0;
+  }
+  .state-area {
+    position: static;
+    margin: 0;
+    background-color: rgba(245, 243, 240, 0.9);
+  }
+  .messages-container {
+    /* 减小顶部空间，让 messages 直接紧贴 state-area */
+    height: calc(100vh - 130px); 
+    /* 其中 130px 大概给 state-area + input-area-container */
+  }
+  .input-area-container {
+    /* 在小屏时也可保持固定定位，让输入框总在底部 */
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    margin: 0 auto;
+    border-radius: 15px;
+    padding: 8px 12px;
+    /* 若空间不够，可缩小外边距和阴影 */
+  }
 }
 </style>

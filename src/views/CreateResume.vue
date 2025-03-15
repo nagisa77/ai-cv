@@ -1,54 +1,113 @@
 <template>
-  <div class="app">
+  <div class="app" :class="{ 'mobile-layout': isMobile }">
     <!-- 左侧 -->
     <div class="left-container cv-container">
       <!-- 如果已选中某个title，就显示ChatComponent -->
       <div class="loading-container" v-if="isFetching">
-        <l-waveform class="chat-loading-icon" size="60" stroke="3.5" speed="1"
-        color="var(--color-primary)"></l-waveform>
+        <l-waveform
+          class="chat-loading-icon"
+          size="60"
+          stroke="3.5"
+          speed="1"
+          color="var(--color-primary)"
+        />
       </div>
       <template v-else-if="currentEditingType != ''">
-        <EditTitleComponent :currentEditingTitle="currentEditingTitle" :currentEditingType="currentEditingType"
-          @cancel-changes="handleCloseEdit" :isNewTitle="isNewTitle" @changes-submitted="handleCloseEdit" />
+        <EditTitleComponent
+          :currentEditingTitle="currentEditingTitle"
+          :currentEditingType="currentEditingType"
+          @cancel-changes="handleCloseEdit"
+          :isNewTitle="isNewTitle"
+          @changes-submitted="handleCloseEdit"
+        />
       </template>
       <template v-else-if="currentSelectedTitle != ''">
-        <ChatComponent :modules="chatModules" @update-resume="handleUpdateResume"
-          :currentSelectedTitle="currentSelectedTitle" @close-chat="handleCloseChat" />
+        <ChatComponent
+          :modules="chatModules"
+          @update-resume="handleUpdateResume"
+          :currentSelectedTitle="currentSelectedTitle"
+          @close-chat="handleCloseChat"
+        />
       </template>
       <!-- 否则，显示我们自定义的“选择模块”组件 -->
       <template v-else>
-        <SelectModuleComponent :chatModules="chatModules" @selected-module-changed="handleSelectedModuleChanged" />
+        <SelectModuleComponent
+          :chatModules="chatModules"
+          @selected-module-changed="handleSelectedModuleChanged"
+        />
       </template>
 
-      <!-- <button @click="handleChangeTemplate">修改模板</button> -->
+      <!-- 小屏下才显示：预览简历按钮 -->
+      <button
+        v-if="isMobile"
+        class="mobile-preview-button"
+        @click="handleShowPreview"
+      >
+        预览简历
+      </button>
     </div>
 
-    <!-- 右侧 -->
-    <div class="right-container cv-container">
-      <component class="resume-container" :is="currentTemplateComponent" :isNewTitle="isNewTitle" :highlightTitle="currentSelectedTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @edit-title="handleEditTitle" @cancel-changes="handleCancelChanges" @delete-title="handleDelete" 
-        @add-title="handleAddTitle" @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"/>
+    <!-- 大屏下展示右侧简历；小屏下不展示，改用弹窗 -->
+    <div class="right-container cv-container" v-if="!isMobile">
+      <component
+        class="resume-container"
+        :is="currentTemplateComponent"
+        :isNewTitle="isNewTitle"
+        :highlightTitle="currentSelectedTitle"
+        @selected-module-changed="handleSelectedModuleChanged"
+        @edit-title="handleEditTitle"
+        @cancel-changes="handleCancelChanges"
+        @delete-title="handleDelete"
+        @add-title="handleAddTitle"
+        @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
+      />
     </div>
+
+    <!-- 小屏下出现的“预览简历”弹窗，showPreview 为 true 时展示 -->
+    <transition name="fade">
+      <div class="mobile-preview-overlay" v-if="showPreview">
+        <div class="mobile-preview-dialog">
+          <div class="mobile-preview-header">
+            <span>简历预览</span>
+            <button class="close-btn" @click="showPreview = false">关闭</button>
+          </div>
+          <div class="mobile-preview-content">
+            <component
+              class="resume-container"
+              :is="currentTemplateComponent"
+              :isNewTitle="isNewTitle"
+              :highlightTitle="currentSelectedTitle"
+              @selected-module-changed="handleSelectedModuleChanged"
+              @edit-title="handleEditTitle"
+              @cancel-changes="handleCancelChanges"
+              @delete-title="handleDelete"
+              @add-title="handleAddTitle"
+              @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
+            />
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import ChatComponent from '@/components/ChatComponent.vue'
+import ChatComponent from '@/components/ChatComponent.vue';
 
-import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue'
-import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue'
-import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue'
+import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
+import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
+import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue';
 
-import SelectModuleComponent from '@/components/SelectModuleComponent.vue' 
-import EditTitleComponent from '@/components/EditTitleComponent.vue'
-import metadataInstance from '@/models/metadata_model.js'
-import ChatgptModel from '@/models/chatgpt_model.js'
-import { waveform } from 'ldrs'
-import { resumeModel } from '@/models/resume_model.js'
-import apiClient from '@/api/axios'
+import SelectModuleComponent from '@/components/SelectModuleComponent.vue';
+import EditTitleComponent from '@/components/EditTitleComponent.vue';
+import metadataInstance from '@/models/metadata_model.js';
+import ChatgptModel from '@/models/chatgpt_model.js';
+import { waveform } from 'ldrs';
+import { resumeModel } from '@/models/resume_model.js';
+import apiClient from '@/api/axios';
 
-waveform.register()
-const chatgptInstance = ChatgptModel.getInstance()
+waveform.register();
+const chatgptInstance = ChatgptModel.getInstance();
 
 export default {
   name: 'CreateResume',
@@ -58,13 +117,13 @@ export default {
     GeneralSimpleCV,
     CreativeModernCV,
     SelectModuleComponent,
-    EditTitleComponent
+    EditTitleComponent,
   },
   props: {
     templateType: {
       type: String,
-      default: 'general_simple'
-    }
+      default: 'general_simple',
+    },
   },
   created() {
     // 从路由参数获取 resumeId
@@ -72,8 +131,15 @@ export default {
     if (resumeId) {
       resumeModel.setCurrentResumeId(resumeId);
     } else {
-      resumeModel.setCurrentResumeId(null);    
+      resumeModel.setCurrentResumeId(null);
     }
+
+    // 监听窗口大小变化，实现响应式
+    window.addEventListener('resize', this.checkIsMobile);
+    this.checkIsMobile();
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.checkIsMobile);
   },
   data() {
     return {
@@ -84,103 +150,97 @@ export default {
       // 当前正在编辑的类型
       currentEditingType: '',
       // 是否是新添加的标题
-      isNewTitle: false
-    }
+      isNewTitle: false,
+
+      // 新增的响应式/预览控制
+      isMobile: false, // 是否是窄屏
+      showPreview: false, // 是否展示“简历预览”弹窗
+    };
   },
   computed: {
     isFetching() {
-      return chatgptInstance.getIsFetching()
+      return chatgptInstance.getIsFetching();
     },
     currentTemplateComponent() {
       if (this.templateType == 'default') {
-        return DefaultCV
+        return DefaultCV;
       } else if (this.templateType == 'general_simple') {
-        return GeneralSimpleCV
+        return GeneralSimpleCV;
       } else if (this.templateType == 'creative_modern') {
-        return CreativeModernCV
+        return CreativeModernCV;
       }
-
-      return DefaultCV
+      return DefaultCV;
     },
     /**
      * 动态生成聊天模块 tabs
-     * （依然从 metadata_model 中取数据，自动生成教育/工作/项目等标签）
      */
     chatModules() {
-      const result = []
-
-      // // 1) 遍历教育经历
-      // const educationList = metadataInstance.contentForType('education') || []
-      // educationList.forEach((edu, index) => {
-      //   const eduTitle = edu.title || `教育经历-${index + 1}`
-      //   result.push({
-      //     type: 'education',
-      //     title: eduTitle
-      //   })
-      // })
+      const result = [];
 
       // 2) 遍历工作经历
-      const workList = metadataInstance.contentForType('workExperience') || []
+      const workList = metadataInstance.contentForType('workExperience') || [];
       workList.forEach((work, index) => {
-        const workTitle = work.title || `工作经历-${index + 1}`
+        const workTitle = work.title || `工作经历-${index + 1}`;
         result.push({
           type: 'workExperience',
-          title: workTitle
-        })
-      })
+          title: workTitle,
+        });
+      });
 
       // 3) 遍历项目经历
-      const projectList = metadataInstance.contentForType('projectExperience') || []
+      const projectList = metadataInstance.contentForType('projectExperience') || [];
       projectList.forEach((proj, index) => {
-        const projTitle = proj.title || `项目经历-${index + 1}`
+        const projTitle = proj.title || `项目经历-${index + 1}`;
         result.push({
           type: 'projectExperience',
-          title: projTitle
-        })
-      })
+          title: projTitle,
+        });
+      });
 
-      return result
-    }
+      return result;
+    },
   },
   methods: {
+    checkIsMobile() {
+      this.isMobile = window.innerWidth < 768; 
+    },
+    handleShowPreview() {
+      this.showPreview = true;
+    },
     /**
      * 当 ChatComponent 得到 GPT 返回的简历 JSON 时
-     * 会通过 update-resume 向父组件发射
      */
     handleUpdateResume(newMetaData) {
-      console.log('handleUpdateResume newMetaData', newMetaData)
-      // 根据新数据更新 metadata 模型
-      metadataInstance.setContentForTitle(newMetaData.resumeData.title, newMetaData.resumeData)
+      console.log('handleUpdateResume newMetaData', newMetaData);
+      metadataInstance.setContentForTitle(
+        newMetaData.resumeData.title,
+        newMetaData.resumeData
+      );
     },
-
     /**
-     * 接收从 ChatComponent 发射的 "selected-module-changed" 事件
-     * 更新当前选择的标题，以便在 CV 中高亮
+     * 更新当前选择的标题（高亮）
      */
     handleSelectedModuleChanged(moduleItem) {
-      this.currentSelectedTitle = moduleItem.title
-      this.currentEditingType = ''
+      this.currentSelectedTitle = moduleItem.title;
+      this.currentEditingType = '';
     },
-
     /**
-     * 接收从 ChatComponent 发射的 "close-chat" 事件
      * 关闭当前正在讨论的标题
      */
     handleCloseChat() {
-      this.currentSelectedTitle = ''
+      this.currentSelectedTitle = '';
     },
-
     /**
-     * 接收从 CVComponent 发射的 "capture-and-save-screenshot" 事件
-     * 捕获当前页面并保存为图片
+     * 下载截图
      */
     handleCaptureAndSaveScreenshot() {
       // 获取当前简历ID
       const resumeId = this.$route.params.resumeId;
-      
+
       // 发送请求获取简历信息
-      apiClient.get(`/user/resumes/${resumeId}`)
-        .then(response => {
+      apiClient
+        .get(`/user/resumes/${resumeId}`)
+        .then((response) => {
           if (response.data.code === 20003 && response.data.data.screenshotUrl) {
             // 创建下载链接
             const link = document.createElement('a');
@@ -193,58 +253,52 @@ export default {
             console.error('获取简历截图失败:', response.data.message);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('下载简历截图时出错:', error);
         });
     },
-
     /**
-     * 接收从 CVComponent 发射的 "edit-title" 事件
-     * 更新当前正在编辑的标题
+     * 编辑某个标题
      */
     handleEditTitle(type, title) {
-      console.log('handleEditTitle', type, title)
-      this.isNewTitle = false
-      this.currentEditingTitle = title
-      this.currentEditingType = type
+      console.log('handleEditTitle', type, title);
+      this.isNewTitle = false;
+      this.currentEditingTitle = title;
+      this.currentEditingType = type;
     },
-
     /**
-     * 接收从 EditTitleComponent 发射的 "cancel-changes" 事件
-     * 取消当前正在编辑的标题
+     * 关闭编辑弹窗
      */
     handleCloseEdit() {
-      this.isNewTitle = false
-      this.currentEditingTitle = ''
-      this.currentEditingType = ''
+      this.isNewTitle = false;
+      this.currentEditingTitle = '';
+      this.currentEditingType = '';
     },
-
     /**
-     * 接收从 CVComponent 发射的 "add-title" 事件
      * 添加一个新的标题
      */
     handleAddTitle(type) {
-      this.isNewTitle = true
-      this.currentEditingTitle = ''
-      this.currentEditingType = type
+      this.isNewTitle = true;
+      this.currentEditingTitle = '';
+      this.currentEditingType = type;
     },
-
     /**
-     * 接收从 CVComponent 发射的 "delete-title" 事件
-     * 删除当前正在编辑的标题
+     * 删除
      */
     handleDelete(type, title) {
-      metadataInstance.deleteContentForTitle(type, title)
+      metadataInstance.deleteContentForTitle(type, title);
     },
-
     handleChangeTemplate() {
       this.$router.push({
         name: 'TemplateSelection',
-        params: { selectionType: 'change_resume', resumeId: this.$route.params.resumeId }
-      })
-    }
-  }
-}
+        params: {
+          selectionType: 'change_resume',
+          resumeId: this.$route.params.resumeId,
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -267,6 +321,78 @@ export default {
   width: calc(50vw - 40px);
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
+}
+
+/* ============== 小屏样式 ============== */
+@media screen and (max-width: 768px) {
+  .app.mobile-layout {
+    display: block; /* 或者 flex-direction: column; 看你需要 */
+  }
+  .right-container {
+    display: none; /* 隐藏右侧简历，改由弹窗来显示 */
+  }
+  .left-container {
+    width: 100vw;
+  }
+  .mobile-preview-button {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    z-index: 999;
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--color-primary);
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .mobile-preview-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mobile-preview-dialog {
+    background-color: #fff;
+    width: 90%;
+    height: 90%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .mobile-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: 10px;
+  }
+  .mobile-preview-content {
+    flex: 1;
+    overflow: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+  }
+  .close-btn {
+    background: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+}
+
+/* 简单的过渡动画示例 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
