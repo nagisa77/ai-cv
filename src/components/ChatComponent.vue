@@ -74,8 +74,6 @@
       </div>
     </div>
 
-    <div class="gradient-overlay"></div>
-
     <!-- 输入区（发送给ChatGPT） -->
     <div class="input-area-container" v-if="isWaitingForAIResponse">
       <div class="loading-container">
@@ -346,7 +344,7 @@ function adjustTextareaHeight() {
   textarea.style.height = 'auto'
   
   // 计算新高度，限制最大高度
-  const newHeight = Math.min(Math.max(textarea.scrollHeight, 20), 120) // 初始约2行(40px)，最多约6行(120px)
+  const newHeight = Math.min(Math.max(textarea.scrollHeight, 20), 120) // 初始约1行(20px)，最多约6行(120px)
   textarea.style.height = `${newHeight}px`
 }
 
@@ -393,15 +391,17 @@ watch(inputValue, () => {
   background-color: var(--color-white);
 }
 
-.gradient-overlay {
-  position: fixed;
-  left: 80px;
-  bottom: 80px;  /* 调整位置确保在聊天框之上 */
-  width: calc(50vw - 40px);
-  height: 40px;  /* 增加高度使过渡更明显 */
+/* 使用input-area-container的伪元素创建渐变遮罩 */
+.input-area-container:before {
+  content: '';
+  position: absolute;
+  left: -15px; /* 弥补padding和定位差异 */
+  bottom: calc(100% + 1px); /* 放置在容器上方 */
+  width: calc(100% + 30px); /* 考虑padding */
+  height: 40px;
   background: linear-gradient(to top, var(--color-background), rgba(255, 255, 255, 0));
   pointer-events: none; /* 不响应鼠标事件 */
-  z-index: 5;  /* 确保在消息上层但在输入框下层 */
+  z-index: -1; /* 确保在消息上层但在输入框下层 */
 }
 
 .input-area-left {
@@ -415,7 +415,7 @@ watch(inputValue, () => {
 
 .chatgpt-input {
   width: 100%;
-  min-height: 40px;  /* 初始约2行高度 */
+  min-height: 20px;  /* 初始约1行高度 */
   max-height: 120px; /* 最多约6行高度 */
   border: none;
   outline: none;
