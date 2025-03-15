@@ -381,14 +381,13 @@ watch(inputValue, () => {
 .input-area-container {
   position: fixed;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   padding: 10px 15px;
   justify-content: space-between;
   border-radius: 25px;
-  left: 110px;
+  left: 95px;
   bottom: 20px;
-  width: calc(38vw - 60px);
-  max-width: 500px;
+  width: calc(50vw - 40px - 30px - 30px);
   align-self: center;
   border: 1px solid var(--color-primary);
   background-color: var(--color-white);
@@ -408,6 +407,8 @@ watch(inputValue, () => {
 .input-area-left {
   display: flex;
   align-items: center;
+  background-color: azure;
+  width: 100%;
   flex: 1;
   margin-right: 15px;
 }
@@ -424,6 +425,13 @@ watch(inputValue, () => {
   resize: none;
   overflow-y: auto;
   line-height: 1.4;
+  /* 隐藏滚动条 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.chatgpt-input::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .chatgpt-send-button {
