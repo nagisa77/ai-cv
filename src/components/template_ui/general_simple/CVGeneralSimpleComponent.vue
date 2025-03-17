@@ -276,7 +276,6 @@ export default {
   left: -20px;
   background-color: var(--color-session-selected);
   border-radius: 4px;
-  z-index: -1;
 }
 
 ::v-deep .highlight-left {

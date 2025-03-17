@@ -380,7 +380,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 20px;
-  background-color: var(--color-secondary);
 }
 
 /* 按钮样式美化 */

@@ -46,6 +46,7 @@
 </template>
 
 <script>
+// import html2canvas from 'html2canvas';
 import metadataInstance from '@/models/metadata_model.js';
 import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue';
 import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue';
@@ -258,7 +259,6 @@ export default {
   left: -20px;
   background-color: var(--color-session-selected);
   border-radius: 4px;
-  z-index: -1;
 }
 
 ::v-deep .highlight-left {
