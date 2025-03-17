@@ -117,7 +117,6 @@ export default {
       // 添加延迟执行
       setTimeout(() => {
         // 参考设计稿的原始宽高（与 .cv-page-content 中的 width、height 一致）
-        const DESIGN_WIDTH = 720;
         const DESIGN_HEIGHT = 960;
 
         const pageEl = this.$refs.page;

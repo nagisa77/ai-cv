@@ -9,27 +9,27 @@
         <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
 
         <!-- General Simple 风格的主要内容 -->
-        <div style="font-family: 'Ma Shan Zheng', sans-serif;">
+        <div :style="{ '--custom-color': customColor }" style="font-family: 'Ma Shan Zheng', sans-serif;">
             <!-- Personal Information -->
-            <PersonalGeneralSimpleInfo :personalInfo="personalInfo" />
+            <PersonalGeneralSimpleInfo :personalInfo="personalInfo" :color="color" />
 
             <!-- Education Section -->
             <EducationGeneralSimpleSection :educationList="educationList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Work Experience Section -->
             <WorkGeneralSimpleSection :workList="workList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Project Experience Section -->
             <ProjectGeneralSimpleSection :projectList="projectList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Personal Summary -->
-            <SummaryGeneralSimpleSection v-if="personalSummary" :personalSummary="personalSummary" />
+            <SummaryGeneralSimpleSection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
         </div>
     </BaseCVComponent>
 </template>
@@ -56,9 +56,25 @@ export default {
         highlightTitle: {
             type: String,
             default: ''
+        },
+        color: {
+            type: String,
+            default: ''
         }
     },
     computed: {
+        customColor() {
+            switch(this.color) {
+                case 'red':
+                    return 'var(--color-primary)';
+                case 'blue':
+                    return '#3498db';
+                case 'gray':
+                    return '#95a5a6';
+                default:
+                    return this.color || 'var(--color-primary)';
+            }
+        },
         isFetching() {
             return metadataInstance.getIsFetching()
         },
@@ -134,7 +150,7 @@ export default {
   width: 100%;
   height: 1px;
   margin-top: 0px;
-  background-color: var(--color-primary);
+  background-color: var(--custom-color, var(--color-primary));
 }
 
 ::v-deep .session-title {
@@ -143,7 +159,7 @@ export default {
   font-weight: bold;
   margin: 0; 
   padding: 4px 8px;
-  background-color: var(--color-primary);
+  background-color: var(--custom-color, var(--color-primary)); 
   color: #fff;
 }
 

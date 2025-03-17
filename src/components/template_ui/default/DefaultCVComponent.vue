@@ -4,25 +4,25 @@
         @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
         @smart-fit="handleSmartFit">
         <!-- Personal Information -->
-        <PersonalInfo :personalInfo="personalInfo" />
+        <PersonalInfo :personalInfo="personalInfo" :color="color" />
 
         <!-- Education Section -->
-        <EducationSection :educationList="educationList" :highlightTitle="highlightTitle"
+        <EducationSection :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
             @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
             @add-title="handleAddTitle" />
 
         <!-- Work Experience Section -->
-        <WorkSection :workList="workList" :highlightTitle="highlightTitle"
+        <WorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
             @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
             @add-title="handleAddTitle" />
 
         <!-- Project Experience Section -->
-        <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
+        <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
             @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
             @add-title="handleAddTitle" />
 
         <!-- Personal Summary -->
-        <SummarySection v-if="personalSummary" :personalSummary="personalSummary" />
+        <SummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
     </BaseCVComponent>
 </template>
 
@@ -46,6 +46,10 @@ export default {
     },
     props: {
         highlightTitle: {
+            type: String,
+            default: ''
+        }, 
+        color: {
             type: String,
             default: ''
         }
@@ -119,6 +123,7 @@ export default {
 ::v-deep .session-title {
   font-size: 10px;
   position: relative;
+  color: v-bind('props.color');
 }
 
 ::v-deep .session-title::after {
@@ -265,5 +270,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+::v-deep .session-title-underline {
+  background-color: v-bind('props.color');
 }
 </style>

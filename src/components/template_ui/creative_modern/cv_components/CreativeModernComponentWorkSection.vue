@@ -3,7 +3,7 @@
   <section class="work-section session">
     <h2 class="session-title" @mouseenter="titleHover = true" @mouseleave="titleHover = false">工作经历
       <span v-if="titleHover" class="session-title-add-icon" @click="onAddTitleClick">
-        <svg enable-background="new 0 0 512 512" fill="var(--color-primary)" height="10px" id="Layer_1" version="1.1"
+        <svg enable-background="new 0 0 512 512" fill="white" height="10px" id="Layer_1" version="1.1"
           viewBox="0 0 512 512" width="10px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
           <path d="M256,512C114.625,512,0,397.391,0,256C0,114.609,114.625,0,256,0c141.391,0,256,114.609,256,256  
         C512,397.391,397.391,512,256,512z M256,64C149.969,64,64,149.969,64,256s85.969,192,192,192c106.047,0,192-85.969,192-192  
@@ -64,6 +64,10 @@ export default {
     enableHover: {  
       type: Boolean,
       default: true
+    },
+    color: {
+      type: String,
+      default: ''
     }
   },
   watch: {
@@ -111,3 +115,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+::v-deep .session-title {
+  color: v-bind('props.color');
+}
+
+::v-deep .session-title-underline {
+  background-color: v-bind('props.color');
+}
+</style>

@@ -16,6 +16,11 @@
   --color-background: rgb(245, 243, 240);
   --color-session-selected: rgba(236, 131, 90, 0.2);
   --color-delete-hover: #ff190036;
+
+
+  --color-cv-red: var(--color-primary);
+  --color-cv-blue: #3498db;
+  --color-cv-gray: #95a5a6;
 }
 
 html, body {

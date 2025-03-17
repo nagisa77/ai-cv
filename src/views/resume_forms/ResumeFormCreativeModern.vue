@@ -184,6 +184,12 @@ export default {
     CreativeModernSummarySection,
     UploadableImage
   },
+  props: {
+    color: {
+      type: String,
+      default: ''
+    }
+  },
   setup() {
     const toast = useToast()
     return { toast }
@@ -295,7 +301,7 @@ export default {
 
       resumeModel.isFetching = true
 
-      apiClient.post('/user/resumes', { templateType: 'creative_modern' })
+      apiClient.post('/user/resumes', { templateType: 'creative_modern', color: this.color })
         .then(response => {
           const newResume = response.data.data
 
@@ -368,7 +374,8 @@ export default {
             name: 'CreateResume',
             params: {
               templateType: 'creative_modern',
-              resumeId: newResume.resumeId
+              resumeId: newResume.resumeId,
+              color: this.color
             }
           })
 

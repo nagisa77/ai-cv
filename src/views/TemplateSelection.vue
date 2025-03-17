@@ -271,17 +271,17 @@ export default {
         if (this.selectedTemplate.id === 'general_simple') {
           this.$router.push({
             name: 'ResumeFormGeneralSimple',
-            // query: { color: this.selectedTemplate.selectedColor } // 若需要传颜色
+            params: { color: this.selectedTemplate.selectedColor }
           })
         } else if (this.selectedTemplate.id === 'default') {
           this.$router.push({
             name: 'ResumeForm',
-            // query: { color: this.selectedTemplate.selectedColor }
+            params: { color: this.selectedTemplate.selectedColor }
           })
         } else if (this.selectedTemplate.id === 'creative_modern') {
           this.$router.push({
             name: 'ResumeFormCreativeModern',
-            // query: { color: this.selectedTemplate.selectedColor }
+            params: { color: this.selectedTemplate.selectedColor }
           })
         } else {
           console.error('未找到对应的模板')
@@ -293,7 +293,7 @@ export default {
           // 将模板ID以及对应颜色等信息传给后端
           await apiClient.patch(`/user/resumes/${this.resumeId}`, {
             templateType: this.selectedTemplate.id,
-            // color: this.selectedTemplate.selectedColor // 若后端也需要颜色信息
+            color: this.selectedTemplate.selectedColor 
           })
           this.toast.success('模板修改成功')
           this.isConfirmPopupVisible = false
@@ -301,9 +301,9 @@ export default {
             name: 'CreateResume',
             params: {
               templateType: this.selectedTemplate.id,
-              resumeId: this.resumeId
+              resumeId: this.resumeId,
+              color: this.selectedTemplate.selectedColor
             }
-            // query: { color: this.selectedTemplate.selectedColor } // 同理，如需颜色
           })
         } catch (error) {
           this.toast.error('模板修改失败，请重试')
@@ -617,13 +617,13 @@ export default {
   vertical-align: middle;
 }
 .color-circle.red {
-  background-color: #e74c3c; /* 红 */
+  background-color: var(--color-cv-red); /* 红 */
 }
 .color-circle.blue {
-  background-color: #3498db; /* 蓝 */
+  background-color: var(--color-cv-blue); /* 蓝 */
 }
 .color-circle.gray {
-  background-color: #95a5a6; /* 灰 */
+  background-color: var(--color-gray); /* 灰 */
 }
 .color-circle.active {
   border-color: #333;
@@ -668,6 +668,30 @@ export default {
   }
 }
 
+/* 添加平板电脑和中等屏幕的响应式支持 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .template-container {
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 40px;
+  }
+  
+  .template-select {
+    padding-left: 40px;
+    margin-left: 40px;
+  }
+  
+  .back-button {
+    left: 60px;
+  }
+}
+
+/* 确保小型设备上至少有双栏 */
+@media (min-width: 481px) and (max-width: 768px) {
+  .template-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 480px) {
   .template-select {
     padding-left: 15px;
@@ -695,6 +719,14 @@ export default {
   .subtitle {
     font-size: 14px;
     margin-bottom: 20px;
+  }
+}
+
+/* 增加特大屏幕支持 */
+@media (min-width: 1440px) {
+  .template-container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    max-width: 1600px;
   }
 }
 

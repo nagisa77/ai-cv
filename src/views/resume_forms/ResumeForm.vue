@@ -180,6 +180,12 @@ export default {
     SummarySection,
     UploadableImage
   },
+  props: {
+    color: {
+      type: String,
+      default: ''
+    }
+  },
   setup() {
     const toast = useToast()
     return { toast }
@@ -291,7 +297,7 @@ export default {
 
       resumeModel.isFetching = true
 
-      apiClient.post('/user/resumes', { templateType: 'default' })
+      apiClient.post('/user/resumes', { templateType: 'default', color: this.color })
         .then(response => {
           const newResume = response.data.data
 
@@ -364,7 +370,8 @@ export default {
             name: 'CreateResume',
             params: {
               templateType: 'default',
-              resumeId: newResume.resumeId
+              resumeId: newResume.resumeId,
+              color: this.color
             }
           })
 

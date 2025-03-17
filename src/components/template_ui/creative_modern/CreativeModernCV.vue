@@ -14,25 +14,25 @@
         <!-- 创意 Modern 的主要内容（即原先 cv-page 里的部分） -->
         <div style="font-family: 'LXGW WenKai TC', serif;">
             <!-- Personal Information -->
-            <CreativeModernPersonalInfo :personalInfo="personalInfo" />
+            <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
 
             <!-- Education Section -->
             <CreativeModernEducationSection :educationList="educationList" :highlightTitle="highlightTitle"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
+                :color="color" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" />
 
             <!-- Work Experience Section -->
-            <CreativeModernWorkSection :workList="workList" :highlightTitle="highlightTitle"
+            <CreativeModernWorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" />
 
             <!-- Project Experience Section -->
-            <CreativeModernProjectSection :projectList="projectList" :highlightTitle="highlightTitle"
+            <CreativeModernProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" />
 
             <!-- Personal Summary -->
-            <CreativeModernSummarySection v-if="personalSummary" :personalSummary="personalSummary" />
+            <CreativeModernSummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
         </div>
     </BaseCVComponent>
 </template>
@@ -57,6 +57,10 @@ export default {
     },
     props: {
         highlightTitle: {
+            type: String,
+            default: ''
+        },
+        color: {
             type: String,
             default: ''
         }
@@ -136,7 +140,7 @@ export default {
   padding-bottom: 2px;
   position: relative;
   background-color: var(--color-primary-light);
-  color: var(--color-primary);
+  color: v-bind('props.color');
 }
 
 ::v-deep .session-title-left-line {
@@ -282,5 +286,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+::v-deep .session-title-underline {
+  background-color: v-bind('props.color');
 }
 </style>

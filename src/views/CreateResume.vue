@@ -44,6 +44,7 @@
         class="resume-container"
         :is="currentTemplateComponent"
         :isNewTitle="isNewTitle"
+        :color="color"
         :highlightTitle="currentSelectedTitle"
         @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle"
@@ -79,6 +80,7 @@
               class="resume-container"
               :is="currentTemplateComponent"
               :isNewTitle="isNewTitle"
+              :color="color"
               :highlightTitle="currentSelectedTitle"
               @selected-module-changed="handleSelectedModuleChanged"
               @edit-title="handleEditTitle"
@@ -126,6 +128,10 @@ export default {
       type: String,
       default: 'general_simple',
     },
+    color: {
+      type: String,
+      default: ''
+    }
   },
   created() {
     // 从路由参数获取 resumeId

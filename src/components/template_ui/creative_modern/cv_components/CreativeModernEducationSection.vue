@@ -111,3 +111,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+::v-deep .session-title {
+  color: v-bind('props.color');
+}
+
+::v-deep .session-title-underline {
+  background-color: v-bind('props.color');
+}
+</style>

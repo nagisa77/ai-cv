@@ -15,22 +15,25 @@ const routes = [
     component: HomeWrapper
   },
   {
-    path: '/resume-form/',
+    path: '/resume-form/:color?',
     name: 'ResumeForm',
     component: ResumeForm,
+    props: true
   },
   {
-    path: '/resume-form-general-simple',
+    path: '/resume-form-general-simple/:color?',
     name: 'ResumeFormGeneralSimple',
     component: ResumeFormGeneralSimple,
+    props: true
   },
   {
-    path: '/resume-form-creative-modern',
+    path: '/resume-form-creative-modern/:color?',
     name: 'ResumeFormCreativeModern',
     component: ResumeFormCreativeModern,
+    props: true
   },
   {
-    path: '/create-resume/:templateType/:resumeId?', // 添加可选参数
+    path: '/create-resume/:templateType/:resumeId?/:color?',
     name: 'CreateResume',
     component: CreateResume,
     props: true
