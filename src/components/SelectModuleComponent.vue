@@ -1,11 +1,18 @@
 <template>
   <div class="select-module">
-    <div class="select-module-title">请<span class="select-module-title-highlight">选择</span>一个经历...</div>
+    <div class="select-module-title">
+      请<span class="select-module-title-highlight">选择</span>一个经历...
+    </div>
     <div class="select-module-subtitle">
       Hi少侠，欢迎来到神奇的AI简历创建之旅，我是你的好伙伴简历君，你也可以叫我菌菌：）右边已经根据您提供的基础信息生成了初步的简历框架，下面就由俺来协助少侠完善它吧！请选择要先开始攻略的板块：
     </div>
     <div class="select-module-list">
-      <div class="select-module-item" v-for="module in chatModules" :key="module.title" @click="selectModule(module)">
+      <div
+        class="select-module-item"
+        v-for="module in chatModules"
+        :key="module.title"
+        @click="selectModule(module)"
+      >
         {{ module.title }}
       </div>
     </div>
@@ -32,13 +39,12 @@ export default {
 </script>
 
 <style scoped>
-
 .select-module {
+  /* 桌面端布局 */
   padding: 100px 20px;
   background-color: var(--color-background);
-
   height: calc(100vh - 200px);
-  width: calc(50vw - 40px - 40px);
+  width: calc(50vw - 80px);
 }
 
 .select-module-title {
@@ -72,12 +78,31 @@ export default {
   border-radius: 25px;
   padding: 8px 16px;
   font-size: 13px;
+  transition: all 0.3s ease;
 }
 
 .select-module-item:hover {
   background-color: var(--color-primary);
   color: white;
-  transition: all 0.3s ease;
 }
 
+/* 响应式：当屏幕宽度小于等于 768px 时，适配移动端全屏 */
+@media screen and (max-width: 768px) {
+  .select-module {
+    width: calc(100vw - 40px);         
+    height: calc(100vh - 60px);
+
+    position: fixed;
+    top: 60px;
+    left: 0;
+  }
+
+  .select-module-title {
+    font-size: 20px;
+  }
+
+  .select-module-subtitle {
+    font-size: 14px;
+  }
+}
 </style>

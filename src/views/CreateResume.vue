@@ -328,6 +328,7 @@ export default {
 
 /* 预览按钮公共样式：在大屏/小屏都可能要用到 */
 .mobile-preview-button {
+  display: none;
   border: none;
   padding: 8px 14px;
   border-radius: 20px;
@@ -354,8 +355,17 @@ export default {
     width: 100vw;
   }
 
+  .loading-container {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+  }
+
   /* 让按钮固定在右上角，避免与输入框（fixed在底部）重叠 */
   .mobile-preview-button {
+    display: block;
     position: fixed;
     top: 70px;
     right: 10px;
