@@ -251,7 +251,6 @@ export default {
   /* 如果你希望在小屏也保持固定高度，可以酌情去掉这行 */
   .cv-page {
     width: calc(90vw - 40px);
-    min-height: 60vh; /* 给个最小高度，防止内容太少时页面过小 */
   }
 }
 </style>

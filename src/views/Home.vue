@@ -388,6 +388,7 @@ export default {
 /* 保持原有样式不变 */
 .home {
   display: flex;
+  margin-left: 0;
   flex-direction: column;
 }
 
@@ -691,4 +692,130 @@ export default {
 .pay-button:hover {
 }
 
+/* 移动端响应式适配 */
+@media (max-width: 768px) {
+  /* 第一部分响应式调整 */
+  .session1 {
+    flex-direction: column;
+    height: auto;
+    padding: 50px 0;
+  }
+
+  .session1-left {
+    padding-left: 20px;
+    width: 100%;
+    height: auto;
+    padding-right: 20px;
+    order: 1;
+  }
+
+  .session1-right {
+    width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+    order: 0;
+  }
+
+  .home-image {
+    max-height: 200px;
+    object-fit: contain;
+  }
+
+  .home-title {
+    font-size: 36px;
+    text-align: center;
+  }
+
+  .home-button-content {
+    padding: 20px 30px;
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+  }
+
+  /* 第二部分响应式调整 */
+  .session2 {
+    flex-direction: column;
+    height: auto;
+    padding: 50px 0;
+  }
+
+  .session2-left {
+    margin-top: 30px;
+    width: 100%;
+    height: auto;
+    order: 1;
+    padding-bottom: 30px;
+  }
+
+  .session2-right {
+    width: 100%;
+    height: auto;
+    order: 0;
+  }
+
+  .carousel-text {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .carousel-sub-text {
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+  }
+
+  .session2-image {
+    width: 90%;
+    height: auto;
+    max-height: 300px;
+  }
+
+  /* 第三部分响应式调整 */
+  .session3 {
+    height: auto;
+    padding: 50px 0;
+  }
+
+  .pay-card-content {
+    flex-direction: column;
+    margin-top: 40px;
+    width: 90%;
+  }
+
+  .pay-card {
+    width: 80%;
+    margin-bottom: 0px;
+  }
+
+  .session3-title {
+    font-size: 24px;
+    padding: 0 20px;
+    text-align: center;
+  }
+}
+
+/* 更小屏幕的额外调整 */
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 28px;
+  }
+
+  .home-button-content {
+    margin-top: 70px;
+    width: 60%;
+    padding: 30px 10px;
+  }
+
+  .carousel-text {
+    font-size: 24px;
+  }
+
+  .create-resume-button {
+    padding: 8px 20px;
+    font-size: 16px;
+  }
+}
 </style>
