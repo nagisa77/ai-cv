@@ -29,7 +29,7 @@
       />
     </div>
 
-    <!-- 否则，显示简历主体（插槽），并将其包裹在一个固定“设计稿尺寸”的容器里 -->
+    <!-- 否则，显示简历主体（插槽），并将其包裹在一个固定"设计稿尺寸"的容器里 -->
     <div v-else class="cv-page" ref="page">
       <div class="cv-page-content" ref="pageContent">
         <!-- 
@@ -66,6 +66,17 @@ export default {
     });
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', this.fitScale);
+  },
+  // 添加 watch 选项，监听 isFetching 的变化
+  watch: {
+    isFetching(newVal, oldVal) {
+      // 当 isFetching 从 true 变为 false 时（即加载完成后）
+      if (oldVal === true && newVal === false) {
+        this.$nextTick(() => {
+          this.fitScale();
+        });
+      }
+    }
   },
   beforeUnmount() {
     // 移除监听
