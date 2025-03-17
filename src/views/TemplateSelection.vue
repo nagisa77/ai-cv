@@ -11,6 +11,7 @@
     
     <h1 class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
     <h2 class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
+
     <!-- 新增确认弹窗 -->
     <teleport to="body">
       <transition name="fade">
@@ -23,18 +24,28 @@
               </div>
 
               <div class="modal-body" @wheel.prevent="handleWheel">
-                <img ref="previewImage" :src="selectedTemplate.preview" alt="模板预览" class="modal-preview" :style="{
-                  transform: `scale(${scale})`,
-                  transformOrigin: transformOrigin
-                }">
+                <img 
+                  ref="previewImage" 
+                  :src="selectedTemplate.colorOptions[selectedTemplate.selectedColor]" 
+                  alt="模板预览" 
+                  class="modal-preview" 
+                  :style="{
+                    transform: 'scale(' + scale + ')',
+                    transformOrigin: transformOrigin
+                  }"
+                >
               </div>
 
               <div class="modal-footer">
                 <button class="modal-button cancel" @click="isConfirmPopupVisible = false">
                   取消
                 </button>
-                <button class="modal-button confirm" @click="confirmTemplate" :disabled="isModifying"
-                  :class="{ modifying: isModifying }">
+                <button 
+                  class="modal-button confirm" 
+                  @click="confirmTemplate" 
+                  :disabled="isModifying"
+                  :class="{ modifying: isModifying }"
+                >
                   确认选择
                   <span v-if="isModifying" class="loading"></span>
                 </button>
@@ -47,18 +58,30 @@
 
     <!-- 类别选项卡 -->
     <div class="category-tabs">
-      <button v-for="category in filteredCategories" :key="category"
-        :class="['tab-button', { active: currentCategory === category }]" @click="currentCategory = category">
+      <button v-for="category in filteredCategories" 
+              :key="category"
+              :class="['tab-button', { active: currentCategory === category }]" 
+              @click="currentCategory = category"
+      >
         {{ category }}
       </button>
     </div>
 
     <!-- 模板展示区 -->
     <div class="template-container">
-      <div v-for="template in filteredTemplates" :key="template.id" class="template-card"
-        @click="selectTemplate(template.id)">
+      <div 
+        v-for="template in filteredTemplates" 
+        :key="template.id" 
+        class="template-card"
+        @click="selectTemplate(template.id)"
+      >
         <div class="preview-wrapper">
-          <img :src="template.preview" alt="模板预览" class="preview-image">
+          <!-- 这里根据当前选中颜色显示对应预览图 -->
+          <img 
+            :src="template.colorOptions[template.selectedColor]" 
+            alt="模板预览" 
+            class="preview-image"
+          />
           <div class="badge" v-if="template.isNew">NEW</div>
         </div>
         <div class="template-info">
@@ -68,6 +91,15 @@
             <span v-for="tag in template.tags" :key="tag" class="tag">
               {{ tag }}
             </span>
+          </div>
+          <!-- 颜色切换区：阻止点击冒泡，避免触发整卡片的选中 -->
+          <div class="color-selector" @click.stop>
+            <span 
+              v-for="(url, color) in template.colorOptions" 
+              :key="color" 
+              :class="['color-circle', color, { active: template.selectedColor === color }]" 
+              @click="changeTemplateColor(template, color)"
+            ></span>
           </div>
         </div>
       </div>
@@ -102,48 +134,70 @@ export default {
       categories: ['热门', '通用', '社招', '校招/实习', '零经验', '英文'],
       templatesByCategory: {
         '热门': [
+          // 示例：无数据可根据需求自行添加
         ],
         '通用': [
           {
             id: 'default',
             name: '现代极简',
-            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '现代'],
-            isNew: false
+            isNew: false,
+            selectedColor: 'gray', 
+            colorOptions: {
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png'
+            }
           },
           {
             id: 'general_simple',
             name: '简约现代模板',
-            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '简约'],
-            isNew: false
+            isNew: false,
+            selectedColor: 'red',
+            colorOptions: {
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-red.png',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-blue.png',
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-gray.png'
+            }
           },
           {
             id: 'creative_modern',
             name: '创意模板, 现代',
-            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['创意', '独特'],
-            isNew: false
+            isNew: false,
+            selectedColor: 'red',
+            colorOptions: {
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-red.png',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-blue.png',
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-gray.png'
+            }
           },
         ],
         '社招': [
           {
             id: 'social',
             name: '社招模板, 现代',
-            preview: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1.png',
             description: '社招模板, 适合社招场景',
             tags: ['有趣', '社招'],
-            isNew: false
+            isNew: false,
+            selectedColor: 'red',
+            colorOptions: {
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-red.png',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-blue.png',
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-gray.png'
+            }
           },
         ],
         '校招/实习': [
+          // 示例：无数据可根据需求自行添加
         ],
         '零经验': [
+          // 示例：无数据可根据需求自行添加
         ],
         '英文': [
+          // 示例：无数据可根据需求自行添加
         ]
       }
     }
@@ -170,6 +224,7 @@ export default {
     }
   },
   methods: {
+    // 处理滚轮缩放
     handleWheel(event) {
       const img = this.$refs.previewImage
       if (!img) return
@@ -182,7 +237,7 @@ export default {
       const originX = (offsetX / rect.width) * 100
       const originY = (offsetY / rect.height) * 100
 
-      // 调整缩放比例（步长0.1）
+      // 调整缩放比例（步长0.05）
       const delta = event.deltaY > 0 ? -0.05 : 0.05
       let newScale = this.scale + delta
 
@@ -190,10 +245,11 @@ export default {
       newScale = Math.max(newScale, 1)
 
       // 更新状态
-      this.transformOrigin = `${originX}% ${originY}%`
+      this.transformOrigin = originX + '% ' + originY + '%'
       this.scale = newScale
     },
 
+    // 点击模板卡片
     selectTemplate(templateId) {
       this.scale = 1
       this.transformOrigin = '0 0'
@@ -201,47 +257,63 @@ export default {
       this.selectedTemplate = this.filteredTemplates.find(t => t.id === templateId)
       this.isConfirmPopupVisible = true
     },
+
+    // 切换模板颜色
+    changeTemplateColor(template, color) {
+      template.selectedColor = color
+    },
+
+    // 确认选择模板
     async confirmTemplate() {
       if (this.selectionType === 'create_resume') {
+        // 新建简历，直接进入对应表单（可将颜色信息也一并传入下个路由）
         this.isConfirmPopupVisible = false
         if (this.selectedTemplate.id === 'general_simple') {
           this.$router.push({
             name: 'ResumeFormGeneralSimple',
+            // query: { color: this.selectedTemplate.selectedColor } // 若需要传颜色
           })
         } else if (this.selectedTemplate.id === 'default') {
           this.$router.push({
             name: 'ResumeForm',
+            // query: { color: this.selectedTemplate.selectedColor }
           })
         } else if (this.selectedTemplate.id === 'creative_modern') {
           this.$router.push({
             name: 'ResumeFormCreativeModern',
+            // query: { color: this.selectedTemplate.selectedColor }
           })
         } else {
           console.error('未找到对应的模板')
         }
       } else if (this.selectionType === 'change_resume') {
+        // 修改已有简历的模板
         this.isModifying = true // 进入修改状态
         try {
+          // 将模板ID以及对应颜色等信息传给后端
           await apiClient.patch(`/user/resumes/${this.resumeId}`, {
-            templateType: this.selectedTemplate.id
-          });
-          this.toast.success('模板修改成功');
-          this.isConfirmPopupVisible = false;
+            templateType: this.selectedTemplate.id,
+            // color: this.selectedTemplate.selectedColor // 若后端也需要颜色信息
+          })
+          this.toast.success('模板修改成功')
+          this.isConfirmPopupVisible = false
           this.$router.push({
             name: 'CreateResume',
             params: {
               templateType: this.selectedTemplate.id,
               resumeId: this.resumeId
             }
-          });
+            // query: { color: this.selectedTemplate.selectedColor } // 同理，如需颜色
+          })
         } catch (error) {
-          this.toast.error('模板修改失败，请重试');
-          console.error('模板修改失败:', error);
+          this.toast.error('模板修改失败，请重试')
+          console.error('模板修改失败:', error)
         } finally {
           this.isModifying = false // 无论成功失败都重置状态
         }
       }
     },
+
     // 添加返回方法
     goBack() {
       if (this.selectionType === 'change_resume' && this.resumeId) {
@@ -249,10 +321,10 @@ export default {
         this.$router.push({
           name: 'CreateResume',
           params: { resumeId: this.resumeId }
-        });
+        })
       } else {
         // 否则返回上一页
-        this.$router.go(-1);
+        this.$router.go(-1)
       }
     }
   }
@@ -338,14 +410,12 @@ export default {
   box-shadow: 0 4px 10px rgba(204, 124, 94, 0.25);
 }
 
-/* 在原有样式基础上增加禁用状态样式 */
 .modal-button.confirm:disabled {
   background: var(--color-primary-disabled);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-/* 增加加载动画 */
 .modal-button.confirm.modifying::after {
   content: "";
   display: inline-block;
@@ -531,6 +601,34 @@ export default {
 .tag:hover {
   background: rgba(204, 124, 94, 0.2);
 }
+
+/* 颜色选择器样式 */
+.color-selector {
+  margin-top: 12px;
+}
+.color-circle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  vertical-align: middle;
+}
+.color-circle.red {
+  background-color: #e74c3c; /* 红 */
+}
+.color-circle.blue {
+  background-color: #3498db; /* 蓝 */
+}
+.color-circle.gray {
+  background-color: #95a5a6; /* 灰 */
+}
+.color-circle.active {
+  border-color: #333;
+}
+
 
 @media (max-width: 768px) {
   .template-select {
