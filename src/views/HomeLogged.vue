@@ -675,45 +675,10 @@ export default {
   }
 }
 
-/* 优化顶部按钮区域的响应式布局 */
-@media (max-width: 576px) {
-  .home-card-left-top-buttons-container {
-    gap: 10px;
-  }
-  
-  .btn {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-  }
-  
-  .btn-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .resume-tabs {
-    padding: 0 10px;
-  }
-  
-  .resume-tab {
-    padding: 14px 16px;
-    font-size: 14px;
-  }
-  
-  .resume-view {
-    padding: 16px;
-  }
-  
-  .resume-section-title {
-    font-size: 18px;
-  }
-}
-
 /* 简历网格布局的优化 */
 .resume-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
   gap: 20px;
 }
 
@@ -952,4 +917,44 @@ export default {
   color: #888;
   font-size: 14px;
 }
+
+/* 优化顶部按钮区域的响应式布局 */
+@media (max-width: 576px) {
+  .home-card-left-top-buttons-container {
+    gap: 10px;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .resume-tabs {
+    padding: 0 10px;
+  }
+  
+  .resume-tab {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .resume-view {
+    padding: 16px;
+  }
+  
+  .resume-section-title {
+    font-size: 18px;
+  }
+
+  .resume-grid {
+    grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
+  }
+}
+
 </style>

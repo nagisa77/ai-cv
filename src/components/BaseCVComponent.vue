@@ -62,10 +62,10 @@ export default {
   mounted() {
     // 初次挂载后，进行一次缩放适配
     this.$nextTick(() => {
-      this.fitScale();
+      this.fitScale(1000);
     });
     // 监听窗口大小变化，动态缩放（可自行去掉）
-    window.addEventListener('resize', this.fitScale);
+    window.addEventListener('resize', () => this.fitScale(1000));
   },
   // 添加 watch 选项，监听 isFetching 的变化
   watch: {
@@ -80,7 +80,7 @@ export default {
   },
   beforeUnmount() {
     // 移除监听
-    window.removeEventListener('resize', this.fitScale);
+    window.removeEventListener('resize', () => this.fitScale(1000));
   },
   methods: {
     handleAddModule() {
@@ -113,7 +113,7 @@ export default {
     /**
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
      */
-    fitScale() {
+    fitScale(delay = 0) {
       // 添加延迟执行
       setTimeout(() => {
         // 参考设计稿的原始宽高（与 .cv-page-content 中的 width、height 一致）
@@ -136,7 +136,7 @@ export default {
         // 应用 transform 缩放
         // pageContentEl.style.transform = `scale(${finalScale})`;
         pageContentEl.style.transform = `scale(${scaleH})`;
-      }, 0); // 延迟100毫秒执行
+      }, delay); // 延迟100毫秒执行
     }
   }
 };

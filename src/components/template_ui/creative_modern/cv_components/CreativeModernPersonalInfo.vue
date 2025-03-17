@@ -35,14 +35,21 @@ export default {
 .name {
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: 2px; /* 减小名字下方的间距 */
+  line-height: 1.1; /* 减小行高 */
 }
 
 .info-session {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0px;
 }
 
 .email-phone {
   font-size: 12px;
+  margin-top: 0; /* 移除上方间距 */
+  line-height: 1; /* 减小行高 */
 }
 
 .avatar {
