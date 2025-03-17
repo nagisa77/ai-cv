@@ -713,7 +713,7 @@ export default {
 /* 简历网格布局的优化 */
 .resume-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
   gap: 20px;
 }
 

@@ -36,15 +36,6 @@
           @selected-module-changed="handleSelectedModuleChanged"
         />
       </template>
-
-      <!-- 小屏下才显示：预览简历按钮 -->
-      <button
-        v-if="isMobile"
-        class="mobile-preview-button"
-        @click="handleShowPreview"
-      >
-        预览简历
-      </button>
     </div>
 
     <!-- 大屏下展示右侧简历；小屏下不展示，改用弹窗 -->
@@ -62,6 +53,18 @@
         @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
       />
     </div>
+
+    <!-- 
+      新增一个按钮，统一使用同一个 .mobile-preview-button，
+      让它在小屏下显示并固定到右上角。大屏下也可以显示或隐藏。
+      这里演示大屏也显示，只是样式不同（也可加 v-if="isMobile" 做区分）。
+    -->
+    <button
+      class="mobile-preview-button"
+      @click="handleShowPreview"
+    >
+      预览简历 >>
+    </button>
 
     <!-- 小屏下出现的“预览简历”弹窗，showPreview 为 true 时展示 -->
     <transition name="fade">
@@ -93,7 +96,6 @@
 
 <script>
 import ChatComponent from '@/components/ChatComponent.vue';
-
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
 import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
 import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCVComponent.vue';
@@ -324,10 +326,26 @@ export default {
   align-items: center;
 }
 
+/* 预览按钮公共样式：在大屏/小屏都可能要用到 */
+.mobile-preview-button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background-color: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.mobile-preview-button:hover {
+  background-color: var(--color-primary-hover);
+  transition: background-color 0.3s ease;
+}
+
 /* ============== 小屏样式 ============== */
 @media screen and (max-width: 768px) {
   .app.mobile-layout {
-    display: block; /* 或者 flex-direction: column; 看你需要 */
+    display: block;
   }
   .right-container {
     display: none; /* 隐藏右侧简历，改由弹窗来显示 */
@@ -335,18 +353,15 @@ export default {
   .left-container {
     width: 100vw;
   }
+
+  /* 让按钮固定在右上角，避免与输入框（fixed在底部）重叠 */
   .mobile-preview-button {
     position: fixed;
-    right: 15px;
-    bottom: 15px;
+    top: 70px;
+    right: 10px;
     z-index: 999;
-    padding: 10px 20px;
-    border: none;
-    background-color: var(--color-primary);
-    color: #fff;
-    border-radius: 20px;
-    cursor: pointer;
   }
+  
   .mobile-preview-overlay {
     position: fixed;
     inset: 0;

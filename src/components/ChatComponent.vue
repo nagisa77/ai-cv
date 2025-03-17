@@ -699,8 +699,10 @@ watch(inputValue, () => {
     padding: 0;
   }
   .state-area {
-    position: static;
+    position: fixed;
     margin: 0;
+    top: 70px;
+    left: 10px;
     background-color: rgba(245, 243, 240, 0.9);
   }
   .messages-container {
