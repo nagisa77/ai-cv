@@ -264,7 +264,8 @@ export default {
         name: 'CreateResume',
         params: {
           templateType: resume.templateType,
-          resumeId: resume.resumeId
+          resumeId: resume.resumeId,
+          color: resume.color
         }
       })
     },
@@ -644,6 +645,7 @@ export default {
 @media (max-width: 768px) {
   .home-logged {
     margin-left: 0;
+    margin-top: 0;
   }
   
   .home-logged-left,
@@ -953,7 +955,16 @@ export default {
   }
 
   .resume-grid {
-    grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 5px;
+  }
+
+  .resume-name {
+    font-size: 10px;
+  }
+
+  .resume-date {
+    font-size: 8px;
   }
 }
 

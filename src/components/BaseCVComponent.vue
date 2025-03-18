@@ -114,6 +114,7 @@ export default {
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
      */
     fitScale(delay = 0) {
+      console.log('delay', delay);
       // 添加延迟执行
       setTimeout(() => {
         // 参考设计稿的原始宽高（与 .cv-page-content 中的 width、height 一致）
@@ -135,7 +136,7 @@ export default {
         // 应用 transform 缩放
         // pageContentEl.style.transform = `scale(${finalScale})`;
         pageContentEl.style.transform = `scale(${scaleH})`;
-      }, delay); // 延迟100毫秒执行
+      }, 0); // 延迟100毫秒执行
     }
   }
 };
