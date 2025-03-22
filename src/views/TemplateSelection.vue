@@ -19,9 +19,9 @@
           <div class="modal-blur"></div>
           <div class="modal-wrapper">
             <div class="modal-container">
-              <div class="modal-header">
+              <!-- <div class="modal-header">
                 <h3>您确认要选择此模版吗？</h3>
-              </div>
+              </div> -->
 
               <div class="modal-body" @wheel.prevent="handleWheel">
                 <img 

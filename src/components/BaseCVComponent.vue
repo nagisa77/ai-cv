@@ -219,7 +219,7 @@ export default {
 /* 固定尺寸：与 DESIGN_WIDTH、DESIGN_HEIGHT 对应 */
 .cv-page-content {
   width: 680px;   /* 设计稿的宽度 */
-  height: 920;  /* 设计稿的高度 */
+  height: 920px;  /* 设计稿的高度 */
   padding: 20px;
   transform-origin: top left; /* 以左上角为缩放参考点 */
   /* 默认不加 transform，这里由 JS 动态赋值 scale(...) */
