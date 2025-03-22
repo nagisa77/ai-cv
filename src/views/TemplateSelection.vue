@@ -268,24 +268,14 @@ export default {
       if (this.selectionType === 'create_resume') {
         // 新建简历，直接进入对应表单（可将颜色信息也一并传入下个路由）
         this.isConfirmPopupVisible = false
-        if (this.selectedTemplate.id === 'general_simple') {
-          this.$router.push({
-            name: 'ResumeFormGeneralSimple',
-            params: { color: this.selectedTemplate.selectedColor }
-          })
-        } else if (this.selectedTemplate.id === 'default') {
-          this.$router.push({
-            name: 'ResumeForm',
-            params: { color: this.selectedTemplate.selectedColor }
-          })
-        } else if (this.selectedTemplate.id === 'creative_modern') {
-          this.$router.push({
-            name: 'ResumeFormCreativeModern',
-            params: { color: this.selectedTemplate.selectedColor }
-          })
-        } else {
-          console.error('未找到对应的模板')
-        }
+        // 使用统一的简历表单组件
+        this.$router.push({
+          name: 'ResumeFormUnified',
+          params: { 
+            templateType: this.selectedTemplate.id,
+            color: this.selectedTemplate.selectedColor 
+          }
+        })
       } else if (this.selectionType === 'change_resume') {
         // 修改已有简历的模板
         this.isModifying = true // 进入修改状态

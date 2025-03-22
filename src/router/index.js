@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeWrapper from '@/views/HomeWrapper.vue'
-import ResumeForm from '@/views/resume_forms/ResumeForm.vue'
-import ResumeFormGeneralSimple from '@/views/resume_forms/ResumeFormGeneralSimple.vue'
-import ResumeFormCreativeModern from '@/views/resume_forms/ResumeFormCreativeModern.vue'
+// import ResumeForm from '@/views/resume_forms/ResumeForm.vue'
+// import ResumeFormGeneralSimple from '@/views/resume_forms/ResumeFormGeneralSimple.vue'
+// import ResumeFormCreativeModern from '@/views/resume_forms/ResumeFormCreativeModern.vue'
+import UnifiedResumeForm from '@/views/UnifiedResumeForm.vue'
 import CreateResume from '@/views/CreateResume.vue'
 import TemplateSelection from '@/views/TemplateSelection.vue'
 import AuthPage from '@/views/AuthPage.vue'
@@ -15,23 +16,29 @@ const routes = [
     component: HomeWrapper
   },
   {
-    path: '/resume-form/:color?',
-    name: 'ResumeForm',
-    component: ResumeForm,
+    path: '/resume-form-unified/:templateType?/:color?',
+    name: 'ResumeFormUnified',
+    component: UnifiedResumeForm,
     props: true
   },
-  {
-    path: '/resume-form-general-simple/:color?',
-    name: 'ResumeFormGeneralSimple',
-    component: ResumeFormGeneralSimple,
-    props: true
-  },
-  {
-    path: '/resume-form-creative-modern/:color?',
-    name: 'ResumeFormCreativeModern',
-    component: ResumeFormCreativeModern,
-    props: true
-  },
+  // {
+  //   path: '/resume-form/:color?',
+  //   name: 'ResumeForm',
+  //   component: ResumeForm,
+  //   props: true
+  // },
+  // {
+  //   path: '/resume-form-general-simple/:color?',
+  //   name: 'ResumeFormGeneralSimple',
+  //   component: ResumeFormGeneralSimple,
+  //   props: true
+  // },
+  // {
+  //   path: '/resume-form-creative-modern/:color?',
+  //   name: 'ResumeFormCreativeModern',
+  //   component: ResumeFormCreativeModern,
+  //   props: true
+  // },
   {
     path: '/create-resume/:templateType/:resumeId?/:color?',
     name: 'CreateResume',
