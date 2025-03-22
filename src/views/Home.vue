@@ -4,19 +4,18 @@
     <div class="session1">
       <div class="session1-left">
         <h1 class="home-title animate-on-scroll" data-animation="fade-in-up">
-          AI 懂你所想，<br>让简历
-          <span class="home-title-highlight">更出众</span>
+          <span class="home-title-highlight">AI </span>懂你所想，<br>让简历更出众
         </h1>
 
         <div class="home-button-content animate-on-scroll" data-animation="fade-in-up-delay">
           <div class="home-description">AI对话式简历撰写</div>
           <p class="home-description">
-            <strong>Deepseek V3/R1 支持</strong>
+            <strong>Deepseek V3 满血版支持</strong>
           </p>
 
           <router-link to="/template-selection">
             <button class="create-resume-button animate-on-scroll" data-animation="fade-in-up-delay2">
-              与AI简历君聊聊吧 🎉
+              与AI简历君聊聊吧
             </button>
           </router-link>
         </div>
@@ -46,7 +45,7 @@
     </div>
 
     <div class="session3">
-      <div class="session3-title">套餐价格 (限时优惠👀)</div>
+      <div class="session3-title">套餐价格 (限时特惠)</div>
       <div class="pay-card-content">
         <div class="pay-card">
           <div class="pay-card-title">免费版</div>
@@ -69,7 +68,6 @@
           <div class="pay-price-subtitle">
             对所有人免费
           </div>
-          <button :disabled="true" class="pay-button">立即购买</button>
         </div>
         <div class="pay-card">
           <div class="pay-card-title">Pro版</div>
@@ -100,7 +98,6 @@
             每月价格，包年享8折优惠
           </div>
 
-          <button class="pay-button">立即购买</button>
 
         </div>
 
@@ -138,7 +135,6 @@
             每月价格，包年享8折优惠
           </div>
 
-          <button class="pay-button">立即购买</button>
         </div>
       </div>
     </div>
@@ -152,13 +148,11 @@ export default {
     return {
       texts: [
         'AI对话式简历撰写',
-        '数十种简历模版随便选',
-        'AI模拟面试体验',
+        '数十种模版随便选',
       ],
       subTexts: [
-        '通过自然对话方式快速生成专业简历内容，智能优化工作经历描述',
-        '涵盖互联网、金融、教育等行业模板，支持一键切换风格',
-        '智能面试官模拟真实面试场景，提供面试建议和评分反馈',
+        '聊着聊着，简历就写好了？？',
+        '写出老板们万分欣赏的简历！！',
       ],
       images: [
         'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/show1.png',
@@ -286,7 +280,7 @@ export default {
 }
 
 .home-button-content {
-  padding: 40px 60px;
+  padding: 40px 80px;
   background-color: var(--color-white);
   border-radius: 30px;
   display: flex;
@@ -298,7 +292,7 @@ export default {
 }
 
 .session1-left {
-  padding-left: 100px;
+  padding-left: 250px;
   width: calc(60vw - 100px);
   height: calc(100vh);
   display: flex;
@@ -316,6 +310,9 @@ export default {
 }
 
 .home-image {
+  position: relative;
+  bottom: -30px;
+  left: -30px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -393,19 +390,8 @@ export default {
 }
 
 .home-title-highlight {
-  color: var(--color-primary);
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -0.25em;
-    left: 0;
-    width: 100%;
-    height: 0.2em;
-    background: currentColor;
-    opacity: 0.2;
-  }
+  font-size: 80px;
+  font-weight: bold;
 }
 
 .text-carousel {
@@ -416,6 +402,8 @@ export default {
 }
 
 .session2-left {
+  position: relative;
+  bottom: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -425,15 +413,15 @@ export default {
 
 .carousel-text {
   margin-left: 100px;
-  color: var(--color-secondary);
-  font-size: 50px;
+  color: var(--color-black);
+  font-size: 65px;
 }
 
 .carousel-sub-text {
   margin-top: 20px;
   margin-left: 100px;
-  font-size: 20px;
-  color: var(--color-secondary);
+  font-size: 35px;
+  color: var(--color-black);
 }
 
 .fade-enter-active,
@@ -452,7 +440,7 @@ export default {
 }
 
 .create-resume-button {
-  padding: 10px 40px;
+  padding: 10px 60px;
   margin-top: 8px;
   font-size: 20px;
   background-color: var(--color-primary);
@@ -471,7 +459,7 @@ export default {
 }
 
 .home-description {
-  font-size: 20px;
+  font-size: 25px;
   color: #666;
   max-width: 600px;
 }
@@ -489,7 +477,7 @@ export default {
 .session2 {
   height: calc(100vh);
   width: 100vw;
-  background-color: var(--color-primary);
+  background-color: var(--color-secondary-dark);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -503,6 +491,9 @@ export default {
 }
 
 .session2-right {
+  position: relative;
+  bottom: 15px;
+  left: -15px;
   display: flex;
   flex-direction: column;
   justify-content: center;

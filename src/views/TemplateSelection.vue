@@ -86,12 +86,12 @@
         </div>
         <div class="template-info">
           <h3>{{ template.name }}</h3>
-          <p class="description">{{ template.description }}</p>
-          <div class="tags">
+          <!-- <p class="description">{{ template.description }}</p> -->
+          <!-- <div class="tags">
             <span v-for="tag in template.tags" :key="tag" class="tag">
               {{ tag }}
             </span>
-          </div>
+          </div> -->
           <!-- 颜色切换区：阻止点击冒泡，避免触发整卡片的选中 -->
           <div class="color-selector" @click.stop>
             <span 
@@ -452,7 +452,7 @@ export default {
 
 .template-select {
   padding-left: 80px;
-  padding-top: 80px;
+  padding-top: 50px;
   margin-left: 80px;
   background-color: var(--color-background);
   height: calc(100vh - 80px);
@@ -465,7 +465,7 @@ export default {
 }
 
 .subtitle {
-  margin-bottom: 40px;
+  margin-bottom: 23px;
   font-weight: 350;
   font-size: 18px;
   color: var(--color-black);
@@ -474,7 +474,7 @@ export default {
 .category-tabs {
   display: flex;
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 10px;
 }
@@ -557,7 +557,7 @@ export default {
 }
 
 .template-info {
-  padding: 20px;
+  padding: 10px 20px;
   border-top: 1px solid #f5f5f5;
 }
 
@@ -565,6 +565,7 @@ export default {
   margin: 0 0 10px;
   color: #333;
   font-weight: 500;
+  font-size: 18px;
 }
 
 .description {

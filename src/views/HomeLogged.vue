@@ -395,7 +395,7 @@ export default {
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
@@ -530,6 +530,16 @@ export default {
   background-color: #f0f0f0;
   border-radius: 8px;
   padding: 2px;
+}
+
+.btn-icon-import {
+  position: relative;
+  scale: 1.3;
+}
+
+.btn-icon-interview {
+  position: relative;
+  scale: 1.1;
 }
 
 .view-btn {

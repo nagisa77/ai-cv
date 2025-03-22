@@ -66,7 +66,6 @@
     
       <!-- 将底部元素包裹到一个容器中 -->
       <div class="bottom-section">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/phone_icon.svg" alt="phone" class="phone-icon">
         <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user" class="user-icon">
       </div>
     </header>
@@ -184,6 +183,7 @@ export default {
 
 .app-title-left {
   font-size: 15px;
+  margin-top: 3px;
   color: var(--color-black);
 }
 
@@ -220,10 +220,11 @@ export default {
 
 /* 用户图标样式 */
 .user-icon {
-  width: 24px;
-  height: 24px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
 }
+
 .user-icon-link {
   display: flex;
   align-items: center;
