@@ -1,3 +1,6 @@
+
+<!-- ========== UploadableImage 组件 ========== -->
+<!-- src/components/basic_ui/UploadableImage.vue -->
 <template>
   <div 
     class="uploadable-image"
@@ -42,6 +45,7 @@ import { useToast } from 'vue-toastification'
 import apiClient from '@/api/axios'
 
 export default {
+  name: 'UploadableImage',
   props: {
     width: {
       type: Number,
@@ -51,22 +55,29 @@ export default {
       type: Number,
       default: 120
     },
-    value: String // 支持v-model
+    value: {
+      type: String,
+      default: ''
+    },
+    defaultImage: {
+      type: String,
+      default: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png'
+    }
   },
   setup() {
-        const toast = useToast()
-        return { toast }
+    const toast = useToast()
+    return { toast }
   },
   data() {
     return {
       isHovered: false,
       isLoading: false,
-      currentImage: this.value
+      currentImage: this.value || this.defaultImage
     }
   },
   computed: {
     displayImage() {
-      return this.currentImage || 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png'
+      return this.currentImage
     }
   },
   methods: {
@@ -86,12 +97,14 @@ export default {
         const formData = new FormData()
         formData.append('image', file)
 
+        // 假设上传接口是 /pic，根据你的实际情况修改
         const { data } = await apiClient.post('/pic', formData, {})
 
-        console.log(data)
-
         this.currentImage = data.data.url
-        this.$emit('input', data.data.url) 
+        // 与 v-model 相兼容的写法需触发 input 事件或 update:modelValue 事件
+        this.$emit('update:value', data.data.url)
+        this.$emit('input', data.data.url)
+
         this.toast.success('图片上传成功')
       } catch (error) {
         this.toast.error('图片上传失败')
@@ -103,7 +116,7 @@ export default {
   },
   watch: {
     value(newVal) {
-      this.currentImage = newVal
+      this.currentImage = newVal || this.defaultImage
     }
   }
 }

@@ -622,19 +622,20 @@ export default {
 
 @media (max-width: 768px) {
   .template-select {
-    padding-left: 20px;
+    padding-left: 15px;
     margin-left: 0;
     padding-top: 80px;
   }
   
   .template-container {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    padding-right: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 15px;
+    gap: 15px;
   }
 
   .category-tabs {
     gap: 10px;
-    padding-right: 20px;
+    padding-right: 15px;
     overflow-x: auto;
   }
 
@@ -684,13 +685,14 @@ export default {
 
 @media (max-width: 480px) {
   .template-select {
-    padding-left: 15px;
+    padding-left: 10px;
     padding-top: 70px;
   }
   
   .template-container {
-    grid-template-columns: 1fr;
-    padding-right: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 10px;
+    gap: 10px;
   }
   
   .modal-container {
@@ -700,6 +702,25 @@ export default {
   
   .modal-preview {
     width: 100%;
+  }
+  
+  .template-info {
+    padding: 12px;
+  }
+  
+  .template-info h3 {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .description {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .tag {
+    padding: 2px 8px;
+    font-size: 10px;
   }
   
   .title {

@@ -1,8 +1,18 @@
-<!-- src/components/AppleStyleInput.vue -->
+
+<!-- ========== AppleStyleInput 组件 ========== -->
+<!-- src/components/basic_ui/AppleStyleInput.vue -->
 <template>
   <div class="form-group">
-    <input :id="id" :type="inputType" class="form-input" placeholder=" " :required="required" :value="modelValue"
-      :disabled="!enable" @input="$emit('update:modelValue', $event.target.value)" />
+    <input
+      :id="id"
+      :type="inputType"
+      class="form-input"
+      placeholder=" "
+      :required="required"
+      :value="modelValue"
+      :disabled="!enable"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
     <label class="form-label" :for="id">{{ labelText }}</label>
   </div>
 </template>
@@ -83,18 +93,18 @@ export default {
   transition: all 0.3s ease;
 }
 
-.form-input:focus+.form-label,
-.form-input:not(:placeholder-shown)+.form-label {
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label {
   top: 10px;
   left: 12px;
   font-size: 10px;
 }
 
-.form-input:focus+.form-label {
+.form-input:focus + .form-label {
   color: var(--color-primary);
 }
 
-.form-input:disabled+.form-label {
+.form-input:disabled + .form-label {
   color: var(--color-gray);
 }
 </style>

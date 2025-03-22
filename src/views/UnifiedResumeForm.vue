@@ -282,7 +282,8 @@
       </button>
     </div>
 
-    <!-- 预览窗格
+    <!-- 预览窗格（示例：可根据业务情况自由开启/关闭） -->
+    <!--
     <div class="preview-pane">
       <div v-if="selectedModule.type">
         <div class="preview-title">
@@ -299,7 +300,8 @@
           :enableHover="false"
         />
       </div>
-    </div> -->
+    </div>
+    -->
   </div>
 </template>
 
@@ -312,7 +314,7 @@ import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
 
 /**
  * ========== 2. 引入三套模板的 Education、Work、Project、PersonalInfo、Summary ========== 
- * 根据 templateType 判断要在右侧展示哪套组件。
+ * 根据 templateType 判断要在右侧展示哪一套组件。（此处注释掉，按需引入）
  */
 // default 模板
 // import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue'
@@ -351,7 +353,7 @@ export default {
   components: {
     AppleStyleInput,
     UploadableImage,
-    // 这三套模板里所有用得到的组件都先注册
+    // 以下三套模板里所有用得到的组件都先注册（按需开启）
     // EducationSection,
     // WorkSection,
     // ProjectSection,
@@ -686,22 +688,24 @@ export default {
 </script>
 
 <style scoped>
-/* 这里合并了三份 Form 的样式，可根据需要自由调整 */
-
-.container {
-  background-color: var(--color-white);
-  margin-left: 200px;
-  margin-top: 100px;
-  padding-bottom: 60px;
-  max-width: 600px;
-}
+/* ========== 布局与容器相关 ========== */
 
 .scroll-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: row; /* 默认大屏时水平布局 */
   flex-wrap: nowrap;
 }
 
+/* 主体容器：居中 + 最大宽度限制 */
+.container {
+  margin: 0 auto; /* 水平居中 */
+  margin-top: 100px;
+  padding-bottom: 60px;
+  max-width: 600px;
+  /* 可视需要在大屏上可加额外左右边距或其他样式 */
+}
+
+/* 右侧预览窗格：大屏固定定位，小屏时自动堆叠 */
 .preview-pane {
   position: fixed;
   top: 100px;
@@ -710,6 +714,7 @@ export default {
   overflow-y: auto;
 }
 
+/* 右侧预览标题 */
 .preview-title {
   font-size: 18px;
   margin-bottom: 20px;
@@ -723,10 +728,13 @@ export default {
   margin-top: 50px;
 }
 
-/* 小屏幕下自适应 */
+/* ========== 响应式处理 ========== */
+
+/* 当屏幕宽度小于 1200px 时，让预览窗口跟随布局从上往下排布 */
 @media (max-width: 1200px) {
   .scroll-container {
     flex-direction: column;
+    align-items: stretch; /* 让子元素宽度自适应 */
   }
 
   .preview-pane {
@@ -737,8 +745,19 @@ export default {
     border-top: 1px solid #ccc;
     max-width: 100%;
     height: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
+
+/* 当屏幕宽度较窄时，表单内部的行容器可自动换行，让控件单列显示 */
+@media (max-width: 768px) {
+  .form-line {
+    flex-wrap: wrap;
+  }
+}
+
+/* ========== 文字和局部样式 ========== */
 
 .title {
   margin-top: 20px;
@@ -753,6 +772,12 @@ export default {
   opacity: 0.5;
 }
 
+.highlight-content {
+  color: var(--color-primary);
+}
+
+/* ========== 基本表单 + 卡片样式 ========== */
+
 .form-line {
   display: flex;
   gap: 10px;
@@ -761,10 +786,6 @@ export default {
 
 .avatar-upload {
   margin-bottom: 10px;
-}
-
-.highlight-content {
-  color: var(--color-primary);
 }
 
 .block-title {
@@ -781,6 +802,8 @@ export default {
   margin-bottom: 15px;
   cursor: pointer;
   transition: box-shadow 0.3s ease;
+  padding: 10px; /* 给卡片内部一些间距 */
+  background: #fff;
 }
 
 .card:hover {
@@ -827,7 +850,7 @@ export default {
 
 /* 提交按钮 */
 .submit-btn {
-  width: 100%;
+  width: 90%;
   background-color: var(--color-primary);
   color: var(--color-secondary);
   border: none;
@@ -837,6 +860,10 @@ export default {
   font-size: 16px;
   font-weight: bold;
   margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
 }
 
 .submit-btn:hover {
