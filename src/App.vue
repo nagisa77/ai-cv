@@ -30,7 +30,7 @@
             <span class="nav-item">价格</span>
             <span class="nav-item">关于我们</span>
             <router-link to="/auth" class="user-icon-link">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户" class="user-icon">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户" class="user-icon user-icon-top-header">
             </router-link>
             <button class="free-trial">免费试用</button>
           </div>
@@ -191,10 +191,6 @@ export default {
   height: 40px;
 }
 
-.user-icon {
-  margin-top: 20px;
-}
-
 /* 左侧logo样式 */
 .logo-link {
   display: flex;
@@ -245,18 +241,26 @@ export default {
   font-size: 14px;
   color: var(--color-text-primary);
   cursor: default;  /* 暂时禁用点击状态 */
+  display: flex;
+  align-items: center;
 }
 
 /* 用户图标样式 */
 .user-icon {
   width: 35px;
   height: 35px;
+  margin-top: 20px;
   cursor: pointer;
+}
+
+.user-icon-top-header {
+  margin-top: 0;
 }
 
 .user-icon-link {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 /* 免费试用按钮 */
