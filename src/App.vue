@@ -46,15 +46,29 @@
     </header>
 
     <!-- 移动端菜单面板 -->
-    <div class="mobile-menu-panel" :class="{ 'menu-open': showMobileMenu }">
+    <div class="mobile-menu-panel" :class="{ 'menu-open': showMobileMenu, 'logged-in': isLoggedIn }">
       <div class="mobile-menu-items">
-        <span class="mobile-nav-item">功能</span>
-        <span class="mobile-nav-item">价格</span>
-        <span class="mobile-nav-item">关于我们</span>
-        <router-link to="/auth" class="mobile-nav-item" @click="showMobileMenu = false">
-          <span>登录/注册</span>
-        </router-link>
-        <button class="mobile-free-trial">免费试用</button>
+        <!-- 未登录状态的菜单项 -->
+        <template v-if="!isLoggedIn">
+          <span class="mobile-nav-item">功能</span>
+          <span class="mobile-nav-item">价格</span>
+          <span class="mobile-nav-item">关于我们</span>
+          <router-link to="/auth" class="mobile-nav-item" @click="showMobileMenu = false">
+            <span>登录/注册</span>
+          </router-link>
+          <button class="mobile-free-trial">免费试用</button>
+        </template>
+        
+        <!-- 登录状态的菜单项 -->
+        <template v-else>
+          <router-link to="/dashboard" class="mobile-nav-item" @click="showMobileMenu = false">
+            <span>我的简历</span>
+          </router-link>
+          <router-link to="/settings" class="mobile-nav-item" @click="showMobileMenu = false">
+            <span>账户设置</span>
+          </router-link>
+          <div class="mobile-nav-item" @click="handleLogout">退出登录</div>
+        </template>
       </div>
     </div>
 
@@ -66,7 +80,22 @@
     
       <!-- 将底部元素包裹到一个容器中 -->
       <div class="bottom-section">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user" class="user-icon">
+        <div class="user-profile" @click="showMenu = !showMenu">
+          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user" class="user-icon">
+          <div class="username mobile-username">{{ username }}</div>
+          <!-- 移动端下拉菜单 -->
+          <transition name="fade">
+            <ul v-show="showMenu" class="dropdown-menu mobile-dropdown">
+              <li @click="handleLogout">退出登录</li>
+            </ul>
+          </transition>
+        </div>
+        <!-- 移动端菜单图标 -->
+        <div class="mobile-menu-icon logged-in-menu" @click="toggleMobileMenu">
+          <div class="menu-icon-bar" :class="{ 'menu-open': showMobileMenu }"></div>
+          <div class="menu-icon-bar" :class="{ 'menu-open': showMobileMenu }"></div>
+          <div class="menu-icon-bar" :class="{ 'menu-open': showMobileMenu }"></div>
+        </div>
       </div>
     </header>
 
@@ -249,7 +278,34 @@ export default {
 .user-menu-container { position: relative; }
 .username { cursor: pointer; }
 .dropdown-menu {
-  /* 原有样式保持不变 */
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 10px 0;
+  min-width: 120px;
+  z-index: 1002;
+}
+
+.dropdown-menu li {
+  list-style: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu li:hover {
+  background-color: var(--color-secondary);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
 /* 移动端菜单图标 */
@@ -356,14 +412,17 @@ export default {
     justify-content: space-between;
     padding: 0 20px;
     box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
   
   .logo-link-left {
     flex-direction: row;
     margin-top: 0;
+    align-items: center;
   }
   
   .app-title-left {
+    margin-top: 0;
     margin-left: 10px;
   }
   
@@ -372,6 +431,7 @@ export default {
     flex-direction: row;
     margin-bottom: 0;
     gap: 20px;
+    align-items: center;
   }
   
   .user-icon {
@@ -379,8 +439,115 @@ export default {
   }
   
   .router-view {
-    padding-top: 60px !important;
     padding-left: 0 !important;
+  }
+  
+  /* 登录状态下的用户菜单移动端适配 */
+  .user-menu-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .username {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* 超小屏幕设备适配 */
+@media (max-width: 480px) {
+  .app-title, .app-title-left {
+    font-size: 14px;
+  }
+  
+  .header-logo {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .user-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .mobile-menu-panel {
+    width: 100%;
+  }
+  
+  .username {
+    max-width: 80px;
+  }
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.mobile-username {
+  display: none;
+}
+
+.mobile-dropdown {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+}
+
+.logged-in-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-username {
+    display: block;
+    margin-left: 10px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .logged-in-menu {
+    display: flex;
+    margin-left: 20px;
+  }
+  
+  /* 登录状态下的移动菜单样式 */
+  .mobile-menu-panel.logged-in {
+    z-index: 999;
+  }
+}
+
+.router-view {
+  flex: 1;
+}
+
+/* 未登录状态下的布局 */
+.router-view {
+  width: 100%;
+}
+
+/* 登录状态下的布局 */
+.header-left + .router-view {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+@media (max-width: 768px) {
+  .header-left + .router-view {
+    margin-left: 0;
+    margin-top: 60px;
+    width: 100%;
   }
 }
 </style>

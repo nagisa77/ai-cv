@@ -708,13 +708,18 @@ export default {
   }
 
   .home-image {
+    position: static;
     max-height: 200px;
     object-fit: contain;
   }
 
   .home-title {
-    font-size: 36px;
+    font-size: 30px;
     text-align: center;
+  }
+
+  .home-title-highlight {
+    font-size: 40px;
   }
 
   .home-button-content {
@@ -722,6 +727,10 @@ export default {
     margin: 0 auto;
     width: 80%;
     text-align: center;
+  }
+
+  .home-description {
+    font-size: 18px;
   }
 
   /* 第二部分响应式调整 */
@@ -732,6 +741,7 @@ export default {
   }
 
   .session2-left {
+    position: static;
     margin-top: 30px;
     width: 100%;
     height: auto;
@@ -740,6 +750,7 @@ export default {
   }
 
   .session2-right {
+    position: static;
     width: 100%;
     height: auto;
     order: 0;
@@ -748,13 +759,14 @@ export default {
   .carousel-text {
     margin-left: 20px;
     margin-right: 20px;
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
   }
 
   .carousel-sub-text {
     margin-left: 20px;
     margin-right: 20px;
+    font-size: 20px;
     text-align: center;
   }
 
@@ -774,6 +786,7 @@ export default {
     flex-direction: column;
     margin-top: 40px;
     width: 90%;
+    gap: 30px;
   }
 
   .pay-card {
@@ -786,27 +799,58 @@ export default {
     padding: 0 20px;
     text-align: center;
   }
+
+  .pay-card-title {
+    font-size: 18px;
+  }
+
+  .pay-price-title {
+    font-size: 18px;
+  }
 }
 
 /* 更小屏幕的额外调整 */
 @media (max-width: 480px) {
   .home-title {
-    font-size: 28px;
+    position: relative;
+    top: -50px;
+    font-size: 24px;
+  }
+
+  .home-title-highlight {
+    font-size: 32px;
   }
 
   .home-button-content {
-    margin-top: 70px;
-    width: 60%;
-    padding: 30px 10px;
+    position: relative;
+    top: -20px;
+    width: 80%;
+    padding: 20px 10px;
   }
 
   .carousel-text {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .carousel-sub-text {
+    font-size: 16px;
   }
 
   .create-resume-button {
     padding: 8px 20px;
     font-size: 16px;
+  }
+
+  .pay-acitvity-item-title {
+    font-size: 14px;
+  }
+
+  .pay-price-subtitle {
+    font-size: 12px;
+  }
+
+  .pay-card-subtitle {
+    font-size: 12px;
   }
 }
 </style>
