@@ -665,7 +665,7 @@ export default {
   .session1 {
     flex-direction: column;
     height: auto;
-    padding: 50px 0;
+    padding: 40px 0 60px;
   }
 
   .session1-left {
@@ -685,44 +685,56 @@ export default {
 
   .home-image {
     position: static;
-    max-height: 200px;
+    max-height: 220px;
     object-fit: contain;
+    margin: 0 auto;
+    display: block;
   }
 
   .home-title {
-    font-size: 30px;
+    font-size: 32px;
     text-align: center;
+    margin-bottom: 20px;
   }
 
   .home-title-highlight {
-    font-size: 40px;
+    font-size: 42px;
   }
 
   .home-button-content {
-    padding: 20px 30px;
+    padding: 24px 30px;
     margin: 0 auto;
-    width: 80%;
+    width: 85%;
     text-align: center;
+    border-radius: 20px;
   }
 
   .home-description {
     font-size: 18px;
   }
 
+  .create-resume-button {
+    padding: 12px 30px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
   /* 第二部分响应式调整 */
   .session2 {
     flex-direction: column;
     height: auto;
-    padding: 50px 0;
+    padding: 50px 0 70px;
   }
 
   .session2-left {
     position: static;
-    margin-top: 30px;
+    margin-top: 20px;
     width: 100%;
     height: auto;
     order: 1;
-    padding-bottom: 30px;
+    padding-bottom: 40px;
   }
 
   .session2-right {
@@ -730,32 +742,34 @@ export default {
     width: 100%;
     height: auto;
     order: 0;
+    margin-bottom: 20px;
   }
 
   .carousel-text {
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 28px;
+    margin: 0 25px;
+    font-size: 30px;
     text-align: center;
+    font-weight: bold;
   }
 
   .carousel-sub-text {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 15px 25px 0;
     font-size: 20px;
     text-align: center;
   }
 
   .session2-image {
-    width: 90%;
+    width: 85%;
     height: auto;
-    max-height: 300px;
+    max-height: 320px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
 
   /* 第三部分响应式调整 */
   .session3 {
     height: auto;
-    padding: 50px 0;
+    padding: 60px 0 80px;
   }
 
   .pay-card-content {
@@ -766,71 +780,222 @@ export default {
   }
 
   .pay-card {
-    width: 80%;
-    margin-bottom: 0px;
+    width: 85%;
+    padding: 30px;
+    margin-bottom: 5px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .pay-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .session3-title {
-    font-size: 24px;
+    font-size: 28px;
     padding: 0 20px;
     text-align: center;
+    margin-bottom: 10px;
   }
 
   .pay-card-title {
-    font-size: 18px;
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .pay-card-subtitle {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  .pay-acitvity {
+    margin-top: 25px;
+    height: auto;
+    min-height: 180px;
+    margin-bottom: 20px;
+  }
+  
+  .pay-acitvity-item {
+    font-size: 16px;
+    margin-top: 12px;
   }
 
   .pay-price-title {
-    font-size: 18px;
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .pay-price-subtitle {
+    font-size: 16px;
+    text-align: center;
   }
 
   .carousel-dots {
-    bottom: 20px;
+    bottom: 25px;
+  }
+  
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
   }
 }
 
 /* 更小屏幕的额外调整 */
 @media (max-width: 480px) {
+  .session1 {
+    padding: 30px 0 50px;
+  }
+  
   .home-title {
-    position: relative;
-    top: -50px;
-    font-size: 24px;
+    font-size: 26px;
+    line-height: 1.4;
+    margin-bottom: 15px;
   }
 
   .home-title-highlight {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   .home-button-content {
-    position: relative;
-    top: -20px;
-    width: 80%;
-    padding: 20px 10px;
+    width: 90%;
+    padding: 20px 15px;
+    border-radius: 18px;
+  }
+  
+  .home-description {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .create-resume-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  
+  .session2 {
+    padding: 40px 0 60px;
   }
 
   .carousel-text {
-    font-size: 22px;
+    font-size: 24px;
+    line-height: 1.3;
+    margin: 0 20px;
   }
 
   .carousel-sub-text {
     font-size: 16px;
+    margin: 10px 20px 0;
   }
-
-  .create-resume-button {
-    padding: 8px 20px;
-    font-size: 16px;
+  
+  .session2-image {
+    width: 90%;
+    max-height: 260px;
   }
-
-  .pay-acitvity-item-title {
+  
+  .session3 {
+    padding: 50px 0 70px;
+  }
+  
+  .session3-title {
+    font-size: 24px;
+  }
+  
+  .pay-card {
+    width: 90%;
+    padding: 25px 20px;
+  }
+  
+  .pay-card-title {
+    font-size: 20px;
+  }
+  
+  .pay-card-subtitle {
     font-size: 14px;
   }
 
-  .pay-price-subtitle {
-    font-size: 12px;
+  .pay-acitvity-item {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .pay-acitvity-item-icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
   }
 
-  .pay-card-subtitle {
-    font-size: 12px;
+  .pay-price-title {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+
+  .pay-price-subtitle {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .carousel-dots {
+    bottom: 15px;
+    gap: 10px;
+  }
+  
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+  }
+  
+  /* 添加进入视图动画效果在移动端的优化 */
+  .animate-on-scroll[data-animation="fade-in-up"],
+  .animate-on-scroll[data-animation="fade-in-up-delay"],
+  .animate-on-scroll[data-animation="fade-in-up-delay2"] {
+    transform: translateY(15px);
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* 超小屏幕的额外调整 */
+@media (max-width: 360px) {
+  .home-title {
+    font-size: 22px;
+  }
+  
+  .home-title-highlight {
+    font-size: 30px;
+  }
+  
+  .home-button-content {
+    padding: 18px 12px;
+  }
+  
+  .home-description {
+    font-size: 14px;
+  }
+  
+  .create-resume-button {
+    padding: 8px 15px;
+    font-size: 15px;
+  }
+  
+  .pay-card {
+    padding: 20px 15px;
+  }
+  
+  .pay-acitvity-item {
+    font-size: 13px;
   }
 }
 </style>
