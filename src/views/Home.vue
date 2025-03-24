@@ -56,94 +56,23 @@
     <div class="session3">
       <div class="session3-title">套餐价格 (限时特惠)</div>
       <div class="pay-card-content">
-        <div class="pay-card">
-          <div class="pay-card-title">免费版</div>
-          <div class="pay-card-subtitle">适用于体验用户</div>
+        <div class="pay-card" v-for="(card, index) in payCards" :key="index">
+          <div class="pay-card-title">{{ card.title }}</div>
+          <div class="pay-card-subtitle">{{ card.subtitle }}</div>
           <div class="pay-acitvity">
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">每日20次AI对话</div>
-            </div>
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">每日1次简历下载</div>
+            <div class="pay-acitvity-item" v-for="(feature, fIndex) in card.features" :key="fIndex">
+              <svg class="pay-acitvity-item-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M512 992C246.896 992 32 777.104 32 512 32 246.896 246.896 32 512 32 777.104 32 992 246.896 992 512 992 777.104 777.104 992 512 992ZM792.832 359.168C780.704 347.04 761.024 347.04 748.896 359.168L447.536 660.528 276.032 489.024C264.16 477.136 244.896 477.136 233.024 489.024 221.136 500.896 221.136 520.16 233.024 532.032L419.664 718.672C421.12 721.584 422.688 724.464 425.12 726.896 437.232 739.024 456.912 739.024 469.04 726.896L792.832 403.104C804.96 390.976 804.96 371.296 792.832 359.168Z" />
+              </svg>
+              <div class="pay-acitvity-item-title">{{ feature }}</div>
             </div>
           </div>
           <div class="pay-price-title">
-            0 元
+            {{ card.price }}
           </div>
           <div class="pay-price-subtitle">
-            对所有人免费
+            {{ card.priceDesc }}
           </div>
-        </div>
-        <div class="pay-card">
-          <div class="pay-card-title">Pro版</div>
-          <div class="pay-card-subtitle">适用于专业用户</div>
-          <div class="pay-acitvity">
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">每日50次AI对话</div>
-            </div>
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">每日5次简历下载</div>
-            </div>
-
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">可保存5份简历</div>
-            </div>
-          </div>
-
-          <div class="pay-price-title">
-            9.9 元
-          </div>
-          <div class="pay-price-subtitle">
-            每月价格，包年享8折优惠
-          </div>
-
-
-        </div>
-
-
-        <div class="pay-card">
-          <div class="pay-card-title">Plus版</div>
-          <div class="pay-card-subtitle">适用于职场达人</div>
-          <div class="pay-acitvity">
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">无限次AI对话</div>
-            </div>
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">无限次简历下载</div>
-            </div>
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">可保存10份简历</div>
-            </div>
-            <div class="pay-acitvity-item">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/complete.svg"
-                alt="check-circle" class="pay-acitvity-item-icon">
-              <div class="pay-acitvity-item-title">支持一键模版、字体切换</div>
-            </div>
-          </div>
-
-          <div class="pay-price-title">
-            19.9 元
-          </div>
-          <div class="pay-price-subtitle">
-            每月价格，包年享8折优惠
-          </div>
-
         </div>
       </div>
     </div>
@@ -166,6 +95,29 @@ export default {
       images: [
         'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/show1.png',
         'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/show2.png',
+      ],
+      payCards: [
+        {
+          title: '免费版',
+          subtitle: '适用于体验用户',
+          features: ['每日20次AI对话', '每日1次简历下载'],
+          price: '0 元',
+          priceDesc: '对所有人免费'
+        },
+        {
+          title: 'Pro版',
+          subtitle: '适用于专业用户',
+          features: ['每日50次AI对话', '每日5次简历下载', '可保存5份简历'],
+          price: '9.9 元 ☕️',
+          priceDesc: '每月价格，包年享8折优惠'
+        },
+        {
+          title: 'Plus版',
+          subtitle: '适用于职场达人',
+          features: ['无限次AI对话', '无限次简历下载', '可保存10份简历', '支持一键模版、字体切换'],
+          price: '19.9 元 🌭',
+          priceDesc: '每月价格，包年享8折优惠'
+        }
       ],
       currentIndex: 0,
       currentImageIndex: 0,
@@ -606,7 +558,7 @@ export default {
 
 
 .session3-title {
-  font-size: 30px;
+  font-size: 45px;
   font-weight: bold;
   color: var(--color-black);
 }
@@ -617,7 +569,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 100px;
 }
 
 .pay-card {
@@ -625,33 +577,35 @@ export default {
   width: 300px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 40px;
+  border-radius: 30px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .pay-card-title {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   color: var(--color-text-primary);
 }
 
 .pay-card-subtitle {
-  margin-top: 5px;
-  font-size: 14px;
+  margin-top: 14px;
+  font-size: 20px;
   color: var(--color-text-primary);
   opacity: 0.5;
 }
 
 .pay-acitvity {
   margin-top: 20px;
-  height: 150px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .pay-acitvity-item {
+  font-size: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -665,36 +619,16 @@ export default {
 }
 
 .pay-price-title {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   color: var(--color-text-primary);
 }
 
 .pay-price-subtitle {
-  font-size: 14px;
+  font-size: 20px;
+  margin-top: 10px;
   color: var(--color-text-primary);
   opacity: 0.5;
-}
-
-.pay-button {
-  position: relative;
-  left: -3px;
-  margin-top: 20px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.pay-button:disabled {
-  background-color: var(--color-primary-disabled);
-  cursor: not-allowed;
-}
-
-.pay-button:hover {
 }
 
 .carousel-dots {
