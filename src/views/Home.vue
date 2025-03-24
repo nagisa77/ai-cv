@@ -38,9 +38,18 @@
       </div>
 
       <div class="session2-right">
-        <!-- <transition name="fade" mode="out-in"> -->
-        <img class="session2-image" :key="currentImage" :src="currentImage">
-        <!-- </transition> -->
+        <transition name="fade" mode="out-in">
+          <img class="session2-image" :key="currentImage" :src="currentImage">
+        </transition>
+      </div>
+      
+      <div class="carousel-dots">
+        <div 
+          v-for="(_, index) in texts" 
+          :key="index" 
+          :class="['carousel-dot', { active: index === currentIndex }]"
+          @click="changeSlide(index)"
+        ></div>
       </div>
     </div>
 
@@ -171,7 +180,7 @@ export default {
       return this.subTexts[this.currentIndex];
     },
     currentImage() {
-      return this.images[this.currentImageIndex];
+      return this.images[this.currentIndex];
     }
   },
   beforeUnmount() {
@@ -181,13 +190,17 @@ export default {
     startCarousel() {
       this.interval = setInterval(() => {
         this.currentIndex = (this.currentIndex + 1) % this.texts.length;
-        this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
       }, 3000);
     },
     stopCarousel() {
       if (this.interval) {
         clearInterval(this.interval);
       }
+    },
+    changeSlide(index) {
+      this.stopCarousel();
+      this.currentIndex = index;
+      this.startCarousel();
     }
   },
   mounted() {
@@ -482,6 +495,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .session2-image {
@@ -683,6 +697,34 @@ export default {
 .pay-button:hover {
 }
 
+.carousel-dots {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary-disabled);
+  cursor: pointer;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.carousel-dot.active {
+  background-color: var(--color-primary);
+  transform: scale(1.2);
+}
+
+.carousel-dot:hover {
+  background-color: var(--color-primary-hover);
+}
+
 /* 移动端响应式适配 */
 @media (max-width: 768px) {
   /* 第一部分响应式调整 */
@@ -806,6 +848,10 @@ export default {
 
   .pay-price-title {
     font-size: 18px;
+  }
+
+  .carousel-dots {
+    bottom: 20px;
   }
 }
 
