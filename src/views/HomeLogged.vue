@@ -148,14 +148,7 @@
 
       <div class="home-logged-right-bottom">
         <div class="home-card-right-bottom">
-          <div class="recent-activity">
-            <h3>最近活动</h3>
-            <div class="activity-list">
-              <div class="activity-empty">
-                暂无活动记录
-              </div>
-            </div>
-          </div>
+          <img  class="home-card-right-bottom-img" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/CleanShot%202025-03-25%20at%2011%E2%80%AF.47.38%402x.png" alt="活动图标">
         </div>
       </div>
     </div>
@@ -319,24 +312,24 @@ export default {
 
 .home-logged-left {
   height: 100vh;
-  width: calc(60vw - 40px);
+  width: calc(65vw - 40px);
   transition: width 0.3s ease; /* 添加过渡效果 */
 }
 
 .home-logged-right {
   display: flex;
   flex-direction: column;
-  width: 40vw;
+  width: 35vw;
   transition: width 0.3s ease; /* 添加过渡效果 */
 }
 
 .home-logged-right-top {
-  height: 40vh;
+  height: 30vh;
   width: 100%;
 }
 
 .home-logged-right-bottom {
-  height: 60vh;
+  height: 70vh;
   width: 100%;
 }
 
@@ -371,6 +364,12 @@ export default {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   margin-top: 40px;
+}
+
+.home-card-right-bottom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fit;
 }
 
 /* 顶部按钮容器 */
