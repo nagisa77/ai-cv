@@ -138,10 +138,33 @@
     <div class="home-logged-right">
       <div class="home-logged-right-top">
         <div class="home-card-right-top">
-          <div class="premium-banner">
-            <h2>升级到AI简历菌专业版</h2>
-            <p>解锁全部高级功能，获得AI辅助简历优化</p>
-            <button class="premium-btn">了解更多</button>
+          <div class="date-section">
+            <div class="month">{{ currentMonth }}</div>
+            <div class="day">{{ currentDay }}</div>
+            <div class="weekday">{{ currentWeekday }}</div>
+            <div class="lunar">{{ currentLunar }}</div>
+          </div>
+          <div class="content-section">
+            <div v-if="!showTips" class="fortune-section">
+              <div class="fortune-item">
+                <span class="fortune-label fortune-label-avoid">忌</span>
+                <span class="fortune-content">{{ currentFortune.avoid }}</span>
+              </div>
+              <div class="fortune-item">
+                <span class="fortune-label fortune-label-suitable">宜</span>
+                <span class="fortune-content">{{ currentFortune.suitable }}</span>
+              </div>
+              <button class="tips-button" @click="showTips = true">
+                查看今日求职 Tips
+              </button>
+            </div>
+            <div v-if="showTips" class="tips-section">
+              <button class="back-button" @click="showTips = false">
+                <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                返回
+              </button>
+              <div class="tips-content">{{ currentTip }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -170,6 +193,40 @@ export default {
       activeTab: 'myResumes', // 默认显示"我的简历"标签页
       resumes: [],
       loading: false,
+      showTips: false,
+      currentMonth: '',
+      currentDay: '',
+      currentWeekday: '',
+      currentLunar: '',
+      currentFortune: {
+        avoid: '',
+        suitable: ''
+      },
+      currentTip: '',
+      fortunes: [
+        { avoid: '冲动购物', suitable: '制定新计划' },
+        { avoid: '熬夜追剧', suitable: '整理房间' },
+        { avoid: '沉迷刷手机', suitable: '出门晒太阳' },
+        { avoid: '加班', suitable: '吃顿美味犒劳自己' },
+        { avoid: '纠结琐事', suitable: '和朋友聚餐聊天' },
+        { avoid: '与人争执', suitable: '独处放松心情' },
+        { avoid: '忙中出错', suitable: '慢下来喝杯咖啡' },
+        { avoid: '回忆过去', suitable: '主动认识新朋友' },
+        { avoid: '偷懒拖延', suitable: '学习新技能' },
+        { avoid: '暗自烦恼', suitable: '早睡早起' }
+      ],
+      tips: [
+        '再坚持一下，你比自己想象的还要厉害！',
+        '每一步都算数，微小的进步终会累积成巨大成功。',
+        '努力从来不会白费，你所付出的，都在未来等着你。',
+        '不用害怕慢一点，只要方向对了，终点一定会到达。',
+        '你已经走了这么远，别放弃，最好的风景就在前方。',
+        '相信自己，每一次挑战都是变得更强的机会。',
+        '不完美又怎样？你勇敢尝试的样子，比完美更迷人。',
+        '只要开始行动，困难就已经输了一半。',
+        '愿你熬过所有的不安，迎来属于自己的高光时刻。',
+        '今天的你，已经比昨天更加优秀了，再加油一点点！'
+      ],
       trashResumes: [
         // 回收站数据模拟
         {
@@ -192,6 +249,9 @@ export default {
   },
   mounted() {
     this.fetchResumes()
+    this.updateDateTime()
+    this.updateFortune()
+    this.updateTip()
   },
   methods: {
     async fetchResumes() {
@@ -295,6 +355,26 @@ export default {
       
       this.trashResumes = []
       this.toast.success('回收站已清空')
+    },
+
+    updateDateTime() {
+      const now = new Date()
+      const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
+      const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      
+      this.currentMonth = months[now.getMonth()]
+      this.currentDay = now.getDate()
+      this.currentWeekday = weekdays[now.getDay()]
+      // 这里需要添加农历转换的逻辑，暂时使用占位符
+      this.currentLunar = '农历正月初一'
+    },
+    updateFortune() {
+      const randomIndex = Math.floor(Math.random() * this.fortunes.length)
+      this.currentFortune = this.fortunes[randomIndex]
+    },
+    updateTip() {
+      const randomIndex = Math.floor(Math.random() * this.tips.length)
+      this.currentTip = this.tips[randomIndex]
     }
   }
 }
@@ -354,7 +434,9 @@ export default {
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-}   
+  display: flex;
+  gap: 20px;
+}
 
 .home-card-right-bottom {
   background-color: white;
@@ -974,6 +1056,175 @@ export default {
 
   .resume-date {
     font-size: 8px;
+  }
+}
+
+.date-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #eee;
+  padding-right: 20px;
+  min-width: 200px;
+}
+
+.month {
+  font-size: 24px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.day {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.lunar {
+  font-size: 14px;
+  color: #999;
+}
+
+.content-section {
+  flex: 2;
+  position: relative;
+}
+
+.fortune-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.fortune-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fortune-label {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  min-width: 40px;
+  text-align: center;
+}
+
+.fortune-label-avoid {
+  background-color: var(--color-primary);
+}
+
+.fortune-label-suitable {
+  background-color: #333;
+}
+
+.fortune-content {
+  font-size: 16px;
+  color: #333;
+}
+
+.tips-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: var(--color-primary);
+  margin-right: 50px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tips-button:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.tips-section {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  height: 100%;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #f5f5f5;
+  transform: translateX(-2px);
+}
+
+.tips-content {
+  font-size: 18px;
+  color: #333;
+  line-height: 1.6;
+  max-width: 90%;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .home-card-right-top {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .date-section {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-right: 0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    min-width: 100%;
+  }
+
+  .content-section {
+    width: 100%;
+  }
+
+  .back-button {
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+  }
+
+  .tips-content {
+    font-size: 16px;
+    max-width: 90%;
+    padding-top: 35px;
   }
 }
 
