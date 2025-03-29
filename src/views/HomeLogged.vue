@@ -538,7 +538,7 @@ export default {
 
 <style scoped>
 .home-logged {
-  margin-left: 80px;
+  margin-left: 60px;
   background-color: var(--color-background);
   height: 100vh;
   display: flex;

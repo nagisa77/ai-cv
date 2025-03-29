@@ -207,7 +207,7 @@ export default {
   left: 0;
   display: flex;
   height: 100vh;
-  width: 80px;
+  width: 60px;
   flex-direction: column;
   background-color: var(--color-left-header-background);
   align-items: center;
@@ -246,7 +246,7 @@ export default {
 }
 
 .app-title-left {
-  font-size: 15px;
+  font-size: 13px;
   margin-top: 3px;
   color: var(--color-black);
 }
@@ -603,8 +603,8 @@ export default {
 
 /* 登录状态下的布局 */
 .header-left+.router-view {
-  margin-left: 80px;
-  width: calc(100% - 80px);
+  margin-left: 60px;
+  width: calc(100% - 60px);
 }
 
 @media (max-width: 768px) {
