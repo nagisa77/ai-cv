@@ -512,6 +512,7 @@ export default {
   overflow: hidden;
   display: flex;
   gap: 20px;
+  background-color: var(--color-left-header-background);
 }
 
 .home-card-right-bottom {
@@ -1174,34 +1175,34 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid #eee;
-  padding-right: 20px;
-  min-width: 200px;
+  border-right: 1px solid black;
+  min-width: 150px;
 }
 
 .month {
   font-size: 24px;
-  font-weight: 500;
-  color: #666;
-  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--color-black);
+  font-family: Georgia, serif;
 }
 
 .day {
-  font-size: 48px;
+  font-size: 70px;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 8px;
+  color: var(--color-black);
+  font-family: Times New Roman, serif;
 }
 
 .weekday {
   font-size: 16px;
-  color: #666;
+  font-weight: bold;
+  color: var(--color-black);
   margin-bottom: 4px;
 }
 
 .lunar {
   font-size: 14px;
-  color: #999;
+  color: var(--color-black);
 }
 
 .content-section {
@@ -1224,8 +1225,8 @@ export default {
 }
 
 .fortune-label {
-  padding: 4px 12px;
-  border-radius: 4px;
+  padding: 8px 0px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   color: white;
