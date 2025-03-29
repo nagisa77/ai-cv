@@ -3,17 +3,15 @@
     <header v-if="showTopHeader" class="header">
       <!-- 左侧logo部分 -->
       <router-link class="logo-link" to="/">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo" class="header-logo">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo"
+          class="header-logo">
         <span class="app-title">AI简历君</span>
       </router-link>
 
       <!-- 右侧导航部分 -->
       <div class="nav-right">
         <!-- 登录状态显示用户菜单 -->
-        <div v-if="isLoggedIn" 
-             class="user-menu-container"
-             @mouseenter="showMenu = true"
-             @mouseleave="showMenu = false">
+        <div v-if="isLoggedIn" class="user-menu-container" @mouseenter="showMenu = true" @mouseleave="showMenu = false">
           <div class="username">{{ username }}</div>
           <transition name="fade">
             <ul v-show="showMenu" class="dropdown-menu">
@@ -26,15 +24,19 @@
         <template v-else>
           <!-- 桌面端导航项 -->
           <div class="desktop-nav">
-            <span class="nav-item">功能</span>
-            <span class="nav-item">价格</span>
+            <!-- 点击后滚动到 session2 -->
+            <span class="nav-item" @click="scrollToSection('session2')">功能</span>
+            <!-- 点击后滚动到 session3 -->
+            <span class="nav-item" @click="scrollToSection('session3')">价格</span>
             <span class="nav-item">关于我们</span>
+
             <router-link to="/auth" class="user-icon-link">
-              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户" class="user-icon user-icon-top-header">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户"
+                class="user-icon user-icon-top-header" />
             </router-link>
             <button class="free-trial">免费试用</button>
           </div>
-          
+
           <!-- 移动端菜单图标 -->
           <div class="mobile-menu-icon" @click="toggleMobileMenu">
             <div class="menu-icon-bar" :class="{ 'menu-open': showMobileMenu }"></div>
@@ -58,7 +60,7 @@
           </router-link>
           <button class="mobile-free-trial">免费试用</button>
         </template>
-        
+
         <!-- 登录状态的菜单项 -->
         <template v-else>
           <router-link to="/dashboard" class="mobile-nav-item" @click="showMobileMenu = false">
@@ -74,14 +76,16 @@
 
     <header v-if="showLeftHeader" class="header-left">
       <router-link class="logo-link-left" to="/">
-        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo" class="header-logo">
+        <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="logo"
+          class="header-logo">
         <span class="app-title-left">AI简历君</span>
       </router-link>
-    
+
       <!-- 将底部元素包裹到一个容器中 -->
       <div class="bottom-section">
         <div class="user-profile" @click="showMenu = !showMenu">
-          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user" class="user-icon">
+          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user"
+            class="user-icon">
           <div class="username mobile-username">{{ username }}</div>
           <!-- 移动端下拉菜单 -->
           <transition name="fade">
@@ -142,6 +146,37 @@ export default {
     },
     toggleMobileMenu() {
       this.showMobileMenu = !this.showMobileMenu
+    },
+    scrollToSection(sectionId) {
+      // 判断当前是否为首页路由
+      if (this.$route.name !== 'Home') {
+        // 先跳转到首页
+        this.$router.push({ name: 'Home' }).then(() => {
+          // 跳转成功后等待DOM更新
+          this.$nextTick(() => {
+            const target = document.getElementById(sectionId)
+            if (target) {
+              // 滚动到目标元素并向下偏移100px
+              const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 60
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              })
+            }
+          })
+        })
+      } else {
+        // 已经在首页了，直接滚动
+        const target = document.getElementById(sectionId)
+        if (target) {
+          // 滚动到目标元素并向下偏移100px
+          const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 60
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }
     }
   }
 }
@@ -179,11 +214,13 @@ export default {
 
 /* 新增底部容器样式 */
 .bottom-section {
-  margin-top: auto;  /* 关键样式 - 将容器推到最底部 */
+  margin-top: auto;
+  /* 关键样式 - 将容器推到最底部 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; /* 底部留白 */
+  margin-bottom: 20px;
+  /* 底部留白 */
 }
 
 .phone-icon {
@@ -216,6 +253,7 @@ export default {
   width: 28px;
   height: 28px;
 }
+
 .app-title {
   font-size: 15px;
   color: var(--color-black);
@@ -226,14 +264,16 @@ export default {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 30px;  /* 元素间距统一控制 */
+  gap: 30px;
+  /* 元素间距统一控制 */
 }
 
 /* 桌面端导航样式 */
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 60px;  /* 确保导航项之间间距一致 */
+  gap: 60px;
+  /* 确保导航项之间间距一致 */
   position: relative;
   left: 20px;
 }
@@ -242,9 +282,11 @@ export default {
 .nav-item {
   font-size: 14px;
   color: var(--color-text-primary);
-  cursor: default;  /* 暂时禁用点击状态 */
+  cursor: default;
+  /* 暂时禁用点击状态 */
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 /* 用户图标样式 */
@@ -284,8 +326,14 @@ export default {
 }
 
 /* 保持原有下拉菜单样式不变 */
-.user-menu-container { position: relative; }
-.username { cursor: pointer; }
+.user-menu-container {
+  position: relative;
+}
+
+.username {
+  cursor: pointer;
+}
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -309,11 +357,13 @@ export default {
   background-color: var(--color-secondary);
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -409,7 +459,7 @@ export default {
   .header {
     padding: 0 20px;
   }
-  
+
   .header-left {
     position: fixed;
     top: 0;
@@ -423,18 +473,18 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
-  
+
   .logo-link-left {
     flex-direction: row;
     margin-top: 0;
     align-items: center;
   }
-  
+
   .app-title-left {
     margin-top: 0;
     margin-left: 10px;
   }
-  
+
   .bottom-section {
     margin-top: 0;
     flex-direction: row;
@@ -442,28 +492,28 @@ export default {
     gap: 20px;
     align-items: center;
   }
-  
+
   .user-icon {
     margin-top: 0;
   }
-  
+
   .router-view {
     padding-left: 0 !important;
   }
-  
+
   /* 登录状态下的用户菜单移动端适配 */
   .user-menu-container {
     display: flex;
     align-items: center;
   }
-  
+
   .username {
     max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .dropdown-menu {
     right: 0;
     left: auto;
@@ -472,24 +522,26 @@ export default {
 
 /* 超小屏幕设备适配 */
 @media (max-width: 480px) {
-  .app-title, .app-title-left {
+
+  .app-title,
+  .app-title-left {
     font-size: 14px;
   }
-  
+
   .header-logo {
     width: 24px;
     height: 24px;
   }
-  
+
   .user-icon {
     width: 28px;
     height: 28px;
   }
-  
+
   .mobile-menu-panel {
     width: 100%;
   }
-  
+
   .username {
     max-width: 80px;
   }
@@ -525,12 +577,12 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .logged-in-menu {
     display: flex;
     margin-left: 20px;
   }
-  
+
   /* 登录状态下的移动菜单样式 */
   .mobile-menu-panel.logged-in {
     z-index: 999;
@@ -547,13 +599,13 @@ export default {
 }
 
 /* 登录状态下的布局 */
-.header-left + .router-view {
+.header-left+.router-view {
   margin-left: 80px;
   width: calc(100% - 80px);
 }
 
 @media (max-width: 768px) {
-  .header-left + .router-view {
+  .header-left+.router-view {
     margin-left: 0;
     margin-top: 60px;
     width: 100%;

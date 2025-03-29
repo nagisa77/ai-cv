@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="session2">
+    <div class="session2" id="session2">
       <div class="session2-left">
         <transition name="fade" mode="out-in">
           <div :key="currentText" class="carousel-text">{{ currentText }}</div>
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div class="session3">
+    <div class="session3" id="session3">
       <div class="session3-title">套餐价格 (限时特惠)</div>
       <div class="pay-card-content">
         <div class="pay-card" v-for="(card, index) in payCards" :key="index">
@@ -100,21 +100,21 @@ export default {
         {
           title: '免费版',
           subtitle: '适用于体验用户',
-          features: ['每日20次AI对话', '每日1次简历下载'],
+          features: ['简历模版免费使用', '每日20次AI对话', '每日1次简历下载'],
           price: '0 元',
           priceDesc: '对所有人免费'
         },
         {
           title: 'Pro版',
           subtitle: '适用于专业用户',
-          features: ['每日50次AI对话', '每日5次简历下载', '可保存5份简历'],
+          features: ['简历模版免费使用', '每日50次AI对话', '每日5次简历下载', '可保存5份简历'],
           price: '9.9 元 ☕️',
           priceDesc: '每月价格，包年享8折优惠'
         },
         {
           title: 'Plus版',
           subtitle: '适用于职场达人',
-          features: ['无限次AI对话', '无限次简历下载', '可保存10份简历', '支持一键模版、字体切换'],
+          features: ['简历模版免费使用', '无限次AI对话', '无限次简历下载', '可保存10份简历', '支持一键模版、字体切换'],
           price: '19.9 元 🌭',
           priceDesc: '每月价格，包年享8折优惠'
         }
@@ -553,18 +553,18 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 
 .session3-title {
-  font-size: 45px;
+  margin-top: 50px;
+  font-size: 40px;
   font-weight: bold;
   color: var(--color-black);
 }
 
 .pay-card-content {
-  margin-top: 100px;
+  margin-top: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
