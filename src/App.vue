@@ -34,7 +34,7 @@
               <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户"
                 class="user-icon user-icon-top-header" />
             </router-link>
-            <button class="free-trial">免费试用</button>
+            <router-link to="/auth" class="free-trial">免费试用</router-link>
           </div>
 
           <!-- 移动端菜单图标 -->
@@ -58,7 +58,9 @@
           <router-link to="/auth" class="mobile-nav-item" @click="showMobileMenu = false">
             <span>登录/注册</span>
           </router-link>
-          <button class="mobile-free-trial">免费试用</button>
+          <router-link to="/auth" class="mobile-nav-item" @click="showMobileMenu = false">
+            <button class="mobile-free-trial">免费试用</button>
+          </router-link>
         </template>
 
         <!-- 登录状态的菜单项 -->
@@ -319,6 +321,7 @@ export default {
   font-size: 14px;
   cursor: pointer;
   transition: opacity 0.2s;
+  text-decoration: none;
 }
 
 .free-trial:hover {

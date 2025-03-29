@@ -13,7 +13,7 @@
             <strong>Deepseek V3 满血版支持</strong>
           </p>
 
-          <router-link to="/template-selection">
+          <router-link to="/auth">
             <button class="create-resume-button animate-on-scroll" data-animation="fade-in-up-delay2">
               与AI简历君聊聊吧
             </button>
