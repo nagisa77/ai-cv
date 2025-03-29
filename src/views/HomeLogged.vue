@@ -392,14 +392,14 @@ export default {
 
 .home-logged-left {
   height: 100vh;
-  width: calc(65vw - 40px);
+  width: calc(100vw - 500px - 40px);
   transition: width 0.3s ease; /* 添加过渡效果 */
 }
 
 .home-logged-right {
   display: flex;
   flex-direction: column;
-  width: 35vw;
+  width: 500px;
   transition: width 0.3s ease; /* 添加过渡效果 */
 }
 
