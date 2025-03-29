@@ -154,12 +154,12 @@
           <div class="content-section">
             <div v-if="!showTips" class="fortune-section">
               <div class="fortune-item">
-                <span class="fortune-label fortune-label-avoid">忌</span>
-                <span class="fortune-content">{{ currentFortune.avoid }}</span>
-              </div>
-              <div class="fortune-item">
                 <span class="fortune-label fortune-label-suitable">宜</span>
                 <span class="fortune-content">{{ currentFortune.suitable }}</span>
+              </div>
+              <div class="fortune-item">
+                <span class="fortune-label fortune-label-avoid">忌</span>
+                <span class="fortune-content">{{ currentFortune.avoid }}</span>
               </div>
               <button class="tips-button" @click="showTips = true">
                 查看今日求职 Tips
@@ -211,16 +211,56 @@ export default {
       },
       currentTip: '',
       fortunes: [
-        { avoid: '冲动购物', suitable: '制定新计划' },
-        { avoid: '熬夜追剧', suitable: '整理房间' },
-        { avoid: '沉迷刷手机', suitable: '出门晒太阳' },
-        { avoid: '加班', suitable: '吃顿美味犒劳自己' },
-        { avoid: '纠结琐事', suitable: '和朋友聚餐聊天' },
-        { avoid: '与人争执', suitable: '独处放松心情' },
-        { avoid: '忙中出错', suitable: '慢下来喝杯咖啡' },
-        { avoid: '回忆过去', suitable: '主动认识新朋友' },
-        { avoid: '偷懒拖延', suitable: '学习新技能' },
-        { avoid: '暗自烦恼', suitable: '早睡早起' }
+        { avoid: '懒惰拖延，自我否定', suitable: '保持专注，高效执行' },
+        { avoid: '焦虑不安，过度比较', suitable: '自信微笑，主动沟通' },
+        { avoid: '抱怨环境，畏惧挑战', suitable: '目标明确，积极复盘' },
+        { avoid: '犹豫退缩，借口敷衍', suitable: '展现优势，灵活应变' },
+        { avoid: '消极对待，急功近利', suitable: '坚持到底，乐观心态' },
+        { avoid: '敷衍准备，紧张焦虑', suitable: '注重细节，正向思考' },
+        { avoid: '迷失方向，情绪失控', suitable: '学习知识，提升技能' },
+        { avoid: '草率应对，过度依赖', suitable: '保持冷静，思路清晰' },
+        { avoid: '自我设限，放弃尝试', suitable: '主动争取，谦逊待人' },
+        { avoid: '忽视反馈，封闭内心', suitable: '学习新知，积累经验' },
+        { avoid: '过度敏感，否定自我', suitable: '提前规划，充分准备' },
+        { avoid: '患得患失，瞻前顾后', suitable: '展现热情，把握机会' },
+        { avoid: '消极对比，执意攀比', suitable: '耐心倾听，冷静应对' },
+        { avoid: '回避问题，推卸责任', suitable: '逻辑清晰，表达流畅' },
+        { avoid: '思维固化，拒绝改变', suitable: '调整节奏，从容不迫' },
+        { avoid: '过度完美，苛求细节', suitable: '分析需求，精准匹配' },
+        { avoid: '急于求成，忽略积累', suitable: '拓展人脉，扩大视野' },
+        { avoid: '言行不一，缺乏行动', suitable: '保持愉悦，精力充沛' },
+        { avoid: '过度焦急，丧失耐心', suitable: '复盘总结，优化策略' },
+        { avoid: '沉迷幻想，脱离实际', suitable: '突破局限，挑战自我' },
+        { avoid: '逃避沟通，封闭自我', suitable: '强化优势，补齐短板' },
+        { avoid: '过度消耗，透支精力', suitable: '保持真诚，赢得信任' },
+        { avoid: '盲目自信，轻视面试', suitable: '把握时机，果断行动' },
+        { avoid: '忽视仪表，随意邋遢', suitable: '模仿榜样，借鉴经验' },
+        { avoid: '过度紧张，动作僵硬', suitable: '关注行业，紧跟趋势' },
+        { avoid: '被动等待，错失良机', suitable: '强化抗压，稳定心态' },
+        { avoid: '过度解读，徒增压力', suitable: '重视礼仪，塑造形象' },
+        { avoid: '情绪波动，影响判断', suitable: '设定节点，逐步推进' },
+        { avoid: '盲目妥协，丧失立场', suitable: '保持专注，主动沟通' },
+        { avoid: '负面暗示，削弱动力', suitable: '保持好奇，探索可能' },
+        { avoid: '过度倾诉，暴露弱点', suitable: '细化目标，拆分步骤' },
+        { avoid: '纠结过去，忽略当下', suitable: '保持热情，感染他人' },
+        { avoid: '过度依赖，丧失主动', suitable: '理性评估，避免冲动' },
+        { avoid: '消极语言，打击士气', suitable: '强化执行，拒绝空想' },
+        { avoid: '过度承诺，难以兑现', suitable: '保持独立，适度求助' },
+        { avoid: '忽视规划，杂乱无章', suitable: '专注当下，减少杂念' },
+        { avoid: '否定自我，丧失兴趣', suitable: '平衡心态，避免焦虑' },
+        { avoid: '过度防备，难以合作', suitable: '保持开放，接纳反馈' },
+        { avoid: '放大困难，丧失勇气', suitable: '强化自信，减少犹豫' },
+        { avoid: '忽视细节，漏洞频出', suitable: '保持韧性，持续精进' },
+        { avoid: '盲目忙碌，缺乏方向', suitable: '量化成果，增强说服' },
+        { avoid: '过度保守，错失创新', suitable: '保持自律，规律作息' },
+        { avoid: '消极标签，固化认知', suitable: '强化行动，减少内耗' },
+        { avoid: '忽视健康，透支身体', suitable: '保持活力，传递能量' },
+        { avoid: '过度内卷，丧失平衡', suitable: '强化专业，凸显价值' },
+        { avoid: '盲目模仿，失去特色', suitable: '保持敏锐，捕捉机遇' },
+        { avoid: '过度迎合，迷失自我', suitable: '强化责任，赢得认可' },
+        { avoid: '忽视复盘，重复错误', suitable: '保持谦逊，持续成长' },
+        { avoid: '消极预期，提前退缩', suitable: '强化创新，避免僵化' },
+        { avoid: '放弃学习，停滞成长', suitable: '保持勇气，珍惜机会' }
       ],
       tips: [
         '再坚持一下，你比自己想象的还要厉害！',
@@ -511,7 +551,6 @@ export default {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   display: flex;
-  gap: 20px;
   background-color: var(--color-left-header-background);
 }
 
@@ -1176,7 +1215,7 @@ export default {
   justify-content: center;
   align-items: center;
   border-right: 1px solid black;
-  min-width: 150px;
+  min-width: 170px;
 }
 
 .month {
@@ -1206,15 +1245,19 @@ export default {
 }
 
 .content-section {
+  display: flex;
   flex: 2;
-  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .fortune-section {
   display: flex;
+
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  align-items: center;
+  gap: 10px;
   height: 100%;
 }
 
@@ -1225,7 +1268,7 @@ export default {
 }
 
 .fortune-label {
-  padding: 8px 0px;
+  padding: 10px 0px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -1235,11 +1278,11 @@ export default {
 }
 
 .fortune-label-avoid {
-  background-color: var(--color-primary);
+   background-color: #333;
 }
 
 .fortune-label-suitable {
-  background-color: #333;
+  background-color: var(--color-primary);
 }
 
 .fortune-content {
@@ -1248,10 +1291,9 @@ export default {
 }
 
 .tips-button {
-  margin-top: 20px;
-  padding: 12px 24px;
+  padding: 8px 24px;
+  margin-top: 10px;
   background-color: var(--color-primary);
-  margin-right: 50px;
   color: white;
   border: none;
   border-radius: 8px;
@@ -1268,11 +1310,9 @@ export default {
 .tips-section {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
+  justify-content: center;
   height: 100%;
-  position: relative;
+  background-color: var(--color-primary);
 }
 
 .back-button {
