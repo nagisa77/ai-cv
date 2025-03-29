@@ -167,9 +167,9 @@
             </div>
             <div v-if="showTips" class="tips-section">
               <button class="back-button" @click="showTips = false">
-                <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                返回
+                <i class="fas fa-arrow-left"></i>
               </button>
+              <div class="tips-content-title"> <i class="fas fa-lightbulb"></i> 今日求职 Tips</div>
               <div class="tips-content">{{ currentTip }}</div>
             </div>
           </div>
@@ -263,16 +263,56 @@ export default {
         { avoid: '放弃学习，停滞成长', suitable: '保持勇气，珍惜机会' }
       ],
       tips: [
-        '再坚持一下，你比自己想象的还要厉害！',
-        '每一步都算数，微小的进步终会累积成巨大成功。',
-        '努力从来不会白费，你所付出的，都在未来等着你。',
-        '不用害怕慢一点，只要方向对了，终点一定会到达。',
-        '你已经走了这么远，别放弃，最好的风景就在前方。',
-        '相信自己，每一次挑战都是变得更强的机会。',
-        '不完美又怎样？你勇敢尝试的样子，比完美更迷人。',
-        '只要开始行动，困难就已经输了一半。',
-        '愿你熬过所有的不安，迎来属于自己的高光时刻。',
-        '今天的你，已经比昨天更加优秀了，再加油一点点！'
+        '简历排版简洁清晰，关键信息一目了然，模块化设计展示核心能力！',
+        '"摸鱼式投简历"：早上6-8点网速快，避开高峰更高效！HR上班立刻看！',
+        '量化成果数据，过程数据+结果数据+行业对比数据更有力哦！',
+        '删除无关经历，聚焦岗位核心需求，记得包含硬技能、软实力、隐性要求、加分项！',
+        '用行业术语提升专业性，避免口语化，确保与目标岗位用词同频哦！',
+        '针对不同岗位，准备多版本简历内容，记得删除重复项、强化关联项、新增定制项！',
+        '社会经历用倒叙，HR更关注！近期动态突出核心贡献，中期经历提炼方法论～',
+        '用老板视角写简历：别吹牛，直接说帮他赚了多少钱/省了多少事，展示你的贡献与价值！',
+        '反问如团队目标或培训体系，"如果我入职，半年内最需要突破的三个方向是什么？"拉满责任感！',
+        '薪资谈判先问结构，底薪绩效分开谈，多做功课，要清楚薪资最后情况哦！',
+        '谈失败经历用"过去认知局限+现在方法论+未来预防机制"闭环模型！',
+        '录音复盘回答漏洞，针对性改进，重点标记"嗯啊"口头禅和超时问题！',
+        '穿着参考企业文化，私企可适度个性，参考目标公司官网穿搭风格，用细节呼应~',
+        '用"3P原则"：自信、个性、中肯，表达融入Power Word如「颠覆性增长」等强动词吧！',
+        '遇到压力问题，深呼吸分点回答，首先是...（框架）→其次是...（细节）→最后是...（升华）',
+        '微笑节奏：对方提问时点头微笑，自己回答时嘴角微扬，关键数据处加深笑容！',
+        '回答动机时，引用最新市场规模数据、提及近三年财报增长点、拆解JD中三个核心能力项！',
+        '案例用STAR法则：什么烂摊子→让我干啥→我咋搞→最后多牛，突出如何在困境中突破成长学习！',
+        '投递组合策略：5份主攻目标岗位 + 3份关联岗位 + 2份探索性岗位~',
+        '「岗位新鲜度」分级：24h内岗位标红 + 48h内标黄 + 72h后标灰，抢占首轮面试席位~',
+        '多开浏览器窗口，同步投递省时间，一组填基础信息/二组上传附件/三组跟进进度！',
+        '建立Excel表管理进度，分类跟进，设置条件格式自动标红超72h未推进岗位！',
+        '每天上午9点刷新简历激活算法推荐，增加猎头主动约聊概率。',
+        '使用地图搜索附近职位，缩短通勤，手动拖动地图中心点，解锁跨区优质岗位。',
+        '订阅岗位邮件提醒，抢占先机，48小时内新岗位投递反馈率比普通岗位高3倍。',
+        '被拒就追问原因，表示会通过计划提升具体能力，希望能再次交流。',
+        '手机号分段写成"131-1234-5678"，减少HR拨错率，分段数字记忆准确率可提升41%~',
+        '调研目标公司竞品，面试展现全局观，SWOT分析法很适用哦！',
+        '优先投递匹配度超70%的岗位，转化率更好，给自己更多自信！',
+        '秋招提前批6月开启，尽早行动，建立"投递日历"，避免拖延错失机会！',
+        '记得背调公司资质，避开风险企业，"舆情监控"看近三月劳动纠纷案件量。',
+        '拒绝海投，聚焦3-5个核心岗位，注意在不同岗位展示可迁移技能哦！',
+        '保持作息规律，保持饱满状态，脑科学显示生物钟稳定者临场反应速度提升27%。',
+        '进行"面试模拟"：对着镜子回答时同步出拳，肾上腺素激增提升语言流畅度，焦虑指数降低40%。',
+        '用"错题本"记录失败问题，包括错误回答、参考解析，针对性改进~',
+        '拒绝完美主义，先完成再优化，数据证明快速试错者比追求完美者Offer获取速度快2倍。',
+        '面试前听轻音乐，缓解紧张情绪，配合"478"呼吸法，可快速平静。',
+        '忌抱怨前公司，离职原因强调成长需求以及对新公司的期待突破！',
+        '保持真诚，避免过度包装经历，但需要佐证经历又不暴露机密！',
+        '用感恩心态对待拒绝，积累经验，分析失败原因，再次出发！',
+        '面试时坐姿端正，双手呈金字塔状置于桌面，背部距椅背5cm，避免小动作！',
+        '避免频繁看表或手机，专注对话，用"谢谢"回应夸奖，谦逊得体～',
+        '合同逐条核对，特别关注试用期、薪资、离职违约金条款！',
+        '口头offer不作数，需书面确认后再做决定，试用期权益需明确写入合同~',
+        '招聘平台不透露身份证号等敏感信息，面试地点偏僻需谨慎，优先选白天！',
+        '试用期权益写入合同，包括考核标准、转正条件、薪资结构、社保基数、解除条件~',
+        '阅读行业报告，面试时引用最新数据，了解市场趋势、竞品布局、用户画像，形成数据三角论证~',
+        '研究岗位上下游技能，拓宽能力边界与视野，扩大竞争优势！',
+        '保持终身学习，技能是最好筹码，每季度新增1个工具技能+1个认知模型~',
+        '学习基础职场英语，多听多练多读，应对外企需求更轻松！'
       ],
       trashResumes: [],
       renamingResume: null, // 正在重命名的简历
@@ -1214,7 +1254,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid black;
   min-width: 170px;
 }
 
@@ -1259,6 +1298,9 @@ export default {
   align-items: center;
   gap: 10px;
   height: 100%;
+
+  position: relative;
+  left: -10px;
 }
 
 .fortune-item {
@@ -1270,7 +1312,7 @@ export default {
 .fortune-label {
   padding: 10px 0px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: white;
   min-width: 40px;
@@ -1288,10 +1330,11 @@ export default {
 .fortune-content {
   font-size: 16px;
   color: #333;
+  margin-left: 10px;
 }
 
 .tips-button {
-  padding: 8px 24px;
+  padding: 8px 40px;
   margin-top: 10px;
   background-color: var(--color-primary);
   color: white;
@@ -1299,6 +1342,7 @@ export default {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  font-weight: bold;
   transition: all 0.3s ease;
 }
 
@@ -1310,40 +1354,52 @@ export default {
 .tips-section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   height: 100%;
   background-color: var(--color-primary);
+  position: relative;
+
+  justify-content: center;
 }
 
 .back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
+  top: 10px;
+  left: 10px;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background-color: white;
-  border: 1px solid #eee;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #eee;
+  color: white;
+  background-color: transparent;
+  border-radius: 20px;
   font-size: 14px;
-  color: #666;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.back-button:hover {
-  background-color: #f5f5f5;
-  transform: translateX(-2px);
+.fa-arrow-left {
+  position: relative;
+  left: 1px;
 }
 
-.tips-content {
+.tips-content-title {
   font-size: 18px;
-  color: #333;
+  color: white;
   line-height: 1.6;
   max-width: 90%;
   margin: 0 auto;
-  padding-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.tips-content {
+  font-size: 16px;
+  color: white;
+  line-height: 1.6;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 10px;
 }
 
 @media (max-width: 768px) {
