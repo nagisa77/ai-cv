@@ -111,26 +111,29 @@
             </div>
             
             <div v-else class="resume-grid">
-              <div class="resume-item deleted" v-for="(resume, index) in trashResumes" :key="index">
-                <div class="resume-preview">
-                  <img :src="resume.imageUrl" alt="简历预览">
-                  <div class="resume-deleted-overlay">
-                    <span>已删除</span>
+              <div class="resume-item" v-for="resume in trashResumes" :key="resume.resumeId">
+                <div class="resume-header-info">
+                  <div class="resume-edit-time">最后编辑时间：{{ formatDate(resume.updatedAt || resume.createdAt) }}</div>
+                  <div class="resume-actions-dropdown">
+                    <div class="resume-dropdown-trigger" @click.stop="toggleTrashDropdown(resume.resumeId)">
+                      <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <div class="resume-dropdown-menu" v-if="resume.showDropdown">
+                      <div class="resume-dropdown-item" @click.stop="restoreResume(resume.resumeId)">
+                        <i class="fas fa-undo"></i> 恢复简历
+                      </div>
+                      <div class="resume-dropdown-item resume-dropdown-item-delete" @click.stop="permanentDelete(resume.resumeId)">
+                        <i class="fas fa-trash"></i> 彻底删除
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div class="resume-preview">
+                  <img class="resume-pic" :src="getResumeImage(resume)" alt="简历预览">
+                </div>
+                <div class="resume-pic-after"></div>
                 <div class="resume-info">
                   <div class="resume-name">{{ resume.name }}</div>
-                  <div class="resume-date">{{ resume.date }}</div>
-                  <div class="resume-actions">
-                    <button class="resume-restore-btn" @click="restoreResume(resume.id)">
-                      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
-                      恢复
-                    </button>
-                    <button class="resume-delete-btn" @click="permanentDelete(resume.id)">
-                      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                      永久删除
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -231,15 +234,7 @@ export default {
         '愿你熬过所有的不安，迎来属于自己的高光时刻。',
         '今天的你，已经比昨天更加优秀了，再加油一点点！'
       ],
-      trashResumes: [
-        // 回收站数据模拟
-        {
-          id: 'trash-1',
-          imageUrl: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3.png',
-          name: '已删除简历',
-          date: '2023-05-20'
-        }
-      ],
+      trashResumes: [],
       renamingResume: null, // 正在重命名的简历
     }
   },
@@ -301,12 +296,10 @@ export default {
         // 将删除的简历从列表中移除
         const deletedResume = this.resumes.find(r => r.resumeId === resumeId)
         if (deletedResume) {
-          // 模拟添加到回收站
+          // 添加到回收站
           this.trashResumes.unshift({
-            id: deletedResume.resumeId,
-            imageUrl: this.getResumeImage(deletedResume),
-            name: deletedResume.name,
-            date: new Date().toLocaleDateString()
+            ...deletedResume,
+            showDropdown: false
           })
         }
         this.resumes = this.resumes.filter(r => r.resumeId !== resumeId)
@@ -339,31 +332,29 @@ export default {
       })
     },
 
-    // 回收站功能 - 这些是模拟功能
+    // 回收站功能
     restoreResume(resumeId) {
-      const resumeIndex = this.trashResumes.findIndex(r => r.id === resumeId)
+      const resumeIndex = this.trashResumes.findIndex(r => r.resumeId === resumeId)
       if (resumeIndex !== -1) {
+        const restoredResume = this.trashResumes[resumeIndex]
+        // 移除showDropdown属性，防止界面显示问题
+        restoredResume.showDropdown = false
+        // 添加到简历列表
+        this.resumes.unshift(restoredResume)
+        // 从回收站移除
         this.trashResumes.splice(resumeIndex, 1)
         this.toast.success('已恢复简历')
-        this.fetchResumes() // 重新获取简历列表
       }
     },
 
     permanentDelete(resumeId) {
       if (!confirm('确定要永久删除这个简历吗？此操作无法撤销')) return
       
-      const resumeIndex = this.trashResumes.findIndex(r => r.id === resumeId)
+      const resumeIndex = this.trashResumes.findIndex(r => r.resumeId === resumeId)
       if (resumeIndex !== -1) {
         this.trashResumes.splice(resumeIndex, 1)
         this.toast.success('已永久删除简历')
       }
-    },
-
-    emptyTrash() {
-      if (!confirm('确定要清空回收站吗？此操作无法撤销')) return
-      
-      this.trashResumes = []
-      this.toast.success('回收站已清空')
     },
 
     updateDateTime() {
@@ -402,8 +393,30 @@ export default {
       // 点击其他地方关闭下拉菜单
       document.addEventListener('click', this.closeAllDropdowns, { once: true })
     },
+    toggleTrashDropdown(resumeId) {
+      // 关闭其他所有下拉菜单
+      this.trashResumes.forEach(resume => {
+        if (resume.resumeId !== resumeId) {
+          resume.showDropdown = false
+        }
+      })
+      
+      // 切换当前简历的下拉菜单状态
+      const resume = this.trashResumes.find(r => r.resumeId === resumeId)
+      if (resume) {
+        resume.showDropdown = !resume.showDropdown
+      }
+      
+      // 点击其他地方关闭下拉菜单
+      document.addEventListener('click', this.closeAllTrashDropdowns, { once: true })
+    },
     closeAllDropdowns() {
       this.resumes.forEach(resume => {
+        resume.showDropdown = false
+      })
+    },
+    closeAllTrashDropdowns() {
+      this.trashResumes.forEach(resume => {
         resume.showDropdown = false
       })
     },
@@ -725,6 +738,7 @@ export default {
   padding: 60px 0;
   color: #888;
   text-align: center;
+  margin-top: 80px;
 }
 
 .empty-icon {
