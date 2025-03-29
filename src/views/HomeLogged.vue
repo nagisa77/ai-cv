@@ -28,7 +28,7 @@
             :class="{ 'active': activeTab === 'myResumes' }" 
             @click="activeTab = 'myResumes'"
           >
-            <span class="tab-icon">📄</span>
+            <span class="tab-icon"><i class="fas fa-file-alt"></i></span>
             我的简历
             <span class="resume-count" v-if="resumes.length > 0">{{ resumes.length }}</span>
           </div>
@@ -37,7 +37,7 @@
             :class="{ 'active': activeTab === 'trash' }" 
             @click="activeTab = 'trash'"
           >
-            <span class="tab-icon">🗑️</span>
+            <span class="tab-icon"><i class="fas fa-trash-alt"></i></span>
             回收站
             <span class="resume-count" v-if="trashResumes.length > 0">{{ trashResumes.length }}</span>
           </div>

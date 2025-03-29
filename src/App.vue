@@ -233,7 +233,9 @@ export default {
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 30px;  /* 确保导航项之间间距一致 */
+  gap: 60px;  /* 确保导航项之间间距一致 */
+  position: relative;
+  left: 20px;
 }
 
 /* 导航项通用样式 */
@@ -265,15 +267,18 @@ export default {
 
 /* 免费试用按钮 */
 .free-trial {
+  position: relative;
   background: var(--color-black);
   color: var(--color-text-secondary);
+  left: -20px;
   border: none;
-  padding: 8px 20px;
+  padding: 8px 40px;
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
   transition: opacity 0.2s;
 }
+
 .free-trial:hover {
   opacity: 0.9;
 }

@@ -258,7 +258,7 @@ export default {
 
 .session1-left {
   padding-left: 250px;
-  width: calc(60vw - 100px);
+  width: calc(50vw - 100px);
   height: calc(100vh);
   display: flex;
   flex-direction: column;
@@ -267,7 +267,7 @@ export default {
 }
 
 .session1-right {
-  width: 40vw;
+  width: 50vw;
   height: calc(100vh);
   display: flex;
   flex-direction: column;
@@ -368,7 +368,7 @@ export default {
 
 .session2-left {
   position: relative;
-  bottom: 15px;
+  bottom: 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -458,8 +458,8 @@ export default {
 
 .session2-right {
   position: relative;
-  bottom: 15px;
-  left: -15px;
+  bottom: 5%;
+  left: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -633,7 +633,7 @@ export default {
 
 .carousel-dots {
   position: absolute;
-  bottom: 40px;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
