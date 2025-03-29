@@ -72,20 +72,31 @@
             
             <div v-else class="resume-grid">
               <div class="resume-item" v-for="resume in resumes" :key="resume.resumeId" @click="openResume(resume)">
-                <div class="resume-preview">
-                  <img class="resume-pic" :src="getResumeImage(resume)" alt="简历预览">
-                  <div class="resume-hover-actions">
-                    <button class="resume-action-icon edit" @click.stop="openResume(resume)">
-                      <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                    </button>
-                    <button class="resume-action-icon delete" @click.stop="deleteResume(resume.resumeId)">
-                      <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
+                <div class="resume-header-info">
+                  <div class="resume-edit-time">最后编辑时间：{{ formatDate(resume.updatedAt || resume.createdAt) }}</div>
+                  <div class="resume-actions-dropdown">
+                    <div class="resume-dropdown-trigger" @click.stop="toggleDropdown(resume.resumeId)">
+                      <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <div class="resume-dropdown-menu" v-if="resume.showDropdown">
+                      <div class="resume-dropdown-item" @click.stop="downloadResume(resume)">
+                        <i class="fas fa-download"></i> 下载简历
+                      </div>
+                      <div class="resume-dropdown-item resume-dropdown-item-delete" @click.stop="deleteResume(resume.resumeId)">
+                        <i class="fas fa-trash"></i> 删除简历
+                      </div>
+                      <div class="resume-dropdown-item" @click.stop="renameResume(resume)">
+                        <i class="fas fa-edit"></i> 修改名称
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div class="resume-preview">
+                  <img class="resume-pic" :src="getResumeImage(resume)" alt="简历预览">
+                </div>
+                <div class="resume-pic-after"></div>
                 <div class="resume-info">
                   <div class="resume-name">{{ resume.name }}</div>
-                  <div class="resume-date">{{ formatDate(resume.createdAt) }}</div>
                 </div>
               </div>
             </div>
@@ -93,13 +104,6 @@
           
           <!-- 回收站标签页内容 -->
           <div v-if="activeTab === 'trash'" class="resume-view">
-            <div class="resume-header">
-              <h2 class="resume-section-title">回收站</h2>
-              <button v-if="trashResumes.length > 0" class="empty-trash-btn" @click="emptyTrash">
-                清空回收站
-              </button>
-            </div>
-
             <div v-if="trashResumes.length === 0" class="empty-state">
               <div class="empty-icon">🗑️</div>
               <h3>回收站为空</h3>
@@ -235,7 +239,8 @@ export default {
           name: '已删除简历',
           date: '2023-05-20'
         }
-      ]
+      ],
+      renamingResume: null, // 正在重命名的简历
     }
   },
   setup() {
@@ -259,7 +264,11 @@ export default {
         this.loading = true
         const response = await apiClient.get('/user/resumes')
         if (response.data.code === 20002) {
-          this.resumes = response.data.data
+          // 为每个简历添加showDropdown属性
+          this.resumes = response.data.data.map(resume => ({
+            ...resume,
+            showDropdown: false
+          }))
         }
       } catch (error) {
         console.error('获取简历列表失败:', error)
@@ -375,6 +384,60 @@ export default {
     updateTip() {
       const randomIndex = Math.floor(Math.random() * this.tips.length)
       this.currentTip = this.tips[randomIndex]
+    },
+    toggleDropdown(resumeId) {
+      // 关闭其他所有下拉菜单
+      this.resumes.forEach(resume => {
+        if (resume.resumeId !== resumeId) {
+          resume.showDropdown = false
+        }
+      })
+      
+      // 切换当前简历的下拉菜单状态
+      const resume = this.resumes.find(r => r.resumeId === resumeId)
+      if (resume) {
+        resume.showDropdown = !resume.showDropdown
+      }
+      
+      // 点击其他地方关闭下拉菜单
+      document.addEventListener('click', this.closeAllDropdowns, { once: true })
+    },
+    closeAllDropdowns() {
+      this.resumes.forEach(resume => {
+        resume.showDropdown = false
+      })
+    },
+    downloadResume(resume) {
+      try {
+        // 使用简历的截图链接
+        const imageUrl = resume.screenshotUrl || this.getResumeImage(resume)
+        
+        // 创建一个临时链接
+        const a = document.createElement('a')
+        a.href = imageUrl
+        a.download = `${resume.name || '简历'}.png`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        
+        this.toast.success('简历下载中')
+      } catch (error) {
+        console.error('下载失败:', error)
+        this.toast.error('下载失败，请重试')
+      }
+    },
+    renameResume(resume) {
+      const newName = prompt('请输入新的简历名称', resume.name)
+      
+      if (newName && newName !== resume.name) {
+        // 这里应当调用API更新简历名称
+        // 示例: apiClient.put(`/user/resumes/${resume.resumeId}`, { name: newName })
+        // 然后刷新简历列表
+        
+        // 模拟更新
+        resume.name = newName
+        this.toast.success('名称已更新')
+      }
     }
   }
 }
@@ -558,6 +621,21 @@ export default {
 .resume-tab.active {
   color: var(--color-primary);
   font-weight: 600;
+}
+
+.resume-info {
+  padding: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.resume-pic-after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #00000033;
 }
 
 .resume-tab.active .resume-count {
@@ -770,14 +848,27 @@ export default {
 
 /* 优化悬停操作按钮在触摸设备上的显示 */
 @media (hover: none) {
-  .resume-hover-actions {
-    opacity: 1;
-    background-color: rgba(0, 0, 0, 0.3);
+  .resume-header-info {
+    padding: 6px 10px;
   }
   
-  .resume-action-icon {
-    width: 36px;
-    height: 36px;
+  .resume-edit-time {
+    font-size: 10px;
+    max-width: 60%;
+  }
+  
+  .resume-dropdown-trigger {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .resume-dropdown-menu {
+    width: 130px;
+  }
+  
+  .resume-dropdown-item {
+    padding: 10px 12px;
+    font-size: 12px;
   }
 }
 
@@ -799,10 +890,6 @@ export default {
 
 .resume-preview {
   width: 100%;
-  aspect-ratio: 0.7071;  /* A4纸张比例 */
-  position: relative;
-  overflow: hidden;
-  background-color: #f5f5f5;
 }
 
 .resume-preview img {
@@ -823,65 +910,80 @@ export default {
   transform: scale(1.05);
 }
 
-/* 悬停操作按钮 */
-.resume-hover-actions {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+/* 新增的简历头部信息区域 */
+.resume-header-info {
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.9);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  z-index: 2;
+  font-family: var(--font-family);
 }
 
-.resume-item:hover .resume-hover-actions {
-  opacity: 1;
+.resume-edit-time {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
 }
 
-.resume-action-icon {
-  width: 40px;
-  height: 40px;
+.resume-actions-dropdown {
+  position: relative;
+}
+
+.resume-dropdown-trigger {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: none;
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
-.resume-action-icon.edit {
-  background-color: var(--color-primary);
+.resume-dropdown-trigger:hover {
+  background-color: #f5f5f5;
 }
 
-.resume-action-icon.delete {
-  background-color: #f44336;
+.resume-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 110px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  margin-top: 5px;
 }
 
-.resume-action-icon:hover {
-  transform: scale(1.1);
-}
-
-.resume-info {
-  padding: 16px;
-}
-
-.resume-name {
-  font-size: 16px;
-  font-weight: 600;
+.resume-dropdown-item {
+  padding: 12px 16px;
+  font-size: 14px;
   color: #333;
-  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+  cursor: pointer;
 }
 
-.resume-date {
-  font-size: 12px;
-  color: #888;
+.resume-dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* 删除原来的悬停操作区域 */
+.resume-hover-actions {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* 已删除简历样式 */
