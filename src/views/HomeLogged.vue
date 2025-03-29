@@ -47,7 +47,7 @@
         <div class="resume-content">
           <!-- 我的简历标签页内容 -->
           <div v-if="activeTab === 'myResumes'" class="resume-view">
-            <div class="resume-header">
+            <!-- <div class="resume-header">
               <h2 class="resume-section-title">我的简历</h2>
               <div class="resume-actions-top">
                 <div class="view-toggle">
@@ -59,7 +59,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div v-if="loading" class="empty-state">
               <l-waveform size="60" stroke="3.5" speed="1" color="var(--color-primary)"></l-waveform>
@@ -681,10 +681,10 @@ export default {
   background-color: #d32f2f;
 }
 
-/* 简历网格样式优化 */
+/* 简历网格布局的优化 */
 .resume-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
@@ -766,13 +766,6 @@ export default {
   .resume-grid {
     grid-template-columns: 1fr;
   }
-}
-
-/* 简历网格布局的优化 */
-.resume-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
-  gap: 20px;
 }
 
 /* 优化悬停操作按钮在触摸设备上的显示 */
