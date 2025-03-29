@@ -76,6 +76,12 @@
         </div>
       </div>
     </div>
+    <footer class="footer">
+      <div class="footer-content">
+        <p>© 2025 AI简历君 All rights reserved.</p>
+        <p>关于我们  |  帮助中心  |  联系我们</p>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -402,6 +408,20 @@ export default {
 .home-title {
   font-size: 70px;
   font-weight: bold;
+}
+
+.footer {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .create-resume-button {
