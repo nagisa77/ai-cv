@@ -259,6 +259,8 @@ export default {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
   width: fit-content;
+  position: relative;
+  left: -10px;
   /* 根据内容自适应宽度 */
 }
 
@@ -589,7 +591,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 100px;
+  gap: 80px;
 }
 
 .pay-card {
