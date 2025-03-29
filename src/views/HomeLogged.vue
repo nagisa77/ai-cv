@@ -190,6 +190,7 @@ import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { useToast } from 'vue-toastification'
+import { Solar } from 'lunar-javascript'
 
 waveform.register()
 
@@ -446,7 +447,9 @@ export default {
       this.currentDay = now.getDate()
       this.currentWeekday = weekdays[now.getDay()]
       // 这里需要添加农历转换的逻辑，暂时使用占位符
-      this.currentLunar = '农历正月初一'
+      const solar = Solar.fromDate(now);
+      const lunar = solar.getLunar();
+      this.currentLunar = `${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}`;
     },
     updateFortune() {
       const randomIndex = Math.floor(Math.random() * this.fortunes.length)

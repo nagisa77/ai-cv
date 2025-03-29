@@ -451,9 +451,9 @@ export default {
 }
 
 .template-select {
-  padding-left: 80px;
+  padding-left: 60px;
   padding-top: 50px;
-  margin-left: 80px;
+  margin-left: 60px;
   background-color: var(--color-background);
   height: calc(100vh - 80px);
   overflow-y: auto;
