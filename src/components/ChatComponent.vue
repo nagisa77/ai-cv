@@ -21,11 +21,11 @@
           <!-- GPT 消息：头像 + 蓝框并列 -->
           <template v-if="message.sender === 'gpt' && message.display">
             <div class="gpt-message-container">
-              <img
+              <!-- <img
                 src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png"
                 alt="ChatGPT 头像"
                 class="chatgpt-message-icon"
-              />
+              /> -->
               <div class="message gpt">
                 <span>{{ extractMessage(message.text) }}</span>
               </div>
@@ -621,23 +621,27 @@ watch(inputValue, () => {
 
 /* 消息内容样式 */
 .message {
-  max-width: 300px;
+  max-width: 400px;
   padding: 10px;
   border-radius: 15px;
   font-size: 14px;
+  line-height: 1.5;
   word-wrap: break-word;
 }
 .message.gpt {
-  color: var(--color-secondary);
-  background-color: var(--color-primary);
+  color: var(--color-black);
+  /* background-color: var(--color-primary); */
+  max-width: calc(100% - 30px);
 }
 .message.me {
   background-color: var(--color-background);
 }
-.message.choice {
-  max-width: 100%;
-}
 
+.message.choice {
+  max-width: calc(100% - 60px);
+  padding: 20px;
+  background-color: var(--color-background);
+}
 /* choice 消息里的内容 */
 .choice-message-container {
   display: flex;
