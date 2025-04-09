@@ -68,9 +68,9 @@ export default {
                 case 'red':
                     return 'var(--color-primary)';
                 case 'blue':
-                    return '#3498db';
+                    return 'var(--color-cv-blue)';
                 case 'gray':
-                    return '#95a5a6';
+                    return 'var(--color-cv-gray)';
                 default:
                     return this.color || 'var(--color-primary)';
             }

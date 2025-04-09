@@ -139,56 +139,58 @@ export default {
         '通用': [
           {
             id: 'default',
-            name: '现代极简',
+            name: '模版1',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '现代'],
             isNew: false,
             selectedColor: 'gray', 
             colorOptions: {
-              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general1.png'
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_1.jpg',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_2.jpg',
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_3.jpg'
             }
           },
           {
             id: 'general_simple',
-            name: '简约现代模板',
+            name: '模版2',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '简约'],
             isNew: false,
-            selectedColor: 'red',
+            selectedColor: 'gray',
             colorOptions: {
-              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-red.png',
-              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-blue.png',
-              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general2-gray.png'
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_2_1.jpg',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_2_2.jpg',
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_2_3.jpg'
             }
           },
           {
             id: 'creative_modern',
-            name: '创意模板, 现代',
+            name: '模版3',
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['创意', '独特'],
             isNew: false,
-            selectedColor: 'red',
+            selectedColor: 'gray',
             colorOptions: {
-              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-red.png',
-              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-blue.png',
-              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-general3-gray.png'
+              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_3_1.jpg',
+              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_3_2.jpg',
+              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_3_3.jpg'
             }
           },
         ],
         '社招': [
-          {
-            id: 'social',
-            name: '社招模板, 现代',
-            description: '社招模板, 适合社招场景',
-            tags: ['有趣', '社招'],
-            isNew: false,
-            selectedColor: 'red',
-            colorOptions: {
-              red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-red.png',
-              blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-blue.png',
-              gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview/template-social-recruitment1-gray.png'
-            }
-          },
+          // {
+          //   id: 'social',
+          //   name: '社招模板, 现代',
+          //   description: '社招模板, 适合社招场景',
+          //   tags: ['有趣', '社招'],
+          //   isNew: false,
+          //   selectedColor: 'red',
+          //   colorOptions: {
+          //     red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_1.jpg',
+          //     blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_2.jpg',
+          //     gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_3.jpg'
+          //   }
+          // },
         ],
         '校招/实习': [
           // 示例：无数据可根据需求自行添加
@@ -473,6 +475,7 @@ export default {
 
 .category-tabs {
   display: flex;
+  padding-top: 2px;
   gap: 15px;
   margin-bottom: 20px;
   overflow-x: auto;
@@ -505,7 +508,7 @@ export default {
 
 .template-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   padding-right: 80px;
   padding-bottom: 80px;
@@ -614,7 +617,7 @@ export default {
   background-color: var(--color-cv-blue); /* 蓝 */
 }
 .color-circle.gray {
-  background-color: var(--color-gray); /* 灰 */
+  background-color: var(--color-cv-gray); /* 灰 */
 }
 .color-circle.active {
   border-color: #333;
@@ -737,7 +740,7 @@ export default {
 /* 增加特大屏幕支持 */
 @media (min-width: 1440px) {
   .template-container {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     max-width: 1600px;
   }
 }

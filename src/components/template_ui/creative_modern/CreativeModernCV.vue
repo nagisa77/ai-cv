@@ -1,40 +1,40 @@
 <template>
-    <!-- 使用通用的 BaseCVComponent 包裹 -->
-    <BaseCVComponent :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-        @smart-fit="handleSmartFit">
+  <!-- 使用通用的 BaseCVComponent 包裹 -->
+  <BaseCVComponent :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
+    @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
+    @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
+    @smart-fit="handleSmartFit">
 
-        <!-- Creative Modern 风格需要的特殊字体，可自行保留或更换 -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
+    <!-- Creative Modern 风格需要的特殊字体，可自行保留或更换 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-        <!-- 创意 Modern 的主要内容（即原先 cv-page 里的部分） -->
-        <div style="font-family: 'LXGW WenKai TC', serif;">
-            <!-- Personal Information -->
-            <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
+    <!-- 创意 Modern 的主要内容（即原先 cv-page 里的部分） -->
+    <div :style="{ '--custom-color': customColor }" style="font-family: 'LXGW WenKai TC', serif;">
+      <!-- Personal Information -->
+      <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
 
-            <!-- Education Section -->
-            <CreativeModernEducationSection :educationList="educationList" :highlightTitle="highlightTitle"
-                :color="color" @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+      <!-- Education Section -->
+      <CreativeModernEducationSection :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
-            <!-- Work Experience Section -->
-            <CreativeModernWorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+      <!-- Work Experience Section -->
+      <CreativeModernWorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
-            <!-- Project Experience Section -->
-            <CreativeModernProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" />
+      <!-- Project Experience Section -->
+      <CreativeModernProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
+        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
+        @add-title="handleAddTitle" />
 
-            <!-- Personal Summary -->
-            <CreativeModernSummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
-        </div>
-    </BaseCVComponent>
+      <!-- Personal Summary -->
+      <CreativeModernSummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
+    </div>
+  </BaseCVComponent>
 </template>
 
 <script>
@@ -46,72 +46,84 @@ import CreativeModernProjectSection from '@/components/template_ui/creative_mode
 import CreativeModernSummarySection from '@/components/template_ui/creative_modern/cv_components/CreativeModernSummarySection.vue';
 import metadataInstance from '@/models/metadata_model.js';
 export default {
-    name: "CreativeModernCV",
-    components: {
-        BaseCVComponent,
-        CreativeModernPersonalInfo,
-        CreativeModernEducationSection,
-        CreativeModernWorkSection,
-        CreativeModernProjectSection,
-        CreativeModernSummarySection
+  name: "CreativeModernCV",
+  components: {
+    BaseCVComponent,
+    CreativeModernPersonalInfo,
+    CreativeModernEducationSection,
+    CreativeModernWorkSection,
+    CreativeModernProjectSection,
+    CreativeModernSummarySection
+  },
+  props: {
+    highlightTitle: {
+      type: String,
+      default: ''
     },
-    props: {
-        highlightTitle: {
-            type: String,
-            default: ''
-        },
-        color: {
-            type: String,
-            default: ''
-        }
-    },
-    computed: {
-        isFetching() {
-            return metadataInstance.getIsFetching()
-        },
-        personalInfo() {
-            return metadataInstance.data.personalInfo;
-        },
-        educationList() {
-            return metadataInstance.data.education;
-        },
-        workList() {
-            return metadataInstance.data.workExperience;
-        },
-        projectList() {
-            return metadataInstance.data.projectExperience;
-        },
-        personalSummary() {
-            return metadataInstance.data.personalSummary;
-        }
-    },
-    methods: {
-        // 透传或自定义处理事件
-        handleSelectedModuleChanged(payload) {
-            this.$emit('selected-module-changed', payload);
-        },
-        captureAndSaveScreenshot() {
-            this.$emit('capture-and-save-screenshot');
-        },
-        handleEdit(type, title) {
-            this.$emit('edit-title', type, title);
-        },
-        handleDelete(type, title) {
-            this.$emit('delete-title', type, title);
-        },
-        handleAddTitle(type) {
-            this.$emit('add-title', type);
-        },
-        handleAddModule() {
-            this.$emit('add-module');
-        },
-        handleChangeFont() {
-            this.$emit('change-font');
-        },
-        handleSmartFit() {
-            this.$emit('smart-fit');
-        }
+    color: {
+      type: String,
+      default: ''
     }
+  },
+  computed: {
+    customColor() {
+      switch (this.color) {
+        case 'red':
+          return 'var(--color-primary)';
+        case 'blue':
+          return 'var(--color-cv-blue)';
+        case 'gray':
+          return 'var(--color-cv-gray)';
+        default:
+          return this.color || 'var(--color-primary)';
+      }
+    },
+    isFetching() {
+      return metadataInstance.getIsFetching()
+    },
+    personalInfo() {
+      return metadataInstance.data.personalInfo;
+    },
+    educationList() {
+      return metadataInstance.data.education;
+    },
+    workList() {
+      return metadataInstance.data.workExperience;
+    },
+    projectList() {
+      return metadataInstance.data.projectExperience;
+    },
+    personalSummary() {
+      return metadataInstance.data.personalSummary;
+    }
+  },
+  methods: {
+    // 透传或自定义处理事件
+    handleSelectedModuleChanged(payload) {
+      this.$emit('selected-module-changed', payload);
+    },
+    captureAndSaveScreenshot() {
+      this.$emit('capture-and-save-screenshot');
+    },
+    handleEdit(type, title) {
+      this.$emit('edit-title', type, title);
+    },
+    handleDelete(type, title) {
+      this.$emit('delete-title', type, title);
+    },
+    handleAddTitle(type) {
+      this.$emit('add-title', type);
+    },
+    handleAddModule() {
+      this.$emit('add-module');
+    },
+    handleChangeFont() {
+      this.$emit('change-font');
+    },
+    handleSmartFit() {
+      this.$emit('smart-fit');
+    }
+  }
 };
 </script>
 
@@ -140,7 +152,7 @@ export default {
   padding-bottom: 2px;
   position: relative;
   background-color: var(--color-primary-light);
-  color: v-bind('props.color');
+  color: var(--custom-color, var(--color-primary)); 
 }
 
 ::v-deep .session-title-left-line {
@@ -289,6 +301,6 @@ export default {
 }
 
 ::v-deep .session-title-underline {
-  background-color: v-bind('props.color');
+  background-color: var(--custom-color, var(--color-primary));
 }
 </style>

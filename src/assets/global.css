@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #CB7C5E;
+  --color-primary: #d97757;
   --color-secondary: #f5f3f0;
   --color-secondary-dark: #fbfaf8;
   --color-text-primary: #000000;
@@ -20,8 +20,8 @@
 
 
   --color-cv-red: var(--color-primary);
-  --color-cv-blue: #3498db;
-  --color-cv-gray: #95a5a6;
+  --color-cv-blue: #4183ff;
+  --color-cv-gray: #404040;
 }
 
 html, body {
