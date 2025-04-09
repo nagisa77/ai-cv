@@ -579,12 +579,9 @@ watch(inputValue, () => {
 /* GPT 消息、提示等 */
 .gpt-message-container,
 .prompt-hint {
-  display: flex;
   padding-left: 20px;
   margin-bottom: 10px;
   gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
 }
 
 .chatgpt-message-icon {
@@ -594,19 +591,22 @@ watch(inputValue, () => {
 
 .prompt-hint {
   width: fit-content;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--color-primary);
-  padding: 3px 10px;
-  color: var(--color-primary);
-  margin-left: 60px;
+  border-radius: 13px;
+  padding: 8px 15px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-black);
+  color: var(--color-black);
+  margin-left: 30px;
   opacity: 0.7;
   cursor: pointer;
 }
+
 .prompt-hint:hover {
-  opacity: 1;
+  opacity: 0.9;
   transition: opacity 0.3s ease;
+  background-color: var(--color-left-header-background);
 }
 
 /* 用户消息（me） */
@@ -634,6 +634,7 @@ watch(inputValue, () => {
   max-width: calc(100% - 30px);
 }
 .message.me {
+  margin-top: 10px;
   background-color: var(--color-background);
 }
 

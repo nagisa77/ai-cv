@@ -122,26 +122,24 @@ export default {
       console.log('delay', delay);
       // 添加延迟执行
       setTimeout(() => {
-        // 参考设计稿的原始宽高（与 .cv-page-content 中的 width、height 一致）
         const DESIGN_HEIGHT = 960;
+        const DESIGN_WIDTH = 720;
 
         const pageEl = this.$refs.page;
         const pageContentEl = this.$refs.pageContent;
         if (!pageEl || !pageContentEl) return;
 
-        // 获取 .cv-page 的实际显示大小
-        // const containerWidth = pageEl.clientWidth;
+        const containerWidth = pageEl.clientWidth;
         const containerHeight = pageEl.clientHeight;
 
         // 计算需要的缩放比例，保证宽高都能完整显示
-        // const scaleW = containerWidth / DESIGN_WIDTH;
+        const scaleW = containerWidth / DESIGN_WIDTH;
         const scaleH = containerHeight / DESIGN_HEIGHT;
-        // const finalScale = Math.min(scaleW, scaleH);
+        const finalScale = Math.max(scaleW, scaleH);
 
         // 应用 transform 缩放
-        // pageContentEl.style.transform = `scale(${finalScale})`;
-        pageContentEl.style.transform = `scale(${scaleH})`;
-      }, 0); // 延迟100毫秒执行
+        pageContentEl.style.transform = `scale(${finalScale})`;
+      }, 200); // 延迟100毫秒执行
     }
   }
 };
@@ -161,68 +159,66 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   margin: 20px;
   background-color: var(--color-background);
   transition: all 0.3s ease;
+  /* overflow-x: auto; 添加此行以支持垂直滚动 */
 }
 
 /* 顶部按钮区 */
 .cv-top-buttons {
   display: flex;
-  justify-content: center;
-  gap: 18px; /* 增加按钮间距 */
+  justify-content: right;
+  gap: 5px; /* 增加按钮间距 */
   margin-bottom: 15px;
-  width: 100%;
+  margin-top: 15px;
+  width: 90%;
   padding: 0 15px;
   flex-wrap: wrap;
 }
 
 .cv-top-button {
-  background-color: transparent; /* 移除背景色 */
+  background-color: transparent; 
   border: none;
-  border-radius: 50%; /* 可以尝试圆形 */
-  color: var(--color-primary); /* 图标颜色设为主题色 */
+  border-radius: 50%; 
+  color: var(--color-primary); 
   cursor: pointer;
-  display: flex; /* 改回flex便于图标居中 */
+  display: flex; 
   align-items: center;
-  justify-content: center; /* 图标水平居中 */
-  padding: 8px; /* 调整内边距 */
-  font-size: 18px; /* 增大图标尺寸 */
-  transition: color 0.2s ease, background-color 0.2s ease; /* 平滑过渡 */
-  position: relative; /* 为 tooltip 定位 */
-  width: 36px; /* 固定宽度 */
-  height: 36px; /* 固定高度 */
+  justify-content: center; 
+  font-size: 18px; 
+  transition: color 0.2s ease, background-color 0.2s ease; 
+  position: relative; 
+  width: 24px; 
+  height: 24px; 
 }
 
 .cv-top-button i {
-  /* 图标本身不需要额外样式，大小由父级font-size控制 */
-  line-height: 1; /* 确保图标垂直居中 */
+  line-height: 1; 
 }
 
 .cv-top-button .button-text {
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  bottom: 115%; /* 定位到图标上方 */
+  bottom: -120%; 
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8); /* Tooltip 背景 */
-  color: white; /* Tooltip 文字颜色 */
+  background-color: rgba(0, 0, 0, 0.8); 
+  color: white; 
   padding: 5px 10px;
   border-radius: 4px;
-  font-size: 12px; /* Tooltip 文字大小 */
-  white-space: nowrap; /* 防止文字换行 */
+  font-size: 12px; 
+  white-space: nowrap; 
   z-index: 10;
   transition: opacity 0.2s ease, visibility 0.2s ease;
-  pointer-events: none; /* 防止tooltip干扰鼠标事件 */
+  pointer-events: none; 
 }
 
 .cv-top-button:hover {
   color: var(--color-primary-hover); /* Hover 时改变图标颜色 */
   background-color: rgba(0, 0, 0, 0.05); /* 轻微背景反馈 */
-  /* 移除原有的 transform 和 box-shadow */
 }
 
 .cv-top-button:hover .button-text {
@@ -231,22 +227,21 @@ export default {
 }
 
 .cv-top-button:active {
-  /* 移除原有的 transform 和 box-shadow */
   background-color: rgba(0, 0, 0, 0.1); /* 点击时的背景反馈 */
 }
 
 /* 页面主容器：用于展示简历页面 */
 .cv-page {
-  /* 保持原逻辑：这里 aspect-ratio 3:4 并非必须，你也可换成固定宽高或其他写法。 */
-  height: 80%;
+  width: 90%;
   aspect-ratio: 3 / 4; /* 3:4 纸张比例，可根据需求定制 */
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   background-color: white;
   border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* 为后面自定义绝对定位做准备 */
-  overflow: hidden;   /* 让超出部分隐藏，避免缩放造成滚动条 */
+  position: relative;
+  overflow: hidden;  
 }
+
 .cv-page:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-3px);
@@ -254,11 +249,10 @@ export default {
 
 /* 固定尺寸：与 DESIGN_WIDTH、DESIGN_HEIGHT 对应 */
 .cv-page-content {
-  width: 680px;   /* 设计稿的宽度 */
-  height: 920px;  /* 设计稿的高度 */
+  width: 680px;   
+  height: 920px;  
   padding: 20px;
-  transform-origin: top left; /* 以左上角为缩放参考点 */
-  /* 默认不加 transform，这里由 JS 动态赋值 scale(...) */
+  transform-origin: top left; 
 }
 
 /* 加载状态时的容器 */
