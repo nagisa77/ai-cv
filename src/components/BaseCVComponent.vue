@@ -3,19 +3,24 @@
     <!-- 顶部按钮区域（公共） -->
     <div class="cv-top-buttons">
       <button class="cv-top-button" @click="handleAddModule">
-        <i class="fas fa-plus-circle"></i> 添加模块
+        <i class="fas fa-plus-circle"></i>
+        <span class="button-text">添加模块</span>
       </button>
       <button class="cv-top-button" @click="handleChangeFont">
-        <i class="fas fa-font"></i> 更换字体
+        <i class="fas fa-font"></i>
+        <span class="button-text">更换字体</span>
       </button>
       <button class="cv-top-button" @click="handleChangeTemplate">
-        <i class="fas fa-file-alt"></i> 更换模板
+        <i class="fas fa-file-alt"></i>
+        <span class="button-text">更换模板</span>
       </button>
       <button class="cv-top-button" @click="handleSmartFit">
-        <i class="fas fa-compress-alt"></i> 智能一页
+        <i class="fas fa-compress-alt"></i>
+        <span class="button-text">智能一页</span>
       </button>
       <button class="cv-top-button" @click="captureAndSaveScreenshot">
-        <i class="fas fa-download"></i> 下载
+        <i class="fas fa-download"></i>
+        <span class="button-text">下载</span>
       </button>
     </div>
     <!-- 如果在请求数据，显示加载动画 -->
@@ -167,36 +172,67 @@ export default {
 .cv-top-buttons {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 18px; /* 增加按钮间距 */
   margin-bottom: 15px;
   width: 100%;
   padding: 0 15px;
-  flex-wrap: wrap; /* 当按钮过多或屏幕变窄时自动换行 */
+  flex-wrap: wrap;
 }
 
 .cv-top-button {
-  padding: 8px 15px;
+  background-color: transparent; /* 移除背景色 */
   border: none;
-  border-radius: 6px;
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
+  border-radius: 50%; /* 可以尝试圆形 */
+  color: var(--color-primary); /* 图标颜色设为主题色 */
   cursor: pointer;
-  display: flex;
+  display: flex; /* 改回flex便于图标居中 */
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  justify-content: center; /* 图标水平居中 */
+  padding: 8px; /* 调整内边距 */
+  font-size: 18px; /* 增大图标尺寸 */
+  transition: color 0.2s ease, background-color 0.2s ease; /* 平滑过渡 */
+  position: relative; /* 为 tooltip 定位 */
+  width: 36px; /* 固定宽度 */
+  height: 36px; /* 固定高度 */
 }
+
+.cv-top-button i {
+  /* 图标本身不需要额外样式，大小由父级font-size控制 */
+  line-height: 1; /* 确保图标垂直居中 */
+}
+
+.cv-top-button .button-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 115%; /* 定位到图标上方 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8); /* Tooltip 背景 */
+  color: white; /* Tooltip 文字颜色 */
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px; /* Tooltip 文字大小 */
+  white-space: nowrap; /* 防止文字换行 */
+  z-index: 10;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none; /* 防止tooltip干扰鼠标事件 */
+}
+
 .cv-top-button:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: var(--color-primary-hover); /* Hover 时改变图标颜色 */
+  background-color: rgba(0, 0, 0, 0.05); /* 轻微背景反馈 */
+  /* 移除原有的 transform 和 box-shadow */
 }
+
+.cv-top-button:hover .button-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 .cv-top-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  /* 移除原有的 transform 和 box-shadow */
+  background-color: rgba(0, 0, 0, 0.1); /* 点击时的背景反馈 */
 }
 
 /* 页面主容器：用于展示简历页面 */
