@@ -19,9 +19,9 @@
           <div class="modal-blur"></div>
           <div class="modal-wrapper">
             <div class="modal-container">
-              <!-- <div class="modal-header">
+              <div class="modal-header">
                 <h3>您确认要选择此模版吗？</h3>
-              </div> -->
+              </div>
 
               <div class="modal-body" @wheel.prevent="handleWheel">
                 <img 
@@ -353,44 +353,55 @@ export default {
 
 .modal-container {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  width: 450px;
-  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  width: 600px;
+  padding: 30px;
   transition: all 0.3s ease;
+}
+
+.modal-header {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 15px;
 }
 
 .modal-header h3 {
   margin: 0;
   color: var(--color-primary);
   text-align: center;
-  font-weight: 500;
-  font-size: 1.3rem;
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
 .modal-body {
-  margin: 20px 0;
+  margin: 25px 0;
   overflow: auto;
-  max-height: 60vh;
+  max-height: 65vh;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-preview {
   width: 400px;
   border-radius: 8px;
   border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .modal-footer {
   display: flex;
-  justify-content: flex-end;
-  gap: 15px;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .modal-button {
-  padding: 10px 25px;
-  border-radius: 6px;
+  padding: 12px 30px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 16px;
 }
 
 .modal-button.confirm {
@@ -398,8 +409,8 @@ export default {
   color: white;
   border: none;
   font-weight: 500;
-  padding: 12px 28px;
-  box-shadow: 0 4px 10px rgba(204, 124, 94, 0.25);
+  padding: 14px 35px;
+  box-shadow: 0 4px 15px rgba(204, 124, 94, 0.3);
 }
 
 .modal-button.confirm:disabled {
@@ -411,9 +422,9 @@ export default {
 .modal-button.confirm.modifying::after {
   content: "";
   display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-left: 8px;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
   border: 2px solid #fff;
   border-top-color: transparent;
   border-radius: 50%;
@@ -427,7 +438,8 @@ export default {
 }
 
 .modal-button.confirm:hover {
-  background: var(--color-primary);
+  background: var(--color-primary-dark, #b96c4c);
+  transform: translateY(-2px);
 }
 
 .modal-button.cancel {
@@ -435,11 +447,12 @@ export default {
   color: #606266;
   border: 1px solid #dcdfe6;
   font-weight: 500;
-  padding: 12px 28px;
+  padding: 14px 35px;
 }
 
 .modal-button.cancel:hover {
   background: #e6e6e6;
+  transform: translateY(-2px);
 }
 
 .fade-enter-active,
@@ -660,6 +673,19 @@ export default {
   .back-button {
     left: 20px;
     top: 15px;
+  }
+
+  .modal-container {
+    width: 90%;
+    padding: 20px;
+  }
+  
+  .modal-preview {
+    width: 100%;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.2rem;
   }
 }
 
