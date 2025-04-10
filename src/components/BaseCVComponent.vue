@@ -150,7 +150,7 @@ export default {
 
 /* 外层容器 */
 .cv-component {
-  width: calc(50vw - 40px - 40px);
+  width: calc(53vw - 40px - 40px);
   border-radius: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -168,7 +168,7 @@ export default {
 .cv-top-buttons {
   display: flex;
   justify-content: right;
-  gap: 5px; /* 增加按钮间距 */
+  gap: 9px; /* 增加按钮间距 */
   margin-bottom: 15px;
   margin-top: 15px;
   width: 90%;

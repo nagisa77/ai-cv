@@ -329,7 +329,7 @@ export default {
 .loading-container {
   background-color: var(--color-background);
   height: 100vh;
-  width: calc(50vw - 40px);
+  width: calc(47vw - 40px);
   display: flex;
   justify-content: center;
   align-items: center;

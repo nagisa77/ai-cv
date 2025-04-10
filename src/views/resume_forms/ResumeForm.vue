@@ -723,26 +723,6 @@ export default {
   height: calc(100% + 10px);
   border-radius: 4px;
   z-index: 1;
-
-  /* 整体应用模糊滤镜 */
-  backdrop-filter: blur(20px);
-
-  /* 背景色等其它需求 */
-  background-color: rgba(0, 0, 0, 0.3);
-  transition: backdrop-filter 0.2s ease;
-
-  /* 关键：使用渐变遮罩控制模糊的可见区域
-     #000 表示该区域不透明（会显示blur），
-     transparent 表示透明（不显示或不被遮罩） */
-  -webkit-mask-image: linear-gradient(to left,
-      #000 0%,
-      /* 左侧开始完全被遮罩，可见模糊 */
-      transparent 100%
-      /* 右侧逐渐过渡到完全透明，不会显示模糊 */
-    );
-  mask-image: linear-gradient(to left,
-      #000 0%,
-      transparent 100%);
 }
 
 /* 按钮区域 */
@@ -786,7 +766,7 @@ export default {
 
 ::v-deep .delete-button {
   color: var(--color-secondary);
-  background-color: rgba(255, 0, 0, 0.485);
+  background-color: rgba(255, 0, 0, 1);
 }
 
 ::v-deep .session-title-add-icon {

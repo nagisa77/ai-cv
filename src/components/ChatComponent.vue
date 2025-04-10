@@ -449,7 +449,7 @@ watch(inputValue, () => {
 .chat-component {
   /* 大屏时：占据一半宽度(减去一些外边距) */
   height: 100vh;
-  width: calc(50vw - 40px);
+  width: calc(47vw - 40px);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -457,26 +457,29 @@ watch(inputValue, () => {
 
 /* 消息列表区域 */
 .messages-container {
-  height: calc(100vh - 62px - 100px); /* 62 是 state-area 占的高度，100px 预留给底部输入区 */
+  height: calc(100vh - 62px - 100px - 20px); /* 62 是 state-area 占的高度，100px 预留给底部输入区 */
   overflow-y: auto;
   padding-top: 20px;
   padding-bottom: 20px;
+  margin-top: 20px;
 }
 
 /* state-area 位置固定在顶部 */
 .state-area {
   position: fixed;
+  width: calc(47vw - 40px - 60px);
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 10px;
-  margin: 10px;
+  margin: 20px;
   border-radius: 10px;
   margin-bottom: 10px;
-  background-color: rgba(245, 243, 240, 0.8);
+  background-color: var(--color-background);
   font-size: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* 输入区域固定在底部 */
@@ -487,13 +490,13 @@ watch(inputValue, () => {
   padding: 10px 15px;
   justify-content: space-between;
   border-radius: 25px;
-  left: 95px;
+  left: 85px;
   bottom: 20px;
-  width: calc(50vw - 40px - 30px - 30px);
+  width: calc(47vw - 40px - 30px - 45px);
   align-self: center;
   border: 1px solid var(--color-primary);
   background-color: var(--color-background);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* 在输入区域上方做个渐变遮罩，让消息滚动到快底部时有渐变过渡 */
@@ -539,6 +542,8 @@ watch(inputValue, () => {
 
 /* 发送按钮 */
 .chatgpt-send-button {
+  position: relative;
+  left: 5px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -621,7 +626,7 @@ watch(inputValue, () => {
 
 /* 消息内容样式 */
 .message {
-  max-width: 400px;
+  max-width: 75%;
   padding: 10px;
   border-radius: 15px;
   font-size: 14px;
@@ -633,6 +638,7 @@ watch(inputValue, () => {
   /* background-color: var(--color-primary); */
   max-width: calc(100% - 30px);
 }
+
 .message.me {
   margin-top: 10px;
   background-color: var(--color-background);
@@ -652,17 +658,19 @@ watch(inputValue, () => {
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .bullet-point-content {
   font-size: 10px;
   margin-right: 10px;
-  margin-top: 10px;
+  margin-top: 7px;
 }
+
 .bullet-point {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
 }
 .bullet-content {
-  font-size: 10px;
+  font-size: 12px;
   padding-left: 10px;
 }
 .choice-buttons {
@@ -708,7 +716,7 @@ watch(inputValue, () => {
     margin: 0;
     top: 70px;
     left: 10px;
-    background-color: rgba(245, 243, 240, 0.9);
+    background-color: var(--color-background);
   }
   .messages-container {
     /* 减小顶部空间，让 messages 直接紧贴 state-area */

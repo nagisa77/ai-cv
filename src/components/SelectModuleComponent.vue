@@ -44,7 +44,7 @@ export default {
   padding: 100px 20px;
   background-color: var(--color-background);
   height: calc(100vh - 200px);
-  width: calc(50vw - 80px);
+  width: calc(45 - 80px);
 }
 
 .select-module-title {
