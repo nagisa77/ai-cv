@@ -122,21 +122,21 @@ export default {
       console.log('delay', delay);
       // 添加延迟执行
       setTimeout(() => {
-        const DESIGN_HEIGHT = 960;
-        const DESIGN_WIDTH = 720;
+        // const DESIGN_HEIGHT = 960;
+        const DESIGN_WIDTH = 493;
 
         const pageEl = this.$refs.page;
         const pageContentEl = this.$refs.pageContent;
         if (!pageEl || !pageContentEl) return;
 
         const containerWidth = pageEl.clientWidth;
-        const containerHeight = pageEl.clientHeight;
+        // const containerHeight = pageEl.clientHeight;
 
         // 计算需要的缩放比例，保证宽高都能完整显示
         const scaleW = containerWidth / DESIGN_WIDTH;
-        const scaleH = containerHeight / DESIGN_HEIGHT;
-        const finalScale = Math.max(scaleW, scaleH);
-
+        // const scaleH = containerHeight / DESIGN_HEIGHT;
+        // const finalScale = Math.max(scaleW, scaleH);
+        const finalScale = scaleW;
         // 应用 transform 缩放
         pageContentEl.style.transform = `scale(${finalScale})`;
       }, 200); // 延迟100毫秒执行
@@ -150,9 +150,6 @@ export default {
 
 /* 外层容器 */
 .cv-component {
-  /* 父级容器的大小，可以根据你的布局需要定制。
-     这里维持原有逻辑：高=calc(100vh - 40px)，宽=calc(50vw - 40px - 40px) 等等。 */
-  height: calc(100vh - 40px);
   width: calc(50vw - 40px - 40px);
   border-radius: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -163,7 +160,8 @@ export default {
   margin: 20px;
   background-color: var(--color-background);
   transition: all 0.3s ease;
-  /* overflow-x: auto; 添加此行以支持垂直滚动 */
+  height: calc(100vh - 40px); 
+  overflow-y: auto;
 }
 
 /* 顶部按钮区 */
@@ -233,13 +231,12 @@ export default {
 /* 页面主容器：用于展示简历页面 */
 .cv-page {
   width: 90%;
-  aspect-ratio: 3 / 4; /* 3:4 纸张比例，可根据需求定制 */
+  aspect-ratio: 3 / 4; 
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   background-color: white;
   border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
-  overflow: hidden;  
 }
 
 .cv-page:hover {
@@ -249,8 +246,8 @@ export default {
 
 /* 固定尺寸：与 DESIGN_WIDTH、DESIGN_HEIGHT 对应 */
 .cv-page-content {
-  width: 680px;   
-  height: 920px;  
+  width: 453px;   
+  height: 613px;  
   padding: 20px;
   transform-origin: top left; 
 }

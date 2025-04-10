@@ -314,13 +314,16 @@ export default {
   display: flex;
   height: 100vh;
   width: 100vw - 80px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .cv-container {
   position: relative;
   height: 100vh;
+}
+
+.resume-container {
+  overflow-y: auto;
 }
 
 .loading-container {
