@@ -459,7 +459,6 @@ watch(inputValue, () => {
 .messages-container {
   height: calc(100vh - 62px - 100px - 20px); /* 62 是 state-area 占的高度，100px 预留给底部输入区 */
   overflow-y: auto;
-  padding-top: 20px;
   padding-bottom: 20px;
   margin-top: 20px;
 }

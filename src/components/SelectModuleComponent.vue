@@ -1,10 +1,10 @@
 <template>
   <div class="select-module">
     <div class="select-module-title">
-      请<span class="select-module-title-highlight">选择</span>一个经历...
+      请<span class="select-module-title-highlight">选择</span>你想要攻略的经历
     </div>
     <div class="select-module-subtitle">
-      Hi少侠，欢迎来到神奇的AI简历创建之旅，我是你的好伙伴简历君，你也可以叫我菌菌：）右边已经根据您提供的基础信息生成了初步的简历框架，下面就由俺来协助少侠完善它吧！请选择要先开始攻略的板块：
+      您好，欢迎使用AI简历君！我是您的智能简历助手，已根据您提供的基础信息生成了初步的简历框架。接下来，我将协助您完善各个模块，打造一份专业而有竞争力的简历。请选择您想要优先完善的板块：
     </div>
     <div class="select-module-list">
       <div
@@ -41,14 +41,13 @@ export default {
 <style scoped>
 .select-module {
   /* 桌面端布局 */
-  padding: 100px 20px;
-  background-color: var(--color-background);
+  padding: 75px 20px;
   height: calc(100vh - 200px);
-  width: calc(45 - 80px);
+  width: calc(47vw - 80px);
 }
 
 .select-module-title {
-  font-size: 24px;
+  font-size: 35px;
   font-weight: bold;
 }
 
@@ -57,9 +56,9 @@ export default {
 }
 
 .select-module-subtitle {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--color-text-primary);
-  margin-top: 20px;
+  margin-top: 40px;
   opacity: 0.6;
   line-height: 1.7;
 }
@@ -68,7 +67,7 @@ export default {
   margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 .select-module-item {
@@ -76,8 +75,8 @@ export default {
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
   border-radius: 25px;
-  padding: 8px 16px;
-  font-size: 13px;
+  padding: 12px 25px;
+  font-size: 18px;
   transition: all 0.3s ease;
 }
 
