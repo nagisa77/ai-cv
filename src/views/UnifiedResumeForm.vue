@@ -281,27 +281,6 @@
         {{ isCreatingResume ? '正在创建...' : '开始创建我的简历' }}
       </button>
     </div>
-
-    <!-- 预览窗格（示例：可根据业务情况自由开启/关闭） -->
-    <!--
-    <div class="preview-pane">
-      <div v-if="selectedModule.type">
-        <div class="preview-title">
-          这是您的输入在简历的大致样子，您可以在此基础上进行修改
-        </div>
-        <component
-          class="preview-component"
-          :is="getPreviewComponent(selectedModule.type)"
-          :educationList="mappedEducationList"
-          :workList="mappedWorkList"
-          :projectList="mappedProjectList"
-          :personalInfo="basicInfo"
-          :personalSummary="personalSummary"
-          :enableHover="false"
-        />
-      </div>
-    </div>
-    -->
   </div>
 </template>
 
@@ -311,31 +290,6 @@
  */
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
 import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
-
-/**
- * ========== 2. 引入三套模板的 Education、Work、Project、PersonalInfo、Summary ========== 
- * 根据 templateType 判断要在右侧展示哪一套组件。（此处注释掉，按需引入）
- */
-// default 模板
-// import EducationSection from '@/components/template_ui/default/cv_components/EducationSection.vue'
-// import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue'
-// import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue'
-// import PersonalInfo from '@/components/template_ui/default/cv_components/PersonalInfo.vue'
-// import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue'
-
-// // general_simple 模板
-// import EducationGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/EducationGeneralSimpleSection.vue'
-// import WorkGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/WorkGeneralSimpleSection.vue'
-// import ProjectGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/ProjectGeneralSimpleSection.vue'
-// import PersonalGeneralSimpleInfo from '@/components/template_ui/general_simple/cv_components/PersonalGeneralSimpleInfo.vue'
-// import SummaryGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/SummaryGeneralSimpleSection.vue'
-
-// // creative_modern 模板
-// import CreativeModernEducationSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernEducationSection.vue'
-// import CreativeModernWorkSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernComponentWorkSection.vue'
-// import CreativeModernProjectSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernProjectSection.vue'
-// import CreativeModernPersonalInfo from '@/components/template_ui/creative_modern/cv_components/CreativeModernPersonalInfo.vue'
-// import CreativeModernSummarySection from '@/components/template_ui/creative_modern/cv_components/CreativeModernSummarySection.vue'
 
 /**
  * ========== 3. 其他业务相关的模块 ========== 
@@ -353,24 +307,6 @@ export default {
   components: {
     AppleStyleInput,
     UploadableImage,
-    // 以下三套模板里所有用得到的组件都先注册（按需开启）
-    // EducationSection,
-    // WorkSection,
-    // ProjectSection,
-    // PersonalInfo,
-    // SummarySection,
-
-    // EducationGeneralSimpleSection,
-    // WorkGeneralSimpleSection,
-    // ProjectGeneralSimpleSection,
-    // PersonalGeneralSimpleInfo,
-    // SummaryGeneralSimpleSection,
-
-    // CreativeModernEducationSection,
-    // CreativeModernWorkSection,
-    // CreativeModernProjectSection,
-    // CreativeModernPersonalInfo,
-    // CreativeModernSummarySection
   },
   props: {
     /**

@@ -178,7 +178,7 @@
 
       <div class="home-logged-right-bottom">
         <div class="home-card-right-bottom">
-          <img  class="home-card-right-bottom-img" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/CleanShot%202025-03-25%20at%2011%E2%80%AF.47.38%402x.png" alt="活动图标">
+          <img  class="home-card-right-bottom-img" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/7114a5ab-15a4-45ae-ac83-b6c9b7f2130a.png" alt="活动图标">
         </div>
       </div>
     </div>
