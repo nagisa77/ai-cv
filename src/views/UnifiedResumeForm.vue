@@ -150,6 +150,13 @@
         class="resume-container"
         :is="currentTemplateComponent"
         :color="color"
+        :isPreview="true"
+        :previewData="{
+          personalInfo: basicInfo,
+          education: mappedEducationList,
+          workExperience: mappedWorkList,
+          projectExperience: mappedProjectList,
+        }"
       />
     </div>
   </div>

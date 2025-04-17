@@ -63,6 +63,14 @@ export default {
     color: {
       type: String,
       default: ''
+    },
+    isPreview: {
+      type: Boolean,
+      default: false
+    },
+    previewData: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
@@ -82,18 +90,38 @@ export default {
       return metadataInstance.getIsFetching()
     },
     personalInfo() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.personalInfo) {
+        return this.previewData.personalInfo;
+      }
       return metadataInstance.data.personalInfo;
     },
     educationList() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.education) {
+        return this.previewData.education;
+      }
       return metadataInstance.data.education;
     },
     workList() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.workExperience) {
+        return this.previewData.workExperience;
+      }
       return metadataInstance.data.workExperience;
     },
     projectList() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.projectExperience) {
+        return this.previewData.projectExperience;
+      }
       return metadataInstance.data.projectExperience;
     },
     personalSummary() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.personalSummary) {
+        return this.previewData.personalSummary;
+      }
       return metadataInstance.data.personalSummary;
     }
   },
