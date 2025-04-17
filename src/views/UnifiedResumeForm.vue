@@ -7,279 +7,289 @@
     rel="stylesheet"
   />
 
-  <div class="scroll-container">
-    <!-- 主体容器 -->
-    <div class="container">
-      <h1 class="title">
-        你好，欢迎来到 <span class="highlight-content">AI 简历君</span>
-      </h1>
-      <p class="subtitle">
-        在开始为您创建 AI 智能简历前，请先完善以下基础信息：
-      </p>
+  <div class="main-layout">
+    <div class="scroll-container">
+      <!-- 主体容器 -->
+      <div class="container">
+        <h1 class="title">
+          你好，欢迎来到 <span class="highlight-content">AI 简历君</span>
+        </h1>
+        <p class="subtitle">
+          在开始为您创建 AI 智能简历前，请先完善以下基础信息：
+        </p>
 
-      <!-- 基础信息卡片 -->
-      <div class="card" @click="handleCardClick('personalInfo', '')">
-        <div class="block-title">基础信息</div>
-        <div class="avatar-upload">
-          <UploadableImage
-            v-model="basicInfo.avatar"
-            width="80"
-            height="120"
-            default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
+        <!-- 基础信息卡片 -->
+        <div class="card" @click="handleCardClick('personalInfo', '')">
+          <div class="block-title">基础信息</div>
+          <div class="avatar-upload">
+            <UploadableImage
+              v-model="basicInfo.avatar"
+              width="80"
+              height="120"
+              default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
+            />
+          </div>
+          <div class="form-line">
+            <AppleStyleInput
+              id="name"
+              labelText="姓名"
+              inputType="text"
+              :required="true"
+              v-model="basicInfo.name"
+            />
+            <AppleStyleInput
+              id="phone"
+              labelText="手机号 (选填)"
+              inputType="tel"
+              v-model="basicInfo.phone"
+            />
+          </div>
+
+          <AppleStyleInput
+            id="email"
+            labelText="邮箱 (选填)"
+            inputType="email"
+            v-model="basicInfo.email"
+          />
+
+          <div class="form-line">
+            <AppleStyleInput
+              id="targetCompany"
+              labelText="目标公司 (选填)"
+              inputType="text"
+              v-model="basicInfo.targetCompany"
+            />
+            <AppleStyleInput
+              id="jobTitle"
+              labelText="岗位名称 (选填)"
+              inputType="text"
+              v-model="basicInfo.jobTitle"
+            />
+          </div>
+          <AppleStyleInput
+            id="jobDescription"
+            labelText="岗位描述 (选填)"
+            inputType="text"
+            v-model="basicInfo.jobDescription"
           />
         </div>
-        <div class="form-line">
-          <AppleStyleInput
-            id="name"
-            labelText="姓名"
-            inputType="text"
-            :required="true"
-            v-model="basicInfo.name"
-          />
-          <AppleStyleInput
-            id="phone"
-            labelText="手机号 (选填)"
-            inputType="tel"
-            v-model="basicInfo.phone"
-          />
+
+        <!-- 教育经历 -->
+        <div class="block-title">教育经历</div>
+        <div id="education-experience" class="education-list">
+          <div
+            class="card"
+            v-for="(edu, index) in educationList"
+            :key="index"
+            @click="handleCardClick('educationExperience', edu.school)"
+          >
+            <div class="card-header">
+              <div class="card-title">教育经历{{ index + 1 }}</div>
+              <button
+                class="remove-btn"
+                type="button"
+                @click.stop="removeCard('educationList', index)"
+              >
+                ×
+              </button>
+            </div>
+
+            <AppleStyleInput
+              :id="`school-${index}`"
+              labelText="学校名"
+              inputType="text"
+              :required="true"
+              v-model="edu.school"
+            />
+
+            <div class="form-line">
+              <AppleStyleInput
+                :id="`edu-time-${index}`"
+                labelText="时间"
+                inputType="text"
+                :required="true"
+                v-model="edu.time"
+              />
+              <AppleStyleInput
+                :id="`major-${index}`"
+                labelText="专业"
+                inputType="text"
+                :required="true"
+                v-model="edu.major"
+              />
+            </div>
+
+            <div class="form-line">
+              <AppleStyleInput
+                :id="`degree-${index}`"
+                labelText="学历"
+                inputType="text"
+                :required="true"
+                v-model="edu.degree"
+              />
+              <AppleStyleInput
+                :id="`gpa-${index}`"
+                labelText="GPA (选填)"
+                inputType="text"
+                v-model="edu.gpa"
+              />
+              <AppleStyleInput
+                :id="`edu-city-${index}`"
+                labelText="城市"
+                inputType="text"
+                :required="true"
+                v-model="edu.city"
+              />
+            </div>
+            <AppleStyleInput
+              :id="`honors-${index}`"
+              labelText="荣誉奖项 (选填)"
+              inputType="text"
+              v-model="edu.honors"
+            />
+            <AppleStyleInput
+              :id="`courses-${index}`"
+              labelText="相关课程 (选填)"
+              inputType="text"
+              v-model="edu.courses"
+            />
+          </div>
+        </div>
+        <div>
+          <button class="add-button" type="button" @click="addEducationExperience">
+            + 新增教育经历
+          </button>
         </div>
 
-        <AppleStyleInput
-          id="email"
-          labelText="邮箱 (选填)"
-          inputType="email"
-          v-model="basicInfo.email"
-        />
+        <!-- 工作经历 -->
+        <div class="block-title">工作经历</div>
+        <div id="work-experience" class="experience-list">
+          <div
+            class="card"
+            v-for="(work, index) in workList"
+            :key="index"
+            @click="handleCardClick('workExperience', work.company)"
+          >
+            <div class="card-header">
+              <div class="card-title">工作经历{{ index + 1 }}</div>
+              <button
+                class="remove-btn"
+                type="button"
+                @click.stop="removeCard('workList', index)"
+              >
+                ×
+              </button>
+            </div>
 
-        <div class="form-line">
-          <AppleStyleInput
-            id="targetCompany"
-            labelText="目标公司 (选填)"
-            inputType="text"
-            v-model="basicInfo.targetCompany"
-          />
-          <AppleStyleInput
-            id="jobTitle"
-            labelText="岗位名称 (选填)"
-            inputType="text"
-            v-model="basicInfo.jobTitle"
-          />
+            <AppleStyleInput
+              :id="`company-${index}`"
+              labelText="公司名"
+              inputType="text"
+              :required="true"
+              v-model="work.company"
+            />
+
+            <div class="form-line">
+              <AppleStyleInput
+                :id="`work-time-${index}`"
+                labelText="时间"
+                inputType="text"
+                :required="true"
+                v-model="work.time"
+              />
+              <AppleStyleInput
+                :id="`title-${index}`"
+                labelText="职位"
+                inputType="text"
+                :required="true"
+                v-model="work.title"
+              />
+              <AppleStyleInput
+                :id="`work-city-${index}`"
+                labelText="城市"
+                inputType="text"
+                :required="true"
+                v-model="work.city"
+              />
+            </div>
+          </div>
         </div>
-        <AppleStyleInput
-          id="jobDescription"
-          labelText="岗位描述 (选填)"
-          inputType="text"
-          v-model="basicInfo.jobDescription"
-        />
-      </div>
+        <div>
+          <button class="add-button" type="button" @click="addWorkExperience">
+            + 新增工作经历
+          </button>
+        </div>
 
-      <!-- 教育经历 -->
-      <div class="block-title">教育经历</div>
-      <div id="education-experience" class="education-list">
-        <div
-          class="card"
-          v-for="(edu, index) in educationList"
-          :key="index"
-          @click="handleCardClick('educationExperience', edu.school)"
+        <!-- 项目经历 -->
+        <div class="block-title">项目经历</div>
+        <div id="project-experience" class="project-list">
+          <div
+            class="card"
+            v-for="(proj, index) in projectList"
+            :key="index"
+            @click="handleCardClick('projectExperience', proj.projectName)"
+          >
+            <div class="card-header">
+              <div class="card-title">项目经历{{ index + 1 }}</div>
+              <button
+                class="remove-btn"
+                type="button"
+                @click.stop="removeCard('projectList', index)"
+              >
+                ×
+              </button>
+            </div>
+
+            <AppleStyleInput
+              :id="`project-${index}`"
+              labelText="项目名"
+              inputType="text"
+              :required="true"
+              v-model="proj.projectName"
+            />
+
+            <div class="form-line">
+              <AppleStyleInput
+                :id="`project-time-${index}`"
+                labelText="时间"
+                inputType="text"
+                :required="true"
+                v-model="proj.time"
+              />
+              <AppleStyleInput
+                :id="`role-${index}`"
+                labelText="职位/角色"
+                inputType="text"
+                :required="true"
+                v-model="proj.role"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="add-button" type="button" @click="addProjectExperience">
+            + 新增项目经历
+          </button>
+        </div>
+
+        <!-- 提交按钮 -->
+        <button
+          :disabled="isCreatingResume"
+          class="submit-btn"
+          type="button"
+          @click="handleSubmit"
         >
-          <div class="card-header">
-            <div class="card-title">教育经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('educationList', index)"
-            >
-              ×
-            </button>
-          </div>
-
-          <AppleStyleInput
-            :id="`school-${index}`"
-            labelText="学校名"
-            inputType="text"
-            :required="true"
-            v-model="edu.school"
-          />
-
-          <div class="form-line">
-            <AppleStyleInput
-              :id="`edu-time-${index}`"
-              labelText="时间"
-              inputType="text"
-              :required="true"
-              v-model="edu.time"
-            />
-            <AppleStyleInput
-              :id="`major-${index}`"
-              labelText="专业"
-              inputType="text"
-              :required="true"
-              v-model="edu.major"
-            />
-          </div>
-
-          <div class="form-line">
-            <AppleStyleInput
-              :id="`degree-${index}`"
-              labelText="学历"
-              inputType="text"
-              :required="true"
-              v-model="edu.degree"
-            />
-            <AppleStyleInput
-              :id="`gpa-${index}`"
-              labelText="GPA (选填)"
-              inputType="text"
-              v-model="edu.gpa"
-            />
-            <AppleStyleInput
-              :id="`edu-city-${index}`"
-              labelText="城市"
-              inputType="text"
-              :required="true"
-              v-model="edu.city"
-            />
-          </div>
-          <AppleStyleInput
-            :id="`honors-${index}`"
-            labelText="荣誉奖项 (选填)"
-            inputType="text"
-            v-model="edu.honors"
-          />
-          <AppleStyleInput
-            :id="`courses-${index}`"
-            labelText="相关课程 (选填)"
-            inputType="text"
-            v-model="edu.courses"
-          />
-        </div>
-      </div>
-      <div>
-        <button class="add-button" type="button" @click="addEducationExperience">
-          + 新增教育经历
+          {{ isCreatingResume ? '正在创建...' : '开始创建我的简历' }}
         </button>
       </div>
-
-      <!-- 工作经历 -->
-      <div class="block-title">工作经历</div>
-      <div id="work-experience" class="experience-list">
-        <div
-          class="card"
-          v-for="(work, index) in workList"
-          :key="index"
-          @click="handleCardClick('workExperience', work.company)"
-        >
-          <div class="card-header">
-            <div class="card-title">工作经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('workList', index)"
-            >
-              ×
-            </button>
-          </div>
-
-          <AppleStyleInput
-            :id="`company-${index}`"
-            labelText="公司名"
-            inputType="text"
-            :required="true"
-            v-model="work.company"
-          />
-
-          <div class="form-line">
-            <AppleStyleInput
-              :id="`work-time-${index}`"
-              labelText="时间"
-              inputType="text"
-              :required="true"
-              v-model="work.time"
-            />
-            <AppleStyleInput
-              :id="`title-${index}`"
-              labelText="职位"
-              inputType="text"
-              :required="true"
-              v-model="work.title"
-            />
-            <AppleStyleInput
-              :id="`work-city-${index}`"
-              labelText="城市"
-              inputType="text"
-              :required="true"
-              v-model="work.city"
-            />
-          </div>
-        </div>
+    </div>
+    
+    <div class="preview-container">
+      <div v-if="selectedModule.type" class="preview-content">
       </div>
-      <div>
-        <button class="add-button" type="button" @click="addWorkExperience">
-          + 新增工作经历
-        </button>
+      <div v-else class="no-selection">
+        请点击左侧卡片查看预览
       </div>
-
-      <!-- 项目经历 -->
-      <div class="block-title">项目经历</div>
-      <div id="project-experience" class="project-list">
-        <div
-          class="card"
-          v-for="(proj, index) in projectList"
-          :key="index"
-          @click="handleCardClick('projectExperience', proj.projectName)"
-        >
-          <div class="card-header">
-            <div class="card-title">项目经历{{ index + 1 }}</div>
-            <button
-              class="remove-btn"
-              type="button"
-              @click.stop="removeCard('projectList', index)"
-            >
-              ×
-            </button>
-          </div>
-
-          <AppleStyleInput
-            :id="`project-${index}`"
-            labelText="项目名"
-            inputType="text"
-            :required="true"
-            v-model="proj.projectName"
-          />
-
-          <div class="form-line">
-            <AppleStyleInput
-              :id="`project-time-${index}`"
-              labelText="时间"
-              inputType="text"
-              :required="true"
-              v-model="proj.time"
-            />
-            <AppleStyleInput
-              :id="`role-${index}`"
-              labelText="职位/角色"
-              inputType="text"
-              :required="true"
-              v-model="proj.role"
-            />
-          </div>
-        </div>
-      </div>
-      <div>
-        <button class="add-button" type="button" @click="addProjectExperience">
-          + 新增项目经历
-        </button>
-      </div>
-
-      <!-- 提交按钮 -->
-      <button
-        :disabled="isCreatingResume"
-        class="submit-btn"
-        type="button"
-        @click="handleSubmit"
-      >
-        {{ isCreatingResume ? '正在创建...' : '开始创建我的简历' }}
-      </button>
     </div>
   </div>
 </template>
@@ -626,28 +636,40 @@ export default {
 <style scoped>
 /* ========== 布局与容器相关 ========== */
 
-.scroll-container {
+.main-layout {
   display: flex;
-  flex-direction: row; /* 默认大屏时水平布局 */
-  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 100vh;
 }
 
-/* 主体容器：居中 + 最大宽度限制 */
+.scroll-container {
+  flex: 0 0 50%;
+  max-width: calc(50vw - 60px);
+  margin-left: 60px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.preview-container {
+  flex: 0 0 50%;
+  max-width: calc(50vw - 60px);
+  height: 100vh - 40px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border-left: 1px solid #dee2e6;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+}
+
+/* 主体容器：最大宽度限制 */
 .container {
   margin: 0 auto; /* 水平居中 */
   margin-top: 100px;
   padding-bottom: 60px;
   max-width: 600px;
-  /* 可视需要在大屏上可加额外左右边距或其他样式 */
-}
-
-/* 右侧预览窗格：大屏固定定位，小屏时自动堆叠 */
-.preview-pane {
-  position: fixed;
-  top: 100px;
-  left: 750px;
-  width: 400px;
-  overflow-y: auto;
 }
 
 /* 右侧预览标题 */
@@ -658,6 +680,13 @@ export default {
   opacity: 0.5;
 }
 
+.preview-content {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .no-selection {
   text-align: center;
   color: #888;
@@ -666,23 +695,23 @@ export default {
 
 /* ========== 响应式处理 ========== */
 
-/* 当屏幕宽度小于 1200px 时，让预览窗口跟随布局从上往下排布 */
+/* 当屏幕宽度小于 1200px 时，让布局变成上下结构 */
 @media (max-width: 1200px) {
-  .scroll-container {
+  .main-layout {
     flex-direction: column;
-    align-items: stretch; /* 让子元素宽度自适应 */
   }
 
-  .preview-pane {
-    position: relative;
-    left: 0;
-    top: 0;
-    border-left: none;
-    border-top: 1px solid #ccc;
+  .scroll-container,
+  .preview-container {
+    flex: 0 0 100%;
     max-width: 100%;
     height: auto;
+  }
+
+  .preview-container {
+    border-left: none;
+    border-top: 1px solid #dee2e6;
     margin-top: 20px;
-    margin-bottom: 20px;
   }
 }
 
