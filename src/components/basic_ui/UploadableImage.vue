@@ -55,7 +55,7 @@ export default {
       type: Number,
       default: 120
     },
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -101,8 +101,7 @@ export default {
         const { data } = await apiClient.post('/pic', formData, {})
 
         this.currentImage = data.data.url
-        // 与 v-model 相兼容的写法需触发 input 事件或 update:modelValue 事件
-        this.$emit('update:value', data.data.url)
+        this.$emit('update:modelValue', data.data.url)
         this.$emit('input', data.data.url)
 
         this.toast.success('图片上传成功')

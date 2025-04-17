@@ -1,7 +1,7 @@
 <template>
   <div class="cv-component" ref="cvComponent">
     <!-- 顶部按钮区域（公共） -->
-    <div class="cv-top-buttons">
+    <div v-if="!isPreview" class="cv-top-buttons">
       <button class="cv-top-button" @click="handleAddModule">
         <i class="fas fa-plus-circle"></i>
         <span class="button-text">添加模块</span>
@@ -22,6 +22,11 @@
         <i class="fas fa-download"></i>
         <span class="button-text">下载</span>
       </button>
+    </div>
+
+    <!-- 预览模式下，不展示顶部按钮 -->
+    <div v-else class="cv-top-buttons">
+      <div class="preview-mode-indicator">当前为预览模式</div>
     </div>
     <!-- 如果在请求数据，显示加载动画 -->
     <div class="cv-page loading-container" v-if="isFetching">
@@ -56,7 +61,11 @@ export default {
     highlightTitle: {
       type: String,
       default: ''
-    }
+    },
+    isPreview: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     // 若有更多字段可自行补充
@@ -162,6 +171,11 @@ export default {
   transition: all 0.3s ease;
   height: calc(100vh - 40px); 
   overflow-y: auto;
+}
+
+.preview-mode-indicator {
+  font-size: 12px;
+  opacity: 0.5;
 }
 
 /* 顶部按钮区 */

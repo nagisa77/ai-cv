@@ -10,7 +10,7 @@
     </div>
 
     <div class="right-info">
-      <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/pic.jpg" alt="头像" class="avatar">
+      <img :src="personalInfo.avatar ? personalInfo.avatar : 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/pic.jpg'" alt="头像" class="avatar">
     </div>
   </div>
 </template>

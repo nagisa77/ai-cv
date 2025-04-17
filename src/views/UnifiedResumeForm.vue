@@ -362,7 +362,7 @@ export default {
      */
     handleSubmit() {
       // 取出基础信息
-      const { name, phone, email, targetCompany, jobTitle, jobDescription } = this.basicInfo
+      const { name, phone, email, targetCompany, jobTitle, jobDescription, avatar } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
@@ -393,7 +393,8 @@ export default {
             email,
             targetCompany,
             jobTitle,
-            jobDescription
+            jobDescription,
+            avatar
           })
 
           // 保存教育经历

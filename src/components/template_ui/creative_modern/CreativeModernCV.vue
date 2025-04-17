@@ -1,6 +1,6 @@
 <template>
   <!-- 使用通用的 BaseCVComponent 包裹 -->
-  <BaseCVComponent :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
+  <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
     @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
     @smart-fit="handleSmartFit">
