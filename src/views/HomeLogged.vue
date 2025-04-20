@@ -610,7 +610,7 @@ export default {
 .home-card-right-bottom-img {
   width: 100%;
   height: 100%;
-  object-fit: fit;
+  object-fit: contain;
 }
 
 /* 顶部按钮容器 */
