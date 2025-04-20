@@ -249,15 +249,13 @@ export default {
 
 <style scoped>
 .edit-title-component {
-    padding: 100px 20px;
-    background-color: var(--color-background);
-    height: calc(100vh - 60px - 200px);
-    width: calc(38vw - 40px);
-    overflow-y: auto;
+    padding: 75px 20px;
+    height: calc(100vh - 200px);
+    width: calc(47vw - 80px);
 }
 
 .edit-title-component-title {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
 }
 

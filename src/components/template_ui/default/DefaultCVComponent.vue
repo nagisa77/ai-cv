@@ -8,22 +8,22 @@
       <PersonalInfo :personalInfo="personalInfo" :color="color" />
 
       <!-- Education Section -->
-      <EducationSection :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
+      <EducationSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Work Experience Section -->
-      <WorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
+      <WorkSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Project Experience Section -->
-      <ProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
+      <ProjectSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Personal Summary -->
-      <SummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
+      <SummarySection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
     </div>
   </BaseCVComponent>
 </template>

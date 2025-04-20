@@ -14,22 +14,22 @@
             <PersonalGeneralSimpleInfo :personalInfo="personalInfo" :color="color" />
 
             <!-- Education Section -->
-            <EducationGeneralSimpleSection :educationList="educationList" :highlightTitle="highlightTitle"
+            <EducationGeneralSimpleSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Work Experience Section -->
-            <WorkGeneralSimpleSection :workList="workList" :highlightTitle="highlightTitle"
+            <WorkGeneralSimpleSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Project Experience Section -->
-            <ProjectGeneralSimpleSection :projectList="projectList" :highlightTitle="highlightTitle"
+            <ProjectGeneralSimpleSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle"
                 @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
                 @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
 
             <!-- Personal Summary -->
-            <SummaryGeneralSimpleSection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
+            <SummaryGeneralSimpleSection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
         </div>
     </BaseCVComponent>
 </template>

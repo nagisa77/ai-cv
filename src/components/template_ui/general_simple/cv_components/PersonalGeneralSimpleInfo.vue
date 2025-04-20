@@ -10,7 +10,7 @@
     </div>
 
     <div class="right-info">
-      <img :src="personalInfo.avatar ? personalInfo.avatar : 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/pic.jpg'" alt="头像" class="avatar">
+      <img v-if="personalInfo.avatar" :src="personalInfo.avatar" alt="头像" class="avatar">
     </div>
   </div>
 </template>
@@ -51,7 +51,11 @@ export default {
 }
 
 .avatar {
-  height: 100px;
-  width: 62px;
+  height: 80px;
+  width: 60px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  object-position: center;
 }
 </style>

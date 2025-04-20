@@ -384,6 +384,8 @@ export default {
 
 .modal-preview {
   width: 400px;
+  max-width: 100%;
+  object-fit: contain;
   border-radius: 8px;
   border: 1px solid #eee;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -545,12 +547,16 @@ export default {
 .preview-wrapper {
   position: relative;
   background: #f8f9fa;
+  aspect-ratio: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .preview-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s;
 }
 

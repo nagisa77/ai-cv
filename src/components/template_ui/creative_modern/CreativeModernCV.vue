@@ -17,22 +17,22 @@
       <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
 
       <!-- Education Section -->
-      <CreativeModernEducationSection :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
+      <CreativeModernEducationSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Work Experience Section -->
-      <CreativeModernWorkSection :workList="workList" :highlightTitle="highlightTitle" :color="color"
+      <CreativeModernWorkSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Project Experience Section -->
-      <CreativeModernProjectSection :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
+      <CreativeModernProjectSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
         @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
         @add-title="handleAddTitle" />
 
       <!-- Personal Summary -->
-      <CreativeModernSummarySection v-if="personalSummary" :personalSummary="personalSummary" :color="color" />
+      <CreativeModernSummarySection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
     </div>
   </BaseCVComponent>
 </template>

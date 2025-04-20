@@ -6,6 +6,14 @@
 
   <div class="main-layout">
     <div class="scroll-container">
+      <button class="back-button" @click="goBack">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        返回
+      </button>
+
       <!-- 主体容器 -->
       <div class="container">
         <h1 class="title">
@@ -19,8 +27,9 @@
         <div class="card" @click="handleCardClick('personalInfo', '')">
           <div class="block-title">基础信息</div>
           <div class="avatar-upload">
-            <UploadableImage v-model="basicInfo.avatar" width="80" height="120"
+            <UploadableImage v-model="basicInfo.avatar" width="90" height="120"
               default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png" />
+            <div class="upload-tip">点击上传证件照 (可选)</div>
           </div>
           <div class="form-line">
             <AppleStyleInput id="name" labelText="姓名" inputType="text" :required="true" v-model="basicInfo.name" />
@@ -473,6 +482,11 @@ export default {
         })
     },
 
+    // 添加返回方法
+    goBack() {
+      this.$router.go(-1)
+    },
+
     // 新增教育经历
     addEducationExperience() {
       this.educationList.push({
@@ -632,8 +646,43 @@ export default {
 
 .avatar-upload {
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
+.upload-tip {
+  font-size: 12px;
+  color: var(--color-black);
+  opacity: 0.5;
+  margin-left: 20px;
+}
+
+/* 返回按钮样式 */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 100px; /* 考虑到左侧菜单栏 */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(204, 124, 94, 0.1);
+}
+
+.back-button svg {
+  width: 20px;
+  height: 20px;
+}
 .block-title {
   font-size: 20px;
   font-weight: bold;
