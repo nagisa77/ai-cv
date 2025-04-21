@@ -59,7 +59,7 @@ export default {
 
                 if (success) {
                     this.toast.success(`欢迎回来，${user.contact}`)
-                    const redirect = decodeURIComponent(this.$route.query.redirect) || '/'
+                    const redirect = '/'
                     this.$router.push(redirect)
                 } else {
                     this.toast.error(error)
