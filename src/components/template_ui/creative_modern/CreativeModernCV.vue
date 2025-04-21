@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
     <!-- 创意 Modern 的主要内容（即原先 cv-page 里的部分） -->
-    <div :style="{ '--custom-color': customColor }" style="font-family: 'LXGW WenKai TC', serif;">
+    <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
       <!-- Personal Information -->
       <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
 

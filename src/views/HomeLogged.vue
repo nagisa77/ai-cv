@@ -178,7 +178,9 @@
 
       <div class="home-logged-right-bottom">
         <div class="home-card-right-bottom">
-          <img  class="home-card-right-bottom-img" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/7114a5ab-15a4-45ae-ac83-b6c9b7f2130a.png" alt="活动图标">
+          <img class="home-card-right-bottom-bg" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/1d84bbe5-3be3-4bc8-9839-260c5820f92a.png" alt="活动图标">
+          <img class="home-card-right-bottom-qrcode" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/images/23a6e556-b967-4f79-bab3-5d292592dfce.png" alt="活动图标">
+          <img class="home-card-right-bottom-logo" src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png" alt="活动图标">
         </div>
       </div>
     </div>
@@ -598,6 +600,7 @@ export default {
 }
 
 .home-card-right-bottom {
+  position: relative;
   background-color: white;
   height: calc(100% - 80px);
   width: calc(100% - 40px);
@@ -607,10 +610,34 @@ export default {
   margin-top: 40px;
 }
 
-.home-card-right-bottom-img {
+.home-card-right-bottom-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.home-card-right-bottom-qrcode {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-49%, -50%);
+  width: 53%;
+  height: 53%;
+  object-fit: contain;
+}
+
+.home-card-right-bottom-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10%;
+  height: 10%;
+  object-fit: contain;
+  z-index: 100;
 }
 
 /* 顶部按钮容器 */

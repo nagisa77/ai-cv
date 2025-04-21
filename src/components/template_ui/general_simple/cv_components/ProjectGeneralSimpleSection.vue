@@ -42,7 +42,7 @@
       <div class="item-content-item" v-if="project.content.content.length === 0" style="opacity: 0.5;">
         (这里是描述，您可以在这里详细描述您的项目经历，包括项目的背景、您的角色、使用的技术以及取得的成果等。)
       </div>
-      <div class="highlight" v-if="project.title === highlightTitle">
+      <div class="highlight" v-if="project.title === highlightTitle && project.title != ''">
         <div class="highlight-left"></div>
       </div>
     </div>

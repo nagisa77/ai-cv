@@ -9,7 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
 
         <!-- General Simple 风格的主要内容 -->
-        <div :style="{ '--custom-color': customColor }" style="font-family: 'Ma Shan Zheng', sans-serif;">
+        <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
             <!-- Personal Information -->
             <PersonalGeneralSimpleInfo :personalInfo="personalInfo" :color="color" />
 
