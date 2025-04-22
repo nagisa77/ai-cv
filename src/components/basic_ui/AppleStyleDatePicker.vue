@@ -1,10 +1,10 @@
-<!-- ========== AppleStyleInput 组件 ========== -->
-<!-- src/components/basic_ui/AppleStyleInput.vue -->
+<!-- ========== 新增的 AppleStyleDatePicker 组件 ========== -->
+<!-- 也可拆分到单独的文件 AppleStyleDatePicker.vue，这里为了方便演示放在同一文件中 -->
 <template>
   <div class="form-group">
     <input
       :id="id"
-      :type="inputType"
+      type="date"
       class="form-input"
       placeholder=" "
       :required="required"
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'AppleStyleInput',
+  name: 'AppleStyleDatePicker',
   props: {
     id: {
       type: String,
@@ -28,16 +28,12 @@ export default {
       type: String,
       required: true
     },
-    inputType: {
-      type: String,
-      default: 'text'
-    },
     required: {
       type: Boolean,
       default: false
     },
     modelValue: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     enable: {
@@ -52,21 +48,20 @@ export default {
 <style scoped>
 .form-group {
   position: relative;
-  width: 100%;
-  height: 50px;
+  width: calc(100% - 24px);
+  height: calc(100% - 12px);
+  padding: 20px 12px 4px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-gray);
   margin-bottom: 10px;
 }
 
 .form-input {
-  width: calc(100% - 24px);
-  height: calc(100% - 12px);
-  padding: 12px 12px 0 12px;
-  border: 1px solid var(--color-gray);
-  border-radius: 10px;
   font-size: 14px;
   display: block;
   background-color: white;
   transition: all 0.3s ease;
+  border: none;
 }
 
 .form-input:disabled {
