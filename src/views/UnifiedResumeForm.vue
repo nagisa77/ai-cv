@@ -1,19 +1,42 @@
-<!-- ========== 主要表单 UnifiedResumeForm 组件 ========== -->
 <template>
-  <!-- 可以统一引入一些字体等资源（也可根据 templateType 条件化引入） -->
+  <!-- 引入图标资源 (font-awesome) 和其他字体 -->
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    integrity="sha384-DyZ88mC6Up2lfX2B1R2FVr3lMH26n/dXK0NTP8TWx93X/h6p2J7c3hsa5S1p36Md"
+    crossorigin="anonymous"
+  />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap"
+    rel="stylesheet"
+  />
 
   <div class="main-layout">
     <div class="scroll-container">
       <button class="back-button" @click="goBack">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-             xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 12H5" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19 12H5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12 19L5 12L12 5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
         返回
       </button>
@@ -27,9 +50,18 @@
           在开始为您创建 AI 智能简历前，请先完善以下基础信息：
         </p>
 
-        <!-- 基础信息卡片 -->
-        <div class="card" @click="handleCardClick('personalInfo', '')">
-          <div class="block-title">基础信息</div>
+        <!-- ========== 基础信息 ========== -->
+        <div
+          class="block-title clickable"
+          @click="toggleSection('personalInfo')"
+        >
+          <i class="fas fa-file-alt"></i> 基础信息
+        </div>
+        <div
+          class="card"
+          v-show="!sectionsCollapsed.personalInfo"
+          @click="handleCardClick('personalInfo', '')"
+        >
           <div class="avatar-upload">
             <UploadableImage
               v-model="basicInfo.avatar"
@@ -84,223 +116,268 @@
           />
         </div>
 
-        <!-- 教育经历 -->
-        <div class="block-title">教育经历</div>
-        <div id="education-experience" class="education-list">
-          <div
-            class="card"
-            v-for="(edu, index) in educationList"
-            :key="index"
-            @click="handleCardClick('educationExperience', edu.school)"
-          >
-            <div class="card-header">
-              <div class="card-title">教育经历{{ index + 1 }}</div>
-              <button
-                class="remove-btn"
-                type="button"
-                @click.stop="removeCard('educationList', index)"
-              >
-                ×
-              </button>
-            </div>
-
-            <AppleStyleInput
-              :id="`school-${index}`"
-              labelText="学校名"
-              inputType="text"
-              :required="true"
-              v-model="edu.school"
-            />
-
-            <!-- 将原本的时间字符串替换为两个日期选择器 -->
-            <div class="form-line">
-              <AppleStyleDatePicker
-                :id="`edu-start-${index}`"
-                labelText="开始时间"
-                :required="true"
-                v-model="edu.startDate"
-              />
-              <AppleStyleDatePicker
-                :id="`edu-end-${index}`"
-                labelText="结束时间"
-                :required="true"
-                v-model="edu.endDate"
-              />
-              <AppleStyleInput
-                :id="`major-${index}`"
-                labelText="专业"
-                inputType="text"
-                :required="true"
-                v-model="edu.major"
-              />
-            </div>
-
-            <div class="form-line">
-              <AppleStyleInput
-                :id="`degree-${index}`"
-                labelText="学历"
-                inputType="text"
-                :required="true"
-                v-model="edu.degree"
-              />
-              <AppleStyleInput
-                :id="`gpa-${index}`"
-                labelText="GPA (选填)"
-                inputType="text"
-                v-model="edu.gpa"
-              />
-              <AppleStyleInput
-                :id="`edu-city-${index}`"
-                labelText="城市"
-                inputType="text"
-                :required="true"
-                v-model="edu.city"
-              />
-            </div>
-            <AppleStyleInput
-              :id="`honors-${index}`"
-              labelText="荣誉奖项 (选填)"
-              inputType="text"
-              v-model="edu.honors"
-            />
-            <AppleStyleInput
-              :id="`courses-${index}`"
-              labelText="相关课程 (选填)"
-              inputType="text"
-              v-model="edu.courses"
-            />
-          </div>
+        <!-- ========== 教育经历 ========== -->
+        <div
+          class="block-title clickable"
+          @click="toggleSection('education')"
+        >
+          <i class="fas fa-file-alt"></i> 教育经历
         </div>
-        <div>
-          <button class="add-button" type="button" @click="addEducationExperience">
-            + 新增教育经历
-          </button>
-        </div>
+        <div v-show="!sectionsCollapsed.education">
+          <div id="education-experience" class="education-list">
+            <div
+              class="card"
+              v-for="(edu, index) in educationList"
+              :key="index"
+              @click="handleCardClick('educationExperience', edu.school)"
+            >
+              <div class="card-header">
+                <div class="card-title">教育经历{{ index + 1 }}</div>
+                <button
+                  class="remove-btn"
+                  type="button"
+                  @click.stop="removeCard('educationList', index)"
+                >
+                  ×
+                </button>
+              </div>
 
-        <!-- 工作经历 -->
-        <div class="block-title">工作经历</div>
-        <div id="work-experience" class="experience-list">
-          <div
-            class="card"
-            v-for="(work, index) in workList"
-            :key="index"
-            @click="handleCardClick('workExperience', work.company)"
-          >
-            <div class="card-header">
-              <div class="card-title">工作经历{{ index + 1 }}</div>
-              <button
-                class="remove-btn"
-                type="button"
-                @click.stop="removeCard('workList', index)"
-              >
-                ×
-              </button>
-            </div>
-
-            <AppleStyleInput
-              :id="`company-${index}`"
-              labelText="公司名"
-              inputType="text"
-              :required="true"
-              v-model="work.company"
-            />
-
-            <div class="form-line">
-              <!-- 两个日期选择器替换原本的 time 文本输入 -->
-              <AppleStyleDatePicker
-                :id="`work-start-${index}`"
-                labelText="开始时间"
-                :required="true"
-                v-model="work.startDate"
-              />
-              <AppleStyleDatePicker
-                :id="`work-end-${index}`"
-                labelText="结束时间"
-                :required="true"
-                v-model="work.endDate"
-              />
               <AppleStyleInput
-                :id="`title-${index}`"
-                labelText="职位"
+                :id="'school-' + index"
+                labelText="学校名"
                 inputType="text"
                 :required="true"
-                v-model="work.title"
+                v-model="edu.school"
+              />
+
+              <div class="form-line">
+                <AppleStyleDatePicker
+                  :id="'edu-start-' + index"
+                  labelText="开始时间"
+                  :required="true"
+                  v-model="edu.startDate"
+                />
+                <AppleStyleDatePicker
+                  :id="'edu-end-' + index"
+                  labelText="结束时间"
+                  :required="true"
+                  v-model="edu.endDate"
+                />
+                <AppleStyleInput
+                  :id="'major-' + index"
+                  labelText="专业"
+                  inputType="text"
+                  :required="true"
+                  v-model="edu.major"
+                />
+              </div>
+
+              <div class="form-line">
+                <AppleStyleInput
+                  :id="'degree-' + index"
+                  labelText="学历"
+                  inputType="text"
+                  :required="true"
+                  v-model="edu.degree"
+                />
+                <AppleStyleInput
+                  :id="'gpa-' + index"
+                  labelText="GPA (选填)"
+                  inputType="text"
+                  v-model="edu.gpa"
+                />
+                <AppleStyleInput
+                  :id="'edu-city-' + index"
+                  labelText="城市"
+                  inputType="text"
+                  :required="true"
+                  v-model="edu.city"
+                />
+              </div>
+              <AppleStyleInput
+                :id="'honors-' + index"
+                labelText="荣誉奖项 (选填)"
+                inputType="text"
+                v-model="edu.honors"
               />
               <AppleStyleInput
-                :id="`work-city-${index}`"
-                labelText="城市"
+                :id="'courses-' + index"
+                labelText="相关课程 (选填)"
                 inputType="text"
-                :required="true"
-                v-model="work.city"
+                v-model="edu.courses"
               />
             </div>
           </div>
-        </div>
-        <div>
-          <button class="add-button" type="button" @click="addWorkExperience">
-            + 新增工作经历
-          </button>
-        </div>
-
-        <!-- 项目经历 -->
-        <div class="block-title">项目经历</div>
-        <div id="project-experience" class="project-list">
-          <div
-            class="card"
-            v-for="(proj, index) in projectList"
-            :key="index"
-            @click="handleCardClick('projectExperience', proj.projectName)"
-          >
-            <div class="card-header">
-              <div class="card-title">项目经历{{ index + 1 }}</div>
-              <button
-                class="remove-btn"
-                type="button"
-                @click.stop="removeCard('projectList', index)"
-              >
-                ×
-              </button>
-            </div>
-
-            <AppleStyleInput
-              :id="`project-${index}`"
-              labelText="项目名"
-              inputType="text"
-              :required="true"
-              v-model="proj.projectName"
-            />
-
-            <div class="form-line">
-              <!-- 同理，两个日期选择器 -->
-              <AppleStyleDatePicker
-                :id="`project-start-${index}`"
-                labelText="开始时间"
-                :required="true"
-                v-model="proj.startDate"
-              />
-              <AppleStyleDatePicker
-                :id="`project-end-${index}`"
-                labelText="结束时间"
-                :required="true"
-                v-model="proj.endDate"
-              />
-              <AppleStyleInput
-                :id="`role-${index}`"
-                labelText="职位/角色"
-                inputType="text"
-                :required="true"
-                v-model="proj.role"
-              />
-            </div>
+          <div>
+            <button class="add-button" type="button" @click="addEducationExperience">
+              + 新增教育经历
+            </button>
           </div>
         </div>
-        <div>
-          <button class="add-button" type="button" @click="addProjectExperience">
-            + 新增项目经历
-          </button>
+
+        <!-- ========== 工作经历 ========== -->
+        <div class="block-title clickable" @click="toggleSection('work')">
+          <i class="fas fa-file-alt"></i> 工作经历
+        </div>
+        <div v-show="!sectionsCollapsed.work">
+          <div id="work-experience" class="experience-list">
+            <div
+              class="card"
+              v-for="(work, index) in workList"
+              :key="index"
+              @click="handleCardClick('workExperience', work.company)"
+            >
+              <div class="card-header">
+                <div class="card-title">工作经历{{ index + 1 }}</div>
+                <button
+                  class="remove-btn"
+                  type="button"
+                  @click.stop="removeCard('workList', index)"
+                >
+                  ×
+                </button>
+              </div>
+
+              <AppleStyleInput
+                :id="'company-' + index"
+                labelText="公司名"
+                inputType="text"
+                :required="true"
+                v-model="work.company"
+              />
+
+              <div class="form-line">
+                <AppleStyleDatePicker
+                  :id="'work-start-' + index"
+                  labelText="开始时间"
+                  :required="true"
+                  v-model="work.startDate"
+                />
+                <AppleStyleDatePicker
+                  :id="'work-end-' + index"
+                  labelText="结束时间"
+                  :required="true"
+                  v-model="work.endDate"
+                />
+                <AppleStyleInput
+                  :id="'title-' + index"
+                  labelText="职位"
+                  inputType="text"
+                  :required="true"
+                  v-model="work.title"
+                />
+                <AppleStyleInput
+                  :id="'work-city-' + index"
+                  labelText="城市"
+                  inputType="text"
+                  :required="true"
+                  v-model="work.city"
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="add-button" type="button" @click="addWorkExperience">
+              + 新增工作经历
+            </button>
+          </div>
         </div>
 
-        <!-- 提交按钮 -->
+        <!-- ========== 项目经历 ========== -->
+        <div class="block-title clickable" @click="toggleSection('project')">
+          <i class="fas fa-file-alt"></i> 项目经历
+        </div>
+        <div v-show="!sectionsCollapsed.project">
+          <div id="project-experience" class="project-list">
+            <div
+              class="card"
+              v-for="(proj, index) in projectList"
+              :key="index"
+              @click="handleCardClick('projectExperience', proj.projectName)"
+            >
+              <div class="card-header">
+                <div class="card-title">项目经历{{ index + 1 }}</div>
+                <button
+                  class="remove-btn"
+                  type="button"
+                  @click.stop="removeCard('projectList', index)"
+                >
+                  ×
+                </button>
+              </div>
+
+              <AppleStyleInput
+                :id="'project-' + index"
+                labelText="项目名"
+                inputType="text"
+                :required="true"
+                v-model="proj.projectName"
+              />
+
+              <div class="form-line">
+                <AppleStyleDatePicker
+                  :id="'project-start-' + index"
+                  labelText="开始时间"
+                  :required="true"
+                  v-model="proj.startDate"
+                />
+                <AppleStyleDatePicker
+                  :id="'project-end-' + index"
+                  labelText="结束时间"
+                  :required="true"
+                  v-model="proj.endDate"
+                />
+                <AppleStyleInput
+                  :id="'role-' + index"
+                  labelText="职位/角色"
+                  inputType="text"
+                  :required="true"
+                  v-model="proj.role"
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="add-button" type="button" @click="addProjectExperience">
+              + 新增项目经历
+            </button>
+          </div>
+        </div>
+
+        <!-- ========== 其他模块 ========== -->
+        <div class="block-title clickable" @click="toggleSection('others')">
+          <i class="fas fa-file-alt"></i> 其他
+        </div>
+        <div v-show="!sectionsCollapsed.others">
+          <div class="card" @click="handleCardClick('otherModule', '')">
+            <AppleStyleInput
+              id="skills"
+              labelText="技能 (选填)"
+              inputType="text"
+              v-model="others.skills"
+            />
+            <AppleStyleInput
+              id="certificates"
+              labelText="证书/执照 (选填)"
+              inputType="text"
+              v-model="others.certificates"
+            />
+            <AppleStyleInput
+              id="languages"
+              labelText="语言 (选填)"
+              inputType="text"
+              v-model="others.languages"
+            />
+            <AppleStyleInput
+              id="interests"
+              labelText="兴趣爱好 (选填)"
+              inputType="text"
+              v-model="others.interests"
+            />
+          </div>
+        </div>
+
+        <!-- ========== 提交按钮 ========== -->
         <button
           :disabled="isCreatingResume"
           class="submit-btn"
@@ -394,9 +471,6 @@ export default {
         jobTitle: '前端工程师',
         jobDescription: '负责前端开发相关工作'
       },
-      /**
-       * 把原先的 time 改成 startDate 和 endDate
-       */
       educationList: [
         {
           school: '清华大学',
@@ -427,10 +501,25 @@ export default {
           role: '项目经理'
         }
       ],
+      // 新增 其他模块
+      others: {
+        skills: '',
+        certificates: '',
+        languages: '',
+        interests: ''
+      },
       personalSummary: '',
       selectedModule: {
         type: '',
         title: ''
+      },
+      // 控制各个模块是否折叠
+      sectionsCollapsed: {
+        personalInfo: false,
+        education: false,
+        work: false,
+        project: false,
+        others: false
       }
     }
   },
@@ -521,41 +610,26 @@ export default {
       return `${year}.${month}`
     },
 
-    getPreviewComponent(type) {
-      // 三套模板组件映射
-      const templatesMap = {
-        default: {
-          educationExperience: 'EducationSection',
-          workExperience: 'WorkSection',
-          projectExperience: 'ProjectSection',
-          personalInfo: 'PersonalInfo',
-          personalSummary: 'SummarySection'
-        },
-        general_simple: {
-          educationExperience: 'EducationGeneralSimpleSection',
-          workExperience: 'WorkGeneralSimpleSection',
-          projectExperience: 'ProjectGeneralSimpleSection',
-          personalInfo: 'PersonalGeneralSimpleInfo',
-          personalSummary: 'SummaryGeneralSimpleSection'
-        },
-        creative_modern: {
-          educationExperience: 'CreativeModernEducationSection',
-          workExperience: 'CreativeModernWorkSection',
-          projectExperience: 'CreativeModernProjectSection',
-          personalInfo: 'CreativeModernPersonalInfo',
-          personalSummary: 'CreativeModernSummarySection'
-        }
-      }
-
-      const mapForCurrentTemplate = templatesMap[this.templateType] || templatesMap.default
-      return mapForCurrentTemplate[type] || null
+    /**
+     * 折叠/展开切换
+     */
+    toggleSection(sectionKey) {
+      this.sectionsCollapsed[sectionKey] = !this.sectionsCollapsed[sectionKey];
     },
 
     /**
      * 提交创建简历的逻辑
      */
     handleSubmit() {
-      const { name, phone, email, targetCompany, jobTitle, jobDescription, avatar } = this.basicInfo
+      const {
+        name,
+        phone,
+        email,
+        targetCompany,
+        jobTitle,
+        jobDescription,
+        avatar
+      } = this.basicInfo
       const educationList = this.educationList
       const workList = this.workList
       const projectList = this.projectList
@@ -628,18 +702,30 @@ export default {
 
           // 保存项目经历
           projectList.forEach((proj) => {
-            const title = `${proj.projectName}`
             metadataInstance.setContentForType(
               'projectExperience',
               {
-                title,
+                title: proj.projectName,
                 from_time: this.formatYearMonth(proj.startDate),
                 to_time: this.formatYearMonth(proj.endDate),
                 content: []
               },
-              title
+              proj.projectName
             )
           })
+
+          // 保存其他模块
+          metadataInstance.setContentForType(
+            'otherModule',
+            {
+              skills: this.others.skills,
+              certificates: this.others.certificates,
+              languages: this.others.languages,
+              interests: this.others.interests,
+              content: []
+            },
+            ''
+          )
 
           // 跳转到简历主编辑页面 (CreateResume)
           this.$router.push({
@@ -866,11 +952,19 @@ export default {
   width: 20px;
   height: 20px;
 }
+
 .block-title {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
   margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 /* 卡片 */
