@@ -51,331 +51,372 @@
         </p>
 
         <!-- ========== 基础信息 ========== -->
-        <div
-          class="block-title clickable"
-          @click="toggleSection('personalInfo')"
-        >
-          <i class="fas fa-file-alt"></i> 基础信息
-        </div>
-        <div
-          class="card"
-          v-show="!sectionsCollapsed.personalInfo"
-          @click="handleCardClick('personalInfo', '')"
-        >
-          <div class="avatar-upload">
-            <UploadableImage
-              v-model="basicInfo.avatar"
-              width="90"
-              height="120"
-              default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
-            />
-            <div class="upload-tip">点击上传证件照 (可选)</div>
+        <div class="block-title clickable" @click="toggleSection('personalInfo')">
+          <div class="title-left">
+            <i class="fas fa-file-alt"></i> 基础信息
           </div>
-          <div class="form-line">
-            <AppleStyleInput
-              id="name"
-              labelText="姓名"
-              inputType="text"
-              :required="true"
-              v-model="basicInfo.name"
-            />
-            <AppleStyleInput
-              id="phone"
-              labelText="手机号 (选填)"
-              inputType="tel"
-              v-model="basicInfo.phone"
-            />
-          </div>
-
-          <AppleStyleInput
-            id="email"
-            labelText="邮箱 (选填)"
-            inputType="email"
-            v-model="basicInfo.email"
-          />
-
-          <div class="form-line">
-            <AppleStyleInput
-              id="targetCompany"
-              labelText="目标公司 (选填)"
-              inputType="text"
-              v-model="basicInfo.targetCompany"
-            />
-            <AppleStyleInput
-              id="jobTitle"
-              labelText="岗位名称 (选填)"
-              inputType="text"
-              v-model="basicInfo.jobTitle"
-            />
-          </div>
-          <AppleStyleInput
-            id="jobDescription"
-            labelText="岗位描述 (选填)"
-            inputType="text"
-            v-model="basicInfo.jobDescription"
-          />
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.personalInfo ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
         </div>
-
-        <!-- ========== 教育经历 ========== -->
-        <div
-          class="block-title clickable"
-          @click="toggleSection('education')"
-        >
-          <i class="fas fa-file-alt"></i> 教育经历
-        </div>
-        <div v-show="!sectionsCollapsed.education">
-          <div id="education-experience" class="education-list">
-            <div
-              class="card"
-              v-for="(edu, index) in educationList"
-              :key="index"
-              @click="handleCardClick('educationExperience', edu.school)"
-            >
-              <div class="card-header">
-                <div class="card-title">教育经历{{ index + 1 }}</div>
-                <button
-                  class="remove-btn"
-                  type="button"
-                  @click.stop="removeCard('educationList', index)"
-                >
-                  ×
-                </button>
+        <transition name="expand">
+          <div
+            class="expanded-section"
+            v-show="!sectionsCollapsed.personalInfo"
+            @click="handleCardClick('personalInfo', '')"
+          >
+            <div class="card">
+              <div class="avatar-upload">
+                <UploadableImage
+                  v-model="basicInfo.avatar"
+                  width="90"
+                  height="120"
+                  default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
+                />
+                <div class="upload-tip">点击上传证件照 (可选)</div>
+              </div>
+              <div class="form-line">
+                <AppleStyleInput
+                  id="name"
+                  labelText="姓名"
+                  inputType="text"
+                  :required="true"
+                  v-model="basicInfo.name"
+                />
+                <AppleStyleInput
+                  id="phone"
+                  labelText="手机号 (选填)"
+                  inputType="tel"
+                  v-model="basicInfo.phone"
+                />
               </div>
 
               <AppleStyleInput
-                :id="'school-' + index"
-                labelText="学校名"
-                inputType="text"
-                :required="true"
-                v-model="edu.school"
+                id="email"
+                labelText="邮箱 (选填)"
+                inputType="email"
+                v-model="basicInfo.email"
               />
 
               <div class="form-line">
-                <AppleStyleDatePicker
-                  :id="'edu-start-' + index"
-                  labelText="开始时间"
-                  :required="true"
-                  v-model="edu.startDate"
-                />
-                <AppleStyleDatePicker
-                  :id="'edu-end-' + index"
-                  labelText="结束时间"
-                  :required="true"
-                  v-model="edu.endDate"
+                <AppleStyleInput
+                  id="targetCompany"
+                  labelText="目标公司 (选填)"
+                  inputType="text"
+                  v-model="basicInfo.targetCompany"
                 />
                 <AppleStyleInput
-                  :id="'major-' + index"
-                  labelText="专业"
+                  id="jobTitle"
+                  labelText="岗位名称 (选填)"
                   inputType="text"
-                  :required="true"
-                  v-model="edu.major"
-                />
-              </div>
-
-              <div class="form-line">
-                <AppleStyleInput
-                  :id="'degree-' + index"
-                  labelText="学历"
-                  inputType="text"
-                  :required="true"
-                  v-model="edu.degree"
-                />
-                <AppleStyleInput
-                  :id="'gpa-' + index"
-                  labelText="GPA (选填)"
-                  inputType="text"
-                  v-model="edu.gpa"
-                />
-                <AppleStyleInput
-                  :id="'edu-city-' + index"
-                  labelText="城市"
-                  inputType="text"
-                  :required="true"
-                  v-model="edu.city"
+                  v-model="basicInfo.jobTitle"
                 />
               </div>
               <AppleStyleInput
-                :id="'honors-' + index"
-                labelText="荣誉奖项 (选填)"
+                id="jobDescription"
+                labelText="岗位描述 (选填)"
                 inputType="text"
-                v-model="edu.honors"
-              />
-              <AppleStyleInput
-                :id="'courses-' + index"
-                labelText="相关课程 (选填)"
-                inputType="text"
-                v-model="edu.courses"
+                v-model="basicInfo.jobDescription"
               />
             </div>
           </div>
-          <div>
-            <button class="add-button" type="button" @click="addEducationExperience">
-              + 新增教育经历
-            </button>
+        </transition>
+
+        <!-- ========== 教育经历 ========== -->
+        <div class="block-title clickable" @click="toggleSection('education')">
+          <div class="title-left">
+            <i class="fas fa-file-alt"></i> 教育经历
           </div>
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.education ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
         </div>
+        <transition name="expand">
+          <div class="expanded-section" v-show="!sectionsCollapsed.education">
+            <div id="education-experience" class="education-list">
+              <div
+                class="card"
+                v-for="(edu, index) in educationList"
+                :key="index"
+                @click="handleCardClick('educationExperience', edu.school)"
+              >
+                <div class="card-header">
+                  <div class="card-title">教育经历{{ index + 1 }}</div>
+                  <button
+                    class="remove-btn"
+                    type="button"
+                    @click.stop="removeCard('educationList', index)"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <AppleStyleInput
+                  :id="'school-' + index"
+                  labelText="学校名"
+                  inputType="text"
+                  :required="true"
+                  v-model="edu.school"
+                />
+
+                <div class="form-line">
+                  <AppleStyleDatePicker
+                    :id="'edu-start-' + index"
+                    labelText="开始时间"
+                    :required="true"
+                    v-model="edu.startDate"
+                  />
+                  <AppleStyleDatePicker
+                    :id="'edu-end-' + index"
+                    labelText="结束时间"
+                    :required="true"
+                    v-model="edu.endDate"
+                  />
+                  <AppleStyleInput
+                    :id="'major-' + index"
+                    labelText="专业"
+                    inputType="text"
+                    :required="true"
+                    v-model="edu.major"
+                  />
+                </div>
+
+                <div class="form-line">
+                  <AppleStyleInput
+                    :id="'degree-' + index"
+                    labelText="学历"
+                    inputType="text"
+                    :required="true"
+                    v-model="edu.degree"
+                  />
+                  <AppleStyleInput
+                    :id="'gpa-' + index"
+                    labelText="GPA (选填)"
+                    inputType="text"
+                    v-model="edu.gpa"
+                  />
+                  <AppleStyleInput
+                    :id="'edu-city-' + index"
+                    labelText="城市"
+                    inputType="text"
+                    :required="true"
+                    v-model="edu.city"
+                  />
+                </div>
+                <AppleStyleInput
+                  :id="'honors-' + index"
+                  labelText="荣誉奖项 (选填)"
+                  inputType="text"
+                  v-model="edu.honors"
+                />
+                <AppleStyleInput
+                  :id="'courses-' + index"
+                  labelText="相关课程 (选填)"
+                  inputType="text"
+                  v-model="edu.courses"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="add-button" type="button" @click="addEducationExperience">
+                + 新增教育经历
+              </button>
+            </div>
+          </div>
+        </transition>
 
         <!-- ========== 工作经历 ========== -->
         <div class="block-title clickable" @click="toggleSection('work')">
-          <i class="fas fa-file-alt"></i> 工作经历
+          <div class="title-left">
+            <i class="fas fa-file-alt"></i> 工作经历
+          </div>
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.work ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
         </div>
-        <div v-show="!sectionsCollapsed.work">
-          <div id="work-experience" class="experience-list">
-            <div
-              class="card"
-              v-for="(work, index) in workList"
-              :key="index"
-              @click="handleCardClick('workExperience', work.company)"
-            >
-              <div class="card-header">
-                <div class="card-title">工作经历{{ index + 1 }}</div>
-                <button
-                  class="remove-btn"
-                  type="button"
-                  @click.stop="removeCard('workList', index)"
-                >
-                  ×
-                </button>
-              </div>
+        <transition name="expand">
+          <div class="expanded-section" v-show="!sectionsCollapsed.work">
+            <div id="work-experience" class="experience-list">
+              <div
+                class="card"
+                v-for="(work, index) in workList"
+                :key="index"
+                @click="handleCardClick('workExperience', work.company)"
+              >
+                <div class="card-header">
+                  <div class="card-title">工作经历{{ index + 1 }}</div>
+                  <button
+                    class="remove-btn"
+                    type="button"
+                    @click.stop="removeCard('workList', index)"
+                  >
+                    ×
+                  </button>
+                </div>
 
-              <AppleStyleInput
-                :id="'company-' + index"
-                labelText="公司名"
-                inputType="text"
-                :required="true"
-                v-model="work.company"
-              />
-
-              <div class="form-line">
-                <AppleStyleDatePicker
-                  :id="'work-start-' + index"
-                  labelText="开始时间"
-                  :required="true"
-                  v-model="work.startDate"
-                />
-                <AppleStyleDatePicker
-                  :id="'work-end-' + index"
-                  labelText="结束时间"
-                  :required="true"
-                  v-model="work.endDate"
-                />
                 <AppleStyleInput
-                  :id="'title-' + index"
-                  labelText="职位"
+                  :id="'company-' + index"
+                  labelText="公司名"
                   inputType="text"
                   :required="true"
-                  v-model="work.title"
+                  v-model="work.company"
                 />
-                <AppleStyleInput
-                  :id="'work-city-' + index"
-                  labelText="城市"
-                  inputType="text"
-                  :required="true"
-                  v-model="work.city"
-                />
+
+                <div class="form-line">
+                  <AppleStyleDatePicker
+                    :id="'work-start-' + index"
+                    labelText="开始时间"
+                    :required="true"
+                    v-model="work.startDate"
+                  />
+                  <AppleStyleDatePicker
+                    :id="'work-end-' + index"
+                    labelText="结束时间"
+                    :required="true"
+                    v-model="work.endDate"
+                  />
+                  <AppleStyleInput
+                    :id="'title-' + index"
+                    labelText="职位"
+                    inputType="text"
+                    :required="true"
+                    v-model="work.title"
+                  />
+                  <AppleStyleInput
+                    :id="'work-city-' + index"
+                    labelText="城市"
+                    inputType="text"
+                    :required="true"
+                    v-model="work.city"
+                  />
+                </div>
               </div>
             </div>
+            <div>
+              <button class="add-button" type="button" @click="addWorkExperience">
+                + 新增工作经历
+              </button>
+            </div>
           </div>
-          <div>
-            <button class="add-button" type="button" @click="addWorkExperience">
-              + 新增工作经历
-            </button>
-          </div>
-        </div>
+        </transition>
 
         <!-- ========== 项目经历 ========== -->
         <div class="block-title clickable" @click="toggleSection('project')">
-          <i class="fas fa-file-alt"></i> 项目经历
+          <div class="title-left">
+            <i class="fas fa-file-alt"></i> 项目经历
+          </div>
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.project ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
         </div>
-        <div v-show="!sectionsCollapsed.project">
-          <div id="project-experience" class="project-list">
-            <div
-              class="card"
-              v-for="(proj, index) in projectList"
-              :key="index"
-              @click="handleCardClick('projectExperience', proj.projectName)"
-            >
-              <div class="card-header">
-                <div class="card-title">项目经历{{ index + 1 }}</div>
-                <button
-                  class="remove-btn"
-                  type="button"
-                  @click.stop="removeCard('projectList', index)"
-                >
-                  ×
-                </button>
-              </div>
+        <transition name="expand">
+          <div class="expanded-section" v-show="!sectionsCollapsed.project">
+            <div id="project-experience" class="project-list">
+              <div
+                class="card"
+                v-for="(proj, index) in projectList"
+                :key="index"
+                @click="handleCardClick('projectExperience', proj.projectName)"
+              >
+                <div class="card-header">
+                  <div class="card-title">项目经历{{ index + 1 }}</div>
+                  <button
+                    class="remove-btn"
+                    type="button"
+                    @click.stop="removeCard('projectList', index)"
+                  >
+                    ×
+                  </button>
+                </div>
 
-              <AppleStyleInput
-                :id="'project-' + index"
-                labelText="项目名"
-                inputType="text"
-                :required="true"
-                v-model="proj.projectName"
-              />
-
-              <div class="form-line">
-                <AppleStyleDatePicker
-                  :id="'project-start-' + index"
-                  labelText="开始时间"
-                  :required="true"
-                  v-model="proj.startDate"
-                />
-                <AppleStyleDatePicker
-                  :id="'project-end-' + index"
-                  labelText="结束时间"
-                  :required="true"
-                  v-model="proj.endDate"
-                />
                 <AppleStyleInput
-                  :id="'role-' + index"
-                  labelText="职位/角色"
+                  :id="'project-' + index"
+                  labelText="项目名"
                   inputType="text"
                   :required="true"
-                  v-model="proj.role"
+                  v-model="proj.projectName"
                 />
+
+                <div class="form-line">
+                  <AppleStyleDatePicker
+                    :id="'project-start-' + index"
+                    labelText="开始时间"
+                    :required="true"
+                    v-model="proj.startDate"
+                  />
+                  <AppleStyleDatePicker
+                    :id="'project-end-' + index"
+                    labelText="结束时间"
+                    :required="true"
+                    v-model="proj.endDate"
+                  />
+                  <AppleStyleInput
+                    :id="'role-' + index"
+                    labelText="职位/角色"
+                    inputType="text"
+                    :required="true"
+                    v-model="proj.role"
+                  />
+                </div>
               </div>
             </div>
+            <div>
+              <button class="add-button" type="button" @click="addProjectExperience">
+                + 新增项目经历
+              </button>
+            </div>
           </div>
-          <div>
-            <button class="add-button" type="button" @click="addProjectExperience">
-              + 新增项目经历
-            </button>
-          </div>
-        </div>
+        </transition>
 
         <!-- ========== 其他模块 ========== -->
         <div class="block-title clickable" @click="toggleSection('others')">
-          <i class="fas fa-file-alt"></i> 其他
-        </div>
-        <div v-show="!sectionsCollapsed.others">
-          <div class="card" @click="handleCardClick('otherModule', '')">
-            <AppleStyleInput
-              id="skills"
-              labelText="技能 (选填)"
-              inputType="text"
-              v-model="others.skills"
-            />
-            <AppleStyleInput
-              id="certificates"
-              labelText="证书/执照 (选填)"
-              inputType="text"
-              v-model="others.certificates"
-            />
-            <AppleStyleInput
-              id="languages"
-              labelText="语言 (选填)"
-              inputType="text"
-              v-model="others.languages"
-            />
-            <AppleStyleInput
-              id="interests"
-              labelText="兴趣爱好 (选填)"
-              inputType="text"
-              v-model="others.interests"
-            />
+          <div class="title-left">
+            <i class="fas fa-file-alt"></i> 其他
           </div>
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.others ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
         </div>
+        <transition name="expand">
+          <div class="expanded-section" v-show="!sectionsCollapsed.others" @click="handleCardClick('otherModule', '')">
+            <div class="card">
+              <AppleStyleInput
+                id="skills"
+                labelText="技能 (选填)"
+                inputType="text"
+                v-model="others.skills"
+              />
+              <AppleStyleInput
+                id="certificates"
+                labelText="证书/执照 (选填)"
+                inputType="text"
+                v-model="others.certificates"
+              />
+              <AppleStyleInput
+                id="languages"
+                labelText="语言 (选填)"
+                inputType="text"
+                v-model="others.languages"
+              />
+              <AppleStyleInput
+                id="interests"
+                labelText="兴趣爱好 (选填)"
+                inputType="text"
+                v-model="others.interests"
+              />
+            </div>
+          </div>
+        </transition>
 
         <!-- ========== 提交按钮 ========== -->
         <button
@@ -953,6 +994,7 @@ export default {
   height: 20px;
 }
 
+/* 标题（折叠触发器） */
 .block-title {
   font-size: 20px;
   font-weight: bold;
@@ -960,11 +1002,25 @@ export default {
   margin-top: 20px;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  justify-content: space-between; /* 让箭头靠右 */
+}
+
+/* 左侧图标 + 文字 */
+.title-left {
+  display: flex;
+  align-items: center;
   gap: 5px;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+/* 折叠/展开图标 */
+.arrow-icon {
+  font-size: 16px;
+  transition: transform 0.3s;
 }
 
 /* 卡片 */
@@ -1056,5 +1112,25 @@ export default {
 
   /* 这里为了兼容创意简历里用到的一些中文手写风格字体 */
   font-family: "Ma Shan Zheng", sans-serif;
+}
+
+/* 
+  ========== 折叠动画相关 ========== 
+  这里我们使用 name="expand" 的 <transition>，配合以下 CSS 实现高度和透明度动画
+*/
+
+.expand-enter,
+.expand-leave-to {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* 折叠展开的内容容器背景色 */
+.expanded-section {
+  border-radius: 8px;
+  padding: 10px;
 }
 </style>
