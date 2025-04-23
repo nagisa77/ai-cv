@@ -78,13 +78,16 @@
                 <div class="upload-tip">点击上传证件照 (可选)</div>
               </div>
               <div class="form-line">
+                <!-- 姓名为必填，校验错误时 invalid=true -->
                 <AppleStyleInput
                   id="name"
                   labelText="姓名"
                   inputType="text"
                   :required="true"
+                  :invalid="validationErrors.personalInfo.name"
                   v-model="basicInfo.name"
                 />
+                <!-- 手机号选填，这里不校验 -->
                 <AppleStyleInput
                   id="phone"
                   labelText="手机号 (选填)"
@@ -93,6 +96,7 @@
                 />
               </div>
 
+              <!-- 邮箱选填，不做必填校验 -->
               <AppleStyleInput
                 id="email"
                 labelText="邮箱 (选填)"
@@ -160,20 +164,24 @@
                   labelText="学校名"
                   inputType="text"
                   :required="true"
+                  :invalid="validationErrors.educationList[index]?.school"
                   v-model="edu.school"
                 />
 
                 <div class="form-line">
+                  <!-- AppleStyleDatePicker 新增 :invalid prop -->
                   <AppleStyleDatePicker
                     :id="'edu-start-' + index"
                     labelText="开始时间"
                     :required="true"
+                    :invalid="validationErrors.educationList[index]?.startDate"
                     v-model="edu.startDate"
                   />
                   <AppleStyleDatePicker
                     :id="'edu-end-' + index"
                     labelText="结束时间"
                     :required="true"
+                    :invalid="validationErrors.educationList[index]?.endDate"
                     v-model="edu.endDate"
                   />
                   <AppleStyleInput
@@ -181,6 +189,7 @@
                     labelText="专业"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.educationList[index]?.major"
                     v-model="edu.major"
                   />
                 </div>
@@ -191,8 +200,10 @@
                     labelText="学历"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.educationList[index]?.degree"
                     v-model="edu.degree"
                   />
+                  <!-- GPA 选填，不校验 -->
                   <AppleStyleInput
                     :id="'gpa-' + index"
                     labelText="GPA (选填)"
@@ -204,9 +215,11 @@
                     labelText="城市"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.educationList[index]?.city"
                     v-model="edu.city"
                   />
                 </div>
+                <!-- 荣誉奖项、相关课程等选填，不校验 -->
                 <AppleStyleInput
                   :id="'honors-' + index"
                   labelText="荣誉奖项 (选填)"
@@ -265,6 +278,7 @@
                   labelText="公司名"
                   inputType="text"
                   :required="true"
+                  :invalid="validationErrors.workList[index]?.company"
                   v-model="work.company"
                 />
 
@@ -273,12 +287,14 @@
                     :id="'work-start-' + index"
                     labelText="开始时间"
                     :required="true"
+                    :invalid="validationErrors.workList[index]?.startDate"
                     v-model="work.startDate"
                   />
                   <AppleStyleDatePicker
                     :id="'work-end-' + index"
                     labelText="结束时间"
                     :required="true"
+                    :invalid="validationErrors.workList[index]?.endDate"
                     v-model="work.endDate"
                   />
                   <AppleStyleInput
@@ -286,6 +302,7 @@
                     labelText="职位"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.workList[index]?.title"
                     v-model="work.title"
                   />
                   <AppleStyleInput
@@ -293,6 +310,7 @@
                     labelText="城市"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.workList[index]?.city"
                     v-model="work.city"
                   />
                 </div>
@@ -342,6 +360,7 @@
                   labelText="项目名"
                   inputType="text"
                   :required="true"
+                  :invalid="validationErrors.projectList[index]?.projectName"
                   v-model="proj.projectName"
                 />
 
@@ -350,12 +369,14 @@
                     :id="'project-start-' + index"
                     labelText="开始时间"
                     :required="true"
+                    :invalid="validationErrors.projectList[index]?.startDate"
                     v-model="proj.startDate"
                   />
                   <AppleStyleDatePicker
                     :id="'project-end-' + index"
                     labelText="结束时间"
                     :required="true"
+                    :invalid="validationErrors.projectList[index]?.endDate"
                     v-model="proj.endDate"
                   />
                   <AppleStyleInput
@@ -363,6 +384,7 @@
                     labelText="职位/角色"
                     inputType="text"
                     :required="true"
+                    :invalid="validationErrors.projectList[index]?.role"
                     v-model="proj.role"
                   />
                 </div>
@@ -388,8 +410,13 @@
           ></i>
         </div>
         <transition name="expand">
-          <div class="expanded-section" v-show="!sectionsCollapsed.others" @click="handleCardClick('otherModule', '')">
+          <div
+            class="expanded-section"
+            v-show="!sectionsCollapsed.others"
+            @click="handleCardClick('otherModule', '')"
+          >
             <div class="card">
+              <!-- 均为选填，不做必填校验 -->
               <AppleStyleInput
                 id="skills"
                 labelText="技能 (选填)"
@@ -454,8 +481,6 @@
  */
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'
 import UploadableImage from '@/components/basic_ui/UploadableImage.vue'
-
-// 新增：导入我们自定义的 AppleStyleDatePicker
 import AppleStyleDatePicker from '@/components/basic_ui/AppleStyleDatePicker.vue'
 
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
@@ -503,52 +528,38 @@ export default {
   },
   data() {
     return {
+      /**
+       * 基础信息 - 仅“姓名”必填
+       */
       basicInfo: {
-        name: 'Tim',
+        name: '',
         avatar: '',
-        phone: '13800000000',
-        email: 'tim@example.com',
-        targetCompany: '阿里巴巴',
-        jobTitle: '前端工程师',
-        jobDescription: '负责前端开发相关工作'
+        phone: '',
+        email: '',
+        targetCompany: '',
+        jobTitle: '',
+        jobDescription: ''
       },
-      educationList: [
-        {
-          school: '清华大学',
-          startDate: '2018-09-01',
-          endDate: '2022-06-30',
-          major: '软件工程',
-          degree: '本科',
-          gpa: '3.9',
-          city: '北京',
-          honors: '优秀学生干部',
-          courses: '数据结构, 操作系统, 计算机网络'
-        }
-      ],
-      workList: [
-        {
-          company: '阿里巴巴',
-          startDate: '2020-07-01',
-          endDate: '2023-01-31',
-          title: '全栈工程师',
-          city: '北京'
-        }
-      ],
-      projectList: [
-        {
-          projectName: '智能推荐系统',
-          startDate: '2021-02-01',
-          endDate: '2021-04-30',
-          role: '项目经理'
-        }
-      ],
-      // 新增 其他模块
+      /**
+       * 教育经历 - 每个经历的若干字段必填
+       */
+      educationList: [],
+      /**
+       * 工作经历 - 每个经历的若干字段必填
+       */
+      workList: [],
+      /**
+       * 项目经历 - 每个经历的若干字段必填
+       */
+      projectList: [],
+      // 其他模块 - 全部选填
       others: {
         skills: '',
         certificates: '',
         languages: '',
         interests: ''
       },
+
       personalSummary: '',
       selectedModule: {
         type: '',
@@ -561,6 +572,15 @@ export default {
         work: false,
         project: false,
         others: false
+      },
+      // 校验错误对象
+      validationErrors: {
+        personalInfo: {
+          name: false
+        },
+        educationList: [],
+        workList: [],
+        projectList: []
       }
     }
   },
@@ -585,8 +605,7 @@ export default {
     },
 
     /**
-     * 这里提供一个格式化日期(YYYY.MM)的函数
-     * 若需要显示到日，可以自行修改
+     * 格式化日期(YYYY-MM)，若需要显示到日，可以自行修改
      */
     mappedEducationList() {
       return this.educationList.map((edu) => {
@@ -662,6 +681,14 @@ export default {
      * 提交创建简历的逻辑
      */
     handleSubmit() {
+      // 先进行校验
+      const hasError = this.validateForm()
+      // 如果校验不通过，直接弹出提示并return
+      if (hasError) {
+        this.toast.error('请检查标红字段并填写必填信息')
+        return
+      }
+
       const {
         name,
         phone,
@@ -790,6 +817,129 @@ export default {
         })
     },
 
+    // 校验必填字段的方法
+    validateForm() {
+      let hasError = false
+
+      // 先重置所有错误状态
+      this.validationErrors.personalInfo.name = false
+      this.validationErrors.educationList.forEach(errItem => {
+        Object.keys(errItem).forEach(key => {
+          errItem[key] = false
+        })
+      })
+      this.validationErrors.workList.forEach(errItem => {
+        Object.keys(errItem).forEach(key => {
+          errItem[key] = false
+        })
+      })
+      this.validationErrors.projectList.forEach(errItem => {
+        Object.keys(errItem).forEach(key => {
+          errItem[key] = false
+        })
+      })
+
+      // 基础信息：姓名必填
+      if (!this.basicInfo.name) {
+        this.validationErrors.personalInfo.name = true
+        this.sectionsCollapsed.personalInfo = false
+        hasError = true
+      }
+
+      // 教育经历
+      this.educationList.forEach((edu, index) => {
+        let errObj = this.validationErrors.educationList[index]
+        // 学校、开始时间、结束时间、专业、学历、城市 均为必填
+        if (!edu.school) {
+          errObj.school = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+        if (!edu.startDate) {
+          errObj.startDate = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+        if (!edu.endDate) {
+          errObj.endDate = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+        if (!edu.major) {
+          errObj.major = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+        if (!edu.degree) {
+          errObj.degree = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+        if (!edu.city) {
+          errObj.city = true
+          this.sectionsCollapsed.education = false
+          hasError = true
+        }
+      })
+
+      // 工作经历
+      this.workList.forEach((work, index) => {
+        let errObj = this.validationErrors.workList[index]
+        if (!work.company) {
+          errObj.company = true
+          this.sectionsCollapsed.work = false
+          hasError = true
+        }
+        if (!work.startDate) {
+          errObj.startDate = true
+          this.sectionsCollapsed.work = false
+          hasError = true
+        }
+        if (!work.endDate) {
+          errObj.endDate = true
+          this.sectionsCollapsed.work = false
+          hasError = true
+        }
+        if (!work.title) {
+          errObj.title = true
+          this.sectionsCollapsed.work = false
+          hasError = true
+        }
+        if (!work.city) {
+          errObj.city = true
+          this.sectionsCollapsed.work = false
+          hasError = true
+        }
+      })
+
+      // 项目经历
+      this.projectList.forEach((proj, index) => {
+        let errObj = this.validationErrors.projectList[index]
+        if (!proj.projectName) {
+          errObj.projectName = true
+          this.sectionsCollapsed.project = false
+          hasError = true
+        }
+        if (!proj.startDate) {
+          errObj.startDate = true
+          this.sectionsCollapsed.project = false
+          hasError = true
+        }
+        if (!proj.endDate) {
+          errObj.endDate = true
+          this.sectionsCollapsed.project = false
+          hasError = true
+        }
+        if (!proj.role) {
+          errObj.role = true
+          this.sectionsCollapsed.project = false
+          hasError = true
+        }
+      })
+
+      return hasError
+    },
+
     // 添加返回方法
     goBack() {
       this.$router.go(-1)
@@ -804,7 +954,18 @@ export default {
         major: '',
         degree: '',
         gpa: '',
-        city: ''
+        city: '',
+        honors: '',
+        courses: ''
+      })
+      // 同步新增对应的校验对象
+      this.validationErrors.educationList.push({
+        school: false,
+        startDate: false,
+        endDate: false,
+        major: false,
+        degree: false,
+        city: false
       })
     },
     // 新增工作经历
@@ -816,6 +977,13 @@ export default {
         title: '',
         city: ''
       })
+      this.validationErrors.workList.push({
+        company: false,
+        startDate: false,
+        endDate: false,
+        title: false,
+        city: false
+      })
     },
     // 新增项目经历
     addProjectExperience() {
@@ -825,10 +993,17 @@ export default {
         endDate: '',
         role: ''
       })
+      this.validationErrors.projectList.push({
+        projectName: false,
+        startDate: false,
+        endDate: false,
+        role: false
+      })
     },
     // 删除对应经历
     removeCard(listName, index) {
       this[listName].splice(index, 1)
+      this.validationErrors[listName].splice(index, 1)
     },
     /**
      * 点击卡片时，记录当前所在模块，右侧预览部分会匹配对应的组件
@@ -1112,25 +1287,5 @@ export default {
 
   /* 这里为了兼容创意简历里用到的一些中文手写风格字体 */
   font-family: "Ma Shan Zheng", sans-serif;
-}
-
-/* 
-  ========== 折叠动画相关 ========== 
-  这里我们使用 name="expand" 的 <transition>，配合以下 CSS 实现高度和透明度动画
-*/
-
-.expand-enter,
-.expand-leave-to {
-  opacity: 0;
-  height: 0;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
-
-/* 折叠展开的内容容器背景色 */
-.expanded-section {
-  border-radius: 8px;
-  padding: 10px;
 }
 </style>

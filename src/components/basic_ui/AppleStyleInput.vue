@@ -6,6 +6,7 @@
       :id="id"
       :type="inputType"
       class="form-input"
+      :class="{'error': invalid}"
       placeholder=" "
       :required="required"
       :value="modelValue"
@@ -43,6 +44,13 @@ export default {
     enable: {
       type: Boolean,
       default: true
+    },
+    /**
+     * invalid: 是否标记为错误
+     */
+    invalid: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue']
@@ -67,6 +75,11 @@ export default {
   display: block;
   background-color: white;
   transition: all 0.3s ease;
+}
+
+/* 当invalid=true时，边框变红色 */
+.form-input.error {
+  background-color: rgba(255, 0, 0, 0.173); /* 红色 */
 }
 
 .form-input:disabled {
