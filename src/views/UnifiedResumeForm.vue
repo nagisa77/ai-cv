@@ -53,7 +53,7 @@
         <!-- ========== 基础信息 ========== -->
         <div class="block-title clickable" @click="toggleSection('personalInfo')">
           <div class="title-left">
-            <i class="fas fa-file-alt"></i> 基础信息
+            <i class="fas fa-user"></i> 基础信息
           </div>
           <!-- 折叠 / 展开图标 -->
           <i
@@ -127,7 +127,7 @@
         <!-- ========== 教育经历 ========== -->
         <div class="block-title clickable" @click="toggleSection('education')">
           <div class="title-left">
-            <i class="fas fa-file-alt"></i> 教育经历
+            <i class="fas fa-graduation-cap"></i> 教育经历
           </div>
           <!-- 折叠 / 展开图标 -->
           <i
@@ -232,7 +232,7 @@
         <!-- ========== 工作经历 ========== -->
         <div class="block-title clickable" @click="toggleSection('work')">
           <div class="title-left">
-            <i class="fas fa-file-alt"></i> 工作经历
+            <i class="fas fa-briefcase"></i> 工作经历
           </div>
           <!-- 折叠 / 展开图标 -->
           <i
@@ -309,7 +309,7 @@
         <!-- ========== 项目经历 ========== -->
         <div class="block-title clickable" @click="toggleSection('project')">
           <div class="title-left">
-            <i class="fas fa-file-alt"></i> 项目经历
+            <i class="fas fa-project-diagram"></i> 项目经历
           </div>
           <!-- 折叠 / 展开图标 -->
           <i
@@ -379,7 +379,7 @@
         <!-- ========== 其他模块 ========== -->
         <div class="block-title clickable" @click="toggleSection('others')">
           <div class="title-left">
-            <i class="fas fa-file-alt"></i> 其他
+            <i class="fas fa-ellipsis-h"></i> 其他
           </div>
           <!-- 折叠 / 展开图标 -->
           <i
