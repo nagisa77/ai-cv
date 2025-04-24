@@ -541,17 +541,44 @@ export default {
         jobDescription: ''
       },
       /**
-       * 教育经历 - 每个经历的若干字段必填
+       * 教育经历 - 默认初始化1条空白记录
        */
-      educationList: [],
+      educationList: [
+        {
+          school: '',
+          startDate: '',
+          endDate: '',
+          major: '',
+          degree: '',
+          gpa: '',
+          city: '',
+          honors: '',
+          courses: ''
+        }
+      ],
       /**
-       * 工作经历 - 每个经历的若干字段必填
+       * 工作经历 - 默认初始化1条空白记录
        */
-      workList: [],
+      workList: [
+        {
+          company: '',
+          startDate: '',
+          endDate: '',
+          title: '',
+          city: ''
+        }
+      ],
       /**
-       * 项目经历 - 每个经历的若干字段必填
+       * 项目经历 - 默认初始化1条空白记录
        */
-      projectList: [],
+      projectList: [
+        {
+          projectName: '',
+          startDate: '',
+          endDate: '',
+          role: ''
+        }
+      ],
       // 其他模块 - 全部选填
       others: {
         skills: '',
@@ -578,9 +605,36 @@ export default {
         personalInfo: {
           name: false
         },
-        educationList: [],
-        workList: [],
-        projectList: []
+        // 教育经历对应的校验初始值
+        educationList: [
+          {
+            school: false,
+            startDate: false,
+            endDate: false,
+            major: false,
+            degree: false,
+            city: false
+          }
+        ],
+        // 工作经历对应的校验初始值
+        workList: [
+          {
+            company: false,
+            startDate: false,
+            endDate: false,
+            title: false,
+            city: false
+          }
+        ],
+        // 项目经历对应的校验初始值
+        projectList: [
+          {
+            projectName: false,
+            startDate: false,
+            endDate: false,
+            role: false
+          }
+        ]
       }
     }
   },
@@ -1000,8 +1054,12 @@ export default {
         role: false
       })
     },
-    // 删除对应经历
+    // 删除对应经历（至少保留一条）
     removeCard(listName, index) {
+      if (this[listName].length <= 1) {
+        this.toast.error('至少保留一条记录，无法删除')
+        return
+      }
       this[listName].splice(index, 1)
       this.validationErrors[listName].splice(index, 1)
     },
