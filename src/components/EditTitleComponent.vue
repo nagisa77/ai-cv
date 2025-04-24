@@ -1,7 +1,7 @@
 <template>
     <div class="edit-title-component" v-if="localContent">
         <div v-if="isNewTitle" class="edit-title-component-title">
-            您正在添加一个新的<span class="title-highlight">{{ currentEditingType }}</span>项目
+            您正在添加一个新的<span class="title-highlight">{{ currentEditingTypeComputed }}</span>项目
         </div>
         <div v-else class="edit-title-component-title">
             您正在编辑的是 <span class="title-highlight">{{ currentEditingTitle }}</span>
@@ -148,6 +148,19 @@ export default {
         isNewTitle: {
             type: Boolean,
             default: false
+        }
+    },
+    computed: {
+        currentEditingTypeComputed() {
+            if (this.currentEditingType === 'education') {
+                return '教育经历';
+            } else if (this.currentEditingType === 'workExperience') {
+                return '工作经历';
+            } else if (this.currentEditingType === 'projectExperience') {
+                return '项目经历';
+            } else  {
+                return '其他';
+            }
         }
     },
     data() {
