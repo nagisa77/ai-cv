@@ -70,6 +70,9 @@ export default {
   computed: {
     // 若有更多字段可自行补充
     isFetching() {
+      if (this.isPreview) {
+        return false;
+      }
       return metadataInstance.getIsFetching();
     }
   },
