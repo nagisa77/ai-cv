@@ -121,6 +121,10 @@ export default {
     resumeId: {
       type: String,
       default: ''
+    },
+    userUploadedResumeUrl: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -302,6 +306,73 @@ export default {
           console.error('模板修改失败:', error)
         } finally {
           this.isModifying = false // 无论成功失败都重置状态
+        }
+      } else if (this.selectionType === 'upload_resume') {
+        // 上传简历，直接进入对应表单（可将颜色信息也一并传入下个路由）
+        this.isModifying = true
+        try {
+          // 1. 组织 FormData
+          const formData = new FormData()
+
+          // 如果有文件对象，则使用 formData.append('image', file)
+          // 如果仅有远程链接，就用 formData.append('url', this.userUploadedResumeUrl)
+          formData.append('url', this.userUploadedResumeUrl)
+
+          // 2. 传给后端的模板描述和模板 JSON
+          //    下面只是示例，你可以改成实际想传的描述/JSON 结构
+          //    如果"模板 JSON"就是个字符串，可以直接 append
+          const resumeTemplateDescription = '这是模板的文字性描述，告诉AI如何去生成字段'
+          // 这里的 `resumeTemplate` 可以是后端需要的 JSON 字符串
+          // 也可以把你已有的"选中模板id"或"选中模板字段"整理成 JSON
+          const resumeTemplateJSON = {
+            templateId: this.selectedTemplate.id,
+            color: this.selectedTemplate.selectedColor,
+            // ... 你需要的任何其它字段
+          }
+
+          // 以字符串形式发送
+          formData.append('resumeTemplate', JSON.stringify(resumeTemplateJSON))
+          formData.append('resumeTemplateDescription', resumeTemplateDescription)
+
+          // 3. 发送请求到 /pic/ocr-resume
+          const response = await apiClient.post('/pic/ocr-resume', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+
+          // 假设后端返回的数据结构为：
+          // {
+          //   code: 20020,
+          //   data: {
+          //     ocrText: 'xxx',
+          //     resume: { ...AI生成的简历JSON... }
+          //   }
+          // }
+          if (response.data.code === 20020) {
+            this.toast.success('OCR识别成功，已生成简历内容')
+            const aiResumeData = response.data.data.resume  // 这里就是AI生成的简历JSON
+ 
+            // 4. 跳转到简历编辑页面，并把AI生成的 JSON 通过 query 或 params 传递过去
+            //    你需要在下个组件里接收并进行表单初始化
+            // this.$router.push({
+            //   name: 'ResumeFormUnified',
+            //   query: {
+            //     structuredResume: JSON.stringify(aiResumeData),
+            //     color: this.selectedTemplate.selectedColor
+            //   }
+            // })
+
+            console.log(aiResumeData)
+
+          } else {
+            this.toast.error('OCR识别失败，请重试或检查接口')
+          }
+        } catch (error) {
+          console.error('上传简历识别失败:', error)
+          this.toast.error('上传简历识别失败，请稍后再试')
+        } finally {
+          this.isModifying = false
         }
       }
     },

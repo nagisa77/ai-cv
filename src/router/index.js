@@ -46,7 +46,7 @@ const routes = [
     props: true
   },
   {
-    path: '/template-selection/:selectionType/:resumeId?',
+    path: '/template-selection/:selectionType/:resumeId?/:userUploadedResumeUrl?',
     name: 'TemplateSelection',
     component: TemplateSelection,
     props: true

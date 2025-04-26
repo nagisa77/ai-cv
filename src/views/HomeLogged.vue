@@ -559,15 +559,37 @@ export default {
       }
     },
 
-    // ====== 新增：处理导入弹窗组件传回的文件 ======
-    handleImportFiles(files) {
-      // 这里可以对文件进行校验、上传等逻辑
-      console.log('接收导入的文件列表：', files)
-      // 关闭弹窗
-      this.importModalVisible = false
-      this.toast.success('开始导入简历文件')
-      // 假设有上传逻辑，上传完成后可刷新简历列表
-      // this.fetchResumes()
+    async handleImportFiles(file) {
+      // 检查是否有文件
+      if (!file) {
+        this.toast.error('请选择文件')
+        return
+      }
+      
+      try {
+        // 创建FormData对象并添加文件
+        const formData = new FormData()
+        formData.append('image', file)
+        
+        // 调用上传接口
+        const { data } = await apiClient.post('/pic', formData, {})
+        
+        // 关闭弹窗
+        this.importModalVisible = false
+        this.toast.success('简历文件上传成功')
+
+
+        this.$router.push({
+        name: 'TemplateSelection',
+        params: {
+          selectionType: 'upload_resume',
+          userUploadedResumeUrl: data.data.url
+        },
+      });
+      } catch (error) {
+        console.error('上传失败:', error)
+        this.toast.error('上传失败，请重试')
+      }
     }
   }
 }
