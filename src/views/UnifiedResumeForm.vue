@@ -769,11 +769,9 @@ export default {
           const newResume = response.data.data
 
           // 清理模型缓存
+          resumeModel.setCurrentResumeId(newResume.resumeId)
           metadataInstance.clearMetadata()
           chatgptInstance.clearConversations()
-
-          // 设置当前简历 ID
-          resumeModel.setCurrentResumeId(newResume.resumeId)
 
           // 保存个人信息到 metadata
           metadataInstance.setContentForType('personalInfo', {

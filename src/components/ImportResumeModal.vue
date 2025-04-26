@@ -6,58 +6,65 @@
         <h2>导入简历</h2>
         <p>支持 PDF / DOC / DOCX / PNG 文件，你可以点击或拖入区域完成导入。</p>
 
-        <!-- 拖拽/点击文件选择区域 -->
-        <div
-          class="drop-zone"
-          @dragover.prevent="onDragOver"
-          @dragleave.prevent="onDragLeave"
-          @drop.prevent="onDropFiles"
-          @click="triggerFileInput"
-        >
-          <!-- 隐藏的 file input，通过 ref="fileInput" 触发 -->
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx,.png"
-            id="fileInput"
-            ref="fileInput"
-            style="display: none"
-            @change="onFileChange"
-          />
-          <label for="fileInput">
-            <span v-if="!selectedFile">点击或拖拽文件到此</span>
-            <span v-else>重新选择文件</span>
-          </label>
-        </div>
-
-        <!-- 文件预览区域 -->
-        <div v-if="selectedFile" class="preview-container">
-          <div class="preview-header">
-            <p class="preview-file-name">{{ selectedFile.name }}</p>
-            <button class="preview-remove" @click="removeFile">移除</button>
+        <div class="modal-body">
+          <!-- 左侧：上传（拖拽/点击） -->
+          <div class="upload-section">
+            <div
+              class="drop-zone"
+              @dragover.prevent="onDragOver"
+              @dragleave.prevent="onDragLeave"
+              @drop.prevent="onDropFiles"
+              @click="triggerFileInput"
+            >
+              <!-- 隐藏的 file input，通过 ref="fileInput" 触发 -->
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx,.png"
+                id="fileInput"
+                ref="fileInput"
+                style="display: none"
+                @change="onFileChange"
+              />
+              <label for="fileInput">
+                <span v-if="!selectedFile">点击或拖拽文件到此</span>
+                <span v-else>重新选择文件</span>
+              </label>
+            </div>
           </div>
-          <!-- 根据文件类型显示不同的预览 -->
-          <div class="preview-content">
-            <!-- 图片预览 -->
-            <img
-              v-if="isImage(selectedFile)"
-              :src="filePreviewUrl"
-              alt="file preview"
-            />
-            <!-- PDF 预览（使用 <embed> 或 <iframe>） -->
-            <embed
-              v-else-if="isPDF(selectedFile)"
-              :src="filePreviewUrl"
-              type="application/pdf"
-              class="pdf-preview"
-            />
-            <!-- 对 DOC/DOCX 暂时仅显示图标或简单提示，可根据需要改成更复杂的预览方式 -->
-            <div v-else class="doc-preview">
-              <i class="doc-icon"></i>
-              <p>无法在线预览此文件类型</p>
+
+          <!-- 右侧：预览区域 -->
+          <div class="preview-section">
+            <div v-if="selectedFile" class="preview-container">
+              <div class="preview-header">
+                <p class="preview-file-name">{{ selectedFile.name }}</p>
+                <button class="preview-remove" @click="removeFile">移除</button>
+              </div>
+              <!-- 根据文件类型显示不同的预览 -->
+              <div class="preview-content">
+                <!-- 图片预览 -->
+                <img
+                  v-if="isImage(selectedFile)"
+                  :src="filePreviewUrl"
+                  alt="file preview"
+                />
+                <!-- PDF 预览 -->
+                <embed
+                  v-else-if="isPDF(selectedFile)"
+                  :src="filePreviewUrl"
+                  type="application/pdf"
+                  class="pdf-preview"
+                />
+                <!-- DOC/DOCX 显示图标或提示 -->
+                <div v-else class="doc-preview">
+                  <i class="doc-icon"></i>
+                  <p>无法在线预览此文件类型</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- 操作按钮 -->
         <div class="modal-actions">
           <button class="btn btn-white" @click="closeModal">取消</button>
           <button
@@ -119,7 +126,6 @@ export default {
       const validExtensions = ['pdf', 'doc', 'docx', 'png']
       const ext = file.name.split('.').pop().toLowerCase()
 
-      // 验证文件类型
       if (!validExtensions.includes(ext)) {
         alert('文件类型不符合要求，请选择 PDF / DOC / DOCX / PNG。')
         return
@@ -147,13 +153,11 @@ export default {
     },
     // 判断是否图片类型
     isImage(file) {
-      if (!file) return false
-      return file.type.includes('image')
+      return file && file.type.includes('image')
     },
     // 判断是否 PDF
     isPDF(file) {
-      if (!file) return false
-      return file.type === 'application/pdf'
+      return file && file.type === 'application/pdf'
     }
   }
 }
@@ -186,16 +190,16 @@ export default {
   transform: scale(0.9);
 }
 
-/* 容器 */
+/* 弹窗整体容器 */
 .modal-container {
   background-color: #fff;
-  width: 420px;
+  width: 700px;
   max-width: 90%;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   position: relative;
-  text-align: center;
+  text-align: left;
   animation: fadeIn 0.3s;
 }
 
@@ -211,16 +215,33 @@ export default {
 }
 
 .modal-container h2 {
-  margin: 0;
+  margin: 0 0 8px;
   font-size: 22px;
-  margin-bottom: 8px;
 }
 
 .modal-container p {
-  margin: 0;
+  margin: 0 0 16px;
   font-size: 14px;
   color: #666;
+}
+
+/* 弹窗主体布局（左右分栏） */
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 16px;
+}
+
+/* 左侧上传区域 */
+.upload-section {
+  flex: 1;
+}
+
+/* 右侧预览区域 */
+.preview-section {
+  flex: 1;
 }
 
 /* 拖拽区域 */
@@ -231,7 +252,7 @@ export default {
   cursor: pointer;
   position: relative;
   transition: border-color 0.2s ease;
-  margin-bottom: 16px;
+  text-align: center;
 }
 
 .drop-zone label {
@@ -250,8 +271,6 @@ export default {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 12px;
-  margin-bottom: 16px;
-  text-align: left;
 }
 
 .preview-header {
@@ -294,7 +313,7 @@ export default {
   border-radius: 8px;
 }
 
-/* PDF 预览占位 */
+/* PDF 预览 */
 .pdf-preview {
   width: 100%;
   height: 300px;
@@ -326,7 +345,6 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 8px;
 }
 
 .btn {

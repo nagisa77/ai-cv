@@ -113,6 +113,22 @@ class MetadataModel {
   // 返回不同 type 的数据组织格式
   formatForType(type) {
     switch (type) {
+      case 'personalInfo':
+        return JSON.stringify({
+          "name": "",
+          "phone": "",
+          "email": "",
+          "targetCompany": "",  
+          "jobTitle": "",
+          "jobDescription": "",
+        });
+      case 'education':
+        return JSON.stringify({
+          "title": "",
+          "sub_title": "",
+          "from_time": "",
+          "to_time": "",
+        });
       case 'workExperience':
       case 'projectExperience':
         return JSON.stringify({
@@ -135,6 +151,7 @@ class MetadataModel {
             },
           ],
         });
+
       default:
         return '{}';
     }

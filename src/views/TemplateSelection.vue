@@ -3,12 +3,13 @@
     <!-- 添加返回按钮 -->
     <button class="back-button" @click="goBack">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
       </svg>
       返回
     </button>
-    
+
     <h1 class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
     <h2 class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
 
@@ -24,28 +25,19 @@
               </div>
 
               <div class="modal-body" @wheel.prevent="handleWheel">
-                <img 
-                  ref="previewImage" 
-                  :src="selectedTemplate.colorOptions[selectedTemplate.selectedColor]" 
-                  alt="模板预览" 
-                  class="modal-preview" 
-                  :style="{
+                <img ref="previewImage" :src="selectedTemplate.colorOptions[selectedTemplate.selectedColor]" alt="模板预览"
+                  class="modal-preview" :style="{
                     transform: 'scale(' + scale + ')',
                     transformOrigin: transformOrigin
-                  }"
-                >
+                  }">
               </div>
 
               <div class="modal-footer">
                 <button class="modal-button cancel" @click="isConfirmPopupVisible = false">
                   取消
                 </button>
-                <button 
-                  class="modal-button confirm" 
-                  @click="confirmTemplate" 
-                  :disabled="isModifying"
-                  :class="{ modifying: isModifying }"
-                >
+                <button class="modal-button confirm" @click="confirmTemplate" :disabled="isModifying"
+                  :class="{ modifying: isModifying }">
                   确认选择
                   <span v-if="isModifying" class="loading"></span>
                 </button>
@@ -58,30 +50,19 @@
 
     <!-- 类别选项卡 -->
     <div class="category-tabs">
-      <button v-for="category in filteredCategories" 
-              :key="category"
-              :class="['tab-button', { active: currentCategory === category }]" 
-              @click="currentCategory = category"
-      >
+      <button v-for="category in filteredCategories" :key="category"
+        :class="['tab-button', { active: currentCategory === category }]" @click="currentCategory = category">
         {{ category }}
       </button>
     </div>
 
     <!-- 模板展示区 -->
     <div class="template-container">
-      <div 
-        v-for="template in filteredTemplates" 
-        :key="template.id" 
-        class="template-card"
-        @click="selectTemplate(template.id)"
-      >
+      <div v-for="template in filteredTemplates" :key="template.id" class="template-card"
+        @click="selectTemplate(template.id)">
         <div class="preview-wrapper">
           <!-- 这里根据当前选中颜色显示对应预览图 -->
-          <img 
-            :src="template.colorOptions[template.selectedColor]" 
-            alt="模板预览" 
-            class="preview-image"
-          />
+          <img :src="template.colorOptions[template.selectedColor]" alt="模板预览" class="preview-image" />
           <div class="badge" v-if="template.isNew">NEW</div>
         </div>
         <div class="template-info">
@@ -94,12 +75,9 @@
           </div> -->
           <!-- 颜色切换区：阻止点击冒泡，避免触发整卡片的选中 -->
           <div class="color-selector" @click.stop>
-            <span 
-              v-for="(url, color) in template.colorOptions" 
-              :key="color" 
-              :class="['color-circle', color, { active: template.selectedColor === color }]" 
-              @click="changeTemplateColor(template, color)"
-            ></span>
+            <span v-for="(url, color) in template.colorOptions" :key="color"
+              :class="['color-circle', color, { active: template.selectedColor === color }]"
+              @click="changeTemplateColor(template, color)"></span>
           </div>
         </div>
       </div>
@@ -110,6 +88,11 @@
 <script>
 import apiClient from '@/api/axios'
 import { useToast } from 'vue-toastification'
+import metadataInstance from '@/models/metadata_model.js'
+import { resumeModel } from '@/models/resume_model.js'
+import ChatgptModel from '@/models/chatgpt_model.js'
+
+const chatgptInstance = ChatgptModel.getInstance()
 
 export default {
   name: 'TemplateSelection',
@@ -147,7 +130,7 @@ export default {
             description: '2024年最受欢迎设计，适合大多数求职场景',
             tags: ['通用', '现代'],
             isNew: false,
-            selectedColor: 'gray', 
+            selectedColor: 'gray',
             colorOptions: {
               gray: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_1.jpg',
               blue: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_1_2.jpg',
@@ -277,9 +260,9 @@ export default {
         // 使用统一的简历表单组件
         this.$router.push({
           name: 'ResumeFormUnified',
-          params: { 
+          params: {
             templateType: this.selectedTemplate.id,
-            color: this.selectedTemplate.selectedColor 
+            color: this.selectedTemplate.selectedColor
           }
         })
       } else if (this.selectionType === 'change_resume') {
@@ -289,7 +272,7 @@ export default {
           // 将模板ID以及对应颜色等信息传给后端
           await apiClient.patch(`/user/resumes/${this.resumeId}`, {
             templateType: this.selectedTemplate.id,
-            color: this.selectedTemplate.selectedColor 
+            color: this.selectedTemplate.selectedColor
           })
           this.toast.success('模板修改成功')
           this.isConfirmPopupVisible = false
@@ -321,13 +304,15 @@ export default {
           // 2. 传给后端的模板描述和模板 JSON
           //    下面只是示例，你可以改成实际想传的描述/JSON 结构
           //    如果"模板 JSON"就是个字符串，可以直接 append
-          const resumeTemplateDescription = '这是模板的文字性描述，告诉AI如何去生成字段'
+          const resumeTemplateDescription = '请根据上传的简历，生成一份符合模版要求的简历, 请直接返回JSON字符串，不要返回任何其他内容'
           // 这里的 `resumeTemplate` 可以是后端需要的 JSON 字符串
           // 也可以把你已有的"选中模板id"或"选中模板字段"整理成 JSON
           const resumeTemplateJSON = {
-            templateId: this.selectedTemplate.id,
-            color: this.selectedTemplate.selectedColor,
-            // ... 你需要的任何其它字段
+            education: metadataInstance.formatForType('education'),
+            workExperience: metadataInstance.formatForType('workExperience'),
+            projectExperience: metadataInstance.formatForType('projectExperience'),
+            personalInfo: metadataInstance.formatForType('personalInfo'),
+            personalSummary: metadataInstance.formatForType('personalSummary'),
           }
 
           // 以字符串形式发送
@@ -350,21 +335,152 @@ export default {
           //   }
           // }
           if (response.data.code === 20020) {
-            this.toast.success('OCR识别成功，已生成简历内容')
-            const aiResumeData = response.data.data.resume  // 这里就是AI生成的简历JSON
- 
-            // 4. 跳转到简历编辑页面，并把AI生成的 JSON 通过 query 或 params 传递过去
-            //    你需要在下个组件里接收并进行表单初始化
-            // this.$router.push({
-            //   name: 'ResumeFormUnified',
-            //   query: {
-            //     structuredResume: JSON.stringify(aiResumeData),
-            //     color: this.selectedTemplate.selectedColor
-            //   }
-            // })
+            let gptContent = response.data.data.resume.choices[0].message.content.trim();
+            gptContent = this.extractJsonContent(gptContent);
+            console.log(gptContent)
+            resumeModel.isFetching = true
+            apiClient
+              .post('/user/resumes', {
+                templateType: this.selectedTemplate.id,
+                color: this.selectedTemplate.selectedColor
+              })
+              .then((response) => {
+                const newResume = response.data.data
+                resumeModel.setCurrentResumeId(newResume.resumeId)
+                metadataInstance.clearMetadata()
+                chatgptInstance.clearConversations()
 
-            console.log(aiResumeData)
+                try {
+                  const parsedContent = JSON.parse(gptContent);
+                  // 处理教育经历数据
+                  if (Array.isArray(parsedContent.education)) {
+                    parsedContent.education.forEach(edu => {
+                      metadataInstance.setContentForType(
+                        'education',
+                        {
+                          title: edu.school || edu.title || '',
+                          major: edu.major || '',
+                          degree: edu.degree || '',
+                          gpa: edu.gpa || '',
+                          city: edu.city || '',
+                          honors: edu.honors || '',
+                          courses: edu.courses || '',
+                          from_time: edu.from_time || '',
+                          to_time: edu.to_time || '',
+                          content: edu.content || []
+                        },
+                        edu.school || edu.title || ''
+                      )
+                    })
+                  } else if (parsedContent.education) {
+                    const edu = parsedContent.education
+                    metadataInstance.setContentForType(
+                      'education',
+                      {
+                        title: edu.school || edu.title || '',
+                        major: edu.major || '',
+                        degree: edu.degree || '',
+                        gpa: edu.gpa || '',
+                        city: edu.city || '',
+                        honors: edu.honors || '',
+                        courses: edu.courses || '',
+                        from_time: edu.from_time || '',
+                        to_time: edu.to_time || '',
+                        content: edu.content || []
+                      },
+                      edu.school || edu.title || ''
+                    )
+                  }
+                  // 处理工作经历数据
+                  if (Array.isArray(parsedContent.workExperience)) {
+                    parsedContent.workExperience.forEach(work => {
+                      metadataInstance.setContentForType(
+                        'workExperience',
+                        {
+                          title: work.company || work.title || '',
+                          sub_title: work.title || work.sub_title || '',
+                          city: work.city || '',
+                          from_time: work.from_time || '',
+                          to_time: work.to_time || '',
+                          content: work.content || []
+                        },
+                        work.company || work.title || ''
+                      )
+                    })
+                  } else if (parsedContent.workExperience) {
+                    const work = parsedContent.workExperience
+                    metadataInstance.setContentForType(
+                      'workExperience',
+                      {
+                        title: work.company || work.title || '',
+                        sub_title: work.title || work.sub_title || '',
+                        city: work.city || '',
+                        from_time: work.from_time || '',
+                        to_time: work.to_time || '',
+                        content: work.content || []
+                      },
+                      work.company || work.title || ''
+                    )
+                  }
+                  // 处理项目经历数据
+                  if (Array.isArray(parsedContent.projectExperience)) {
+                    parsedContent.projectExperience.forEach(proj => {
+                      metadataInstance.setContentForType(
+                        'projectExperience',
+                        {
+                          title: proj.projectName || proj.title || '',
+                          from_time: proj.from_time || '',
+                          to_time: proj.to_time || '',
+                          content: proj.content || []
+                        },
+                        proj.projectName || proj.title || ''
+                      )
+                    })
+                  } else if (parsedContent.projectExperience) {
+                    const proj = parsedContent.projectExperience
+                    metadataInstance.setContentForType(
+                      'projectExperience',
+                      {
+                        title: proj.projectName || proj.title || '',
+                        from_time: proj.from_time || '',
+                        to_time: proj.to_time || '',
+                        content: proj.content || []
+                      },
+                      proj.projectName || proj.title || ''
+                    )
+                  }
+                  metadataInstance.setContentForType('personalInfo', {
+                    name: parsedContent.personalInfo?.name || '',
+                    phone: parsedContent.personalInfo?.phone || '',
+                    email: parsedContent.personalInfo?.email || '',
+                    targetCompany: parsedContent.personalInfo?.targetCompany || '',
+                    jobTitle: parsedContent.personalInfo?.jobTitle || '',
+                    jobDescription: parsedContent.personalInfo?.jobDescription || '',
+                    avatar: parsedContent.personalInfo?.avatar || ''
+                  })
+                  metadataInstance.setContentForType('personalSummary', parsedContent.personalSummary)
+                } catch (error) {
+                  console.error('解析JSON内容失败:', error);
+                  this.toast.error('解析简历内容失败');
+                }
 
+                // 跳转到简历主编辑页面 (CreateResume)
+                this.$router.push({
+                  name: 'CreateResume',
+                  params: {
+                    templateType: this.selectedTemplate.id,
+                    resumeId: newResume.resumeId,
+                    color: this.selectedTemplate.selectedColor
+                  }
+                })
+
+                this.toast.success('OCR识别成功，已生成简历内容')
+              })
+              .catch((error) => {
+                resumeModel.isFetching = false;
+                console.error('创建简历失败:', error);
+                this.toast.error('创建简历失败，请稍后再试');
+              });
           } else {
             this.toast.error('OCR识别失败，请重试或检查接口')
           }
@@ -375,6 +491,22 @@ export default {
           this.isModifying = false
         }
       }
+    },
+
+    extractJsonContent(gptContent) {
+      const text = gptContent.trim();
+      if (text.startsWith('{') && text.endsWith('}')) {
+        return text;
+      }
+      const jsonBlockMatch = text.match(/```json([\s\S]*?)```/);
+      if (jsonBlockMatch && jsonBlockMatch[1]) {
+        return jsonBlockMatch[1].trim();
+      }
+      const genericBlockMatch = text.match(/```([\s\S]*?)```/);
+      if (genericBlockMatch && genericBlockMatch[1]) {
+        return genericBlockMatch[1].trim();
+      }
+      return text;
     },
 
     // 添加返回方法
@@ -690,6 +822,7 @@ export default {
 .color-selector {
   margin-top: 12px;
 }
+
 .color-circle {
   display: inline-block;
   width: 16px;
@@ -700,15 +833,22 @@ export default {
   border: 2px solid transparent;
   vertical-align: middle;
 }
+
 .color-circle.red {
-  background-color: var(--color-cv-red); /* 红 */
+  background-color: var(--color-cv-red);
+  /* 红 */
 }
+
 .color-circle.blue {
-  background-color: var(--color-cv-blue); /* 蓝 */
+  background-color: var(--color-cv-blue);
+  /* 蓝 */
 }
+
 .color-circle.gray {
-  background-color: var(--color-cv-gray); /* 灰 */
+  background-color: var(--color-cv-gray);
+  /* 灰 */
 }
+
 .color-circle.active {
   border-color: #333;
 }
@@ -720,7 +860,7 @@ export default {
     margin-left: 0;
     padding-top: 80px;
   }
-  
+
   .template-container {
     grid-template-columns: repeat(2, 1fr);
     padding-right: 15px;
@@ -737,11 +877,11 @@ export default {
     padding: 8px 15px;
     font-size: 14px;
   }
-  
+
   .title {
     margin-top: 50px;
   }
-  
+
   .subtitle {
     font-size: 16px;
     margin-bottom: 30px;
@@ -756,11 +896,11 @@ export default {
     width: 90%;
     padding: 20px;
   }
-  
+
   .modal-preview {
     width: 100%;
   }
-  
+
   .modal-header h3 {
     font-size: 1.2rem;
   }
@@ -772,12 +912,12 @@ export default {
     grid-template-columns: repeat(2, 1fr);
     padding-right: 40px;
   }
-  
+
   .template-select {
     padding-left: 40px;
     margin-left: 40px;
   }
-  
+
   .back-button {
     left: 60px;
   }
@@ -795,45 +935,45 @@ export default {
     padding-left: 10px;
     padding-top: 70px;
   }
-  
+
   .template-container {
     grid-template-columns: repeat(2, 1fr);
     padding-right: 10px;
     gap: 10px;
   }
-  
+
   .modal-container {
     width: 90%;
     max-width: 400px;
   }
-  
+
   .modal-preview {
     width: 100%;
   }
-  
+
   .template-info {
     padding: 12px;
   }
-  
+
   .template-info h3 {
     font-size: 14px;
     margin-bottom: 5px;
   }
-  
+
   .description {
     font-size: 12px;
     margin-bottom: 8px;
   }
-  
+
   .tag {
     padding: 2px 8px;
     font-size: 10px;
   }
-  
+
   .title {
     font-size: 22px;
   }
-  
+
   .subtitle {
     font-size: 14px;
     margin-bottom: 20px;
@@ -852,7 +992,8 @@ export default {
 .back-button {
   position: absolute;
   top: 20px;
-  left: 100px; /* 考虑到左侧菜单栏 */
+  left: 100px;
+  /* 考虑到左侧菜单栏 */
   display: flex;
   align-items: center;
   gap: 5px;
