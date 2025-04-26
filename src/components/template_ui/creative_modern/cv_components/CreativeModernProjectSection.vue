@@ -25,7 +25,8 @@
       </div>
 
       <div class="title-and-time">
-        <h3 class="item-title">{{ project.title }}</h3>
+        <h3 v-if="project.title" class="item-title">{{ project.title }}</h3>
+        <h3 v-else class="item-title">（您的项目经历）</h3>
         <p class="item-time">{{ project.content.from_time }} - {{ project.content.to_time }}</p>
       </div>
       <div class="item-content-item" v-for="(point, i2) in project.content.content" :key="i2">

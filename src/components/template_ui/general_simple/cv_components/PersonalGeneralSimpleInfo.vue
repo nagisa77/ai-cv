@@ -3,9 +3,17 @@
   <div class="personal-info">
     <div class="left-info">
       <h1 class="name" v-if="personalInfo.name">{{ personalInfo.name }}</h1>
-      <p class="email-phone" v-if="personalInfo.email">
+      <h1 class="name" v-else>（您的名称）</h1>
+      <p class="email-phone" v-if="personalInfo.email && personalInfo.phone">
         {{ personalInfo.email }} | {{ personalInfo.phone }}
       </p>
+      <p class="email-phone" v-else-if="personalInfo.email">
+        {{ personalInfo.email }}
+      </p>
+      <p class="email-phone" v-else-if="personalInfo.phone">
+        {{ personalInfo.phone }}
+      </p>
+      <p class="email-phone" v-else>（您的联系方式）</p>
 
     </div>
 

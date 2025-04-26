@@ -26,11 +26,13 @@
         </div>
       </div>
       <div class="title-and-time">
-        <h3 class="item-title">{{ work.title }}</h3>
+        <h3 v-if="work.title" class="item-title">{{ work.title }}</h3>
+        <h3 v-else class="item-title">（您的职位）</h3>
         <p class="item-time">{{ work.content.from_time }} - {{ work.content.to_time }}</p>
       </div>
       <div class="sub-title-and-city">
-        <div>{{ work.content.sub_title }}</div>
+        <div v-if="work.content.sub_title">{{ work.content.sub_title }}</div>
+        <div v-else>（您的职位）</div>
         <div>{{ work.content.city }}</div>
       </div>
       <div class="item-content-item" v-for="(point, i2) in work.content.content" :key="i2">
