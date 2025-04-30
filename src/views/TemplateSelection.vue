@@ -352,28 +352,13 @@ export default {
 
                 try {
                   const parsedContent = JSON.parse(gptContent);
-                  // 处理教育经历数据
-                  if (Array.isArray(parsedContent.education)) {
-                    parsedContent.education.forEach(edu => {
-                      metadataInstance.setContentForType(
-                        'education',
-                        {
-                          title: edu.school || edu.title || '',
-                          major: edu.major || '',
-                          degree: edu.degree || '',
-                          gpa: edu.gpa || '',
-                          city: edu.city || '',
-                          honors: edu.honors || '',
-                          courses: edu.courses || '',
-                          from_time: edu.from_time || '',
-                          to_time: edu.to_time || '',
-                          content: edu.content || []
-                        },
-                        edu.school || edu.title || ''
-                      )
-                    })
-                  } else if (parsedContent.education) {
-                    const edu = parsedContent.education
+                  if (typeof parsedContent.education === 'string') {
+                    parsedContent.education = JSON.parse(parsedContent.education)
+                  }
+                  if (!Array.isArray(parsedContent.education)) {
+                    parsedContent.education = [parsedContent.education]
+                  }
+                  parsedContent.education.forEach(edu => {
                     metadataInstance.setContentForType(
                       'education',
                       {
@@ -390,25 +375,15 @@ export default {
                       },
                       edu.school || edu.title || ''
                     )
+                  })
+
+                  if (typeof parsedContent.workExperience === 'string') {
+                    parsedContent.workExperience = JSON.parse(parsedContent.workExperience)
                   }
-                  // 处理工作经历数据
-                  if (Array.isArray(parsedContent.workExperience)) {
-                    parsedContent.workExperience.forEach(work => {
-                      metadataInstance.setContentForType(
-                        'workExperience',
-                        {
-                          title: work.company || work.title || '',
-                          sub_title: work.title || work.sub_title || '',
-                          city: work.city || '',
-                          from_time: work.from_time || '',
-                          to_time: work.to_time || '',
-                          content: work.content || []
-                        },
-                        work.company || work.title || ''
-                      )
-                    })
-                  } else if (parsedContent.workExperience) {
-                    const work = parsedContent.workExperience
+                  if (!Array.isArray(parsedContent.workExperience)) {
+                    parsedContent.workExperience = [parsedContent.workExperience]
+                  }
+                  parsedContent.workExperience.forEach(work => {
                     metadataInstance.setContentForType(
                       'workExperience',
                       {
@@ -421,23 +396,15 @@ export default {
                       },
                       work.company || work.title || ''
                     )
+                  })
+
+                  if (typeof parsedContent.projectExperience === 'string') {
+                    parsedContent.projectExperience = JSON.parse(parsedContent.projectExperience)
                   }
-                  // 处理项目经历数据
-                  if (Array.isArray(parsedContent.projectExperience)) {
-                    parsedContent.projectExperience.forEach(proj => {
-                      metadataInstance.setContentForType(
-                        'projectExperience',
-                        {
-                          title: proj.projectName || proj.title || '',
-                          from_time: proj.from_time || '',
-                          to_time: proj.to_time || '',
-                          content: proj.content || []
-                        },
-                        proj.projectName || proj.title || ''
-                      )
-                    })
-                  } else if (parsedContent.projectExperience) {
-                    const proj = parsedContent.projectExperience
+                  if (!Array.isArray(parsedContent.projectExperience)) {
+                    parsedContent.projectExperience = [parsedContent.projectExperience]
+                  }
+                  parsedContent.projectExperience.forEach(proj => {
                     metadataInstance.setContentForType(
                       'projectExperience',
                       {
@@ -448,7 +415,12 @@ export default {
                       },
                       proj.projectName || proj.title || ''
                     )
+                  })
+
+                  if (typeof parsedContent.personalInfo === 'string') {
+                    parsedContent.personalInfo = JSON.parse(parsedContent.personalInfo)
                   }
+
                   metadataInstance.setContentForType('personalInfo', {
                     name: parsedContent.personalInfo?.name || '',
                     phone: parsedContent.personalInfo?.phone || '',
