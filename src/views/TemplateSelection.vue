@@ -308,9 +308,9 @@ export default {
           // 这里的 `resumeTemplate` 可以是后端需要的 JSON 字符串
           // 也可以把你已有的"选中模板id"或"选中模板字段"整理成 JSON
           const resumeTemplateJSON = {
-            education: metadataInstance.formatForType('education'),
-            workExperience: metadataInstance.formatForType('workExperience'),
-            projectExperience: metadataInstance.formatForType('projectExperience'),
+            education: [metadataInstance.formatForType('education')],
+            workExperience: [metadataInstance.formatForType('workExperience')],
+            projectExperience: [metadataInstance.formatForType('projectExperience')],
             personalInfo: metadataInstance.formatForType('personalInfo'),
             personalSummary: metadataInstance.formatForType('personalSummary'),
           }
