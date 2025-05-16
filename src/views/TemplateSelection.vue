@@ -388,7 +388,7 @@ export default {
                       'workExperience',
                       {
                         title: work.company || work.title || '',
-                        sub_title: work.title || work.sub_title || '',
+                        sub_title: work.position || work.sub_title || '',
                         city: work.city || '',
                         from_time: work.from_time || '',
                         to_time: work.to_time || '',
@@ -408,7 +408,8 @@ export default {
                     metadataInstance.setContentForType(
                       'projectExperience',
                       {
-                        title: proj.projectName || proj.title || '',
+                        title: proj.company || proj.title || '',
+                        sub_title: proj.position || proj.sub_title || '',
                         from_time: proj.from_time || '',
                         to_time: proj.to_time || '',
                         content: proj.content || []

@@ -124,7 +124,7 @@ class MetadataModel {
         });
       case 'education':
         return JSON.stringify({
-          "title": "",
+          "school": "",
           "major": "",
           "degree": "",
           "gpa": "",
