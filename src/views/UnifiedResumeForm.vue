@@ -68,62 +68,76 @@
             @click="handleCardClick('personalInfo', '')"
           >
             <div class="card">
-              <div class="avatar-upload">
-                <UploadableImage
-                  v-model="basicInfo.avatar"
-                  width="90"
-                  height="120"
-                  default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
-                />
-                <div class="upload-tip">点击上传证件照 (可选)</div>
-              </div>
-              <div class="form-line">
-                <!-- 姓名为必填，校验错误时 invalid=true -->
-                <AppleStyleInput
-                  id="name"
-                  labelText="姓名"
-                  inputType="text"
-                  :required="true"
-                  :invalid="validationErrors.personalInfo.name"
-                  v-model="basicInfo.name"
-                />
-                <!-- 手机号选填，这里不校验 -->
-                <AppleStyleInput
-                  id="phone"
-                  labelText="手机号 (选填)"
-                  inputType="tel"
-                  v-model="basicInfo.phone"
-                />
-              </div>
-
-              <!-- 邮箱选填，不做必填校验 -->
+              <!-- 必填：姓名 -->
               <AppleStyleInput
-                id="email"
-                labelText="邮箱 (选填)"
-                inputType="email"
-                v-model="basicInfo.email"
-              />
-
-              <div class="form-line">
-                <AppleStyleInput
-                  id="targetCompany"
-                  labelText="目标公司 (选填)"
-                  inputType="text"
-                  v-model="basicInfo.targetCompany"
-                />
-                <AppleStyleInput
-                  id="jobTitle"
-                  labelText="岗位名称 (选填)"
-                  inputType="text"
-                  v-model="basicInfo.jobTitle"
-                />
-              </div>
-              <AppleStyleInput
-                id="jobDescription"
-                labelText="岗位描述 (选填)"
+                id="name"
+                labelText="姓名"
                 inputType="text"
-                v-model="basicInfo.jobDescription"
+                :required="true"
+                :invalid="validationErrors.personalInfo.name"
+                v-model="basicInfo.name"
               />
+
+              <!-- 折叠/展开选填信息 -->
+              <div
+                class="optional-toggle clickable"
+                @click.stop="personalInfoOptionalCollapsed = !personalInfoOptionalCollapsed"
+              >
+                <i class="fas" :class="[personalInfoOptionalCollapsed ? 'fa-chevron-down' : 'fa-chevron-up']"></i>
+                更多选填信息
+              </div>
+
+              <transition name="expand">
+                <div v-show="!personalInfoOptionalCollapsed" class="optional-block">
+                  <div class="avatar-upload">
+                    <UploadableImage
+                      v-model="basicInfo.avatar"
+                      width="90"
+                      height="120"
+                      default-image="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/uploadAvatar.png"
+                    />
+                    <div class="upload-tip">点击上传证件照 (可选)</div>
+                  </div>
+
+                  <div class="form-line">
+                    <!-- 手机号选填，这里不校验 -->
+                    <AppleStyleInput
+                      id="phone"
+                      labelText="手机号 (选填)"
+                      inputType="tel"
+                      v-model="basicInfo.phone"
+                    />
+                    <!-- 邮箱选填，不做必填校验 -->
+                    <AppleStyleInput
+                      id="email"
+                      labelText="邮箱 (选填)"
+                      inputType="email"
+                      v-model="basicInfo.email"
+                    />
+                  </div>
+
+                  <div class="form-line">
+                    <AppleStyleInput
+                      id="targetCompany"
+                      labelText="目标公司 (选填)"
+                      inputType="text"
+                      v-model="basicInfo.targetCompany"
+                    />
+                    <AppleStyleInput
+                      id="jobTitle"
+                      labelText="岗位名称 (选填)"
+                      inputType="text"
+                      v-model="basicInfo.jobTitle"
+                    />
+                  </div>
+                  <AppleStyleInput
+                    id="jobDescription"
+                    labelText="岗位描述 (选填)"
+                    inputType="text"
+                    v-model="basicInfo.jobDescription"
+                  />
+                </div>
+              </transition>
             </div>
           </div>
         </transition>
@@ -159,6 +173,7 @@
                   </button>
                 </div>
 
+                <!-- 必填字段 -->
                 <AppleStyleInput
                   :id="'school-' + index"
                   labelText="学校名"
@@ -169,7 +184,6 @@
                 />
 
                 <div class="form-line">
-                  <!-- AppleStyleDatePicker 新增 :invalid prop -->
                   <AppleStyleDatePicker
                     :id="'edu-start-' + index"
                     labelText="开始时间"
@@ -203,13 +217,7 @@
                     :invalid="validationErrors.educationList[index]?.degree"
                     v-model="edu.degree"
                   />
-                  <!-- GPA 选填，不校验 -->
-                  <AppleStyleInput
-                    :id="'gpa-' + index"
-                    labelText="GPA (选填)"
-                    inputType="text"
-                    v-model="edu.gpa"
-                  />
+
                   <AppleStyleInput
                     :id="'edu-city-' + index"
                     labelText="城市"
@@ -219,19 +227,37 @@
                     v-model="edu.city"
                   />
                 </div>
-                <!-- 荣誉奖项、相关课程等选填，不校验 -->
-                <AppleStyleInput
-                  :id="'honors-' + index"
-                  labelText="荣誉奖项 (选填)"
-                  inputType="text"
-                  v-model="edu.honors"
-                />
-                <AppleStyleInput
-                  :id="'courses-' + index"
-                  labelText="相关课程 (选填)"
-                  inputType="text"
-                  v-model="edu.courses"
-                />
+
+                <!-- 折叠/展开选填信息 (GPA、荣誉奖项、相关课程) -->
+                <div
+                  class="optional-toggle clickable"
+                  @click.stop="educationListOptionalCollapsed[index] = !educationListOptionalCollapsed[index]"
+                >
+                  <i class="fas" :class="[educationListOptionalCollapsed[index] ? 'fa-chevron-down' : 'fa-chevron-up']"></i>
+                  更多选填信息
+                </div>
+                <transition name="expand">
+                  <div v-show="!educationListOptionalCollapsed[index]" class="optional-block">
+                    <AppleStyleInput
+                      :id="'gpa-' + index"
+                      labelText="GPA (选填)"
+                      inputType="text"
+                      v-model="edu.gpa"
+                    />
+                    <AppleStyleInput
+                      :id="'honors-' + index"
+                      labelText="荣誉奖项 (选填)"
+                      inputType="text"
+                      v-model="edu.honors"
+                    />
+                    <AppleStyleInput
+                      :id="'courses-' + index"
+                      labelText="相关课程 (选填)"
+                      inputType="text"
+                      v-model="edu.courses"
+                    />
+                  </div>
+                </transition>
               </div>
             </div>
             <div>
@@ -594,14 +620,20 @@ export default {
         type: '',
         title: ''
       },
-      // 控制各个模块是否折叠
+      // 控制各个大模块是否折叠（默认只将 others 折叠）
       sectionsCollapsed: {
         personalInfo: false,
         education: false,
         work: false,
         project: false,
-        others: false
+        others: true
       },
+      // 控制“个人信息”中的选填部分是否折叠
+      personalInfoOptionalCollapsed: true,
+
+      // 控制每条教育经历中的选填部分是否折叠（与 educationList 同步长度）
+      educationListOptionalCollapsed: [true],
+
       // 校验错误对象
       validationErrors: {
         personalInfo: {
@@ -877,18 +909,18 @@ export default {
 
       // 先重置所有错误状态
       this.validationErrors.personalInfo.name = false
-      this.validationErrors.educationList.forEach(errItem => {
-        Object.keys(errItem).forEach(key => {
+      this.validationErrors.educationList.forEach((errItem) => {
+        Object.keys(errItem).forEach((key) => {
           errItem[key] = false
         })
       })
-      this.validationErrors.workList.forEach(errItem => {
-        Object.keys(errItem).forEach(key => {
+      this.validationErrors.workList.forEach((errItem) => {
+        Object.keys(errItem).forEach((key) => {
           errItem[key] = false
         })
       })
-      this.validationErrors.projectList.forEach(errItem => {
-        Object.keys(errItem).forEach(key => {
+      this.validationErrors.projectList.forEach((errItem) => {
+        Object.keys(errItem).forEach((key) => {
           errItem[key] = false
         })
       })
@@ -941,13 +973,10 @@ export default {
         }
       })
 
-      // ========= 关键需求修改点：工作经历、项目经历只需至少有一个不为空 =========
-      // 如果 workList 和 projectList 都是空，则报错
+      // ========= 关键需求点：工作经历、项目经历只需至少有一个不为空 =========
       if (this.workList.length === 0 && this.projectList.length === 0) {
         this.toast.error('请至少填写一条工作经历或项目经历')
         hasError = true
-        // 若出错，这里可以选择直接return，也可让后续逻辑继续检验
-        // 但为了统一，我们先设个标志，下方不 return，以便把错误标识一并显示
       }
 
       // 工作经历校验（若有内容，则必填字段需要填写）
@@ -1035,6 +1064,8 @@ export default {
         degree: false,
         city: false
       })
+      // 新增可选字段折叠状态
+      this.educationListOptionalCollapsed.push(true)
     },
     // 新增工作经历
     addWorkExperience() {
@@ -1070,12 +1101,14 @@ export default {
     },
     // 删除对应经历（工作、项目允许清空；教育保留1条）
     removeCard(listName, index) {
-      // === 新增或修改：仅对 educationList 做“至少1条”限制 ===
+      // === 对 educationList 做“至少1条”限制 ===
       if (listName === 'educationList') {
         if (this[listName].length <= 1) {
           this.toast.error('至少保留一条教育经历，无法删除')
           return
         }
+        // 先删除对应折叠状态
+        this.educationListOptionalCollapsed.splice(index, 1)
       }
       // 其他列表可删除到 0 条
       this[listName].splice(index, 1)
@@ -1352,6 +1385,34 @@ export default {
 .submit-btn:disabled {
   background-color: var(--color-primary-disabled);
   cursor: not-allowed;
+}
+
+/* 折叠区域动画 */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+}
+.expand-enter,
+.expand-leave-to {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 选填信息展开/折叠区 */
+.optional-toggle {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.optional-block {
+  margin-top: 10px;
 }
 
 /* 右侧预览组件外框 */
