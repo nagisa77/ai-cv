@@ -558,6 +558,7 @@ export default {
       ],
       /**
        * 工作经历 - 默认初始化1条空白记录
+       * （用户可删除到0条, 不做强制保留）
        */
       workList: [
         {
@@ -570,6 +571,7 @@ export default {
       ],
       /**
        * 项目经历 - 默认初始化1条空白记录
+       * （用户可删除到0条, 不做强制保留）
        */
       projectList: [
         {
@@ -898,10 +900,15 @@ export default {
         hasError = true
       }
 
-      // 教育经历
+      // 教育经历 (学校、开始时间、结束时间、专业、学历、城市 均为必填)
+      // 至少要有1条
+      if (this.educationList.length === 0) {
+        this.toast.error('请至少填写一条教育经历')
+        this.sectionsCollapsed.education = false
+        return true
+      }
       this.educationList.forEach((edu, index) => {
         let errObj = this.validationErrors.educationList[index]
-        // 学校、开始时间、结束时间、专业、学历、城市 均为必填
         if (!edu.school) {
           errObj.school = true
           this.sectionsCollapsed.education = false
@@ -934,7 +941,16 @@ export default {
         }
       })
 
-      // 工作经历
+      // ========= 关键需求修改点：工作经历、项目经历只需至少有一个不为空 =========
+      // 如果 workList 和 projectList 都是空，则报错
+      if (this.workList.length === 0 && this.projectList.length === 0) {
+        this.toast.error('请至少填写一条工作经历或项目经历')
+        hasError = true
+        // 若出错，这里可以选择直接return，也可让后续逻辑继续检验
+        // 但为了统一，我们先设个标志，下方不 return，以便把错误标识一并显示
+      }
+
+      // 工作经历校验（若有内容，则必填字段需要填写）
       this.workList.forEach((work, index) => {
         let errObj = this.validationErrors.workList[index]
         if (!work.company) {
@@ -964,7 +980,7 @@ export default {
         }
       })
 
-      // 项目经历
+      // 项目经历校验（若有内容，则必填字段需要填写）
       this.projectList.forEach((proj, index) => {
         let errObj = this.validationErrors.projectList[index]
         if (!proj.projectName) {
@@ -1052,12 +1068,16 @@ export default {
         role: false
       })
     },
-    // 删除对应经历（至少保留一条）
+    // 删除对应经历（工作、项目允许清空；教育保留1条）
     removeCard(listName, index) {
-      if (this[listName].length <= 1) {
-        this.toast.error('至少保留一条记录，无法删除')
-        return
+      // === 新增或修改：仅对 educationList 做“至少1条”限制 ===
+      if (listName === 'educationList') {
+        if (this[listName].length <= 1) {
+          this.toast.error('至少保留一条教育经历，无法删除')
+          return
+        }
       }
+      // 其他列表可删除到 0 条
       this[listName].splice(index, 1)
       this.validationErrors[listName].splice(index, 1)
     },
