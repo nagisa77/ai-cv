@@ -1,7 +1,8 @@
-<!-- ========== 新增的 AppleStyleDatePicker 组件 ========== -->
-<!-- 也可拆分到单独的文件 AppleStyleDatePicker.vue，这里为了方便演示放在同一文件中 -->
 <template>
-  <div class="form-group">
+  <div
+    class="form-group"
+    :class="{ invalid: invalid }"
+  >
     <input
       :id="id"
       type="date"
@@ -39,6 +40,13 @@ export default {
     enable: {
       type: Boolean,
       default: true
+    },
+    /**
+     * 新增 invalid，用于标记校验是否出错
+     */
+    invalid: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue']
@@ -54,6 +62,12 @@ export default {
   border-radius: 10px;
   border: 1px solid var(--color-gray);
   margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+/* 当 invalid 为 true 时，使用红色边框。 */
+.form-group.invalid {
+  border: 1px solid #ff4d4f;
 }
 
 .form-input {
@@ -62,18 +76,13 @@ export default {
   background-color: white;
   transition: all 0.3s ease;
   border: none;
+  width: 100%;
 }
 
 .form-input:disabled {
   background-color: var(--color-light-gray);
-  border-color: var(--color-light-gray);
   color: var(--color-gray-dark);
   cursor: not-allowed;
-}
-
-.form-input:focus {
-  outline: none;
-  border: 2px solid var(--color-primary);
 }
 
 .form-label {
@@ -87,6 +96,11 @@ export default {
   transition: all 0.3s ease;
 }
 
+.form-input:focus {
+  outline: none;
+}
+
+/* label上移与原来的 AppleStyleInput 保持一致 */
 .form-input:focus + .form-label,
 .form-input:not(:placeholder-shown) + .form-label {
   top: 10px;
@@ -94,11 +108,8 @@ export default {
   font-size: 10px;
 }
 
-.form-input:focus + .form-label {
-  color: var(--color-primary);
-}
-
-.form-input:disabled + .form-label {
-  color: var(--color-gray);
+/* 当 invalid=true 时，让 label 也变红 */
+.form-group.invalid .form-label {
+  color: #ff4d4f;
 }
 </style>
