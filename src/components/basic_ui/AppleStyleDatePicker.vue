@@ -49,8 +49,8 @@ export default {
 .form-group {
   position: relative;
   width: calc(100% - 24px);
-  height: calc(100% - 12px);
-  padding: 20px 12px 4px 12px;
+  height: 26px;
+  padding: 20px 4px 4px 4px;
   border-radius: 10px;
   border: 1px solid var(--color-gray);
   margin-bottom: 10px;
