@@ -48,6 +48,26 @@
       </transition>
     </teleport>
 
+    <!-- 上传简历时的进度条 -->
+    <teleport to="body">
+      <transition name="fade">
+        <div
+          v-if="selectionType === 'upload_resume' && isModifying"
+          class="progress-mask"
+        >
+          <div class="progress-wrapper">
+            <p class="progress-title">正在解析简历... {{ fakeProgress }}%</p>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                :style="{ width: fakeProgress + '%' }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </teleport>
+
     <!-- 类别选项卡 -->
     <div class="category-tabs">
       <button v-for="category in filteredCategories" :key="category"
@@ -115,6 +135,8 @@ export default {
       currentCategory: null,
       selectedTemplate: null,
       isModifying: false,
+      fakeProgress: 0,
+      progressTimer: null,
       isConfirmPopupVisible: false,
       scale: 1,
       transformOrigin: '0 0',
@@ -293,6 +315,7 @@ export default {
       } else if (this.selectionType === 'upload_resume') {
         // 上传简历，直接进入对应表单（可将颜色信息也一并传入下个路由）
         this.isModifying = true
+        this.startFakeProgress()
         try {
           // 1. 组织 FormData
           const formData = new FormData()
@@ -461,7 +484,7 @@ export default {
           console.error('上传简历识别失败:', error)
           this.toast.error('上传简历识别失败，请稍后再试')
         } finally {
-          this.isModifying = false
+          this.stopFakeProgress()
         }
       }
     },
@@ -480,6 +503,31 @@ export default {
         return genericBlockMatch[1].trim();
       }
       return text;
+    },
+
+    startFakeProgress() {
+      this.fakeProgress = 0;
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer);
+      }
+      this.progressTimer = setInterval(() => {
+        if (this.fakeProgress < 95) {
+          this.fakeProgress += Math.floor(Math.random() * 5) + 1;
+          if (this.fakeProgress > 95) this.fakeProgress = 95;
+        }
+      }, 500);
+    },
+
+    stopFakeProgress() {
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer);
+        this.progressTimer = null;
+      }
+      this.fakeProgress = 100;
+      setTimeout(() => {
+        this.fakeProgress = 0;
+        this.isModifying = false;
+      }, 300);
     },
 
     // 添加返回方法
@@ -987,5 +1035,51 @@ export default {
 .back-button svg {
   width: 20px;
   height: 20px;
+}
+
+/* 上传简历虚拟进度条样式 */
+.progress-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+}
+
+.progress-wrapper {
+  width: 80%;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.progress-title {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: var(--color-primary);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  width: 0;
+  transition: width 0.3s ease;
 }
 </style>
