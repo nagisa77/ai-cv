@@ -77,10 +77,7 @@ export default {
     }
   },
   mounted() {
-    // 初次挂载后，进行一次缩放适配
-    this.$nextTick(() => {
-      this.fitScale(1000);
-    });
+    this.fitScale(0);
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', () => this.fitScale(1000));
   },
@@ -151,7 +148,7 @@ export default {
         const finalScale = scaleW;
         // 应用 transform 缩放
         pageContentEl.style.transform = `scale(${finalScale})`;
-      }, 200); // 延迟100毫秒执行
+      }, delay); // 延迟100毫秒执行
     }
   }
 };
