@@ -72,7 +72,8 @@ export default {
     return {
       isHovered: false,
       isLoading: false,
-      currentImage: this.value || this.defaultImage
+      // 初始化时应使用 modelValue 而不是不存在的 value 属性
+      currentImage: this.modelValue || this.defaultImage
     }
   },
   computed: {
@@ -114,7 +115,8 @@ export default {
     }
   },
   watch: {
-    value(newVal) {
+    // 监听 modelValue 的变化同步 currentImage
+    modelValue(newVal) {
       this.currentImage = newVal || this.defaultImage
     }
   }
