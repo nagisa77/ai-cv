@@ -690,9 +690,23 @@ export default {
         this.selectedMy.splice(idx, 1)
       }
     },
-    batchDeleteMy() {
-      // TODO: 批量删除逻辑待实现
-      console.log('batch delete my resumes', this.selectedMy)
+    async batchDeleteMy() {
+      if (this.selectedMy.length === 0) return
+
+      if (!confirm(`确定要删除选中的 ${this.selectedMy.length} 份简历吗？`)) return
+
+      try {
+        await apiClient.post('/user/resumes/batch/recycle', {
+          resumeIds: this.selectedMy,
+        })
+        this.toast.success('已移入回收站')
+        this.selectedMy = []
+        this.selectModeMy = false
+        this.fetchResumes()
+      } catch (error) {
+        console.error('批量删除失败:', error)
+        this.toast.error('批量删除失败')
+      }
     },
     enterTrashSelectMode() {
       this.selectModeTrash = true
@@ -709,9 +723,24 @@ export default {
         this.selectedTrash.splice(idx, 1)
       }
     },
-    batchDeleteTrash() {
-      // TODO: 批量删除逻辑待实现
-      console.log('batch delete trash resumes', this.selectedTrash)
+    async batchDeleteTrash() {
+      if (this.selectedTrash.length === 0) return
+
+      if (!confirm(`确定要永久删除选中的 ${this.selectedTrash.length} 份简历吗？此操作无法撤销`))
+        return
+
+      try {
+        await apiClient.delete('/user/resumes/batch', {
+          data: { resumeIds: this.selectedTrash },
+        })
+        this.toast.success('已永久删除简历')
+        this.selectedTrash = []
+        this.selectModeTrash = false
+        this.fetchResumes()
+      } catch (error) {
+        console.error('批量删除失败:', error)
+        this.toast.error('批量删除失败')
+      }
     }
   }
 }
