@@ -18,9 +18,15 @@
         <i class="fas fa-compress-alt"></i>
         <span class="button-text">智能一页</span>
       </button>
-      <button class="cv-top-button" @click="captureAndSaveScreenshot">
-        <i class="fas fa-download"></i>
-        <span class="button-text">下载</span>
+      <button
+        class="cv-top-button"
+        :class="{ 'loading-state': isDownloading }"
+        @click="captureAndSaveScreenshot"
+        :disabled="isDownloading"
+      >
+        <i v-if="!isDownloading" class="fas fa-download"></i>
+        <i v-else class="fas fa-spinner fa-spin"></i>
+        <span class="button-text">{{ isDownloading ? '下载中' : '下载' }}</span>
       </button>
     </div>
 
@@ -63,6 +69,10 @@ export default {
       default: ''
     },
     isPreview: {
+      type: Boolean,
+      default: false
+    },
+    isDownloading: {
       type: Boolean,
       default: false
     },
@@ -231,6 +241,16 @@ export default {
 .cv-top-button:hover {
   color: var(--color-primary-hover); /* Hover 时改变图标颜色 */
   background-color: rgba(0, 0, 0, 0.05); /* 轻微背景反馈 */
+}
+
+.cv-top-button.loading-state {
+  cursor: not-allowed;
+  color: #999;
+}
+
+.cv-top-button.loading-state:hover {
+  background-color: transparent;
+  color: #999;
 }
 
 .cv-top-button:hover .button-text {
