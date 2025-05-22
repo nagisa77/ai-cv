@@ -111,6 +111,7 @@ import ChatgptModel from '@/models/chatgpt_model.js';
 import { waveform } from 'ldrs';
 import { resumeModel } from '@/models/resume_model.js';
 import apiClient from '@/api/axios';
+import { useToast } from 'vue-toastification';
 
 waveform.register();
 const chatgptInstance = ChatgptModel.getInstance();
@@ -134,6 +135,10 @@ export default {
       type: String,
       default: ''
     }
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   created() {
     // 从路由参数获取 resumeId
@@ -248,6 +253,9 @@ export default {
       if (this.isDownloading) return
       this.isDownloading = true
 
+      // 提示下载开始
+      this.toast.success('简历下载中')
+
       // 获取当前简历ID
       const resumeId = this.$route.params.resumeId
 
@@ -267,11 +275,13 @@ export default {
             link.click()
             document.body.removeChild(link)
           } else {
+            this.toast.error('下载失败，请重试')
             console.error('获取简历截图失败:', response.data.message)
           }
         })
         .catch((error) => {
           console.error('下载简历截图时出错:', error)
+          this.toast.error('下载失败，请重试')
         })
         .finally(() => {
           this.isDownloading = false
