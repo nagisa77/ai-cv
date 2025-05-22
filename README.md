@@ -1,24 +1,43 @@
-# ai-cv
+# AI 简历君
 
-## Project setup
-```
-npm install
-```
+AI 简历君是一个基于 **Vue 3** 的在线简历生成平台，通过与 ChatGPT 的对话式交互帮助用户快速整理并优化个人简历。项目内置多套简历模板，支持模板切换、颜色与字体更换，并提供一键截图下载等功能。
 
-### Compiles and hot-reloads for development
-```
+## 功能亮点
+
+- **AI 辅助写作**：用户可在聊天界面与 AI 讨论工作经历或项目经历，ChatGPT 会在信息充足时生成精炼的简历要点并回填到对应模块。
+- **多模板与颜色主题**：在模板选择页可以预览不同的模板，并切换配色后再确认使用。模板支持后续更换。
+- **模块化编辑**：工作经历、项目经历、教育经历等内容均以模块方式呈现，可自由新增、编辑或删除。
+- **OCR 简历导入**：上传现有简历后，后台会识别内容并自动填充到对应字段，省去手动录入的步骤。
+- **截图下载与云端存储**：简历可以通过服务器接口生成高清截图下载，所有内容和聊天记录均会同步保存到云端，支持跨设备继续编辑。
+- **回收站**：误删的简历会先进入回收站，可在需要时恢复。
+- **移动端预览**：在窄屏设备下会以弹窗形式展示简历预览，方便在手机上查看效果。
+
+## 项目结构
+
+- `src/api`：Axios 实例及网络请求配置。
+- `src/components`：核心组件以及多套模板实现。
+- `src/models`：负责管理简历元数据、聊天记录及简历列表的状态模型。
+- `src/views`：页面级组件，例如首页、模板选择页和简历编辑页。
+
+## 快速开始
+
+```bash
+# 安装依赖
+yarn install # 或 npm install
+
+# 启动本地开发服务器
 npm run serve
-```
 
-### Compiles and minifies for production
-```
+# 构建生产环境代码
 npm run build
-```
 
-### Lints and fixes files
-```
+# 代码格式检查
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+构建完成的静态文件默认会发布到 `dist/` 目录，若用于 GitHub Pages 部署，可按照项目中的 `justfile` 执行 `just publish`。
+
+## 相关配置
+
+更多自定义配置请参考 [Vue CLI 文档](https://cli.vuejs.org/config/)。`vue.config.js` 中已启用 `source-map` 方便调试，`CNAME` 文件用于自定义域名部署。
+
