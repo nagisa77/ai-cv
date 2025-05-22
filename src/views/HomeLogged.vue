@@ -88,13 +88,22 @@
               <p>点击"新建简历"开始创建您的第一份简历</p>
             </div>
 
-            <div v-else class="resume-grid">
+            <div v-else>
+              <div class="batch-toggle" v-if="!batchMode">
+                <button class="btn btn-white" @click="startBatchDelete">批量删除</button>
+              </div>
+              <div class="batch-actions" v-if="batchMode">
+                <button class="btn btn-primary" @click="confirmBatchDelete">确认删除</button>
+                <button class="btn btn-white" @click="cancelBatchDelete">取消</button>
+              </div>
+              <div class="resume-grid">
               <div
                 class="resume-item"
                 v-for="resume in resumes"
                 :key="resume.resumeId"
                 @click="openResume(resume)"
               >
+                <input type="checkbox" v-if="batchMode" v-model="selectedResumes" :value="resume.resumeId" @click.stop class="batch-checkbox" />
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
@@ -164,12 +173,21 @@
               <p>已删除的简历将会显示在这里</p>
             </div>
 
-            <div v-else class="resume-grid">
+            <div v-else>
+              <div class="batch-toggle" v-if="!batchMode">
+                <button class="btn btn-white" @click="startBatchDelete">批量删除</button>
+              </div>
+              <div class="batch-actions" v-if="batchMode">
+                <button class="btn btn-primary" @click="confirmBatchDelete">确认删除</button>
+                <button class="btn btn-white" @click="cancelBatchDelete">取消</button>
+              </div>
+              <div class="resume-grid">
               <div
                 class="resume-item"
                 v-for="resume in trashResumes"
                 :key="resume.resumeId"
               >
+                <input type="checkbox" v-if="batchMode" v-model="selectedTrashResumes" :value="resume.resumeId" @click.stop class="batch-checkbox" />
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
@@ -332,6 +350,9 @@ export default {
         '保持勇气，珍惜机会'
       ],
       trashResumes: [],
+      batchMode: false,
+      selectedResumes: [],
+      selectedTrashResumes: [],
       renamingResume: null, // 正在重命名的简历
 
       // ===== 新增：导入弹窗控制
@@ -578,6 +599,40 @@ export default {
         resume.name = newName
         this.toast.success('名称已更新')
       }
+    },
+
+    startBatchDelete() {
+      this.batchMode = true
+      this.selectedResumes = []
+      this.selectedTrashResumes = []
+    },
+
+    async confirmBatchDelete() {
+      const ids = this.activeTab === 'myResumes' ? this.selectedResumes : this.selectedTrashResumes
+      if (ids.length === 0) {
+        this.batchMode = false
+        return
+      }
+      try {
+        if (this.activeTab === 'myResumes') {
+          await apiClient.post('/user/resumes/batch/recycle', { resumeIds: ids })
+        } else {
+          await apiClient.delete('/user/resumes/batch', { data: { resumeIds: ids } })
+        }
+        this.toast.success('批量删除成功')
+        this.fetchResumes()
+      } catch (error) {
+        console.error('批量删除失败:', error)
+        this.toast.error('批量删除失败')
+      } finally {
+        this.batchMode = false
+      }
+    },
+
+    cancelBatchDelete() {
+      this.batchMode = false
+      this.selectedResumes = []
+      this.selectedTrashResumes = []
     },
 
     async handleImportFiles(file) {
@@ -1489,6 +1544,18 @@ export default {
     font-size: 16px;
     max-width: 90%;
     padding-top: 35px;
+  }
+
+  .batch-toggle,
+  .batch-actions {
+    margin-bottom: 10px;
+  }
+
+  .batch-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
   }
 }
 </style>
