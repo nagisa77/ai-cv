@@ -543,6 +543,7 @@ export default {
       if (resume.isDownloading) return
       resume.isDownloading = true
       try {
+        this.toast.success('简历下载中')
         const response = await apiClient.post('/pic/scf-screenshot', {
           resumeId: resume.resumeId,
           templateType: resume.templateType,
@@ -556,8 +557,7 @@ export default {
           document.body.appendChild(a)
           a.click()
           document.body.removeChild(a)
-          this.toast.success('简历下载中')
-        } else {
+         } else {
           this.toast.error('下载失败，请重试')
         }
       } catch (error) {
