@@ -74,6 +74,26 @@
         <div class="resume-content">
           <!-- 我的简历标签页内容 -->
           <div v-if="activeTab === 'myResumes'" class="resume-view">
+            <div class="resume-header">
+              <h2 class="resume-section-title">我的简历</h2>
+              <div class="resume-actions-top">
+                <button
+                  v-if="!selectModeMy"
+                  class="btn btn-white"
+                  @click="enterMySelectMode"
+                >
+                  批量选择
+                </button>
+                <template v-else>
+                  <button class="btn btn-white" @click="cancelMySelection">
+                    取消
+                  </button>
+                  <button class="btn btn-white" @click="batchDeleteMy">
+                    删除
+                  </button>
+                </template>
+              </div>
+            </div>
             <div v-if="loading" class="empty-state">
               <l-waveform
                 size="60"
@@ -93,14 +113,15 @@
                 class="resume-item"
                 v-for="resume in resumes"
                 :key="resume.resumeId"
-                @click="openResume(resume)"
+                @click="selectModeMy ? toggleMySelection(resume.resumeId) : openResume(resume)"
+                :class="{ selected: selectModeMy && selectedMy.includes(resume.resumeId) }"
               >
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
                     {{ formatDate(resume.updatedAt || resume.createdAt) }}
                   </div>
-                  <div class="resume-actions-dropdown">
+                  <div class="resume-actions-dropdown" v-if="!selectModeMy">
                     <div
                       class="resume-dropdown-trigger"
                       @click.stop="toggleDropdown(resume.resumeId)"
@@ -148,6 +169,12 @@
                     alt="简历预览"
                   />
                 </div>
+                <div
+                  v-if="selectModeMy && selectedMy.includes(resume.resumeId)"
+                  class="resume-selected-overlay"
+                >
+                  ✓
+                </div>
                 <div class="resume-pic-after"></div>
                 <div class="resume-info">
                   <div class="resume-name">{{ resume.name }}</div>
@@ -158,6 +185,26 @@
 
           <!-- 回收站标签页内容 -->
           <div v-if="activeTab === 'trash'" class="resume-view">
+            <div class="resume-header">
+              <h2 class="resume-section-title">回收站</h2>
+              <div class="resume-actions-top">
+                <button
+                  v-if="!selectModeTrash"
+                  class="btn btn-white"
+                  @click="enterTrashSelectMode"
+                >
+                  批量选择
+                </button>
+                <template v-else>
+                  <button class="btn btn-white" @click="cancelTrashSelection">
+                    取消
+                  </button>
+                  <button class="btn btn-white" @click="batchDeleteTrash">
+                    删除
+                  </button>
+                </template>
+              </div>
+            </div>
             <div v-if="trashResumes.length === 0" class="empty-state">
               <div class="empty-icon">🗑️</div>
               <h3>回收站为空</h3>
@@ -169,13 +216,15 @@
                 class="resume-item"
                 v-for="resume in trashResumes"
                 :key="resume.resumeId"
+                @click="selectModeTrash && toggleTrashSelection(resume.resumeId)"
+                :class="{ selected: selectModeTrash && selectedTrash.includes(resume.resumeId) }"
               >
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
                     {{ formatDate(resume.updatedAt || resume.createdAt) }}
                   </div>
-                  <div class="resume-actions-dropdown">
+                  <div class="resume-actions-dropdown" v-if="!selectModeTrash">
                     <div
                       class="resume-dropdown-trigger"
                       @click.stop="toggleTrashDropdown(resume.resumeId)"
@@ -207,6 +256,12 @@
                     :src="getResumeImage(resume)"
                     alt="简历预览"
                   />
+                </div>
+                <div
+                  v-if="selectModeTrash && selectedTrash.includes(resume.resumeId)"
+                  class="resume-selected-overlay"
+                >
+                  ✓
                 </div>
                 <div class="resume-pic-after"></div>
                 <div class="resume-info">
@@ -335,7 +390,13 @@ export default {
       renamingResume: null, // 正在重命名的简历
 
       // ===== 新增：导入弹窗控制
-      importModalVisible: false
+      importModalVisible: false,
+
+      // 批量选择相关状态
+      selectModeMy: false,
+      selectedMy: [],
+      selectModeTrash: false,
+      selectedTrash: []
     }
   },
   setup() {
@@ -611,6 +672,46 @@ export default {
         console.error('上传失败:', error)
         this.toast.error('上传失败，请重试')
       }
+    },
+
+    // ===== 批量选择相关方法 =====
+    enterMySelectMode() {
+      this.selectModeMy = true
+    },
+    cancelMySelection() {
+      this.selectModeMy = false
+      this.selectedMy = []
+    },
+    toggleMySelection(id) {
+      const idx = this.selectedMy.indexOf(id)
+      if (idx === -1) {
+        this.selectedMy.push(id)
+      } else {
+        this.selectedMy.splice(idx, 1)
+      }
+    },
+    batchDeleteMy() {
+      // TODO: 批量删除逻辑待实现
+      console.log('batch delete my resumes', this.selectedMy)
+    },
+    enterTrashSelectMode() {
+      this.selectModeTrash = true
+    },
+    cancelTrashSelection() {
+      this.selectModeTrash = false
+      this.selectedTrash = []
+    },
+    toggleTrashSelection(id) {
+      const idx = this.selectedTrash.indexOf(id)
+      if (idx === -1) {
+        this.selectedTrash.push(id)
+      } else {
+        this.selectedTrash.splice(idx, 1)
+      }
+    },
+    batchDeleteTrash() {
+      // TODO: 批量删除逻辑待实现
+      console.log('batch delete trash resumes', this.selectedTrash)
     }
   }
 }
@@ -1203,6 +1304,28 @@ export default {
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* 选中状态样式 */
+.resume-item.selected {
+  border: 2px solid var(--color-primary);
+}
+
+.resume-selected-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 3;
 }
 
 /* 简历操作按钮 */
