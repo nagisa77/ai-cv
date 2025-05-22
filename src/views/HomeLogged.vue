@@ -527,20 +527,25 @@ export default {
         resume.showDropdown = false
       })
     },
-    downloadResume(resume) {
+    async downloadResume(resume) {
       try {
-        // 使用简历的截图链接
-        const imageUrl = resume.screenshotUrl || this.getResumeImage(resume)
+        const response = await apiClient.post('/pic/scf-screenshot', {
+          resumeId: resume.resumeId,
+          templateType: resume.templateType,
+          color: resume.color,
+        })
 
-        // 创建一个临时链接
-        const a = document.createElement('a')
-        a.href = imageUrl
-        a.download = `${resume.name || '简历'}.png`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-
-        this.toast.success('简历下载中')
+        if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+          const a = document.createElement('a')
+          a.href = response.data.data.screenshotUrl
+          a.download = `${resume.name || '简历'}.png`
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          this.toast.success('简历下载中')
+        } else {
+          this.toast.error('下载失败，请重试')
+        }
       } catch (error) {
         console.error('下载失败:', error)
         this.toast.error('下载失败，请重试')
