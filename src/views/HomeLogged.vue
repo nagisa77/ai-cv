@@ -88,13 +88,21 @@
               <p>点击"新建简历"开始创建您的第一份简历</p>
             </div>
 
-            <div v-else class="resume-grid">
-              <div
-                class="resume-item"
-                v-for="resume in resumes"
-                :key="resume.resumeId"
-                @click="openResume(resume)"
-              >
+            <div v-else>
+              <div class="batch-toolbar">
+                <label>
+                  <input type="checkbox" v-model="selectAllResumes" @change="toggleSelectAll('active')" /> 全选
+                </label>
+                <button class="btn btn-white" @click="batchRecycleSelected" :disabled="selectedResumes.length === 0">批量删除</button>
+              </div>
+              <div class="resume-grid">
+                <div
+                  class="resume-item"
+                  v-for="resume in resumes"
+                  :key="resume.resumeId"
+                  @click="openResume(resume)"
+                >
+                  <input type="checkbox" class="resume-select-checkbox" v-model="selectedResumes" :value="resume.resumeId" @click.stop="onSelectChange('active')" />
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
@@ -164,12 +172,20 @@
               <p>已删除的简历将会显示在这里</p>
             </div>
 
-            <div v-else class="resume-grid">
-              <div
-                class="resume-item"
-                v-for="resume in trashResumes"
-                :key="resume.resumeId"
-              >
+            <div v-else>
+              <div class="batch-toolbar">
+                <label>
+                  <input type="checkbox" v-model="selectAllTrash" @change="toggleSelectAll('trash')" /> 全选
+                </label>
+                <button class="btn btn-white" @click="batchPermanentDeleteSelected" :disabled="selectedTrashResumes.length === 0">批量删除</button>
+              </div>
+              <div class="resume-grid">
+                <div
+                  class="resume-item"
+                  v-for="resume in trashResumes"
+                  :key="resume.resumeId"
+                >
+                <input type="checkbox" class="resume-select-checkbox" v-model="selectedTrashResumes" :value="resume.resumeId" @click.stop="onSelectChange('trash')" />
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
@@ -335,7 +351,13 @@ export default {
       renamingResume: null, // 正在重命名的简历
 
       // ===== 新增：导入弹窗控制
-      importModalVisible: false
+      importModalVisible: false,
+
+      // ===== 批量选择相关 =====
+      selectedResumes: [],
+      selectedTrashResumes: [],
+      selectAllResumes: false,
+      selectAllTrash: false
     }
   },
   setup() {
@@ -577,6 +599,52 @@ export default {
         // 模拟更新
         resume.name = newName
         this.toast.success('名称已更新')
+      }
+    },
+
+    toggleSelectAll(type) {
+      if (type === 'active') {
+        this.selectedResumes = this.selectAllResumes ? this.resumes.map(r => r.resumeId) : []
+      } else {
+        this.selectedTrashResumes = this.selectAllTrash ? this.trashResumes.map(r => r.resumeId) : []
+      }
+    },
+
+    onSelectChange(type) {
+      if (type === 'active') {
+        this.selectAllResumes = this.selectedResumes.length === this.resumes.length
+      } else {
+        this.selectAllTrash = this.selectedTrashResumes.length === this.trashResumes.length
+      }
+    },
+
+    async batchRecycleSelected() {
+      if (this.selectedResumes.length === 0) return
+      if (!confirm('确定要删除选中的简历吗？')) return
+      try {
+        await apiClient.post('/user/resumes/batch/recycle', { resumeIds: this.selectedResumes })
+        this.toast.success('批量删除成功')
+        this.selectedResumes = []
+        this.selectAllResumes = false
+        this.fetchResumes()
+      } catch (error) {
+        console.error('批量删除失败:', error)
+        this.toast.error('批量删除失败')
+      }
+    },
+
+    async batchPermanentDeleteSelected() {
+      if (this.selectedTrashResumes.length === 0) return
+      if (!confirm('确定要永久删除选中的简历吗？此操作无法撤销')) return
+      try {
+        await apiClient.delete('/user/resumes/batch', { data: { resumeIds: this.selectedTrashResumes } })
+        this.toast.success('批量删除成功')
+        this.selectedTrashResumes = []
+        this.selectAllTrash = false
+        this.fetchResumes()
+      } catch (error) {
+        console.error('批量删除失败:', error)
+        this.toast.error('批量删除失败')
       }
     },
 
@@ -1405,10 +1473,24 @@ export default {
   transition: all 0.3s ease;
 }
 
-.tips-button:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
-}
+  .tips-button:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .batch-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .resume-select-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
+  }
 
 .tips-section {
   display: flex;
