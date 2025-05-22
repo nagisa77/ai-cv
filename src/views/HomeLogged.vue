@@ -88,14 +88,43 @@
               <p>点击"新建简历"开始创建您的第一份简历</p>
             </div>
 
-            <div v-else class="resume-grid">
-              <div
-                class="resume-item"
-                v-for="resume in resumes"
-                :key="resume.resumeId"
-                @click="openResume(resume)"
-              >
-                <div class="resume-header-info">
+            <div v-else>
+              <div class="batch-toolbar" v-if="!batchModeMy">
+                <button class="btn btn-white" @click="enableBatch('my')">
+                  <i class="fas fa-trash"></i> 批量删除
+                </button>
+              </div>
+              <div class="batch-toolbar" v-else>
+                <span>已选择 {{ selectedMyResumes.length }} 项</span>
+                <button class="btn btn-white" @click="cancelBatch('my')">
+                  取消
+                </button>
+                <button
+                  class="btn btn-primary"
+                  @click="confirmBatchDelete('my')"
+                >
+                  删除所选
+                </button>
+              </div>
+              <div class="resume-grid">
+                <div
+                  class="resume-item"
+                  v-for="resume in resumes"
+                  :key="resume.resumeId"
+                  @click="
+                    batchModeMy
+                      ? (resume.selected = !resume.selected)
+                      : openResume(resume)
+                  "
+                >
+                  <input
+                    type="checkbox"
+                    class="resume-checkbox"
+                    v-if="batchModeMy"
+                    v-model="resume.selected"
+                    @click.stop
+                  />
+                  <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
                     {{ formatDate(resume.updatedAt || resume.createdAt) }}
@@ -164,12 +193,42 @@
               <p>已删除的简历将会显示在这里</p>
             </div>
 
-            <div v-else class="resume-grid">
+            <div v-else>
+              <div class="batch-toolbar" v-if="!batchModeTrash">
+                <button class="btn btn-white" @click="enableBatch('trash')">
+                  <i class="fas fa-trash"></i> 批量删除
+                </button>
+              </div>
+              <div class="batch-toolbar" v-else>
+                <span>已选择 {{ selectedTrashResumes.length }} 项</span>
+                <button class="btn btn-white" @click="cancelBatch('trash')">
+                  取消
+                </button>
+                <button
+                  class="btn btn-primary"
+                  @click="confirmBatchDelete('trash')"
+                >
+                  删除所选
+                </button>
+              </div>
+              <div class="resume-grid">
               <div
                 class="resume-item"
                 v-for="resume in trashResumes"
                 :key="resume.resumeId"
+                @click="
+                  batchModeTrash
+                    ? (resume.selected = !resume.selected)
+                    : null
+                "
               >
+                <input
+                  type="checkbox"
+                  class="resume-checkbox"
+                  v-if="batchModeTrash"
+                  v-model="resume.selected"
+                  @click.stop
+                />
                 <div class="resume-header-info">
                   <div class="resume-edit-time">
                     最后编辑时间：
@@ -333,9 +392,12 @@ export default {
       ],
       trashResumes: [],
       renamingResume: null, // 正在重命名的简历
-
       // ===== 新增：导入弹窗控制
-      importModalVisible: false
+      importModalVisible: false,
+
+      // ===== 批量删除相关
+      batchModeMy: false,
+      batchModeTrash: false
     }
   },
   setup() {
@@ -345,6 +407,13 @@ export default {
   computed: {
     username() {
       return AuthService.getUserContact()
+    }
+    ,
+    selectedMyResumes() {
+      return this.resumes.filter((r) => r.selected)
+    },
+    selectedTrashResumes() {
+      return this.trashResumes.filter((r) => r.selected)
     }
   },
   mounted() {
@@ -366,7 +435,8 @@ export default {
           this.resumes = activeRes.data.data.map((resume) => ({
             ...resume,
             showDropdown: false,
-            isDownloading: false
+            isDownloading: false,
+            selected: false
           }))
         }
 
@@ -374,7 +444,8 @@ export default {
           this.trashResumes = trashRes.data.data.map((resume) => ({
             ...resume,
             showDropdown: false,
-            isDownloading: false
+            isDownloading: false,
+            selected: false
           }))
         }
       } catch (error) {
@@ -567,8 +638,8 @@ export default {
         resume.isDownloading = false
       }
     },
-    renameResume(resume) {
-      const newName = prompt('请输入新的简历名称', resume.name)
+  renameResume(resume) {
+    const newName = prompt('请输入新的简历名称', resume.name)
 
       if (newName && newName !== resume.name) {
         // 这里应当调用API更新简历名称
@@ -577,7 +648,36 @@ export default {
         // 模拟更新
         resume.name = newName
         this.toast.success('名称已更新')
+    }
+  },
+
+    enableBatch(type) {
+      if (type === 'my') {
+        this.batchModeMy = true
+      } else {
+        this.batchModeTrash = true
       }
+    },
+    cancelBatch(type) {
+      if (type === 'my') {
+        this.batchModeMy = false
+        this.resumes.forEach((r) => (r.selected = false))
+      } else {
+        this.batchModeTrash = false
+        this.trashResumes.forEach((r) => (r.selected = false))
+      }
+    },
+    confirmBatchDelete(type) {
+      const selected =
+        type === 'my' ? this.selectedMyResumes : this.selectedTrashResumes
+      if (selected.length === 0) {
+        this.toast.info('请选择简历')
+        return
+      }
+      // TODO: 批量删除逻辑待实现
+      console.log('batch delete', selected)
+      this.toast.success('批量删除逻辑待实现')
+      this.cancelBatch(type)
     },
 
     async handleImportFiles(file) {
@@ -964,6 +1064,23 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
+}
+
+.batch-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.resume-checkbox {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 18px;
+  height: 18px;
+  z-index: 2;
 }
 
 /* 添加响应式布局媒体查询 */
