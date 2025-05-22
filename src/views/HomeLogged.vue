@@ -357,10 +357,21 @@ export default {
     async fetchResumes() {
       try {
         this.loading = true
-        const response = await apiClient.get('/user/resumes')
-        if (response.data.code === 20002) {
-          // 为每个简历添加 showDropdown 和 isDownloading 属性
-          this.resumes = response.data.data.map((resume) => ({
+        const [activeRes, trashRes] = await Promise.all([
+          apiClient.get('/user/resumes'),
+          apiClient.get('/user/resumes', { params: { trash: true } })
+        ])
+
+        if (activeRes.data.code === 20002) {
+          this.resumes = activeRes.data.data.map((resume) => ({
+            ...resume,
+            showDropdown: false,
+            isDownloading: false
+          }))
+        }
+
+        if (trashRes.data.code === 20002) {
+          this.trashResumes = trashRes.data.data.map((resume) => ({
             ...resume,
             showDropdown: false,
             isDownloading: false
@@ -393,19 +404,9 @@ export default {
       if (!confirm('确定要删除这个简历吗？')) return
 
       try {
-        await apiClient.delete(`/user/resumes/${resumeId}`)
-        // 将删除的简历从列表中移除
-        const deletedResume = this.resumes.find((r) => r.resumeId === resumeId)
-        if (deletedResume) {
-          // 添加到回收站
-          this.trashResumes.unshift({
-            ...deletedResume,
-            showDropdown: false,
-            isDownloading: false
-          })
-        }
-        this.resumes = this.resumes.filter((r) => r.resumeId !== resumeId)
-        this.toast.success('删除成功')
+        await apiClient.post(`/user/resumes/${resumeId}/recycle`)
+        this.toast.success('已移入回收站')
+        this.fetchResumes()
       } catch (error) {
         console.error('删除失败:', error)
         this.toast.error('删除失败')
@@ -435,28 +436,27 @@ export default {
     },
 
     // 回收站功能
-    restoreResume(resumeId) {
-      const resumeIndex = this.trashResumes.findIndex((r) => r.resumeId === resumeId)
-      if (resumeIndex !== -1) {
-        const restoredResume = this.trashResumes[resumeIndex]
-        // 移除showDropdown属性，防止界面显示问题
-        restoredResume.showDropdown = false
-        restoredResume.isDownloading = false
-        // 添加到简历列表
-        this.resumes.unshift(restoredResume)
-        // 从回收站移除
-        this.trashResumes.splice(resumeIndex, 1)
+    async restoreResume(resumeId) {
+      try {
+        await apiClient.post(`/user/resumes/${resumeId}/restore`)
         this.toast.success('已恢复简历')
+        this.fetchResumes()
+      } catch (error) {
+        console.error('恢复失败:', error)
+        this.toast.error('恢复失败')
       }
     },
 
-    permanentDelete(resumeId) {
+    async permanentDelete(resumeId) {
       if (!confirm('确定要永久删除这个简历吗？此操作无法撤销')) return
 
-      const resumeIndex = this.trashResumes.findIndex((r) => r.resumeId === resumeId)
-      if (resumeIndex !== -1) {
-        this.trashResumes.splice(resumeIndex, 1)
+      try {
+        await apiClient.delete(`/user/resumes/${resumeId}`)
         this.toast.success('已永久删除简历')
+        this.fetchResumes()
+      } catch (error) {
+        console.error('删除失败:', error)
+        this.toast.error('删除失败')
       }
     },
 
