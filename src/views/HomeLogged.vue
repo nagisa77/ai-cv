@@ -114,8 +114,17 @@
                       <div
                         class="resume-dropdown-item"
                         @click.stop="downloadResume(resume)"
+                        :class="{ disabled: resume.isDownloading }"
                       >
-                        <i class="fas fa-download"></i> 下载简历
+                        <i
+                          v-if="!resume.isDownloading"
+                          class="fas fa-download"
+                        ></i>
+                        <i
+                          v-else
+                          class="fas fa-spinner fa-spin"
+                        ></i>
+                        {{ resume.isDownloading ? '下载中...' : '下载简历' }}
                       </div>
                       <div
                         class="resume-dropdown-item resume-dropdown-item-delete"
@@ -350,10 +359,11 @@ export default {
         this.loading = true
         const response = await apiClient.get('/user/resumes')
         if (response.data.code === 20002) {
-          // 为每个简历添加showDropdown属性
+          // 为每个简历添加 showDropdown 和 isDownloading 属性
           this.resumes = response.data.data.map((resume) => ({
             ...resume,
-            showDropdown: false
+            showDropdown: false,
+            isDownloading: false
           }))
         }
       } catch (error) {
@@ -390,7 +400,8 @@ export default {
           // 添加到回收站
           this.trashResumes.unshift({
             ...deletedResume,
-            showDropdown: false
+            showDropdown: false,
+            isDownloading: false
           })
         }
         this.resumes = this.resumes.filter((r) => r.resumeId !== resumeId)
@@ -430,6 +441,7 @@ export default {
         const restoredResume = this.trashResumes[resumeIndex]
         // 移除showDropdown属性，防止界面显示问题
         restoredResume.showDropdown = false
+        restoredResume.isDownloading = false
         // 添加到简历列表
         this.resumes.unshift(restoredResume)
         // 从回收站移除
@@ -528,6 +540,8 @@ export default {
       })
     },
     async downloadResume(resume) {
+      if (resume.isDownloading) return
+      resume.isDownloading = true
       try {
         const response = await apiClient.post('/pic/scf-screenshot', {
           resumeId: resume.resumeId,
@@ -549,6 +563,8 @@ export default {
       } catch (error) {
         console.error('下载失败:', error)
         this.toast.error('下载失败，请重试')
+      } finally {
+        resume.isDownloading = false
       }
     },
     renameResume(resume) {
@@ -1054,6 +1070,10 @@ export default {
     padding: 10px 12px;
     font-size: 12px;
   }
+  .resume-dropdown-item.disabled {
+    cursor: not-allowed;
+    color: #999;
+  }
 }
 
 /* 简历卡片样式 */
@@ -1157,6 +1177,10 @@ export default {
   gap: 8px;
   transition: background 0.2s ease;
   cursor: pointer;
+}
+.resume-dropdown-item.disabled {
+  cursor: not-allowed;
+  color: #999;
 }
 
 .resume-dropdown-item:hover {
