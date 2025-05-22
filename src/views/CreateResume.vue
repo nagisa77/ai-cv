@@ -46,6 +46,7 @@
         :isNewTitle="isNewTitle"
         :color="color"
         :highlightTitle="currentSelectedTitle"
+        :isDownloading="isDownloading"
         @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle"
         @cancel-changes="handleCancelChanges"
@@ -82,6 +83,7 @@
               :isNewTitle="isNewTitle"
               :color="color"
               :highlightTitle="currentSelectedTitle"
+              :isDownloading="isDownloading"
               @selected-module-changed="handleSelectedModuleChanged"
               @edit-title="handleEditTitle"
               @cancel-changes="handleCancelChanges"
@@ -163,6 +165,7 @@ export default {
       // 新增的响应式/预览控制
       isMobile: false, // 是否是窄屏
       showPreview: false, // 是否展示“简历预览”弹窗
+      isDownloading: false, // 简历是否正在下载
     };
   },
   computed: {
@@ -242,6 +245,9 @@ export default {
      * 下载截图
      */
     handleCaptureAndSaveScreenshot() {
+      if (this.isDownloading) return
+      this.isDownloading = true
+
       // 获取当前简历ID
       const resumeId = this.$route.params.resumeId
 
@@ -266,6 +272,9 @@ export default {
         })
         .catch((error) => {
           console.error('下载简历截图时出错:', error)
+        })
+        .finally(() => {
+          this.isDownloading = false
         })
     },
     /**
