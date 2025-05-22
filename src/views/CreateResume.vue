@@ -243,27 +243,30 @@ export default {
      */
     handleCaptureAndSaveScreenshot() {
       // 获取当前简历ID
-      const resumeId = this.$route.params.resumeId;
+      const resumeId = this.$route.params.resumeId
 
-      // 发送请求获取简历信息
+      // 使用新的截图接口获取实时截图
       apiClient
-        .get(`/user/resumes/${resumeId}`)
+        .post('/pic/scf-screenshot', {
+          resumeId,
+          templateType: this.templateType,
+          color: this.color,
+        })
         .then((response) => {
-          if (response.data.code === 20003 && response.data.data.screenshotUrl) {
-            // 创建下载链接
-            const link = document.createElement('a');
-            link.href = response.data.data.screenshotUrl;
-            link.download = `${response.data.data.name || '简历'}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+          if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+            const link = document.createElement('a')
+            link.href = response.data.data.screenshotUrl
+            link.download = `${response.data.data.resumeId}.png`
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
           } else {
-            console.error('获取简历截图失败:', response.data.message);
+            console.error('获取简历截图失败:', response.data.message)
           }
         })
         .catch((error) => {
-          console.error('下载简历截图时出错:', error);
-        });
+          console.error('下载简历截图时出错:', error)
+        })
     },
     /**
      * 编辑某个标题
