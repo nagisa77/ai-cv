@@ -696,7 +696,7 @@ export default {
       if (!confirm(`确定要删除选中的 ${this.selectedMy.length} 份简历吗？`)) return
 
       try {
-        await apiClient.post('/user/resumes/batch/recycle', {
+        await apiClient.post('/user/resumes-batch/recycle', {
           resumeIds: this.selectedMy,
         })
         this.toast.success('已移入回收站')
@@ -730,7 +730,7 @@ export default {
         return
 
       try {
-        await apiClient.delete('/user/resumes/batch', {
+        await apiClient.delete('/user/resumes-batch', {
           data: { resumeIds: this.selectedTrash },
         })
         this.toast.success('已永久删除简历')
