@@ -41,3 +41,7 @@ npm run lint
 
 更多自定义配置请参考 [Vue CLI 文档](https://cli.vuejs.org/config/)。`vue.config.js` 中已启用 `source-map` 方便调试，`CNAME` 文件用于自定义域名部署。
 
+
+## 许可证
+
+本项目遵循 [GNU 通用公共许可证](https://www.gnu.org/licenses/gpl-3.0.html)（GPL-3.0）开源。您可以自由地使用、修改并分发本项目，但分发时必须在文件中保留相同的许可声明。
