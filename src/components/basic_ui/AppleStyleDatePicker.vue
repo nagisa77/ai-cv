@@ -5,7 +5,7 @@
   >
     <input
       :id="id"
-      type="date"
+      type="month"
       class="form-input"
       placeholder=" "
       :required="required"
