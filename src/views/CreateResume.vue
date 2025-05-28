@@ -97,6 +97,11 @@
         </div>
       </div>
     </transition>
+    <AddModuleDialog
+      v-if="showAddModuleDialog"
+      @cancel="showAddModuleDialog = false"
+      @confirm="handleAddModuleConfirm"
+    />
   </div>
 </template>
 
@@ -108,6 +113,7 @@ import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeM
 
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue';
 import EditTitleComponent from '@/components/EditTitleComponent.vue';
+import AddModuleDialog from '@/components/AddModuleDialog.vue';
 import metadataInstance from '@/models/metadata_model.js';
 import ChatgptModel from '@/models/chatgpt_model.js';
 import { waveform } from 'ldrs';
@@ -127,6 +133,7 @@ export default {
     CreativeModernCV,
     SelectModuleComponent,
     EditTitleComponent,
+    AddModuleDialog,
   },
   props: {
     templateType: {
@@ -173,6 +180,7 @@ export default {
       isMobile: false, // 是否是窄屏
       showPreview: false, // 是否展示“简历预览”弹窗
       isDownloading: false, // 简历是否正在下载
+      showAddModuleDialog: false, // 是否展示添加模块弹窗
     };
   },
   computed: {
@@ -250,6 +258,11 @@ export default {
     },
     handleAddModule() {
       this.currentSelectedTitle = '';
+      this.showAddModuleDialog = true;
+    },
+    handleAddModuleConfirm(modules) {
+      console.log('selected modules', modules);
+      this.showAddModuleDialog = false;
     },
     /**
      * 下载截图
