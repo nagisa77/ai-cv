@@ -53,6 +53,7 @@
         @delete-title="handleDelete"
         @add-title="handleAddTitle"
         @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
+        @add-module="handleAddModule"
       />
     </div>
 
@@ -90,6 +91,7 @@
               @delete-title="handleDelete"
               @add-title="handleAddTitle"
               @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
+              @add-module="handleAddModule"
             />
           </div>
         </div>
@@ -244,6 +246,9 @@ export default {
      * 关闭当前正在讨论的标题
      */
     handleCloseChat() {
+      this.currentSelectedTitle = '';
+    },
+    handleAddModule() {
       this.currentSelectedTitle = '';
     },
     /**
