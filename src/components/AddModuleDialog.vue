@@ -41,7 +41,7 @@ export default {
       this.$emit('cancel')
     },
     onSelect(module) {
-      this.$emit('confirm', [module])
+      this.$emit('confirm', module)
     }
   }
 }

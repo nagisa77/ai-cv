@@ -260,9 +260,10 @@ export default {
       this.currentSelectedTitle = '';
       this.showAddModuleDialog = true;
     },
-    handleAddModuleConfirm(modules) {
-      console.log('selected modules', modules);
+    handleAddModuleConfirm(model) {
+      console.log('selected module', model);
       this.showAddModuleDialog = false;
+      this.handleAddTitle(model);
     },
     /**
      * 下载截图
