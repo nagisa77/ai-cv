@@ -45,16 +45,32 @@
       />
     </div>
 
-    <!-- 否则，显示简历主体（插槽），并将其包裹在一个固定"设计稿尺寸"的容器里 -->
-    <div v-else class="cv-page" ref="page">
-      <div class="cv-page-content" ref="pageContent">
-        <!-- 
-          不同简历风格（CreativeModern、Default、GeneralSimple 等）通过 <slot> 注入。
-          注意：slot 内部如果有固定 px，会保持原设计尺寸。
-        -->
-        <slot></slot>
+    <!-- 否则，根据模块高度自动分页 -->
+    <template v-else>
+      <div
+        v-for="(page, pageIndex) in paginatedModules"
+        :key="pageIndex"
+        class="cv-page"
+        ref="pages"
+      >
+        <div class="cv-page-content" ref="pageContents">
+          <!-- 默认渲染模块，如需自定义可使用作用域插槽 -->
+          <slot :page="page" :page-index="pageIndex">
+            <div
+              v-for="(module, moduleIndex) in page"
+              :key="moduleIndex"
+              class="resume-module"
+            >
+              <component
+                :is="module.component"
+                v-bind="module.props"
+                v-on="module.listeners"
+              />
+            </div>
+          </slot>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -76,6 +92,14 @@ export default {
       type: Boolean,
       default: false
     },
+    modulesData: {
+      type: Array,
+      default: () => []
+    },
+    pageMaxHeight: {
+      type: Number,
+      default: 600
+    }
   },
   computed: {
     // 若有更多字段可自行补充
@@ -84,6 +108,24 @@ export default {
         return false;
       }
       return metadataInstance.getIsFetching();
+    },
+    paginatedModules() {
+      const pages = []
+      let currentPage = []
+      let currentHeight = 0
+      this.modulesData.forEach(mod => {
+        const modHeight = mod.estimatedHeight || 100
+        if (currentHeight + modHeight <= this.pageMaxHeight) {
+          currentPage.push(mod)
+          currentHeight += modHeight
+        } else {
+          pages.push(currentPage)
+          currentPage = [mod]
+          currentHeight = modHeight
+        }
+      })
+      if (currentPage.length > 0) pages.push(currentPage)
+      return pages
     }
   },
   mounted() {
@@ -138,27 +180,22 @@ export default {
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
      */
     fitScale(delay = 0) {
-      console.log('delay', delay);
-      // 添加延迟执行
       setTimeout(() => {
-        // const DESIGN_HEIGHT = 960;
         const DESIGN_WIDTH = 493;
+        const pageEls = this.$refs.pages || this.$refs.page;
+        const contentEls = this.$refs.pageContents || this.$refs.pageContent;
+        if (!pageEls || !contentEls) return;
 
-        const pageEl = this.$refs.page;
-        const pageContentEl = this.$refs.pageContent;
-        if (!pageEl || !pageContentEl) return;
-
-        const containerWidth = pageEl.clientWidth;
-        // const containerHeight = pageEl.clientHeight;
-
-        // 计算需要的缩放比例，保证宽高都能完整显示
+        const firstPage = Array.isArray(pageEls) ? pageEls[0] : pageEls;
+        const containerWidth = firstPage.clientWidth;
         const scaleW = containerWidth / DESIGN_WIDTH;
-        // const scaleH = containerHeight / DESIGN_HEIGHT;
-        // const finalScale = Math.max(scaleW, scaleH);
         const finalScale = scaleW;
-        // 应用 transform 缩放
-        pageContentEl.style.transform = `scale(${finalScale})`;
-      }, delay); // 延迟100毫秒执行
+
+        const contents = Array.isArray(contentEls) ? contentEls : [contentEls];
+        contents.forEach(el => {
+          el.style.transform = `scale(${finalScale})`;
+        });
+      }, delay);
     }
   }
 };
@@ -280,10 +317,14 @@ export default {
 
 /* 固定尺寸：与 DESIGN_WIDTH、DESIGN_HEIGHT 对应 */
 .cv-page-content {
-  width: 453px;   
-  height: 613px;  
+  width: 453px;
+  height: 613px;
   padding: 20px;
-  transform-origin: top left; 
+  transform-origin: top left;
+}
+
+.resume-module {
+  margin-bottom: 16px;
 }
 
 /* 加载状态时的容器 */

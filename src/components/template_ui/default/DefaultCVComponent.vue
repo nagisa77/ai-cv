@@ -1,22 +1,29 @@
 <template>
-  <MultiplePages :modulesData="modulesData">
+  <BaseCVComponent
+    :isPreview="isPreview"
+    :highlightTitle="highlightTitle"
+    :modulesData="modulesData"
+    @selected-module-changed="handleSelectedModuleChanged"
+    @capture-and-save-screenshot="captureAndSaveScreenshot"
+    @edit-title="handleEdit"
+    @delete-title="handleDelete"
+    @add-title="handleAddTitle"
+    @add-module="handleAddModule"
+    @change-font="handleChangeFont"
+    @smart-fit="handleSmartFit"
+  >
     <template #default="{ page }">
-      <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-        @smart-fit="handleSmartFit">
-        <div :style="{ '--custom-color': customColor }">
-          <component
-            v-for="(module, moduleIndex) in page"
-            :key="moduleIndex"
-            :is="module.component"
-            v-bind="module.props"
-            v-on="module.listeners"
-          />
-        </div>
-      </BaseCVComponent>
+      <div :style="{ '--custom-color': customColor }">
+        <component
+          v-for="(module, moduleIndex) in page"
+          :key="moduleIndex"
+          :is="module.component"
+          v-bind="module.props"
+          v-on="module.listeners"
+        />
+      </div>
     </template>
-  </MultiplePages>
+  </BaseCVComponent>
 </template>
 
 <script>
@@ -26,7 +33,6 @@ import EducationSection from '@/components/template_ui/default/cv_components/Edu
 import WorkSection from '@/components/template_ui/default/cv_components/WorkSection.vue';
 import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue';
 import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue';
-import MultiplePages from '@/components/MultiplePages.vue';
 import metadataInstance from '@/models/metadata_model.js';
 export default {
   name: "DefaultCVComponent",
@@ -36,8 +42,7 @@ export default {
     EducationSection,
     WorkSection,
     ProjectSection,
-    SummarySection,
-    MultiplePages
+    SummarySection
   },
   props: {
     highlightTitle: {

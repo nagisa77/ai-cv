@@ -1,28 +1,35 @@
 <template>
-  <MultiplePages :modulesData="modulesData">
+  <BaseCVComponent
+    :isPreview="isPreview"
+    :highlightTitle="highlightTitle"
+    :modulesData="modulesData"
+    @selected-module-changed="handleSelectedModuleChanged"
+    @capture-and-save-screenshot="captureAndSaveScreenshot"
+    @edit-title="handleEdit"
+    @delete-title="handleDelete"
+    @add-title="handleAddTitle"
+    @add-module="handleAddModule"
+    @change-font="handleChangeFont"
+    @smart-fit="handleSmartFit"
+  >
     <template #default="{ page }">
-      <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-        @smart-fit="handleSmartFit">
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-        <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
-          <component
-            v-for="(module, moduleIndex) in page"
-            :key="moduleIndex"
-            :is="module.component"
-            v-bind="module.props"
-            v-on="module.listeners"
-          />
-        </div>
-      </BaseCVComponent>
+      <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+        <component
+          v-for="(module, moduleIndex) in page"
+          :key="moduleIndex"
+          :is="module.component"
+          v-bind="module.props"
+          v-on="module.listeners"
+        />
+      </div>
     </template>
-  </MultiplePages>
+  </BaseCVComponent>
 </template>
 
 <script>
@@ -33,7 +40,6 @@ import CreativeModernWorkSection from '@/components/template_ui/creative_modern/
 import CreativeModernProjectSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernProjectSection.vue';
 import CreativeModernSummarySection from '@/components/template_ui/creative_modern/cv_components/CreativeModernSummarySection.vue';
 import metadataInstance from '@/models/metadata_model.js';
-import MultiplePages from '@/components/MultiplePages.vue';
 export default {
   name: "CreativeModernCV",
   components: {
@@ -42,8 +48,7 @@ export default {
     CreativeModernEducationSection,
     CreativeModernWorkSection,
     CreativeModernProjectSection,
-    CreativeModernSummarySection,
-    MultiplePages
+    CreativeModernSummarySection
   },
   props: {
     highlightTitle: {

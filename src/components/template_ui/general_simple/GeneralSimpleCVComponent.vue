@@ -1,10 +1,18 @@
 <template>
-  <MultiplePages :modulesData="modulesData">
-    <template #default="{ page }">
-      <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-          @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-          @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-          @smart-fit="handleSmartFit">
+  <BaseCVComponent
+      :isPreview="isPreview"
+      :highlightTitle="highlightTitle"
+      :modulesData="modulesData"
+      @selected-module-changed="handleSelectedModuleChanged"
+      @capture-and-save-screenshot="captureAndSaveScreenshot"
+      @edit-title="handleEdit"
+      @delete-title="handleDelete"
+      @add-title="handleAddTitle"
+      @add-module="handleAddModule"
+      @change-font="handleChangeFont"
+      @smart-fit="handleSmartFit"
+  >
+      <template #default="{ page }">
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
@@ -18,9 +26,8 @@
                 v-on="module.listeners"
               />
           </div>
-      </BaseCVComponent>
-    </template>
-  </MultiplePages>
+      </template>
+  </BaseCVComponent>
 </template>
 
 <script>
@@ -31,7 +38,6 @@ import WorkGeneralSimpleSection from '@/components/template_ui/general_simple/cv
 import ProjectGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/ProjectGeneralSimpleSection.vue';
 import SummaryGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/SummaryGeneralSimpleSection.vue';
 import metadataInstance from '@/models/metadata_model.js';
-import MultiplePages from '@/components/MultiplePages.vue';
 export default {
     name: "GeneralSimpleCVComponent",
     components: {
@@ -40,8 +46,7 @@ export default {
         EducationGeneralSimpleSection,
         WorkGeneralSimpleSection,
         ProjectGeneralSimpleSection,
-        SummaryGeneralSimpleSection,
-        MultiplePages
+        SummaryGeneralSimpleSection
     },
     props: {
         highlightTitle: {
