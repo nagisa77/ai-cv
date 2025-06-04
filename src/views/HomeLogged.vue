@@ -611,14 +611,25 @@ export default {
           color: resume.color,
         })
 
-        if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+        const urls = response.data.data.screenshotUrls
+        if (response.data.code === 20009 && Array.isArray(urls) && urls.length) {
+          urls.forEach((url, index) => {
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `${resume.name || '简历'}_${index + 1}.png`
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
+          })
+        } else if (response.data.data.screenshotUrl) {
+          // 向后兼容旧接口
           const a = document.createElement('a')
           a.href = response.data.data.screenshotUrl
           a.download = `${resume.name || '简历'}.png`
           document.body.appendChild(a)
           a.click()
           document.body.removeChild(a)
-         } else {
+        } else {
           this.toast.error('下载失败，请重试')
         }
       } catch (error) {

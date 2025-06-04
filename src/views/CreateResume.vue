@@ -286,7 +286,18 @@ export default {
           color: this.color,
         })
         .then((response) => {
-          if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+          const urls = response.data.data.screenshotUrls
+          if (response.data.code === 20009 && Array.isArray(urls) && urls.length) {
+            urls.forEach((url, index) => {
+              const link = document.createElement('a')
+              link.href = url
+              link.download = `${response.data.data.resumeId}_${index + 1}.png`
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+            })
+          } else if (response.data.data.screenshotUrl) {
+            // 向后兼容旧接口
             const link = document.createElement('a')
             link.href = response.data.data.screenshotUrl
             link.download = `${response.data.data.resumeId}.png`
