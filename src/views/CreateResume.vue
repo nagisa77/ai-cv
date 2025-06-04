@@ -120,6 +120,8 @@ import { waveform } from 'ldrs';
 import { resumeModel } from '@/models/resume_model.js';
 import apiClient from '@/api/axios';
 import { useToast } from 'vue-toastification';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 waveform.register();
 const chatgptInstance = ChatgptModel.getInstance();
@@ -285,8 +287,21 @@ export default {
           templateType: this.templateType,
           color: this.color,
         })
-        .then((response) => {
-          if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+        .then(async (response) => {
+          const urls = response.data.data.screenshotUrls
+          if (response.data.code === 20009 && Array.isArray(urls) && urls.length) {
+            if (urls.length === 1) {
+              const link = document.createElement('a')
+              link.href = urls[0]
+              link.download = `${response.data.data.resumeId}.png`
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+            } else {
+              await this.downloadZip(urls, response.data.data.resumeId)
+            }
+          } else if (response.data.data.screenshotUrl) {
+            // 向后兼容旧接口
             const link = document.createElement('a')
             link.href = response.data.data.screenshotUrl
             link.download = `${response.data.data.resumeId}.png`
@@ -305,6 +320,19 @@ export default {
         .finally(() => {
           this.isDownloading = false
         })
+    },
+
+    async downloadZip(urls, baseName) {
+      const zip = new JSZip()
+      await Promise.all(
+        urls.map((url, index) =>
+          apiClient.get(url, { responseType: 'blob' }).then((res) => {
+            zip.file(`${baseName}_${index + 1}.png`, res.data)
+          })
+        )
+      )
+      const blob = await zip.generateAsync({ type: 'blob' })
+      saveAs(blob, `${baseName}.zip`)
     },
     /**
      * 编辑某个标题

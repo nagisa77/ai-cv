@@ -347,6 +347,8 @@ import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { useToast } from 'vue-toastification'
 import { Solar } from 'lunar-javascript'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 // ====== 新增：导入简历弹窗组件 ======
 import ImportResumeModal from '@/components/ImportResumeModal.vue'
@@ -611,14 +613,27 @@ export default {
           color: resume.color,
         })
 
-        if (response.data.code === 20009 && response.data.data.screenshotUrl) {
+        const urls = response.data.data.screenshotUrls
+        if (response.data.code === 20009 && Array.isArray(urls) && urls.length) {
+          if (urls.length === 1) {
+            const a = document.createElement('a')
+            a.href = urls[0]
+            a.download = `${resume.name || '简历'}.png`
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
+          } else {
+            await this.downloadZip(urls, resume.name || '简历')
+          }
+        } else if (response.data.data.screenshotUrl) {
+          // 向后兼容旧接口
           const a = document.createElement('a')
           a.href = response.data.data.screenshotUrl
           a.download = `${resume.name || '简历'}.png`
           document.body.appendChild(a)
           a.click()
           document.body.removeChild(a)
-         } else {
+        } else {
           this.toast.error('下载失败，请重试')
         }
       } catch (error) {
@@ -627,6 +642,19 @@ export default {
       } finally {
         resume.isDownloading = false
       }
+    },
+
+    async downloadZip(urls, baseName) {
+      const zip = new JSZip()
+      await Promise.all(
+        urls.map((url, index) =>
+          apiClient.get(url, { responseType: 'blob' }).then((res) => {
+            zip.file(`${baseName}_${index + 1}.png`, res.data)
+          })
+        )
+      )
+      const blob = await zip.generateAsync({ type: 'blob' })
+      saveAs(blob, `${baseName}.zip`)
     },
     renameResume(resume) {
       const newName = prompt('请输入新的简历名称', resume.name)
