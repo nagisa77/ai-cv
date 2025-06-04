@@ -132,7 +132,7 @@ export default {
     }
   },
   mounted() {
-    this.fitScale(0);
+    // this.fitScale(0);
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', () => this.fitScale(1000));
 
@@ -156,7 +156,6 @@ export default {
           this.$nextTick(this.measureAll)
         })
       },
-      deep: true
     },
     isFetching(newVal, oldVal) {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
@@ -203,7 +202,6 @@ export default {
     registerModuleRef(el, idx) {
       if (el) {
         this.moduleRefs[idx] = el
-        this.$nextTick(this.measureAll)
       }
     },
     measureAll() {
@@ -359,6 +357,7 @@ export default {
 
 /* 页面主容器：用于展示简历页面 */
 .cv-page {
+  margin-bottom: 20px;
   width: 90%;
   aspect-ratio: 3 / 4; 
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
