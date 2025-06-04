@@ -121,8 +121,7 @@ export default {
             const modules = []
             modules.push({
                 component: PersonalGeneralSimpleInfo,
-                props: { personalInfo: this.personalInfo, color: this.color },
-                estimatedHeight: 120
+                props: { personalInfo: this.personalInfo, color: this.color }
             })
             if (this.educationList && this.educationList.length > 0) {
                 modules.push({
@@ -138,8 +137,7 @@ export default {
                         'edit-title': this.handleEdit,
                         'delete-title': this.handleDelete,
                         'add-title': this.handleAddTitle
-                    },
-                    estimatedHeight: 160
+                    }
                 })
             }
             if (this.workList && this.workList.length > 0) {
@@ -156,8 +154,7 @@ export default {
                         'edit-title': this.handleEdit,
                         'delete-title': this.handleDelete,
                         'add-title': this.handleAddTitle
-                    },
-                    estimatedHeight: 220
+                    }
                 })
             }
             if (this.projectList && this.projectList.length > 0) {
@@ -174,8 +171,7 @@ export default {
                         'edit-title': this.handleEdit,
                         'delete-title': this.handleDelete,
                         'add-title': this.handleAddTitle
-                    },
-                    estimatedHeight: 220
+                    }
                 })
             }
             if (this.personalSummary && this.personalSummary.length > 0) {
@@ -185,8 +181,7 @@ export default {
                         personalSummary: this.personalSummary,
                         enableHover: !this.isPreview,
                         color: this.color
-                    },
-                    estimatedHeight: 120
+                    }
                 })
             }
             return modules

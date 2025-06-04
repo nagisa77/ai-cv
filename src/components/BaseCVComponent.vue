@@ -71,6 +71,20 @@
         </div>
       </div>
     </template>
+    <div class="measure-container">
+      <div
+        v-for="(module, moduleIndex) in modulesData"
+        :key="'measure-' + moduleIndex"
+        class="resume-module"
+        :ref="el => registerModuleRef(el, moduleIndex)"
+      >
+        <component
+          :is="module.component"
+          v-bind="module.props"
+          v-on="module.listeners"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -101,6 +115,13 @@ export default {
       default: 600
     }
   },
+  data() {
+    return {
+      moduleRefs: [],
+      measuredHeights: [],
+      paginatedModules: []
+    }
+  },
   computed: {
     // 若有更多字段可自行补充
     isFetching() {
@@ -108,33 +129,35 @@ export default {
         return false;
       }
       return metadataInstance.getIsFetching();
-    },
-    paginatedModules() {
-      const pages = []
-      let currentPage = []
-      let currentHeight = 0
-      this.modulesData.forEach(mod => {
-        const modHeight = mod.estimatedHeight || 100
-        if (currentHeight + modHeight <= this.pageMaxHeight) {
-          currentPage.push(mod)
-          currentHeight += modHeight
-        } else {
-          pages.push(currentPage)
-          currentPage = [mod]
-          currentHeight = modHeight
-        }
-      })
-      if (currentPage.length > 0) pages.push(currentPage)
-      return pages
     }
   },
   mounted() {
     this.fitScale(0);
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', () => this.fitScale(1000));
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(this.measureAll);
+    }
+    this.$nextTick(() => {
+      this.measureAll();
+      this.ro = new ResizeObserver(this.measureAll);
+      this.moduleRefs.forEach(el => el && this.ro.observe(el));
+    });
   },
   // 添加 watch 选项，监听 isFetching 的变化
   watch: {
+    modulesData: {
+      handler() {
+        this.$nextTick(() => {
+          this.moduleRefs = []
+          this.measuredHeights = []
+          this.paginatedModules = []
+          this.$nextTick(this.measureAll)
+        })
+      },
+      deep: true
+    },
     isFetching(newVal, oldVal) {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
       if (oldVal === true && newVal === false) {
@@ -147,6 +170,7 @@ export default {
   beforeUnmount() {
     // 移除监听
     window.removeEventListener('resize', () => this.fitScale(1000));
+    this.ro && this.ro.disconnect()
   },
   methods: {
     handleAddModule() {
@@ -175,6 +199,40 @@ export default {
     },
     handleChangeTemplate() {
       this.$emit('change-template');
+    },
+    registerModuleRef(el, idx) {
+      if (el) {
+        this.moduleRefs[idx] = el
+        this.$nextTick(this.measureAll)
+      }
+    },
+    measureAll() {
+      this.measuredHeights = this.moduleRefs.map(el => {
+        if (!el) return 0
+        const style = getComputedStyle(el)
+        const marginBottom = parseFloat(style.marginBottom) || 0
+        return el.offsetHeight + marginBottom
+      })
+      this.buildPages()
+    },
+    buildPages() {
+      const pages = []
+      let cur = []
+      let curH = 0
+      this.measuredHeights.forEach((h, i) => {
+        const mod = this.modulesData[i]
+        if (curH + h <= this.pageMaxHeight) {
+          cur.push(mod)
+          curH += h
+        } else {
+          if (cur.length) pages.push(cur)
+          cur = [mod]
+          curH = h
+        }
+      })
+      if (cur.length) pages.push(cur)
+      this.paginatedModules = pages
+      this.$nextTick(() => this.fitScale(0))
     },
     /**
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
@@ -325,6 +383,13 @@ export default {
 
 .resume-module {
   margin-bottom: 16px;
+}
+
+.measure-container {
+  visibility: hidden;
+  position: absolute;
+  left: -9999px;
+  top: 0;
 }
 
 /* 加载状态时的容器 */
