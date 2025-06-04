@@ -46,13 +46,15 @@
     </div>
 
     <!-- 否则，显示简历主体（插槽），并将其包裹在一个固定"设计稿尺寸"的容器里 -->
-    <div v-else class="cv-page" ref="page">
-      <div class="cv-page-content" ref="pageContent">
-        <!-- 
-          不同简历风格（CreativeModern、Default、GeneralSimple 等）通过 <slot> 注入。
-          注意：slot 内部如果有固定 px，会保持原设计尺寸。
-        -->
-        <slot></slot>
+    <div v-else class="cv-pages-container" ref="pagesContainer">
+      <div class="cv-page" ref="page">
+        <div class="cv-page-content" ref="pageContent">
+          <!--
+            不同简历风格（CreativeModern、Default、GeneralSimple 等）通过 <slot> 注入。
+            注意：slot 内部如果有固定 px，会保持原设计尺寸。
+          -->
+          <slot></slot>
+        </div>
       </div>
     </div>
   </div>
@@ -88,6 +90,9 @@ export default {
   },
   mounted() {
     this.fitScale(0);
+    this.$nextTick(() => {
+      this.paginate();
+    });
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', () => this.fitScale(1000));
   },
@@ -97,6 +102,7 @@ export default {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
       if (oldVal === true && newVal === false) {
         this.$nextTick(() => {
+          this.paginate();
           this.fitScale();
         });
       }
@@ -135,29 +141,62 @@ export default {
       this.$emit('change-template');
     },
     /**
+     * 将内容按模块拆分到多页
+     */
+    paginate() {
+      const DESIGN_HEIGHT = 613;
+      const container = this.$refs.pagesContainer;
+      let pageEl = this.$refs.page;
+      let contentEl = this.$refs.pageContent;
+      if (!container || !pageEl || !contentEl) return;
+
+      const modules = Array.from(contentEl.children);
+      contentEl.innerHTML = '';
+
+      let currentHeight = 0;
+      modules.forEach((mod) => {
+        const style = window.getComputedStyle(mod);
+        const margin = parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+        const modHeight = mod.offsetHeight + margin;
+        if (currentHeight + modHeight > DESIGN_HEIGHT && currentHeight > 0) {
+          pageEl = this.createPage();
+          contentEl = pageEl.querySelector('.cv-page-content');
+          currentHeight = 0;
+        }
+        contentEl.appendChild(mod);
+        currentHeight += modHeight;
+      });
+    },
+
+    createPage() {
+      const page = document.createElement('div');
+      page.className = 'cv-page';
+      const content = document.createElement('div');
+      content.className = 'cv-page-content';
+      page.appendChild(content);
+      this.$refs.pagesContainer.appendChild(page);
+      return page;
+    },
+
+    /**
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
      */
     fitScale(delay = 0) {
       console.log('delay', delay);
       // 添加延迟执行
       setTimeout(() => {
-        // const DESIGN_HEIGHT = 960;
         const DESIGN_WIDTH = 493;
-
-        const pageEl = this.$refs.page;
-        const pageContentEl = this.$refs.pageContent;
-        if (!pageEl || !pageContentEl) return;
-
-        const containerWidth = pageEl.clientWidth;
-        // const containerHeight = pageEl.clientHeight;
-
-        // 计算需要的缩放比例，保证宽高都能完整显示
-        const scaleW = containerWidth / DESIGN_WIDTH;
-        // const scaleH = containerHeight / DESIGN_HEIGHT;
-        // const finalScale = Math.max(scaleW, scaleH);
-        const finalScale = scaleW;
-        // 应用 transform 缩放
-        pageContentEl.style.transform = `scale(${finalScale})`;
+        const pages = this.$refs.pagesContainer
+          ? this.$refs.pagesContainer.querySelectorAll('.cv-page')
+          : [];
+        pages.forEach((page) => {
+          const content = page.querySelector('.cv-page-content');
+          if (!content) return;
+          const containerWidth = page.clientWidth;
+          const scaleW = containerWidth / DESIGN_WIDTH;
+          const finalScale = scaleW;
+          content.style.transform = `scale(${finalScale})`;
+        });
       }, delay); // 延迟100毫秒执行
     }
   }
@@ -260,6 +299,15 @@ export default {
 
 .cv-top-button:active {
   background-color: rgba(0, 0, 0, 0.1); /* 点击时的背景反馈 */
+}
+
+/* 多页容器 */
+.cv-pages-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 
 /* 页面主容器：用于展示简历页面 */
