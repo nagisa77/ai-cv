@@ -122,7 +122,6 @@ import apiClient from '@/api/axios';
 import { useToast } from 'vue-toastification';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import axios from 'axios';
 
 waveform.register();
 const chatgptInstance = ChatgptModel.getInstance();
@@ -327,7 +326,7 @@ export default {
       const zip = new JSZip()
       await Promise.all(
         urls.map((url, index) =>
-          axios.get(url, { responseType: 'blob' }).then((res) => {
+          apiClient.get(url, { responseType: 'blob' }).then((res) => {
             zip.file(`${baseName}_${index + 1}.png`, res.data)
           })
         )

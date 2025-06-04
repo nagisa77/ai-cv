@@ -349,7 +349,6 @@ import { useToast } from 'vue-toastification'
 import { Solar } from 'lunar-javascript'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import axios from 'axios'
 
 // ====== 新增：导入简历弹窗组件 ======
 import ImportResumeModal from '@/components/ImportResumeModal.vue'
@@ -649,7 +648,7 @@ export default {
       const zip = new JSZip()
       await Promise.all(
         urls.map((url, index) =>
-          axios.get(url, { responseType: 'blob' }).then((res) => {
+          apiClient.get(url, { responseType: 'blob' }).then((res) => {
             zip.file(`${baseName}_${index + 1}.png`, res.data)
           })
         )
