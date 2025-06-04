@@ -86,8 +86,14 @@ export default {
       return metadataInstance.getIsFetching();
     }
   },
+  data() {
+    return {
+      additionalPages: []
+    };
+  },
   mounted() {
     this.fitScale(0);
+    this.paginateContent();
     // 监听窗口大小变化，动态缩放（可自行去掉）
     window.addEventListener('resize', () => this.fitScale(1000));
   },
@@ -98,6 +104,7 @@ export default {
       if (oldVal === true && newVal === false) {
         this.$nextTick(() => {
           this.fitScale();
+          this.paginateContent();
         });
       }
     }
@@ -105,6 +112,8 @@ export default {
   beforeUnmount() {
     // 移除监听
     window.removeEventListener('resize', () => this.fitScale(1000));
+    this.additionalPages.forEach(p => p.remove());
+    this.additionalPages = [];
   },
   methods: {
     handleAddModule() {
@@ -138,27 +147,58 @@ export default {
      * 根据外层 .cv-page 大小，自动计算缩放比例，并对 .cv-page-content 做 transform: scale
      */
     fitScale(delay = 0) {
-      console.log('delay', delay);
-      // 添加延迟执行
       setTimeout(() => {
-        // const DESIGN_HEIGHT = 960;
         const DESIGN_WIDTH = 493;
+        const pageEls = this.$el.querySelectorAll('.cv-page');
+        pageEls.forEach(pageEl => {
+          const pageContentEl = pageEl.querySelector('.cv-page-content');
+          if (!pageContentEl) return;
+          const containerWidth = pageEl.clientWidth;
+          const scaleW = containerWidth / DESIGN_WIDTH;
+          pageContentEl.style.transform = `scale(${scaleW})`;
+        });
+      }, delay);
+    },
 
-        const pageEl = this.$refs.page;
-        const pageContentEl = this.$refs.pageContent;
-        if (!pageEl || !pageContentEl) return;
+    paginateContent() {
+      this.$nextTick(() => {
+        const DESIGN_HEIGHT = 613;
+        const componentEl = this.$refs.cvComponent;
+        const firstPage = this.$refs.page;
+        const firstContent = this.$refs.pageContent;
+        if (!componentEl || !firstPage || !firstContent) return;
 
-        const containerWidth = pageEl.clientWidth;
-        // const containerHeight = pageEl.clientHeight;
+        // 收集所有模块节点
+        const allModules = Array.from(componentEl.querySelectorAll('.cv-page-content'))
+          .reduce((acc, pc) => acc.concat(Array.from(pc.children)), []);
 
-        // 计算需要的缩放比例，保证宽高都能完整显示
-        const scaleW = containerWidth / DESIGN_WIDTH;
-        // const scaleH = containerHeight / DESIGN_HEIGHT;
-        // const finalScale = Math.max(scaleW, scaleH);
-        const finalScale = scaleW;
-        // 应用 transform 缩放
-        pageContentEl.style.transform = `scale(${finalScale})`;
-      }, delay); // 延迟100毫秒执行
+        // 清空并移除旧分页
+        firstContent.innerHTML = '';
+        this.additionalPages.forEach(p => p.remove());
+        this.additionalPages = [];
+
+        let currentPageContent = firstContent;
+        let currentHeight = 0;
+
+        allModules.forEach(mod => {
+          const modHeight = mod.offsetHeight;
+          if (currentHeight + modHeight > DESIGN_HEIGHT && currentHeight > 0) {
+            const newPage = document.createElement('div');
+            newPage.className = 'cv-page';
+            const newContent = document.createElement('div');
+            newContent.className = 'cv-page-content';
+            newPage.appendChild(newContent);
+            componentEl.appendChild(newPage);
+            this.additionalPages.push(newPage);
+            currentPageContent = newContent;
+            currentHeight = 0;
+          }
+          currentPageContent.appendChild(mod);
+          currentHeight += modHeight;
+        });
+
+        this.fitScale();
+      });
     }
   }
 };
