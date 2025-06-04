@@ -1,37 +1,33 @@
 <template>
-    <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-        @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-        @smart-fit="handleSmartFit">
-        <!-- General Simple 所需字体 -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+  <BaseCVComponent
+      :isPreview="isPreview"
+      :highlightTitle="highlightTitle"
+      :modulesData="modulesData"
+      @selected-module-changed="handleSelectedModuleChanged"
+      @capture-and-save-screenshot="captureAndSaveScreenshot"
+      @edit-title="handleEdit"
+      @delete-title="handleDelete"
+      @add-title="handleAddTitle"
+      @add-module="handleAddModule"
+      @change-font="handleChangeFont"
+      @smart-fit="handleSmartFit"
+  >
+      <template #default="{ page }">
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
 
-        <!-- General Simple 风格的主要内容 -->
-        <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
-            <!-- Personal Information -->
-            <PersonalGeneralSimpleInfo :personalInfo="personalInfo" :color="color" />
-
-            <!-- Education Section -->
-            <EducationGeneralSimpleSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
-
-            <!-- Work Experience Section -->
-            <WorkGeneralSimpleSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
-
-            <!-- Project Experience Section -->
-            <ProjectGeneralSimpleSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle"
-                @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit"
-                @delete-title="handleDelete" @add-title="handleAddTitle" :color="color"/>
-
-            <!-- Personal Summary -->
-            <SummaryGeneralSimpleSection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
-        </div>
-    </BaseCVComponent>
+          <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+              <component
+                v-for="(module, moduleIndex) in page"
+                :key="moduleIndex"
+                :is="module.component"
+                v-bind="module.props"
+                v-on="module.listeners"
+              />
+          </div>
+      </template>
+  </BaseCVComponent>
 </template>
 
 <script>
@@ -120,6 +116,75 @@ export default {
                 return this.previewData.personalSummary;
             }
             return metadataInstance.data.personalSummary;
+        },
+        modulesData() {
+            const modules = []
+            modules.push({
+                component: PersonalGeneralSimpleInfo,
+                props: { personalInfo: this.personalInfo, color: this.color }
+            })
+            if (this.educationList && this.educationList.length > 0) {
+                modules.push({
+                    component: EducationGeneralSimpleSection,
+                    props: {
+                        educationList: this.educationList,
+                        highlightTitle: this.highlightTitle,
+                        enableHover: !this.isPreview,
+                        color: this.color
+                    },
+                    listeners: {
+                        'selected-module-changed': this.handleSelectedModuleChanged,
+                        'edit-title': this.handleEdit,
+                        'delete-title': this.handleDelete,
+                        'add-title': this.handleAddTitle
+                    }
+                })
+            }
+            if (this.workList && this.workList.length > 0) {
+                modules.push({
+                    component: WorkGeneralSimpleSection,
+                    props: {
+                        workList: this.workList,
+                        highlightTitle: this.highlightTitle,
+                        enableHover: !this.isPreview,
+                        color: this.color
+                    },
+                    listeners: {
+                        'selected-module-changed': this.handleSelectedModuleChanged,
+                        'edit-title': this.handleEdit,
+                        'delete-title': this.handleDelete,
+                        'add-title': this.handleAddTitle
+                    }
+                })
+            }
+            if (this.projectList && this.projectList.length > 0) {
+                modules.push({
+                    component: ProjectGeneralSimpleSection,
+                    props: {
+                        projectList: this.projectList,
+                        highlightTitle: this.highlightTitle,
+                        enableHover: !this.isPreview,
+                        color: this.color
+                    },
+                    listeners: {
+                        'selected-module-changed': this.handleSelectedModuleChanged,
+                        'edit-title': this.handleEdit,
+                        'delete-title': this.handleDelete,
+                        'add-title': this.handleAddTitle
+                    }
+                })
+            }
+            if (this.personalSummary && this.personalSummary.length > 0) {
+                modules.push({
+                    component: SummaryGeneralSimpleSection,
+                    props: {
+                        personalSummary: this.personalSummary,
+                        enableHover: !this.isPreview,
+                        color: this.color
+                    }
+                })
+            }
+            return modules
         }
     },
     methods: {

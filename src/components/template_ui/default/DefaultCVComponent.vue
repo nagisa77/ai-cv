@@ -1,30 +1,28 @@
 <template>
-  <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-    @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-    @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-    @smart-fit="handleSmartFit">
-    <!-- Personal Information -->
-    <div :style="{ '--custom-color': customColor }">
-      <PersonalInfo :personalInfo="personalInfo" :color="color" />
-
-      <!-- Education Section -->
-      <EducationSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Work Experience Section -->
-      <WorkSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Project Experience Section -->
-      <ProjectSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Personal Summary -->
-      <SummarySection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
-    </div>
+  <BaseCVComponent
+    :isPreview="isPreview"
+    :highlightTitle="highlightTitle"
+    :modulesData="modulesData"
+    @selected-module-changed="handleSelectedModuleChanged"
+    @capture-and-save-screenshot="captureAndSaveScreenshot"
+    @edit-title="handleEdit"
+    @delete-title="handleDelete"
+    @add-title="handleAddTitle"
+    @add-module="handleAddModule"
+    @change-font="handleChangeFont"
+    @smart-fit="handleSmartFit"
+  >
+    <template #default="{ page }">
+      <div :style="{ '--custom-color': customColor }">
+        <component
+          v-for="(module, moduleIndex) in page"
+          :key="moduleIndex"
+          :is="module.component"
+          v-bind="module.props"
+          v-on="module.listeners"
+        />
+      </div>
+    </template>
   </BaseCVComponent>
 </template>
 
@@ -114,6 +112,75 @@ export default {
         return this.previewData.personalSummary;
       }
       return metadataInstance.data.personalSummary;
+    },
+    modulesData() {
+      const modules = []
+      modules.push({
+        component: PersonalInfo,
+        props: { personalInfo: this.personalInfo, color: this.color }
+      })
+      if (this.educationList && this.educationList.length > 0) {
+      modules.push({
+        component: EducationSection,
+        props: {
+          educationList: this.educationList,
+          highlightTitle: this.highlightTitle,
+          enableHover: !this.isPreview,
+          color: this.color
+        },
+        listeners: {
+          'selected-module-changed': this.handleSelectedModuleChanged,
+          'edit-title': this.handleEdit,
+          'delete-title': this.handleDelete,
+          'add-title': this.handleAddTitle
+        }
+      })
+      }
+      if (this.workList && this.workList.length > 0) {
+        modules.push({
+          component: WorkSection,
+          props: {
+            workList: this.workList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
+      if (this.projectList && this.projectList.length > 0) {
+        modules.push({
+          component: ProjectSection,
+          props: {
+            projectList: this.projectList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
+      if (this.personalSummary && this.personalSummary.length > 0) {
+        modules.push({
+          component: SummarySection,
+          props: {
+            personalSummary: this.personalSummary,
+            enableHover: !this.isPreview,
+            color: this.color
+          }
+        })
+      }
+      return modules
     }
   },
   methods: {

@@ -1,39 +1,34 @@
 <template>
-  <!-- 使用通用的 BaseCVComponent 包裹 -->
-  <BaseCVComponent :isPreview="isPreview" :highlightTitle="highlightTitle" @selected-module-changed="handleSelectedModuleChanged"
-    @capture-and-save-screenshot="captureAndSaveScreenshot" @edit-title="handleEdit" @delete-title="handleDelete"
-    @add-title="handleAddTitle" @add-module="handleAddModule" @change-font="handleChangeFont"
-    @smart-fit="handleSmartFit">
+  <BaseCVComponent
+    :isPreview="isPreview"
+    :highlightTitle="highlightTitle"
+    :modulesData="modulesData"
+    @selected-module-changed="handleSelectedModuleChanged"
+    @capture-and-save-screenshot="captureAndSaveScreenshot"
+    @edit-title="handleEdit"
+    @delete-title="handleDelete"
+    @add-title="handleAddTitle"
+    @add-module="handleAddModule"
+    @change-font="handleChangeFont"
+    @smart-fit="handleSmartFit"
+  >
+    <template #default="{ page }">
 
-    <!-- Creative Modern 风格需要的特殊字体，可自行保留或更换 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-    <!-- 创意 Modern 的主要内容（即原先 cv-page 里的部分） -->
-    <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
-      <!-- Personal Information -->
-      <CreativeModernPersonalInfo :personalInfo="personalInfo" :color="color" />
-
-      <!-- Education Section -->
-      <CreativeModernEducationSection v-if="educationList && educationList.length > 0" :enableHover="!isPreview" :educationList="educationList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Work Experience Section -->
-      <CreativeModernWorkSection v-if="workList && workList.length > 0" :enableHover="!isPreview" :workList="workList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Project Experience Section -->
-      <CreativeModernProjectSection v-if="projectList && projectList.length > 0" :enableHover="!isPreview" :projectList="projectList" :highlightTitle="highlightTitle" :color="color"
-        @selected-module-changed="handleSelectedModuleChanged" @edit-title="handleEdit" @delete-title="handleDelete"
-        @add-title="handleAddTitle" />
-
-      <!-- Personal Summary -->
-      <CreativeModernSummarySection v-if="personalSummary && personalSummary.length > 0" :enableHover="!isPreview" :personalSummary="personalSummary" :color="color" />
-    </div>
+      <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+        <component
+          v-for="(module, moduleIndex) in page"
+          :key="moduleIndex"
+          :is="module.component"
+          v-bind="module.props"
+          v-on="module.listeners"
+        />
+      </div>
+    </template>
   </BaseCVComponent>
 </template>
 
@@ -123,6 +118,75 @@ export default {
         return this.previewData.personalSummary;
       }
       return metadataInstance.data.personalSummary;
+    },
+    modulesData() {
+      const modules = []
+      modules.push({
+        component: CreativeModernPersonalInfo,
+        props: { personalInfo: this.personalInfo, color: this.color }
+      })
+      if (this.educationList && this.educationList.length > 0) {
+        modules.push({
+          component: CreativeModernEducationSection,
+          props: {
+            educationList: this.educationList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
+      if (this.workList && this.workList.length > 0) {
+        modules.push({
+          component: CreativeModernWorkSection,
+          props: {
+            workList: this.workList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
+      if (this.projectList && this.projectList.length > 0) {
+        modules.push({
+          component: CreativeModernProjectSection,
+          props: {
+            projectList: this.projectList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
+      if (this.personalSummary && this.personalSummary.length > 0) {
+        modules.push({
+          component: CreativeModernSummarySection,
+          props: {
+            personalSummary: this.personalSummary,
+            enableHover: !this.isPreview,
+            color: this.color
+          }
+        })
+      }
+      return modules
     }
   },
   methods: {
