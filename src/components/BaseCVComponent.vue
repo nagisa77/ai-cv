@@ -216,10 +216,10 @@ export default {
     buildPages() {
       const pages = []
       let cur = []
-      let curH = 0
+      let curH = 20 // padding-top
       this.measuredHeights.forEach((h, i) => {
         const mod = this.modulesData[i]
-        if (curH + h <= this.pageMaxHeight) {
+        if (curH + h <= this.pageMaxHeight - 20) { // padding-bottom
           cur.push(mod)
           curH += h
         } else {

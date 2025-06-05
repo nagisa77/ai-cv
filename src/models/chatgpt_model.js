@@ -234,7 +234,14 @@ ${describeForSenderMessage()}
         return gptContent;
       } catch (error) {
         console.error('调用 GPT API 出错：', error);
-        return 'GPT 接口调用失败，请检查 API Key 或稍后重试。';
+        return JSON.stringify({
+          message: 'GPT 接口调用失败，请检查 API Key 或稍后重试。',
+          meta_data: {
+            resumeData: metadata_model.formatForType(type)
+          },
+          is_enough: false,
+          prompt_hint: []
+        });
       }
     }
 

@@ -192,6 +192,21 @@ function initChat() {
       "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话",
       false
     )
+  } else if (messages.value.length === 2) {
+    if (chatgptInstance.getIsFetching()) {
+      return
+    }
+    // 删除最后一条消息并重新发送
+    const { type, title } = activeModule.value
+    // 删除最后一条消息
+    chatgptInstance.getMessagesForTitle(type, title).pop()
+    // 重新发送
+    chatgptInstance.sendMessage(
+      type,
+      title,
+      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话",
+      false
+    )
   }
 }
 
