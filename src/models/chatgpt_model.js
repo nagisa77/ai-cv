@@ -143,6 +143,11 @@ ${describeForSenderMessage()}
 
     function addMessage(type, title, message) {
       data.conversations[type][title].push(message)
+
+      if (resumeModel.currentResumeId) {
+        apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, data.conversations)
+          .catch(error => console.error('保存聊天记录出错:', error))
+      }
     }
 
     async function sendMessage(type, title, userText, display = true, needPromptHint = false, extra_message = '') {
