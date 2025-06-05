@@ -29,16 +29,16 @@ const ChatgptModel = (function () {
     }
 
     // 监听 conversations 的变化并通过 PUT 请求保存到云函数
-    watch(
-      () => data.conversations,
-      (newConversations) => {
-        if (resumeModel.currentResumeId) {
-          apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
-            .catch(error => console.error('保存聊天记录出错:', error))
-        }
-      },
-      { deep: true }
-    )
+    // watch(
+    //   () => data.conversations,
+    //   (newConversations) => {
+    //     if (resumeModel.currentResumeId) {
+    //       apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, newConversations)
+    //         .catch(error => console.error('保存聊天记录出错:', error))
+    //     }
+    //   },
+    //   { deep: true }
+    // )
 
     async function loadChatData(resumeId) {
       if (!resumeId) return
@@ -166,6 +166,11 @@ ${describeForSenderMessage()}
         sender: 'gpt',
         display: true,
       })
+
+      if (resumeModel.currentResumeId) {
+        apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, data.conversations)
+          .catch(error => console.error('保存聊天记录出错:', error))
+      }
     }
 
     function describeForSenderMessage() {
