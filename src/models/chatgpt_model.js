@@ -145,7 +145,7 @@ ${describeForSenderMessage()}
     function addMessage(type, title, message) {
       data.conversations[type][title].push(message)
 
-      if (resumeModel.currentResumeId) {
+      if (resumeModel.currentResumeId && authService.isLoggedIn()) {
         apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/chat`, data.conversations)
           .catch(error => console.error('保存聊天记录出错:', error))
       }

@@ -40,7 +40,7 @@ class MetadataModel {
 
     // 监听数据变化并通过 PUT 请求保存到云函数
     watch(this.data, (newData) => {
-      if (resumeModel.currentResumeId) {  
+      if (resumeModel.currentResumeId && authService.isLoggedIn()) {  
         apiClient.post(`/user/resumes/${resumeModel.currentResumeId}/meta_data`, newData)
           .then(() => {
             console.log('保存 metadata 成功:', newData);
