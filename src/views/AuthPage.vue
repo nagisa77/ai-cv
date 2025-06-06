@@ -2,8 +2,8 @@
     <div class="app">
         <div class="auth-page">
             <div class="auth-title">欢迎回来</div>
-            <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
 
+            <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
             <button class="continue-button" @click="continueToSecondStep" :disabled="isLoading">
                 <span v-if="!isLoading">继续</span>
                 <span v-else>发送中...</span>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="login-with-area">
-                <div class="login-with-button">
+                <div class="login-with-button" @click="signInWithGoogle">
                     <img class="login-with-button-icon" src="https://cdn-teams-slug.flaticon.com/google.jpg"
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
@@ -47,6 +47,8 @@
 import { useToast } from 'vue-toastification'
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue';
 import apiClient from '@/api/axios';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '@/firebase'
 
 
 export default {
@@ -96,6 +98,19 @@ export default {
                 }
             } finally {
                 this.isLoading = false;
+            }
+        },
+        async signInWithGoogle() {
+            try {
+                const provider = new GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: "select_account" });
+                const result = await signInWithPopup(auth, provider);
+                const idToken = await result.user.getIdToken();
+                const { data } = await apiClient.post('/auth/google', { idToken });
+                localStorage.setItem('token', data.data.token);
+                this.$router.push('/');
+            } catch (e) {
+                this.toast.error(e.code || e.message);
             }
         },
         validateEmail(email) {
