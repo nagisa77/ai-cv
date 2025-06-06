@@ -7,7 +7,6 @@ const apiClient = axios.create({
 
   // guangzhou 
   // baseURL: 'https://1307107697-5q335hkuc1.ap-guangzhou.tencentscf.com',
-
   // hongkong
   baseURL: 'https://1307107697-31bxe8nt1v.ap-hongkong.tencentscf.com',
   headers: {
