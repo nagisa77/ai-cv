@@ -26,7 +26,6 @@
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
-import authService from '@/utils/auth'
                 <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
@@ -50,7 +49,7 @@ import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue';
 import apiClient from '@/api/axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '@/firebase'
-
+import authService from '@/utils/auth'
 
 export default {
     components: {
