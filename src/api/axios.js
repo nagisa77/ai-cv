@@ -3,10 +3,10 @@ import axios from 'axios'
 
 // 创建带基础配置的实例
 const apiClient = axios.create({
-  baseURL: 'http://localhost:9000',
+  // baseURL: 'http://localhost:9000',
   // baseURL: 'http:////192.168.7.235:9000',
   // baseURL: 'https://23.159.248.46:9000',
-  // baseURL: 'https://1307107697-5q335hkuc1.ap-guangzhou.tencentscf.com',
+  baseURL: 'https://1307107697-5q335hkuc1.ap-guangzhou.tencentscf.com',
   headers: {
     'Content-Type': 'application/json'
   },
