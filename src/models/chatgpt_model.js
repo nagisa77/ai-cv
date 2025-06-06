@@ -2,6 +2,7 @@ import { reactive, watch } from 'vue'
 import metadata_model from './metadata_model.js'
 import apiClient from '@/api/axios'
 import resumeModel from './resume_model.js'
+import authService from '@/utils/auth'
 
 const ChatgptModel = (function () {
   let instance
@@ -14,7 +15,7 @@ const ChatgptModel = (function () {
 
     data.isFetching = true
     // 从云函数加载聊天记录（GET 请求）
-    if (resumeModel.currentResumeId) {
+    if (resumeModel.currentResumeId && authService.isLoggedIn()) {
       apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/chat`)
         .then(response => {
           // 若返回数据为空，则保持空对象

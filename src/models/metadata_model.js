@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue'
 import apiClient from '@/api/axios'
 import { resumeModel } from './resume_model.js'
+import authService from '@/utils/auth'
 
 class MetadataModel {
   constructor() {
@@ -23,7 +24,7 @@ class MetadataModel {
 
     // 尝试从云函数加载数据
     this.data.isFetching = true
-    if (resumeModel.currentResumeId) {
+    if (resumeModel.currentResumeId && authService.isLoggedIn()) {
       apiClient.get(`/user/resumes/${resumeModel.currentResumeId}/meta_data`)
         .then(response => {
           // 如果云端有数据，则合并到 this.data 中

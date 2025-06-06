@@ -130,6 +130,7 @@ import AuthService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { useToast } from 'vue-toastification'
+import authService from '@/utils/auth'
 
 waveform.register()
 
@@ -154,6 +155,9 @@ export default {
   },
   methods: {
     async fetchResumes() {
+      if (!authService.isLoggedIn()) {
+        return
+      }
       try {
         this.loading = true
         const response = await apiClient.get('/user/resumes')

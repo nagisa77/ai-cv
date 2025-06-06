@@ -342,7 +342,7 @@
 </template>
 
 <script>
-import AuthService from '@/utils/auth'
+import authService from '@/utils/auth'
 import apiClient from '@/api/axios'
 import { waveform } from 'ldrs'
 import { useToast } from 'vue-toastification'
@@ -407,11 +407,13 @@ export default {
   },
   computed: {
     username() {
-      return AuthService.getUserContact()
+      return authService.getUserContact()
     }
   },
   mounted() {
-    this.fetchResumes()
+    if (authService.isLoggedIn()) {
+      this.fetchResumes()
+    }
     this.updateDateTime()
     this.updateFortune()
     this.updateTip()
