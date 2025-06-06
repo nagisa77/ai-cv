@@ -8,7 +8,7 @@ const ChatgptModel = (function () {
   let instance
 
   function createInstance() {
-    const data = reactive({
+    let data = reactive({
       conversations: {},
       isFetching: false
     })
