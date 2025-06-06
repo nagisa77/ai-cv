@@ -22,7 +22,11 @@
             <span>导入简历</span>
           </button>
 
-          <button class="btn btn-white">
+          <button
+            class="btn btn-white btn-disabled"
+            disabled
+            title="该功能还在开发中"
+          >
             <img
               src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model.png"
               alt="icon"
@@ -30,7 +34,11 @@
             />
             <span>简历模版</span>
           </button>
-          <button class="btn btn-white">
+          <button
+            class="btn btn-white btn-disabled"
+            disabled
+            title="该功能还在开发中"
+          >
             <img
               src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/interview.png"
               alt="icon"
@@ -924,6 +932,18 @@ export default {
 
 .btn-white:hover {
   background-color: var(--color-secondary);
+}
+
+.btn-disabled,
+.btn:disabled {
+  background-color: var(--color-gray);
+  color: var(--color-gray-dark);
+  border: 1.5px solid var(--color-gray-dark);
+  cursor: not-allowed;
+}
+
+.btn-disabled:hover {
+  background-color: var(--color-gray);
 }
 
 .btn-icon {
