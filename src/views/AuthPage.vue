@@ -26,6 +26,7 @@
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
+import authService from '@/utils/auth'
                 <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
@@ -103,12 +104,17 @@ export default {
         async signInWithGoogle() {
             try {
                 const provider = new GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: "select_account" });
+                provider.setCustomParameters({ prompt: 'select_account' });
                 const result = await signInWithPopup(auth, provider);
                 const idToken = await result.user.getIdToken();
-                const { data } = await apiClient.post('/auth/google', { idToken });
-                localStorage.setItem('token', data.data.token);
-                this.$router.push('/');
+                const { success, user, error } = await authService.loginWithGoogle(idToken);
+
+                if (success) {
+                    this.toast.success(`欢迎回来，${user.contact || '用户'}`);
+                    this.$router.push('/');
+                } else {
+                    this.toast.error(error);
+                }
             } catch (e) {
                 this.toast.error(e.code || e.message);
             }

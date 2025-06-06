@@ -43,6 +43,34 @@ class AuthService {
       };
     }
   }
+
+  async loginWithGoogle(idToken) {
+    try {
+      const response = await apiClient.post('/auth/google', { idToken })
+
+      if (response.data.code === 200) {
+        const { token, user } = response.data.data
+        authState.currentUser = user
+        localStorage.setItem('currentUser', JSON.stringify(user))
+        localStorage.setItem('token', token)
+        return {
+          success: true,
+          user
+        }
+      }
+
+      return {
+        success: false,
+        error: response.data.message
+      }
+    } catch (error) {
+      console.error('Google login error:', error)
+      return {
+        success: false,
+        error: error.response?.data?.message || '登录失败，请检查网络连接'
+      }
+    }
+  }
   logout() {
     authState.currentUser = null
     localStorage.removeItem('currentUser')
