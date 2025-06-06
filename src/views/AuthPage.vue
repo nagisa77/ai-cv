@@ -2,8 +2,8 @@
     <div class="app">
         <div class="auth-page">
             <div class="auth-title">欢迎回来</div>
-            <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
 
+            <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
             <button class="continue-button" @click="continueToSecondStep" :disabled="isLoading">
                 <span v-if="!isLoading">继续</span>
                 <span v-else>发送中...</span>
@@ -21,17 +21,18 @@
             </div>
 
             <div class="login-with-area">
-                <div class="login-with-button">
+                <div class="login-with-button" @click="signInWithGoogle">
                     <img class="login-with-button-icon" src="https://cdn-teams-slug.flaticon.com/google.jpg"
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
-                <div class="login-with-button">
+import authService from '@/utils/auth'
+                <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
                         alt="apple" />
                     <div class="login-with-button-text">继续使用 Apple 登录</div>
-                </div>
+                </div> -->
             </div>
 
             <div class="footer">
@@ -47,6 +48,8 @@
 import { useToast } from 'vue-toastification'
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue';
 import apiClient from '@/api/axios';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '@/firebase'
 
 
 export default {
@@ -96,6 +99,24 @@ export default {
                 }
             } finally {
                 this.isLoading = false;
+            }
+        },
+        async signInWithGoogle() {
+            try {
+                const provider = new GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                const result = await signInWithPopup(auth, provider);
+                const idToken = await result.user.getIdToken();
+                const { success, user, error } = await authService.loginWithGoogle(idToken);
+
+                if (success) {
+                    this.toast.success(`欢迎回来，${user.contact || '用户'}`);
+                    this.$router.push('/');
+                } else {
+                    this.toast.error(error);
+                }
+            } catch (e) {
+                this.toast.error(e.code || e.message);
             }
         },
         validateEmail(email) {
@@ -211,6 +232,12 @@ export default {
     padding: 10px;
     font-size: 12px;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-with-button:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: background-color 0.3s ease;
 }
 
 .login-with-button-icon {
