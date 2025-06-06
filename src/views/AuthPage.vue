@@ -26,12 +26,12 @@
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
-                <div class="login-with-button">
+                <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
                         alt="apple" />
                     <div class="login-with-button-text">继续使用 Apple 登录</div>
-                </div>
+                </div> -->
             </div>
 
             <div class="footer">
@@ -226,6 +226,12 @@ export default {
     padding: 10px;
     font-size: 12px;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-with-button:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: background-color 0.3s ease;
 }
 
 .login-with-button-icon {
