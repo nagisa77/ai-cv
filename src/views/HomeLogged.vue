@@ -694,10 +694,11 @@ export default {
       }
     },
 
-    async handleImportFiles(file) {
+    async handleImportFiles(file, done) {
       // 检查是否有文件
       if (!file) {
         this.toast.error('请选择文件')
+        if (done) done()
         return
       }
       
@@ -724,6 +725,8 @@ export default {
       } catch (error) {
         console.error('上传失败:', error)
         this.toast.error('上传失败，请重试')
+      } finally {
+        if (done) done()
       }
     },
 

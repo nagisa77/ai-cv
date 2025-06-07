@@ -160,10 +160,17 @@
           <button class="btn btn-white" @click="closeModal">取消</button>
           <button
             class="btn btn-primary"
-            :disabled="!selectedFile"
+            :class="{ 'btn-loading': isSubmitting }"
+            :disabled="!selectedFile || isSubmitting"
             @click="confirmImport"
           >
-            确认导入
+            <template v-if="isSubmitting">
+              <span class="loading-spinner"></span>
+              导入中...
+            </template>
+            <template v-else>
+              确认导入
+            </template>
           </button>
         </div>
       </div>
@@ -177,7 +184,8 @@ export default {
   data() {
     return {
       selectedFile: null,
-      filePreviewUrl: null
+      filePreviewUrl: null,
+      isSubmitting: false
     }
   },
   methods: {
@@ -248,8 +256,12 @@ export default {
     },
     // 确认按钮
     confirmImport() {
-      // 将选择到的文件通过事件抛到父组件
-      this.$emit('confirmImport', this.selectedFile)
+      this.isSubmitting = true
+      const done = () => {
+        this.isSubmitting = false
+      }
+      // 将选择到的文件以及回调函数通过事件抛到父组件
+      this.$emit('confirmImport', this.selectedFile, done)
     },
     // 判断是否图片类型
     isImage(file) {
@@ -646,6 +658,27 @@ export default {
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-dark, #3a8ee6);
+}
+
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-loading .loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-white:hover {
