@@ -87,6 +87,21 @@
             </div>
           </template>
         </div>
+
+        <div class="gpt-message-container" v-if="isWaitingForAIResponse">
+          <!-- <img
+            src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/logo1.png"
+            alt="ChatGPT 头像"
+            class="chatgpt-message-icon"
+          /> -->
+          <div class="message gpt">
+            <l-dot-pulse
+              size="30"
+              speed="1.3" 
+              color="black" 
+            ></l-dot-pulse>
+          </div>
+        </div>
       </div>
 
       <!-- 如果还没有足够消息，显示加载或空状态 -->
@@ -146,10 +161,11 @@
 <script setup>
 import { ref, computed, watch, nextTick, defineProps, defineEmits, onMounted } from 'vue'
 import ChatgptModel from '@/models/chatgpt_model.js'
-import { infinity, waveform } from 'ldrs'
+import { infinity, waveform, dotPulse } from 'ldrs'
 import metadataInstance from '@/models/metadata_model.js'
 
 waveform.register()
+dotPulse.register()
 infinity.register()
 
 // 父组件需传入的属性
