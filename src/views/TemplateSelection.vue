@@ -507,6 +507,7 @@ export default {
 
     startFakeProgress() {
       this.fakeProgress = 0;
+      let slowIncrementCounter = 0;
       if (this.progressTimer) {
         clearInterval(this.progressTimer);
       }
@@ -514,6 +515,12 @@ export default {
         if (this.fakeProgress < 95) {
           this.fakeProgress += Math.floor(Math.random() * 5) + 1;
           if (this.fakeProgress > 95) this.fakeProgress = 95;
+        } else if (this.fakeProgress < 100) {
+          slowIncrementCounter += 500;
+          if (slowIncrementCounter >= 3000) {
+            this.fakeProgress += 1;
+            slowIncrementCounter = 0;
+          }
         }
       }, 500);
     },
