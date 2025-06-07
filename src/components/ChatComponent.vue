@@ -113,8 +113,9 @@
           speed="1"
           color="var(--color-primary)"
         />
+        初始化对话中...
       </div>
-    </div>
+     </div>
 
     <!-- 输入区域 -->
     <div class="input-area-container">
@@ -205,7 +206,7 @@ function initChat() {
     chatgptInstance.sendMessage(
       type,
       title,
-      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话",
+      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话, 如果我已经有提供已知信息，请用已知信息来展开话题, 可以用一段话循序渐进引导（不要太短）",
       false
     )
   } else if (messages.value.length === 2) {
@@ -220,7 +221,7 @@ function initChat() {
     chatgptInstance.sendMessage(
       type,
       title,
-      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话",
+      "我现在开始讨论这个话题，请你用一句话引导我, 由你来负责展开这个话题。接下来开始正式的对话, 如果我已经有提供已知信息，请用已知信息来展开话题, 可以用一段话循序渐进引导（不要太短）",
       false
     )
   }
@@ -605,10 +606,14 @@ watch(inputValue, () => {
 /* loading 容器 */
 .chat-loading-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--color-primary);
 }
 
 /* GPT 消息、提示等 */

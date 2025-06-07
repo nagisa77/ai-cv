@@ -15,6 +15,7 @@
           <div class="username">{{ username }}</div>
           <transition name="fade">
             <ul v-show="showMenu" class="dropdown-menu">
+              <li @click="handleSettings">设置</li>
               <li @click="handleLogout">退出登录</li>
             </ul>
           </transition>
@@ -91,7 +92,8 @@
           <div class="username mobile-username">{{ username }}</div>
           <!-- 移动端下拉菜单 -->
           <transition name="fade">
-            <ul v-show="showMenu" class="dropdown-menu mobile-dropdown">
+            <ul v-show="showMenu" class="dropdown-menu">
+              <li @click="handleSettings">设置</li>
               <li @click="handleLogout">退出登录</li>
             </ul>
           </transition>
@@ -339,8 +341,8 @@ export default {
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: -60px;
+  right: -150px;
   background-color: var(--color-white);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
