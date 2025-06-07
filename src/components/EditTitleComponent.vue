@@ -73,10 +73,8 @@
                         x
                     </button>
                 </div>
-                <AppleStyleInput :id="`bullet-point-${index}`" labelText="Bullet Point" inputType="text"
-                    :required="true" v-model:modelValue="point.bullet_point" />
-                <AppleStyleInput :id="`bullet-content-${index}`" labelText="内容" inputType="text" :required="true"
-                    v-model:modelValue="point.content" />
+                <AppleStyleInput :id="`bullet-combined-${index}`" labelText="要点" inputType="text"
+                    :required="true" v-model:modelValue="point.combined" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point
@@ -109,10 +107,7 @@
                         x
                     </button>
                 </div>
-                <AppleStyleInput :id="`proj-bullet-${index}`" labelText="Bullet Point" inputType="text" :required="true"
-                    v-model:modelValue="point.bullet_point" />
-                <AppleStyleInput :id="`proj-content-${index}`" labelText="内容" inputType="text" :required="true"
-                    v-model:modelValue="point.content" />
+                <AppleStyleInput :id="`proj-bullet-${index}`" labelText="要点" inputType="text" :required="true" v-model:modelValue="point.combined" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point
@@ -220,13 +215,22 @@ export default {
             // 深拷贝
             this.localContent = JSON.parse(JSON.stringify(originalContent));
         }
+        // 初始化每个 bullet point 的 combined 字符串
+        if (this.localContent && this.localContent.content && Array.isArray(this.localContent.content.content)) {
+            this.localContent.content.content = this.localContent.content.content.map(point => {
+                const prefix = point.bullet_point ? point.bullet_point : '';
+                const suffix = point.content ? `: ${point.content}` : '';
+                return { ...point, combined: `${prefix}${suffix}`.trim() };
+            });
+        }
     },
     methods: {
         // 新增 Bullet Point：各类型共用
         addBulletPoint() {
             this.localContent.content.content.push({
                 bullet_point: '',
-                content: ''
+                content: '',
+                combined: ''
             });
         },
         // 移除对应下标的 Bullet Point
@@ -235,10 +239,28 @@ export default {
         },
         // “提交”按钮：此时才更新 metadataInstance 的数据
         submitChanges() {
-            // 将本地修改内容写回 metadataInstance
+            const finalContent = this.localContent.content.content.map(point => {
+                const value = point.combined || '';
+                const idx = value.indexOf(':');
+                if (idx !== -1) {
+                    return {
+                        bullet_point: value.slice(0, idx).trim(),
+                        content: value.slice(idx + 1).trim(),
+                    };
+                } else {
+                    return {
+                        bullet_point: value.trim(),
+                        content: '',
+                    };
+                }
+            });
+            const dataToSave = {
+                ...this.localContent.content,
+                content: finalContent,
+            };
             metadataInstance.setContentForType(
                 this.currentEditingType,
-                this.localContent.content,
+                dataToSave,
                 this.localContent.content.title,
             )
             // 提交后可根据需要进行其他跳转或提示等操作
