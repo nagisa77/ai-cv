@@ -265,6 +265,7 @@ export default {
     padding: 75px 20px;
     height: calc(100vh - 200px);
     width: calc(47vw - 80px);
+    overflow-y: auto;
 }
 
 .edit-title-component-title {
