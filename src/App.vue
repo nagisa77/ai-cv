@@ -562,9 +562,9 @@ export default {
 }
 
 .mobile-dropdown {
-  position: fixed;
-  top: 60px;
-  right: 20px;
+  position: absolute;
+  top: 100%;
+  right: 0;
 }
 
 .logged-in-menu {
