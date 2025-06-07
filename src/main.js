@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
+import VueSweetalert2 from 'vue-sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 import './assets/global.css'
 import apiClient from './api/axios'
 
@@ -62,6 +64,7 @@ const toastOptions = {
   filterDuplicate: true
 }
 app.use(Toast, toastOptions)
+app.use(VueSweetalert2)
 
 // 挂载应用
 app.mount('#app')

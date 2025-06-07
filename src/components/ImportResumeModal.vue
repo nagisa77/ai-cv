@@ -218,7 +218,11 @@ export default {
       const ext = file.name.split('.').pop().toLowerCase()
 
       if (!validExtensions.includes(ext)) {
-        alert('文件类型不符合要求，请选择 PDF / DOC / DOCX / PNG。')
+        this.$swal({
+          icon: 'error',
+          title: '文件类型不符合要求',
+          text: '请选择 PDF / DOC / DOCX / PNG。'
+        })
         return
       }
 

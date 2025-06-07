@@ -474,7 +474,14 @@ export default {
     },
 
     async deleteResume(resumeId) {
-      if (!confirm('确定要删除这个简历吗？')) return
+      const { isConfirmed } = await this.$swal({
+        icon: 'warning',
+        title: '确定要删除这个简历吗？',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      if (!isConfirmed) return
 
       try {
         await apiClient.post(`/user/resumes/${resumeId}/recycle`)
@@ -521,7 +528,15 @@ export default {
     },
 
     async permanentDelete(resumeId) {
-      if (!confirm('确定要永久删除这个简历吗？此操作无法撤销')) return
+      const { isConfirmed } = await this.$swal({
+        icon: 'warning',
+        title: '确定要永久删除这个简历吗？',
+        text: '此操作无法撤销',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      if (!isConfirmed) return
 
       try {
         await apiClient.delete(`/user/resumes/${resumeId}`)
@@ -731,7 +746,14 @@ export default {
     async batchDeleteMy() {
       if (this.selectedMy.length === 0) return
 
-      if (!confirm(`确定要删除选中的 ${this.selectedMy.length} 份简历吗？`)) return
+      const { isConfirmed } = await this.$swal({
+        icon: 'warning',
+        title: `确定要删除选中的 ${this.selectedMy.length} 份简历吗？`,
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      if (!isConfirmed) return
 
       try {
         await apiClient.post('/user/resumes-batch/recycle', {
@@ -764,8 +786,15 @@ export default {
     async batchDeleteTrash() {
       if (this.selectedTrash.length === 0) return
 
-      if (!confirm(`确定要永久删除选中的 ${this.selectedTrash.length} 份简历吗？此操作无法撤销`))
-        return
+      const { isConfirmed } = await this.$swal({
+        icon: 'warning',
+        title: `确定要永久删除选中的 ${this.selectedTrash.length} 份简历吗？`,
+        text: '此操作无法撤销',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      if (!isConfirmed) return
 
       try {
         await apiClient.delete('/user/resumes-batch', {
