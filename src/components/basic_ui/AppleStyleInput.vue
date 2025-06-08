@@ -1,7 +1,7 @@
 <!-- ========== AppleStyleInput 组件 ========== -->
 <!-- src/components/basic_ui/AppleStyleInput.vue -->
 <template>
-  <div class="form-group" :style="{ height: rows * 50 + 'px' }">
+  <div class="form-group" :style="{ height: inputHeight }">
     <input
       v-if="rows === 1"
       :id="id"
@@ -70,7 +70,16 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue']
+  emits: ['update:modelValue'],
+  computed: {
+    inputHeight() {
+      if (this.rows === 1) {
+        return '50px';
+      } else {
+        return this.rows * 24 + 'px';
+      }
+    }
+  }
 }
 </script>
 
@@ -96,7 +105,7 @@ export default {
 
 .textarea-input {
   overflow-y: auto;
-  resize: vertical;
+  resize: none; 
 }
 
 /* 当invalid=true时，边框变红色 */
