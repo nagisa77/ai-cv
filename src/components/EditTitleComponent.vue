@@ -73,7 +73,7 @@
                         x
                     </button>
                 </div>
-                <AppleStyleInput :id="`bullet-combined-${index}`" labelText="要点" inputType="text"
+                <AppleStyleInput :id="`bullet-combined-${index}`" labelText="要点" inputType="text" rows="3"
                     :required="true" v-model:modelValue="point.combined" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
@@ -107,7 +107,7 @@
                         x
                     </button>
                 </div>
-                <AppleStyleInput :id="`proj-bullet-${index}`" labelText="要点" inputType="text" :required="true" v-model:modelValue="point.combined" />
+                <AppleStyleInput :id="`proj-bullet-${index}`" labelText="要点" inputType="text" rows="3" :required="true" v-model:modelValue="point.combined" />
             </div>
             <button class="add-button" type="button" @click="addBulletPoint">
                 + 新增Bullet Point

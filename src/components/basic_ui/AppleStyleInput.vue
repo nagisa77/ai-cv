@@ -1,8 +1,9 @@
 <!-- ========== AppleStyleInput 组件 ========== -->
 <!-- src/components/basic_ui/AppleStyleInput.vue -->
 <template>
-  <div class="form-group">
+  <div class="form-group" :style="{ height: inputHeight }">
     <input
+      v-if="rows === 1"
       :id="id"
       :type="inputType"
       class="form-input"
@@ -11,6 +12,18 @@
       :required="required"
       :value="modelValue"
       :disabled="!enable"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+    <textarea
+      v-else
+      :id="id"
+      class="form-input textarea-input"
+      :class="{'error': invalid}"
+      :rows="rows"
+      placeholder=" "
+      :required="required"
+      :disabled="!enable"
+      :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
     />
     <label class="form-label" :for="id">{{ labelText }}</label>
@@ -45,6 +58,10 @@ export default {
       type: Boolean,
       default: true
     },
+    rows: {
+      type: Number,
+      default: 1
+    },
     /**
      * invalid: 是否标记为错误
      */
@@ -53,7 +70,16 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue']
+  emits: ['update:modelValue'],
+  computed: {
+    inputHeight() {
+      if (this.rows === 1) {
+        return '50px';
+      } else {
+        return this.rows * 24 + 'px';
+      }
+    }
+  }
 }
 </script>
 
@@ -75,6 +101,11 @@ export default {
   display: block;
   background-color: white;
   transition: all 0.3s ease;
+}
+
+.textarea-input {
+  overflow-y: auto;
+  resize: none; 
 }
 
 /* 当invalid=true时，边框变红色 */
