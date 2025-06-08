@@ -103,6 +103,10 @@ export default {
       this.$emit('delete-title', type, title);
     },
 
+    onTitleClick(type, title) {
+      this.$emit('selected-module-changed', { type, title });
+    },
+
     onAddTitleClick() {
       this.$emit('add-title', 'workExperience');
     }
