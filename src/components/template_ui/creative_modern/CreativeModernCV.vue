@@ -19,7 +19,7 @@
       <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-      <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+      <div :style="{ '--custom-color': customColor, '--custom-color-deep': customColorDeep, '--custom-color-light': customColorLight  }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
         <component
           v-for="(module, moduleIndex) in page"
           :key="moduleIndex"
@@ -81,6 +81,33 @@ export default {
           return this.color || 'var(--color-primary)';
       }
     },
+
+    customColorDeep() {
+      switch (this.color) {
+        case 'red':
+          return 'var(--color-primary-deep)';
+        case 'blue':
+          return 'var(--color-cv-blue-deep)';
+        case 'gray':
+          return 'var(--color-cv-gray-deep)';
+        default:
+          return 'var(--color-primary-deep)';
+      }
+    },
+
+    customColorLight() {
+      switch (this.color) {
+        case 'red':
+          return 'var(--color-primary-light)';
+        case 'blue':
+          return 'var(--color-cv-blue-light)';
+        case 'gray':
+          return 'var(--color-cv-gray-light)';
+        default:
+          return 'var(--color-primary-light)';
+      }
+    },
+
     isFetching() {
       return metadataInstance.getIsFetching()
     },
@@ -243,7 +270,7 @@ export default {
   padding-top: 2px;
   padding-bottom: 2px;
   position: relative;
-  background-color: var(--color-primary-light);
+  background-color: var(--custom-color-light);
   color: var(--custom-color, var(--color-primary)); 
 }
 
@@ -253,7 +280,7 @@ export default {
   top: 0;
   width: 2px;
   height: 100%;
-  background-color: var(--color-primary);
+  background-color: var(--custom-color-deep);
 }
 
 ::v-deep .title-and-time {

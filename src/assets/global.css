@@ -22,6 +22,14 @@
   --color-cv-red: var(--color-primary);
   --color-cv-blue: #4183ff;
   --color-cv-gray: #404040;
+
+  --color-cv-red-deep: #d97757;
+  --color-cv-blue-deep: #4183ff;
+  --color-cv-gray-deep: #303030;
+
+  --color-cv-red-light: #dcc2b9;
+  --color-cv-blue-light: #e7eefa;
+  --color-cv-gray-light: #e8e7e7;
 }
 
 html, body {
