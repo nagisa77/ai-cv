@@ -120,10 +120,10 @@
             <div
                 class="edit-submit-btn"
                 :class="{ 'loading-state': isSubmitting }"
-                @click="!isSubmitting && submitChanges"
+                @click="submitChanges"
             >
-                <i v-if="isSubmitting" class="fas fa-spinner fa-spin"></i>
-                <span v-else>提交</span>
+                <span>提交</span>
+                <i v-if="isSubmitting" class="fas fa-spinner fa-spin loading-icon"></i>
             </div>
         </div>
     </div>
@@ -379,6 +379,10 @@ export default {
 .edit-cancel-btn:hover {
     background-color: var(--color-gray);
     transition: background-color 0.3s ease;
+}
+
+.loading-icon {
+    margin-left: 10px;
 }
 
 .edit-submit-btn {
