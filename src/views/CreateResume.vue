@@ -363,6 +363,9 @@ export default {
      * 删除
      */
     handleDelete(type, title) {
+      if (this.currentSelectedTitle === title) {
+        this.handleCloseChat();
+      }
       metadataInstance.deleteContentForTitle(type, title);
     },
     handleChangeTemplate() {
