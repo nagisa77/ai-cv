@@ -362,11 +362,20 @@ export default {
     /**
      * 删除
      */
-    handleDelete(type, title) {
+    async handleDelete(type, title) {
+      const { isConfirmed } = await this.$swal({
+        icon: 'warning',
+        title: '确定要删除这个模块吗？',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      })
+      if (!isConfirmed) return
+
       if (this.currentSelectedTitle === title) {
-        this.handleCloseChat();
+        this.handleCloseChat()
       }
-      metadataInstance.deleteContentForTitle(type, title);
+      metadataInstance.deleteContentForTitle(type, title)
     },
     handleChangeTemplate() {
       this.$router.push({
