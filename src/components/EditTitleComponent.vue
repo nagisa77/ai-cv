@@ -117,7 +117,14 @@
         <!-- ================== Footer 操作按钮 ================== -->
         <div class="edit-title-component-footer">
             <div class="edit-cancel-btn" @click="cancelChanges">取消</div>
-            <div class="edit-submit-btn" @click="submitChanges">提交</div>
+            <div
+                class="edit-submit-btn"
+                :class="{ 'loading-state': isSubmitting }"
+                @click="!isSubmitting && submitChanges"
+            >
+                <i v-if="isSubmitting" class="fas fa-spinner fa-spin"></i>
+                <span v-else>提交</span>
+            </div>
         </div>
     </div>
 </template>
@@ -125,6 +132,9 @@
 <script>
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'; // 确保路径正确
 import metadataInstance from '@/models/metadata_model.js';
+import ChatgptModel from '@/models/chatgpt_model.js';
+
+const chatgptInstance = ChatgptModel.getInstance();
 
 export default {
     components: {
@@ -162,7 +172,8 @@ export default {
         return {
             // 在本地创建一个副本对象，用于编辑
             localContent: null,
-            mouseHoverIndex: null
+            mouseHoverIndex: null,
+            isSubmitting: false
         };
     },
     mounted() {
@@ -238,33 +249,71 @@ export default {
             this.localContent.content.content.splice(index, 1);
         },
         // “提交”按钮：此时才更新 metadataInstance 的数据
-        submitChanges() {
-            const finalContent = this.localContent.content.content.map(point => {
-                const value = point.combined || '';
-                const idx = value.indexOf(':');
+        async submitChanges() {
+            this.isSubmitting = true;
+            try {
+                const finalContent = [];
+                for (const point of this.localContent.content.content) {
+                let value = point.combined || '';
+
+                // 如果包含中文冒号但没有英文冒号，先替换
+                if (!value.includes(':') && value.includes('：')) {
+                    value = value.replace(/：/g, ':');
+                }
+
+                let idx = value.indexOf(':');
+
+                // 若仍无冒号，调用 GPT 协助转换
+                if (idx === -1) {
+                    try {
+                        chatgptInstance.getMessagesForTitle(
+                            this.currentEditingType,
+                            this.localContent.content.title || ''
+                        );
+                        const gptValue = await chatgptInstance.fetchGptResponse(
+                            this.currentEditingType,
+                            this.localContent.content.title || '',
+                            `请将以下句子转换为“主题: 内容”格式，只返回转换后的句子：${value}`
+                        );
+                        if (typeof gptValue === 'string') {
+                            value = gptValue.trim();
+                        }
+                    } catch (e) {
+                        console.error('fetchGptResponse error:', e);
+                    }
+                    // 再次检查冒号位置
+                    if (!value.includes(':') && value.includes('：')) {
+                        value = value.replace(/：/g, ':');
+                    }
+                    idx = value.indexOf(':');
+                }
+
                 if (idx !== -1) {
-                    return {
+                    finalContent.push({
                         bullet_point: value.slice(0, idx).trim(),
                         content: value.slice(idx + 1).trim(),
-                    };
+                    });
                 } else {
-                    return {
+                    finalContent.push({
                         bullet_point: value.trim(),
                         content: '',
-                    };
+                    });
                 }
-            });
-            const dataToSave = {
-                ...this.localContent.content,
-                content: finalContent,
-            };
-            metadataInstance.setContentForType(
-                this.currentEditingType,
-                dataToSave,
-                this.localContent.content.title,
-            )
-            // 提交后可根据需要进行其他跳转或提示等操作
-            this.$emit("changes-submitted");
+            }
+                const dataToSave = {
+                    ...this.localContent.content,
+                    content: finalContent,
+                };
+                metadataInstance.setContentForType(
+                    this.currentEditingType,
+                    dataToSave,
+                    this.localContent.content.title,
+                )
+                // 提交后可根据需要进行其他跳转或提示等操作
+                this.$emit("changes-submitted");
+            } finally {
+                this.isSubmitting = false;
+            }
         },
         // “取消”按钮：还原 or 关闭编辑
         cancelChanges() {
@@ -344,6 +393,11 @@ export default {
 .edit-submit-btn:hover {
     background-color: var(--color-primary-hover);
     transition: background-color 0.3s ease;
+}
+
+.edit-submit-btn.loading-state {
+    cursor: not-allowed;
+    opacity: 0.8;
 }
 
 .add-button {
