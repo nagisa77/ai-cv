@@ -205,6 +205,7 @@ const ChatgptModel = (function () {
       sendMessage,
       addMessage,
       clearConversations,
+      fetchGptResponse,
     }
   }
 
