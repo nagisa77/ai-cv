@@ -7,8 +7,11 @@ const apiClient = axios.create({
 
   // guangzhou 
   // baseURL: 'https://1307107697-5q335hkuc1.ap-guangzhou.tencentscf.com',
-  // hongkong
-  baseURL: 'https://1307107697-31bxe8nt1v.ap-hongkong.tencentscf.com',
+  // hongkong 个人账号
+  // baseURL: 'https://1307107697-31bxe8nt1v.ap-hongkong.tencentscf.com',
+
+  // hongkong 企业账号
+  baseURL: 'https://1352727507-8325cs7au7.ap-hongkong.tencentscf.com',
   headers: {
     'Content-Type': 'application/json'
   },
