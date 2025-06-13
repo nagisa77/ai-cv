@@ -32,7 +32,7 @@
               alt="icon"
               class="btn-icon btn-icon-model"
             />
-            <span>简历模版</span>
+            <span>面试题合集</span>
           </button>
           <button
             class="btn btn-white btn-disabled"
