@@ -44,11 +44,8 @@
             </div>
           </li>
         </ul>
-        <div class="pagination">
-          <button class="btn btn-white" :disabled="page === 1" @click="changePage(page - 1)">上一页</button>
-          <span class="page-info">第 {{ page }} 页</span>
-          <button class="btn btn-white" :disabled="page >= totalPages" @click="changePage(page + 1)">下一页</button>
-        </div>
+        <div ref="loadMoreTrigger" class="load-trigger"></div>
+        <div v-if="!hasMore && questions.length" class="end-text">没有更多了</div>
       </div>
     </div>
   </div>
@@ -68,7 +65,8 @@ const selectedCategories = ref([])
 const questions = ref([])
 const page = ref(1)
 const pageSize = 10
-const totalPages = ref(1)
+const hasMore = ref(true)
+const loadMoreTrigger = ref(null)
 const loadingMeta = ref(false)
 const loadingQuestions = ref(false)
 
@@ -85,23 +83,28 @@ const fetchMeta = async () => {
 }
 
 const fetchQuestions = async () => {
+  if (loadingQuestions.value || !hasMore.value) return
   loadingQuestions.value = true
   try {
     const params = { page: page.value, pageSize }
     if (selectedPlatforms.value.length) params.platform = selectedPlatforms.value.join(',')
     if (selectedCategories.value.length) params.categories = selectedCategories.value.join(',')
     const res = await apiClient.get('/interview/questions', { params })
-    questions.value = res.data.data || []
-    totalPages.value = questions.value.length === pageSize ? page.value + 1 : page.value
+    const data = res.data.data || []
+    if (page.value === 1) {
+      questions.value = data
+    } else {
+      questions.value = questions.value.concat(data)
+    }
+    if (data.length < pageSize) {
+      hasMore.value = false
+    } else {
+      page.value += 1
+    }
   } catch (err) {
     console.error(err)
   }
   loadingQuestions.value = false
-}
-
-const changePage = p => {
-  page.value = p
-  fetchQuestions()
 }
 
 const platformNameMap = {
@@ -117,10 +120,18 @@ const platformIconMap = {
 onMounted(() => {
   fetchMeta()
   fetchQuestions()
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      fetchQuestions()
+    }
+  })
+  if (loadMoreTrigger.value) observer.observe(loadMoreTrigger.value)
 })
 
 watch([selectedPlatforms, selectedCategories], () => {
   page.value = 1
+  hasMore.value = true
+  questions.value = []
   fetchQuestions()
 })
 </script>
@@ -179,12 +190,8 @@ watch([selectedPlatforms, selectedCategories], () => {
 .meta-field {
   margin-right: 12px;
 }
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
+.load-trigger {
+  height: 1px;
 }
 .loading-container {
   display: flex;
@@ -217,6 +224,11 @@ watch([selectedPlatforms, selectedCategories], () => {
   text-align: center;
   color: #888;
   padding: 60px 0;
+}
+.end-text {
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
 }
 .option-icon {
   width: 20px;
