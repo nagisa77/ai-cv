@@ -22,18 +22,16 @@
             <span>导入简历</span>
           </button>
 
-          <button
-            class="btn btn-white btn-disabled"
-            disabled
-            title="该功能还在开发中"
-          >
-            <img
-              src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model.png"
-              alt="icon"
-              class="btn-icon btn-icon-model"
-            />
-            <span>面试题合集</span>
-          </button>
+          <router-link to="/interview-questions">
+            <button class="btn btn-white">
+              <img
+                src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/model.png"
+                alt="icon"
+                class="btn-icon btn-icon-model"
+              />
+              <span>面试题合集</span>
+            </button>
+          </router-link>
           <button
             class="btn btn-white btn-disabled"
             disabled
