@@ -9,6 +9,7 @@ import TemplateSelection from '@/views/TemplateSelection.vue'
 import AuthPage from '@/views/AuthPage.vue'
 import AuthSecondStepPage from '@/views/AuthSecondStepPage.vue'
 import InterviewQuestions from '@/views/InterviewQuestions.vue'
+import Settings from '@/views/Settings.vue'
 
 const routes = [
   {
@@ -56,6 +57,11 @@ const routes = [
     path: '/interview-questions',
     name: 'InterviewQuestions',
     component: InterviewQuestions
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings
   },
   {
     path: '/auth',
