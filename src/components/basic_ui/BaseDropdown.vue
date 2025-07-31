@@ -52,8 +52,12 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-wrapper {
+  position: relative;
+}
 .dropdown-content {
   position: absolute;
+  top: 10px;
   z-index: 10;
 }
 </style>
