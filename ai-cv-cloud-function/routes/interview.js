@@ -60,15 +60,15 @@ router.get('/questions', async (req, res) => {
       params.push(sizeNum, (pageNum - 1) * sizeNum);
     }
 
-    // const [rows] = await pool.query(sql, params);
+    const [rows] = await pool.query(sql, params);
 
-    // rows.forEach(row => {
-    //   try {
-    //     row.sources = JSON.parse(row.sources || '[]');
-    //   } catch (e) {
-    //     row.sources = [];
-    //   }
-    // });
+    rows.forEach(row => {
+      try {
+        row.sources = JSON.parse(row.sources || '[]');
+      } catch (e) {
+        row.sources = [];
+      }
+    });
 
     res.json({ code: 200, data: rows });
   } catch (err) {
