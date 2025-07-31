@@ -85,24 +85,30 @@
                     {{ formatDate(resume.updatedAt || resume.createdAt) }}
                   </div>
                   <div class="resume-actions-dropdown" v-if="!selectModeMy">
-                    <div class="resume-dropdown-trigger" @click.stop="toggleDropdown(resume.resumeId)">
-                      <i class="fas fa-ellipsis-h"></i>
-                    </div>
-                    <div class="resume-dropdown-menu" v-if="resume.showDropdown">
-                      <div class="resume-dropdown-item" @click.stop="downloadResume(resume)"
-                        :class="{ disabled: resume.isDownloading }">
-                        <i v-if="!resume.isDownloading" class="fas fa-download"></i>
-                        <i v-else class="fas fa-spinner fa-spin"></i>
-                        {{ resume.isDownloading ? '下载中...' : '下载简历' }}
-                      </div>
-                      <div class="resume-dropdown-item resume-dropdown-item-delete"
-                        @click.stop="deleteResume(resume.resumeId)">
-                        <i class="fas fa-trash"></i> 删除简历
-                      </div>
-                      <div class="resume-dropdown-item" @click.stop="renameResume(resume)">
-                        <i class="fas fa-edit"></i> 修改名称
-                      </div>
-                    </div>
+                    <BaseDropdown v-model="resume.showDropdown">
+                      <template #trigger>
+                        <div class="resume-dropdown-trigger" @click.stop="toggleDropdown(resume.resumeId)">
+                          <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                      </template>
+                      <template #menu>
+                        <div class="resume-dropdown-menu">
+                          <div class="resume-dropdown-item" @click.stop="downloadResume(resume)"
+                            :class="{ disabled: resume.isDownloading }">
+                            <i v-if="!resume.isDownloading" class="fas fa-download"></i>
+                            <i v-else class="fas fa-spinner fa-spin"></i>
+                            {{ resume.isDownloading ? '下载中...' : '下载简历' }}
+                          </div>
+                          <div class="resume-dropdown-item resume-dropdown-item-delete"
+                            @click.stop="deleteResume(resume.resumeId)">
+                            <i class="fas fa-trash"></i> 删除简历
+                          </div>
+                          <div class="resume-dropdown-item" @click.stop="renameResume(resume)">
+                            <i class="fas fa-edit"></i> 修改名称
+                          </div>
+                        </div>
+                      </template>
+                    </BaseDropdown>
                   </div>
                 </div>
                 <div class="resume-preview">
@@ -153,18 +159,24 @@
                     {{ formatDate(resume.updatedAt || resume.createdAt) }}
                   </div>
                   <div class="resume-actions-dropdown" v-if="!selectModeTrash">
-                    <div class="resume-dropdown-trigger" @click.stop="toggleTrashDropdown(resume.resumeId)">
-                      <i class="fas fa-ellipsis-h"></i>
-                    </div>
-                    <div class="resume-dropdown-menu" v-if="resume.showDropdown">
-                      <div class="resume-dropdown-item" @click.stop="restoreResume(resume.resumeId)">
-                        <i class="fas fa-undo"></i> 恢复简历
-                      </div>
-                      <div class="resume-dropdown-item resume-dropdown-item-delete"
-                        @click.stop="permanentDelete(resume.resumeId)">
-                        <i class="fas fa-trash"></i> 彻底删除
-                      </div>
-                    </div>
+                    <BaseDropdown v-model="resume.showDropdown">
+                      <template #trigger>
+                        <div class="resume-dropdown-trigger" @click.stop="toggleTrashDropdown(resume.resumeId)">
+                          <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                      </template>
+                      <template #menu>
+                        <div class="resume-dropdown-menu">
+                          <div class="resume-dropdown-item" @click.stop="restoreResume(resume.resumeId)">
+                            <i class="fas fa-undo"></i> 恢复简历
+                          </div>
+                          <div class="resume-dropdown-item resume-dropdown-item-delete"
+                            @click.stop="permanentDelete(resume.resumeId)">
+                            <i class="fas fa-trash"></i> 彻底删除
+                          </div>
+                        </div>
+                      </template>
+                    </BaseDropdown>
                   </div>
                 </div>
                 <div class="resume-preview">
@@ -252,13 +264,15 @@ import { saveAs } from 'file-saver'
 
 // ====== 新增：导入简历弹窗组件 ======
 import ImportResumeModal from '@/components/ImportResumeModal.vue'
+import BaseDropdown from '@/components/basic_ui/BaseDropdown.vue'
 
 waveform.register()
 
 export default {
   name: 'HomeLogged',
   components: {
-    ImportResumeModal
+    ImportResumeModal,
+    BaseDropdown
   },
   data() {
     return {
@@ -583,9 +597,6 @@ export default {
       if (resume) {
         resume.showDropdown = !resume.showDropdown
       }
-
-      // 点击其他地方关闭下拉菜单
-      document.addEventListener('click', this.closeAllDropdowns, { once: true })
     },
     toggleTrashDropdown(resumeId) {
       // 关闭其他所有下拉菜单
@@ -600,19 +611,6 @@ export default {
       if (resume) {
         resume.showDropdown = !resume.showDropdown
       }
-
-      // 点击其他地方关闭下拉菜单
-      document.addEventListener('click', this.closeAllTrashDropdowns, { once: true })
-    },
-    closeAllDropdowns() {
-      this.resumes.forEach((resume) => {
-        resume.showDropdown = false
-      })
-    },
-    closeAllTrashDropdowns() {
-      this.trashResumes.forEach((resume) => {
-        resume.showDropdown = false
-      })
     },
     async downloadResume(resume) {
       if (resume.isDownloading) return

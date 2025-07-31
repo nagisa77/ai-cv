@@ -86,18 +86,21 @@
 
       <!-- 将底部元素包裹到一个容器中 -->
       <div class="bottom-section">
-        <div class="user-profile" @click="showMenu = !showMenu">
-          <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user"
-            class="user-icon">
-          <div class="username mobile-username">{{ username }}</div>
-          <!-- 移动端下拉菜单 -->
-          <transition name="fade">
-            <ul v-show="showMenu" class="dropdown-menu">
+        <BaseDropdown v-model="showMenu">
+          <template #trigger>
+            <div class="user-profile" @click="showMenu = !showMenu">
+              <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user"
+                class="user-icon">
+              <div class="username mobile-username">{{ username }}</div>
+            </div>
+          </template>
+          <template #menu>
+            <ul class="dropdown-menu">
               <li @click="handleSettings">设置</li>
               <li @click="handleLogout">退出登录</li>
             </ul>
-          </transition>
-        </div>
+          </template>
+        </BaseDropdown>
         <!-- 移动端菜单图标 -->
         <div class="mobile-menu-icon logged-in-menu" @click="toggleMobileMenu">
           <div class="menu-icon-bar" :class="{ 'menu-open': showMobileMenu }"></div>
@@ -114,9 +117,13 @@
 <script>
 import AuthService from '@/utils/auth'
 import { useToast } from 'vue-toastification'
+import BaseDropdown from '@/components/basic_ui/BaseDropdown.vue'
 
 export default {
   name: 'App',
+  components: {
+    BaseDropdown
+  },
   data() {
     return {
       showMenu: false,
