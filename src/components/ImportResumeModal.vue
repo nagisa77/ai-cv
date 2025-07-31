@@ -1,30 +1,10 @@
 <template>
-  <!-- 毛玻璃背景蒙层，点击蒙层空白处关闭弹窗 -->
-  <div class="modal-overlay" @click.self="closeModal">
-    <transition name="fade-scale">
-      <div class="modal-container">
-        <div class="modal-header">
-          <h2>导入简历</h2>
-          <button class="close-btn" @click="closeModal">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        <p class="modal-desc">
-          支持 PDF / DOC / DOCX / PNG 文件，你可以点击或拖入区域完成导入。
-        </p>
+  <BaseDialog title="导入简历" @close="closeModal">
+    <p class="modal-desc">
+      支持 PDF / DOC / DOCX / PNG 文件，你可以点击或拖入区域完成导入。
+    </p>
 
-        <div class="modal-body">
+    <div class="modal-body">
           <!-- 左侧：上传（拖拽/点击），只有当未选择文件时展示 -->
           <div
             class="upload-section"
@@ -164,23 +144,21 @@
             :disabled="!selectedFile || isSubmitting"
             @click="confirmImport"
           >
-            <template v-if="isSubmitting">
-              <span class="loading-spinner"></span>
-              导入中...
-            </template>
-            <template v-else>
-              确认导入
-            </template>
+            <span v-if="isSubmitting" class="btn-loading-text">
+              <span class="loading-spinner"></span>导入中...
+            </span>
+            <span v-else>确认导入</span>
           </button>
         </div>
-      </div>
-    </transition>
-  </div>
+    </div> <!-- eslint-disable-line vue/no-parsing-error -->
+  </BaseDialog>
 </template>
 
 <script>
+import BaseDialog from '@/components/BaseDialog.vue'
 export default {
   name: 'ImportResumeModal',
+  components: { BaseDialog },
   data() {
     return {
       selectedFile: null,
@@ -294,34 +272,6 @@ export default {
 </script>
 
 <style scoped>
-/* 毛玻璃/高斯模糊效果的蒙层 */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  backdrop-filter: blur(8px);
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* 弹窗出现的过渡动画 */
-.fade-scale-enter-active,
-.fade-scale-leave-active {
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-scale-enter,
-.fade-scale-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-}
 
 /* 新增：预览区域的淡入淡出+向上位移动画 */
 .fade-slide-enter-active,
@@ -334,53 +284,6 @@ export default {
   transform: translateY(20px);
 }
 
-/* 弹窗整体容器，采用轻微渐变背景 */
-.modal-container {
-  background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
-  width: 800px;
-  max-width: 95%;
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-  position: relative;
-  text-align: left;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  color: #888;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.close-btn:hover {
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.modal-container h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
-}
 
 .modal-desc {
   margin: 0 0 20px;
