@@ -9,6 +9,7 @@ import TemplateSelection from '@/views/TemplateSelection.vue'
 import AuthPage from '@/views/AuthPage.vue'
 import AuthSecondStepPage from '@/views/AuthSecondStepPage.vue'
 import InterviewQuestions from '@/views/InterviewQuestions.vue'
+import SettingsPage from '@/views/SettingsPage.vue'
 
 const routes = [
   {
@@ -67,6 +68,11 @@ const routes = [
     name: 'AuthSecondStep',
     component: AuthSecondStepPage,
     props: true
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: SettingsPage
   }
 ]
 
