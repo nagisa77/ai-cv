@@ -80,6 +80,8 @@
       <div class="footer-content">
         <p>© 2025 AI简历君 All rights reserved.</p>
         <p>关于我们  |  帮助中心  |  联系我们</p>
+        <p>粤ICP备20240536号-1</p>
+        <p>粤公网安备44030502005678号</p>
       </div>
     </footer>
   </div>
