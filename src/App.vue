@@ -148,10 +148,6 @@ export default {
       this.showMenu = false
       this.$router.push('/')
     },
-    handleSettings() {
-      this.showMenu = false
-      this.$router.push('/settings')
-    },
     toggleMobileMenu() {
       this.showMobileMenu = !this.showMobileMenu
     },
