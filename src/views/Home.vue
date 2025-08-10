@@ -78,10 +78,8 @@
     </div>
     <footer class="footer">
       <div class="footer-content">
+        <p>关于我们  |  帮助中心  |  联系我们 <span class="footer-text-highlight">粤ICP备20240536号-1</span></p>
         <p>© 2025 AI简历君 All rights reserved.</p>
-        <p>关于我们  |  帮助中心  |  联系我们</p>
-        <p>粤ICP备20240536号-1</p>
-        <p>粤公网安备44030502005678号</p>
       </div>
     </footer>
   </div>
@@ -326,6 +324,10 @@ export default {
   animation: fadeInRight 1s ease-out forwards;
 }
 
+.footer-text-highlight {
+  margin-left: 10px;
+}
+
 /* 初始隐藏状态，根据 data-animation 设置不同的初始 transform */
 .animate-on-scroll[data-animation="fade-in-up"],
 .animate-on-scroll[data-animation="fade-in-up-delay"],
@@ -426,6 +428,10 @@ export default {
   margin: 0 auto;
   font-size: 16px;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .create-resume-button {
