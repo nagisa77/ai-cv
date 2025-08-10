@@ -26,6 +26,10 @@
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
+                <div class="login-with-button" @click="signInWithWeChat">
+                    <img class="login-with-button-icon" src="https://img.icons8.com/color/48/000000/weixing.png" alt="wechat" />
+                    <div class="login-with-button-text">继续使用 微信 登录</div>
+                </div>
                 <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
@@ -117,6 +121,12 @@ export default {
             } catch (e) {
                 this.toast.error(e.code || e.message);
             }
+        },
+        signInWithWeChat() {
+            const appId = process.env.VUE_APP_WECHAT_APP_ID;
+            const redirectUri = encodeURIComponent(`${window.location.origin}/#/wechat-callback`);
+            const state = Math.random().toString(36).substring(2);
+            window.location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;
         },
         validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
