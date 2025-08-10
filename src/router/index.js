@@ -10,6 +10,8 @@ import AuthPage from '@/views/AuthPage.vue'
 import AuthSecondStepPage from '@/views/AuthSecondStepPage.vue'
 import InterviewQuestions from '@/views/InterviewQuestions.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
+import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
+import ServiceAgreement from '@/views/ServiceAgreement.vue'
 import WeChatCallback from '@/views/WeChatCallback.vue'
 
 const routes = [
@@ -74,6 +76,16 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: SettingsPage
+  },
+  {
+    path: '/privacy-policy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy
+  },
+  {
+    path: '/service-agreement',
+    name: 'ServiceAgreement',
+    component: ServiceAgreement
   },
   {
     path: '/wechat-callback',
