@@ -69,9 +69,9 @@
           <router-link to="/dashboard" class="mobile-nav-item" @click="showMobileMenu = false">
             <span>我的简历</span>
           </router-link>
-          <router-link to="/settings" class="mobile-nav-item" @click="showMobileMenu = false">
+          <div class="mobile-nav-item" @click="handleSettings">
             <span>账户设置</span>
-          </router-link>
+          </div>
           <div class="mobile-nav-item" @click="handleLogout">退出登录</div>
         </template>
       </div>
@@ -111,6 +111,7 @@
     </header>
 
     <router-view class="router-view" />
+    <SettingsDialog v-if="showSettingsDialog" @close="showSettingsDialog = false" />
   </div>
 </template>
 
@@ -118,16 +119,19 @@
 import AuthService from '@/utils/auth'
 import { useToast } from 'vue-toastification'
 import BaseDropdown from '@/components/basic_ui/BaseDropdown.vue'
+import SettingsDialog from '@/components/SettingsDialog.vue'
 
 export default {
   name: 'App',
   components: {
-    BaseDropdown
+    BaseDropdown,
+    SettingsDialog
   },
   data() {
     return {
       showMenu: false,
-      showMobileMenu: false
+      showMobileMenu: false,
+      showSettingsDialog: false
     }
   },
   setup() {
@@ -157,7 +161,8 @@ export default {
     },
     handleSettings() {
       this.showMenu = false
-      this.$router.push('/settings')
+      this.showMobileMenu = false
+      this.showSettingsDialog = true
     },
     toggleMobileMenu() {
       this.showMobileMenu = !this.showMobileMenu
