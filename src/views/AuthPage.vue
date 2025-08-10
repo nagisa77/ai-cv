@@ -39,9 +39,9 @@
             </div>
 
             <div class="footer">
-                <div class="footer-text-left">使用条款</div>
+                <router-link class="footer-text-left" to="/service-agreement">使用条款</router-link>
                 <div class="footer-text-divider">|</div>
-                <div class="footer-text-right">隐私政策</div>
+                <router-link class="footer-text-right" to="/privacy-policy">隐私政策</router-link>
             </div>
         </div>
     </div>
