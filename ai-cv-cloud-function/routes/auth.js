@@ -22,6 +22,7 @@ const { Resend } = require('resend');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const admin = require('../utils/firebaseAdmin');
+const fetch = require('node-fetch');
 // const resend = new Resend(process.env.RESEND_API_KEY, {
 //     fetch: require('node-fetch')
 // });
@@ -236,6 +237,55 @@ router.post('/google', async (req, res) => {
     } catch (err) {
         console.error('[Google Login Error]', err);
         res.status(401).json({ code: 40103, message: '无效的 Google 身份凭证' });
+    }
+});
+
+// WeChat 登录接口
+router.post('/wechat', async (req, res) => {
+    const { code } = req.body;
+    if (!code) {
+        return res.status(400).json({ code: 40006, message: '缺少 code' });
+    }
+
+    try {
+        const wxRes = await fetch(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${process.env.WECHAT_APP_ID}&secret=${process.env.WECHAT_APP_SECRET}&code=${code}&grant_type=authorization_code`);
+        const wxData = await wxRes.json();
+
+        if (wxData.errcode) {
+            return res.status(401).json({
+                code: 40104,
+                message: '无效的微信登录凭证',
+                error: wxData.errmsg
+            });
+        }
+
+        const { openid, unionid } = wxData;
+
+        let [rows] = await pool.query('SELECT id FROM users WHERE wechat_openid=?', [openid]);
+        let userId = rows.length ? rows[0].id : null;
+
+        if (!userId) {
+            userId = uuidv4();
+            await pool.query('INSERT INTO users (id, contact, wechat_openid) VALUES (?, ?, ?)', [userId, unionid || openid, openid]);
+        }
+
+        const token = jwt.sign({ user_id: userId, contact: unionid || openid }, secretKey, { expiresIn: '7d' });
+
+        res.json({
+            code: 200,
+            message: '登录成功',
+            data: {
+                token,
+                user: { user_id: userId, contact: unionid || openid, provider: 'wechat', openid }
+            }
+        });
+    } catch (err) {
+        console.error('[WeChat Login Error]', err);
+        res.status(500).json({
+            code: 50003,
+            message: '微信登录失败',
+            error: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
     }
 });
 

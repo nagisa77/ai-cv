@@ -71,6 +71,34 @@ class AuthService {
       }
     }
   }
+
+  async loginWithWeChat(code) {
+    try {
+      const response = await apiClient.post('/auth/wechat', { code })
+
+      if (response.data.code === 200) {
+        const { token, user } = response.data.data
+        authState.currentUser = user
+        localStorage.setItem('currentUser', JSON.stringify(user))
+        localStorage.setItem('token', token)
+        return {
+          success: true,
+          user
+        }
+      }
+
+      return {
+        success: false,
+        error: response.data.message
+      }
+    } catch (error) {
+      console.error('WeChat login error:', error)
+      return {
+        success: false,
+        error: error.response?.data?.message || '登录失败，请检查网络连接'
+      }
+    }
+  }
   logout() {
     authState.currentUser = null
     localStorage.removeItem('currentUser')

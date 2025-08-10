@@ -10,6 +10,7 @@ import AuthPage from '@/views/AuthPage.vue'
 import AuthSecondStepPage from '@/views/AuthSecondStepPage.vue'
 import InterviewQuestions from '@/views/InterviewQuestions.vue'
 import Settings from '@/views/Settings.vue'
+import WeChatCallback from '@/views/WeChatCallback.vue'
 
 const routes = [
   {
@@ -73,6 +74,11 @@ const routes = [
     name: 'AuthSecondStep',
     component: AuthSecondStepPage,
     props: true
+  },
+  {
+    path: '/wechat-callback',
+    name: 'WeChatCallback',
+    component: WeChatCallback
   }
 ]
 
