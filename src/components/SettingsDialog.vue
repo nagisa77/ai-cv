@@ -1,26 +1,30 @@
 <template>
-  <div class="modal-container">
-    <div class="modal-header">
-      <button class="close-btn" @click="closeDialog">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-    <div class="tab-header">
-      <div :class="['tab-item', { active: activeTab === 'profile' }]" @click="selectTab('profile')">个人信息</div>
-      <div :class="['tab-item', { active: activeTab === 'legal' }]" @click="selectTab('legal')">隐私政策和服务协议</div>
-    </div>
-    <div class="tab-content">
-      <div v-if="activeTab === 'profile'">
-        <p>{{ contact }}</p>
+  <div class="modal-overlay" @click.self="closeDialog">
+    <transition name="fade-scale">
+      <div class="modal-container">
+        <div class="modal-header">
+          <button class="close-btn" @click="closeDialog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="tab-header">
+          <div :class="['tab-item', { active: activeTab === 'profile' }]" @click="selectTab('profile')">个人信息</div>
+          <div :class="['tab-item', { active: activeTab === 'legal' }]" @click="selectTab('legal')">隐私政策和服务协议</div>
+        </div>
+        <div class="tab-content">
+          <div v-if="activeTab === 'profile'">
+            <p>{{ contact }}</p>
+          </div>
+          <div v-else-if="activeTab === 'legal'" class="legal-links">
+            <router-link to="/privacy-policy" class="legal-link">隐私政策</router-link>
+            <router-link to="/service-agreement" class="legal-link">服务协议</router-link>
+          </div>
+        </div>
       </div>
-      <div v-else-if="activeTab === 'legal'" class="legal-links">
-        <router-link to="/privacy-policy" class="legal-link">隐私政策</router-link>
-        <router-link to="/service-agreement" class="legal-link">服务协议</router-link>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -28,23 +32,21 @@
 import AuthService from '@/utils/auth'
 
 export default {
-  name: 'SettingsPage',
+  name: 'SettingsDialog',
+  emits: ['close'],
   data() {
     return {
       activeTab: 'profile'
     }
   },
   computed: {
-    username() {
-      return AuthService.getCurrentUser()?.username || ''
-    },
     contact() {
       return AuthService.getUserContact()
     }
   },
   methods: {
     closeDialog() {
-      this.$router.back()
+      this.$emit('close')
     },
     selectTab(tab) {
       this.activeTab = tab
@@ -54,8 +56,9 @@ export default {
 </script>
 
 <style scoped>
+
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   backdrop-filter: blur(8px);
   background-color: rgba(0, 0, 0, 0.5);
@@ -80,7 +83,8 @@ export default {
 
 .modal-container {
   background: var(--color-white);
-  max-width: calc(100% - 120px);
+  width: 480px;
+  max-width: 95%;
   border-radius: 20px;
   padding: 20px 28px 28px 28px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
