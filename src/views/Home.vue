@@ -78,7 +78,7 @@
     </div>
     <footer class="footer">
       <div class="footer-content">
-        <p>关于我们  |  帮助中心  |  联系我们 <span class="footer-text-highlight">粤ICP备20240536号-1</span></p>
+        <p><router-link to="/about-us">关于我们</router-link>  |  帮助中心  |  联系我们 <span class="footer-text-highlight">粤ICP备20240536号-1</span></p>
         <p>© 2025 AI简历君 All rights reserved.</p>
       </div>
     </footer>
@@ -432,6 +432,11 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.footer-content a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .create-resume-button {
