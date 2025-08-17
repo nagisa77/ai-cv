@@ -78,7 +78,7 @@
     </div>
     <footer class="footer">
       <div class="footer-content">
-        <p><router-link to="/about-us">关于我们</router-link>  |  帮助中心  |  联系我们 <span class="footer-text-highlight">粤ICP备20240536号-1</span></p>
+        <p><router-link to="/about-us">关于我们</router-link>  |  帮助中心  |  联系我们 <span class="footer-text-highlight">苏ICP备2025194623号</span></p>
         <p>© 2025 AI简历君 All rights reserved.</p>
       </div>
     </footer>
