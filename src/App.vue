@@ -29,7 +29,7 @@
             <span class="nav-item" @click="scrollToSection('session2')">功能</span>
             <!-- 点击后滚动到 session3 -->
             <span class="nav-item" @click="scrollToSection('session3')">价格</span>
-            <span class="nav-item">关于我们</span>
+            <router-link to="/about-us" class="nav-item">关于我们</router-link>
 
             <router-link to="/auth" class="user-icon-link">
               <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="用户"
@@ -55,7 +55,7 @@
         <template v-if="!isLoggedIn">
           <span class="mobile-nav-item">功能</span>
           <span class="mobile-nav-item">价格</span>
-          <span class="mobile-nav-item">关于我们</span>
+          <router-link to="/about-us" class="mobile-nav-item" @click="showMobileMenu = false">关于我们</router-link>
           <router-link to="/auth" class="mobile-nav-item" @click="showMobileMenu = false">
             <span>登录/注册</span>
           </router-link>
@@ -307,6 +307,7 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
+  text-decoration: none;
 }
 
 /* 用户图标样式 */

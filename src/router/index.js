@@ -12,6 +12,7 @@ import InterviewQuestions from '@/views/InterviewQuestions.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
 import ServiceAgreement from '@/views/ServiceAgreement.vue'
 import WeChatCallback from '@/views/WeChatCallback.vue'
+import AboutUs from '@/views/AboutUs.vue'
 
 const routes = [
   {
@@ -85,6 +86,11 @@ const routes = [
     path: '/wechat-callback',
     name: 'WeChatCallback',
     component: WeChatCallback
+  },
+  {
+    path: '/about-us',
+    name: 'AboutUs',
+    component: AboutUs
   }
 ]
 
