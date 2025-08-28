@@ -19,8 +19,14 @@
                 class="user-icon">
           </div>
           <div class="user-imformation">
-             <div user-id>
-               {{ id }}
+             <div class="user-id">
+               {{ contact }}
+             </div>
+             <div class="user-card">
+               {{ activecard }}
+               <div class="pay-card-time">
+                 {{ paycardTime +'到期' }}
+               </div>
              </div>
           </div>
         </div>
@@ -30,7 +36,8 @@
         </div>
         <div class="tab-content">
           <div v-if="activeTab === 'subscription'" class="pay-card-content">
-            <div class="pay-card" v-for="(card, index) in payCards" :key="index">
+            <div :class="['pay-card', { 'pay-card-active': activecard === card.title}]" v-for="(card, index) in payCards" :key="index">
+              <div class="pay-card-top" v-if="activecard === card.title">当前订阅</div>
               <div class="pay-card-title">{{ card.title }}</div>
               <div class="pay-acitvity">
                 <div class="pay-acitvity-item" v-for="(feature, fIndex) in card.features" :key="fIndex">
@@ -40,6 +47,7 @@
                   <div class="pay-acitvity-item-title">{{ feature }}</div>
                 </div>
               </div>
+              <div class="pay-card-bottom" v-if="card.title === 'Plus版会员'">限时免费</div>
             </div>
           </div>
           <div v-else-if="activeTab === 'legal'" class="legal-links">
@@ -69,6 +77,8 @@ export default {
   data() {
     return {
       activeTab: 'subscription',
+      activecard:'Plus版会员',
+      paycardTime:'2025.12.13',
       payCards: [
         {
           title: '免费版用户',
@@ -180,6 +190,7 @@ export default {
   border-bottom: 1px solid #e0e0e0;
   margin-left: 10px;
   justify-content: flex-start;
+  align-items: center;
   gap: 8px;
 }
 
@@ -195,7 +206,6 @@ export default {
 .tab-item.active {
   color: black;
   font-size: 22px;
-  font-weight: bold;
   position: relative;
 }
 
@@ -211,14 +221,15 @@ export default {
 }
 
 .legal-links {
-  padding: 20px;
+  margin-top: 20px;
   width: 100%;
 }
 
 .legal-grid {
   display: table;
-  width: 100%;
+  width: 750px;
   border-collapse: collapse;
+  margin: 0 auto;
 }
 
 .legal-item {
@@ -228,12 +239,12 @@ export default {
 
 .legal-name {
   display: table-cell;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--color-text-primary);
   font-weight: 500;
   text-align: center;
   padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border: 1px solid #e8e8e8;
   width: 50%;
 }
 
@@ -242,19 +253,14 @@ export default {
   color: rgb(90, 135, 157);
   text-decoration: none;
   padding: 15px 0;
-  border: 1px solid rgb(90, 135, 157);
+  border: 1px solid #e8e8e8;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   transition: all 0.2s ease;
   white-space: nowrap;
   text-align: center;
   width: 50%;
-  border: none;
   background: none;
-}
-
-.legal-item:last-child .legal-name {
-  border-bottom: none;
 }
 
 .legal-link {
@@ -268,7 +274,7 @@ export default {
 }
 
 .pay-card-content {
-  margin-top: 20px;
+  margin-top: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -280,15 +286,39 @@ export default {
 }
 
 .pay-card {
+  position: relative;
   background-color: #f2f2f2;
   width: 342px;
-  height: 300px;
+  height: 320px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 24px;
   border-radius: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.pay-card-top {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+}
+
+.pay-card-bottom{
+  background-color: rgb(217, 119, 87);
+  margin-top: 20px;
+  height: 35px;
+  width: 80%;
+  font-size: 20px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+}
+.pay-card-active {
+  background-color: rgb(241, 230, 208);
 }
 
 .pay-card-title {
@@ -296,6 +326,7 @@ export default {
   font-weight: bold;
   color: var(--color-text-primary);
   text-align: center;
+  margin-top: 20px;
 }
 
 .pay-acitvity {
@@ -304,12 +335,11 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width:200px;
   justify-content: center;
 }
 
 .pay-acitvity-item {
-  font-size: 16px;
+  font-size: 18px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -322,8 +352,8 @@ export default {
 }
 
 .pay-acitvity-item-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   margin-right: 8px;
   fill: var(--color-primary);
 }
@@ -353,5 +383,35 @@ export default {
   display: flex;
   height: 100px;
   align-items: center;
+}
+
+.user-imformation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-card {
+  position: relative;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: rgb(241, 230, 208);
+  height: 40px;
+  width: 150px;
+  text-align: center;
+  line-height: 40px;
+  margin-top: 10px;
+}
+
+.pay-card-time {
+  position: absolute;
+  top: 50%;
+  right: -110px;
+  font-size: 14px;
+  transform: translateY(-50%);
+  color: rgb(180, 180, 180);
+  font-weight: normal;
 }
 </style>
