@@ -750,6 +750,7 @@ export default {
   methods: {
     // 简单把 YYYY-MM-DD 转成 YYYY.MM
     formatYearMonth(dateStr) {
+      if (dateStr === '至今') return '至今'
       if (!dateStr) return ''
       const dateObj = new Date(dateStr)
       if (isNaN(dateObj.getTime())) return ''
