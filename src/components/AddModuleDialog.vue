@@ -25,6 +25,10 @@
               <i class="icon fas fa-project-diagram project"></i>
               <span>项目经历</span>
             </div>
+            <div class="module-option" @click="onSelect('otherExperience')">
+              <i class="icon fas fa-project-diagram project"></i>
+              <span>其他经历</span>
+            </div>
           </div>
         </div>
       </div>
