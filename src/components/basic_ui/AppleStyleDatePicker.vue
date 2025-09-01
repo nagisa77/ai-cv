@@ -149,9 +149,15 @@ export default {
   padding: 2px 6px;
   font-size: 11px;
   border: none;
-  background: var(--color-gray-light);
+  background: var(--color-primary);
+  color: white; 
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease; 
+}
+
+.present-btn:hover {
+  background: var(--color-primary-hover); 
 }
 .present-btn:disabled { cursor: not-allowed; opacity: 0.5; }
 </style>
