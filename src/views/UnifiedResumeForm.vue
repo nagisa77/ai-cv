@@ -424,6 +424,82 @@
           </div>
         </transition>
 
+        <!-- ========== 其他经历 ========== -->
+        <div class="block-title clickable" @click="toggleSection('otherExperience')">
+          <div class="title-left">
+            <i class="fas fa-star"></i> 其他经历
+          </div>
+          <!-- 折叠 / 展开图标 -->
+          <i
+            class="arrow-icon"
+            :class="['fas', sectionsCollapsed.otherExperience ? 'fa-chevron-down' : 'fa-chevron-up']"
+          ></i>
+        </div>
+        <transition name="expand">
+          <div class="expanded-section" v-show="!sectionsCollapsed.otherExperience">
+            <div id="other-experience" class="other-list">
+              <div
+                class="card"
+                v-for="(other, index) in otherExperienceList"
+                :key="index"
+                @click="handleCardClick('otherExperience', other.title)"
+              >
+                <div class="card-header">
+                  <div class="card-title">其他经历{{ index + 1 }}</div>
+                  <button
+                    class="remove-btn"
+                    type="button"
+                    @click.stop="removeOtherExperience(index)"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <AppleStyleInput
+                  :id="'other-title-' + index"
+                  labelText="主题/名称"
+                  inputType="text"
+                  :required="true"
+                  :invalid="validationErrors.otherExperienceList[index]?.title"
+                  v-model="other.title"
+                />
+
+                <div class="form-line">
+                  <AppleStyleDatePicker
+                    :id="'other-start-' + index"
+                    labelText="开始时间"
+                    :required="true"
+                    :invalid="validationErrors.otherExperienceList[index]?.startDate"
+                    v-model="other.startDate"
+                  />
+                  <AppleStyleDatePicker
+                    :id="'other-end-' + index"
+                    labelText="结束时间"
+                    :required="true"
+                    :invalid="validationErrors.otherExperienceList[index]?.endDate"
+                    v-model="other.endDate"
+                  />
+                </div>
+
+                <AppleStyleInput
+                  :id="'other-desc-' + index"
+                  labelText="描述"
+                  inputType="text"
+                  :required="true"
+                  :invalid="validationErrors.otherExperienceList[index]?.desc"
+                  v-model="other.desc"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="add-button" type="button" @click="addOtherExperience">
+                + 新增其他经历
+              </button>
+            </div>
+          </div>
+        </transition>
+
+
         <!-- ========== 其他模块 ========== -->
         <div class="block-title clickable" @click="toggleSection('others')">
           <div class="title-left">
@@ -495,6 +571,7 @@
           education: mappedEducationList,
           workExperience: mappedWorkList,
           projectExperience: mappedProjectList,
+          otherExperience: mappedOtherExperienceList,
         }"
       />
     </div>
@@ -607,6 +684,14 @@ export default {
           role: ''
         }
       ],
+      otherExperienceList: [
+        {
+          title: '',
+          startDate: '',
+          endDate: '',
+          desc: ''
+        }
+      ],
       // 其他模块 - 全部选填
       others: {
         skills: '',
@@ -626,7 +711,8 @@ export default {
         education: false,
         work: false,
         project: false,
-        others: true
+        others: true,
+        otherExperience: false
       },
       // 控制“个人信息”中的选填部分是否折叠
       personalInfoOptionalCollapsed: true,
@@ -667,6 +753,14 @@ export default {
             startDate: false,
             endDate: false,
             role: false
+          }
+        ],
+        otherExperienceList: [
+          {
+            title: false,
+            startDate: false,
+            endDate: false,
+            desc: false
           }
         ]
       }
@@ -745,7 +839,23 @@ export default {
           }
         }
       })
+    },
+    mappedOtherExperienceList() {
+      return this.otherExperienceList.map((other) => {
+        const from_time = this.formatYearMonth(other.startDate)
+        const to_time = this.formatYearMonth(other.endDate)
+        return {
+          title: other.title,
+          content: {
+            from_time,
+            to_time,
+            desc: other.desc,
+            content: []
+          }
+        }
+      })
     }
+  
   },
   methods: {
     // 简单把 YYYY-MM-DD 转成 YYYY.MM
@@ -867,6 +977,21 @@ export default {
               proj.projectName
             )
           })
+
+          //保存其他经历
+          this.otherExperienceList.forEach((other) => {
+            metadataInstance.setContentForType(
+              'otherExperience',
+              {
+                  title: other.title,
+                  from_time: this.formatYearMonth(other.startDate),
+                  to_time: this.formatYearMonth(other.endDate),
+                  desc: other.desc,
+                  content: []
+              },
+              other.title
+              )
+            })
 
           // 保存其他模块
           metadataInstance.setContentForType(
@@ -1034,6 +1159,30 @@ export default {
         }
       })
 
+      this.otherExperienceList.forEach((other, index) => {
+        let errobj = this.validationErrors.otherExperienceList[index]
+        if (!other.title) {
+          errobj.title = true
+          this.sectionsCollapsed.otherExperience = false
+          hasError = true
+        }
+        if (!other.startDate) {
+          errobj.startDate = true
+          this.sectionsCollapsed.otherExperience = false
+          hasError = true
+        }
+        if (!other.endDate) {
+          errobj.endDate = true
+          this.sectionsCollapsed.otherExperience = false
+          hasError = true
+        }
+        if (!other.desc) {
+          errobj.desc = true
+          this.sectionsCollapsed.otherExperience = false
+          hasError = true
+        }
+      })
+
       return hasError
     },
 
@@ -1099,6 +1248,20 @@ export default {
         role: false
       })
     },
+    addOtherExperience() {
+      this.otherExperienceList.push({
+        title: '',
+        startDate: '',
+        endDate: '',
+        desc: ''
+      })
+      this.validationErrors.otherExperienceList.push({
+        title: false,
+        startDate: false,
+        endDate: false,
+        desc: false
+      })
+    },
     // 删除对应经历（工作、项目允许清空；教育保留1条）
     removeCard(listName, index) {
       // === 对 educationList 做“至少1条”限制 ===
@@ -1113,6 +1276,10 @@ export default {
       // 其他列表可删除到 0 条
       this[listName].splice(index, 1)
       this.validationErrors[listName].splice(index, 1)
+    },
+    removeOtherExperience(index) {
+      this.otherExperienceList.splice(index, 1);
+      this.validationErrors.otherExperienceList.splice(index, 1);
     },
     /**
      * 点击卡片时，记录当前所在模块，右侧预览部分会匹配对应的组件

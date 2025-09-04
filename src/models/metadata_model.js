@@ -330,7 +330,7 @@ class MetadataModel {
 
   // 根据标题更新对应的 content
   setContentForTitle(title, content) {
-    const types = ['education', 'workExperience', 'projectExperience'];
+    const types = ['education', 'workExperience', 'projectExperience', 'otherExperience'];
     for (const type of types) {
       const arr = this.data[type];
       if (!arr || !Array.isArray(arr)) continue;
