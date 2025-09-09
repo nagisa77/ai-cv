@@ -71,11 +71,10 @@
         </div>
       </div>
     </template>
-    <div class="measure-container">
+    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType === 'general_simple'}">
       <div
         v-for="(module, moduleIndex) in modulesData"
         :key="'measure-' + moduleIndex"
-        class="resume-module"
         :ref="el => registerModuleRef(el, moduleIndex)"
       >
         <component
@@ -126,6 +125,10 @@ export default {
     marginBottom: {
       type: Number,
       default: 10
+    },
+    TemplateType: {
+      type: String,
+      default: ''
     },
   },
   data() {
@@ -237,10 +240,11 @@ export default {
       this.totalHeight = 0
       this.measuredHeights = this.moduleRefs.map(el => {
         if (!el) return 0
+        const rect = el.getBoundingClientRect()
         const style = getComputedStyle(el)
         const marginBottom = parseFloat(style.marginBottom) || 0
-        this.totalHeight += el.offsetHeight + marginBottom
-        return el.offsetHeight + marginBottom
+        this.totalHeight += rect.height + marginBottom
+        return rect.height + marginBottom
       })
       console.log(this.measuredHeights)
       this.buildPages()
@@ -273,8 +277,8 @@ export default {
         const pageEls = this.$refs.pages || this.$refs.page;
         const contentEls = this.$refs.pageContents || this.$refs.pageContent;
         if (!pageEls || !contentEls) return;
-
         const firstPage = Array.isArray(pageEls) ? pageEls[0] : pageEls;
+        if(!firstPage) return
         const containerWidth = firstPage.clientWidth;
         const scaleW = containerWidth / DESIGN_WIDTH;
         const finalScale = scaleW;
@@ -289,7 +293,6 @@ export default {
       let everyHeight=(this.totalHeight-this.pageMaxHeight)/this.totalTitleAndItemCount;
       console.log(everyHeight)
       const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[0].querySelectorAll('.session-title')[0]).marginBottom)
-      console.log(curHeight)
       if(everyHeight>curHeight){
         this.toast.error('简历内容太多,智能一页失败')
       }else{
@@ -430,6 +433,10 @@ export default {
   left: -9999px;
   width: 453px;
   top: 0;
+}
+
+.measure-container-GeneralSimple{
+  font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
 }
 
 /* 加载状态时的容器 */

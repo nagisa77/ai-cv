@@ -151,6 +151,9 @@ export default {
       if (this.otherExperienceList && this.otherExperienceList.length > 0) {
         count+=this.otherExperienceList.length+1;
       }
+      if (this.personalSummary && this.personalSummary.length > 0) {
+        count+=1;
+      }
       return count+1;
     },
     modulesData() {

@@ -39,7 +39,6 @@ export default {
 .personal-info {
   display: flex;
   justify-content: space-between;
-  height: 100px;
 }
 
 .name {
