@@ -71,7 +71,7 @@
         </div>
       </div>
     </template>
-    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType === 'general_simple'}">
+    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType !== 'default'}">
       <div
         v-for="(module, moduleIndex) in modulesData"
         :key="'measure-' + moduleIndex"

@@ -23,3 +23,9 @@
     font-size: 9px;
   }
   </style>
+  
+  <style scoped>
+  .summary-section {
+    display: flow-root;
+  }
+  </style>
