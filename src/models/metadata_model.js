@@ -14,6 +14,7 @@ class MetadataModel {
       education: [],
       workExperience: [],
       projectExperience: [],
+      otherExperience: [],
       personalInfo: {},
       personalSummary: '',
       isFetching: false,
@@ -106,6 +107,14 @@ class MetadataModel {
         - meta_data 中的 jobTitle 是用户的目标岗位。
         - meta_data 中的 jobDescription 是用户的目标岗位描述。
         `;
+      case 'otherExperience':
+        return `
+        - meta_data 中的 title 是用户的其他经历主题/名称，注意该字段不要做任何改动。
+        - meta_data 中的 desc 是用户的其他经历描述。
+        - meta_data 中的 content 是AI需要通过对话，总结出的其他经历内容（亮点），需总结为2-4点，突出经历的价值和收获，bullet_point 是总结小标题，content 是总结内容
+        - meta_data 中的 from_time 是经历开始时间。
+        - meta_data 中的 to_time 是经历结束时间。
+        `;
       default:
         return '';
     }
@@ -157,7 +166,23 @@ class MetadataModel {
             },
           ],
         });
-
+      case 'otherExperience':
+        return JSON.stringify({
+          "title": "",
+          "from_time": "",
+          "to_time": "",
+          "desc": "",
+          "content": [
+            {
+              "bullet_point": "总结小标题1",
+              "content": "总结内容1"
+            },
+            {
+              "bullet_point": "总结小标题2",
+              "content": "总结内容2"
+            }
+          ],
+        });
       default:
         return '{}';
     }
@@ -182,6 +207,10 @@ class MetadataModel {
         return this.data.personalInfo;
       case 'personalSummary':
         return this.data.personalSummary;
+      case 'otherExperience':
+        return title
+          ? this.data.otherExperience.find(item => item.title === title)
+          : this.data.otherExperience;
       default:
         return null;
     }
@@ -203,6 +232,11 @@ class MetadataModel {
       case 'projectExperience': {
         this.data.projectExperience = this.data.projectExperience.filter(item => item.title !== title);
         console.log(`删除项目经历: ${title}`);
+        break;
+      }
+      case 'otherExperience': {
+        this.data.otherExperience = this.data.otherExperience.filter(item => item.title !== title);
+        console.log(`删除其他经历: ${title}`);
         break;
       }
       default:
@@ -265,6 +299,22 @@ class MetadataModel {
         }
         break;
       }
+      case 'otherExperience': {
+        if (title) {
+          const existing = this.data.otherExperience.find(item => item.title === title);
+          if (existing) {
+            existing.content = content;
+            console.log(`更新其他经历: ${title}`);
+          } else {
+            this.data.otherExperience.push({ title, content });
+            console.log(`添加其他经历: ${title}`);
+          }
+        } else {
+          this.data.otherExperience.push({ content });
+          console.log(`添加其他经历: 新内容`);
+        }
+        break;
+      }
       case 'personalInfo':
         this.data.personalInfo = content;
         console.log(`更新个人信息`);
@@ -280,7 +330,7 @@ class MetadataModel {
 
   // 根据标题更新对应的 content
   setContentForTitle(title, content) {
-    const types = ['education', 'workExperience', 'projectExperience'];
+    const types = ['education', 'workExperience', 'projectExperience', 'otherExperience'];
     for (const type of types) {
       const arr = this.data[type];
       if (!arr || !Array.isArray(arr)) continue;
@@ -301,6 +351,7 @@ class MetadataModel {
     this.data.projectExperience = [];
     this.data.personalInfo = {};
     this.data.personalSummary = '';
+    this.data.otherExperience = [];
     console.log("Metadata cleared and state reset to default.");
   }
 }

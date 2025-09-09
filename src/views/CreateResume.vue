@@ -225,6 +225,16 @@ export default {
         });
       });
 
+      // 4) 添加其他经历的处理
+      const otherList = metadataInstance.contentForType('otherExperience') || [];
+      otherList.forEach((other, index) => {
+        const otherTitle = other.title || `其他经历-${index + 1}`;
+        result.push({
+          type: 'otherExperience',
+          title: otherTitle,
+    });
+  });
+
       return result;
     },
   },

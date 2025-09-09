@@ -37,6 +37,7 @@ import EducationGeneralSimpleSection from '@/components/template_ui/general_simp
 import WorkGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/WorkGeneralSimpleSection.vue';
 import ProjectGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/ProjectGeneralSimpleSection.vue';
 import SummaryGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/SummaryGeneralSimpleSection.vue';
+import OtherExperienceGeneralSimpleSection from '@/components/template_ui/general_simple/cv_components/OtherExperienceGeneralSimpleSection.vue';
 import metadataInstance from '@/models/metadata_model.js';
 export default {
     name: "GeneralSimpleCVComponent",
@@ -46,7 +47,8 @@ export default {
         EducationGeneralSimpleSection,
         WorkGeneralSimpleSection,
         ProjectGeneralSimpleSection,
-        SummaryGeneralSimpleSection
+        SummaryGeneralSimpleSection,
+        OtherExperienceGeneralSimpleSection
     },
     props: {
         highlightTitle: {
@@ -117,6 +119,14 @@ export default {
             }
             return metadataInstance.data.personalSummary;
         },
+        otherExperienceList() {         
+            // 如果是预览模式且有预览数据，则使用预览数据
+            if(this.isPreview && this.previewData.otherExperience)
+            {
+                return this.previewData.otherExperience;
+            }
+            return metadataInstance.data.otherExperience;
+        },
         modulesData() {
             const modules = []
             modules.push({
@@ -181,6 +191,23 @@ export default {
                         personalSummary: this.personalSummary,
                         enableHover: !this.isPreview,
                         color: this.color
+                    }
+                })
+            }
+            if(this.otherExperienceList && this.otherExperienceList.length > 0) {
+                modules.push({
+                    component: OtherExperienceGeneralSimpleSection,
+                    props: {
+                        otherExperienceList: this.otherExperienceList,
+                        highlightTitle: this.highlightTitle,
+                        enableHover: !this.isPreview,
+                        color: this.color
+                    },
+                    listeners: {
+                        'selected-module-changed': this.handleSelectedModuleChanged,
+                        'edit-title': this.handleEdit,
+                        'delete-title': this.handleDelete,
+                        'add-title': this.handleAddTitle
                     }
                 })
             }
