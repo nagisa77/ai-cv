@@ -71,11 +71,10 @@
         </div>
       </div>
     </template>
-    <div class="measure-container">
+    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType !== 'default'}">
       <div
         v-for="(module, moduleIndex) in modulesData"
         :key="'measure-' + moduleIndex"
-        class="resume-module"
         :ref="el => registerModuleRef(el, moduleIndex)"
       >
         <component
@@ -90,9 +89,14 @@
 
 <script>
 import metadataInstance from '@/models/metadata_model.js';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'BaseCVComponent',
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
   props: {
     highlightTitle: {
       type: String,
@@ -112,14 +116,27 @@ export default {
     },
     pageMaxHeight: {
       type: Number,
-      default: 600
-    }
+      default: 613
+    },
+    totalTitleAndItemCount: {
+      type: Number,
+      default: 0
+    },
+    marginBottom: {
+      type: Number,
+      default: 10
+    },
+    TemplateType: {
+      type: String,
+      default: ''
+    },
   },
   data() {
     return {
       moduleRefs: [],
       measuredHeights: [],
-      paginatedModules: []
+      paginatedModules: [],
+      totalHeight:0,
     }
   },
   computed: {
@@ -156,6 +173,17 @@ export default {
           this.$nextTick(this.measureAll)
         })
       },
+      deep: true
+    },
+    marginBottom: {
+      handler() {
+        this.$nextTick(() => {
+          this.moduleRefs = []
+          this.measuredHeights = []
+          this.paginatedModules = []
+          this.$nextTick(this.measureAll)
+        })
+      }
     },
     isFetching(newVal, oldVal) {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
@@ -179,7 +207,11 @@ export default {
       this.$emit('change-font');
     },
     handleSmartFit() {
-      this.$emit('smart-fit');
+      if(this.paginatedModules.length === 1){
+        this.toast.success("当前页面已经是一页")
+      }else{
+        this.adjustSpace();
+      }
     },
     captureAndSaveScreenshot() {
       this.$emit('capture-and-save-screenshot');
@@ -205,21 +237,25 @@ export default {
       }
     },
     measureAll() {
+      this.totalHeight = 0
       this.measuredHeights = this.moduleRefs.map(el => {
         if (!el) return 0
+        const rect = el.getBoundingClientRect()
         const style = getComputedStyle(el)
         const marginBottom = parseFloat(style.marginBottom) || 0
-        return el.offsetHeight + marginBottom
+        this.totalHeight += rect.height + marginBottom
+        return rect.height + marginBottom
       })
+      console.log(this.measuredHeights)
       this.buildPages()
     },
     buildPages() {
       const pages = []
       let cur = []
-      let curH = 20 // padding-top
+      let curH = 0 // padding-top,padding不算在宽高里面
       this.measuredHeights.forEach((h, i) => {
         const mod = this.modulesData[i]
-        if (curH + h <= this.pageMaxHeight - 20) { // padding-bottom
+        if (curH + h <= this.pageMaxHeight ) { // padding-bottom
           cur.push(mod)
           curH += h
         } else {
@@ -241,8 +277,8 @@ export default {
         const pageEls = this.$refs.pages || this.$refs.page;
         const contentEls = this.$refs.pageContents || this.$refs.pageContent;
         if (!pageEls || !contentEls) return;
-
         const firstPage = Array.isArray(pageEls) ? pageEls[0] : pageEls;
+        if(!firstPage) return
         const containerWidth = firstPage.clientWidth;
         const scaleW = containerWidth / DESIGN_WIDTH;
         const finalScale = scaleW;
@@ -252,6 +288,17 @@ export default {
           el.style.transform = `scale(${finalScale})`;
         });
       }, delay);
+    },
+    adjustSpace(){
+      let everyHeight=(this.totalHeight-this.pageMaxHeight)/this.totalTitleAndItemCount;
+      console.log(everyHeight)
+      const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[0].querySelectorAll('.session-title')[0]).marginBottom)
+      if(everyHeight>curHeight){
+        this.toast.error('简历内容太多,智能一页失败')
+      }else{
+        this.$emit('smart-fit',curHeight-everyHeight)
+      }
+      
     }
   }
 };
@@ -380,15 +427,16 @@ export default {
   transform-origin: top left;
 }
 
-.resume-module {
-  margin-bottom: 16px;
-}
-
 .measure-container {
   visibility: hidden;
   position: absolute;
   left: -9999px;
+  width: 453px;
   top: 0;
+}
+
+.measure-container-GeneralSimple{
+  font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
 }
 
 /* 加载状态时的容器 */

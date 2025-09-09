@@ -47,6 +47,7 @@
         :color="color"
         :highlightTitle="currentSelectedTitle"
         :isDownloading="isDownloading"
+        :TemplateType="templateType"
         @selected-module-changed="handleSelectedModuleChanged"
         @edit-title="handleEditTitle"
         @cancel-changes="handleCancelChanges"

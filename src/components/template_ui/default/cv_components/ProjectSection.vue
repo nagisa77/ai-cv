@@ -99,3 +99,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.project-section {
+  display: flow-root;
+}
+</style>

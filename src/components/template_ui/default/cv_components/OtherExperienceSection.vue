@@ -111,3 +111,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.other-experience-section {
+  display: flow-root;
+}
+</style>

@@ -619,7 +619,7 @@ export default {
       // 创建 PDF 文档
       const pdfDoc = await PDFDocument.create()
       const pngImage = await pdfDoc.embedPng(pngBytes)
-      const { width, height } = pngImage.scale(1)
+      const { width, height } = pngImage.scale(0.6)
       const page = pdfDoc.addPage([width, height])
       page.drawImage(pngImage, { x: 0, y: 0, width, height })
       const pdfBytes = await pdfDoc.save()

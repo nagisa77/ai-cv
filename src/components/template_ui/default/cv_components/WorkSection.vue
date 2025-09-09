@@ -112,3 +112,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.work-section {
+  display: flow-root;
+}
+</style>
