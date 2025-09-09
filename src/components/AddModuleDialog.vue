@@ -25,6 +25,10 @@
               <i class="icon fas fa-project-diagram project"></i>
               <span>项目经历</span>
             </div>
+            <div class="module-option" @click="onSelect('otherExperience')">
+              <i class="icon fas fa-star other"></i>
+              <span>其他经历</span>
+            </div>
           </div>
         </div>
       </div>
@@ -151,6 +155,10 @@ export default {
 }
 .icon.project {
   background: linear-gradient(135deg, var(--color-cv-gray) 60%, #bdbdbd 100%);
+  color: #fff;
+}
+.icon.other {
+  background: linear-gradient(135deg, #FFD700 60%, #FFA500 100%);
   color: #fff;
 }
 </style>

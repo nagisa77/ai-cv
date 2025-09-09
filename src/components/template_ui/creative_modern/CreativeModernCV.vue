@@ -3,6 +3,9 @@
     :isPreview="isPreview"
     :highlightTitle="highlightTitle"
     :modulesData="modulesData"
+    :totalTitleAndItemCount="totalTitleAndItemCount"
+    :marginBottom="marginBottom"
+    :TemplateType="TemplateType"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
@@ -40,6 +43,8 @@ import CreativeModernWorkSection from '@/components/template_ui/creative_modern/
 import CreativeModernProjectSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernProjectSection.vue';
 import CreativeModernSummarySection from '@/components/template_ui/creative_modern/cv_components/CreativeModernSummarySection.vue';
 import metadataInstance from '@/models/metadata_model.js';
+import CreativeModernOtherExperienceSection from './cv_components/CreativeModernOtherExperienceSection.vue';
+import { useToast } from 'vue-toastification';
 export default {
   name: "CreativeModernCV",
   components: {
@@ -48,7 +53,13 @@ export default {
     CreativeModernEducationSection,
     CreativeModernWorkSection,
     CreativeModernProjectSection,
-    CreativeModernSummarySection
+    CreativeModernSummarySection,
+    CreativeModernOtherExperienceSection
+  },
+  data() {
+    return {
+      marginBottom: 10
+    }
   },
   props: {
     highlightTitle: {
@@ -66,7 +77,15 @@ export default {
     previewData: {
       type: Object,
       default: () => ({})
-    }
+    },
+    TemplateType: {
+      type: String,
+      default: ''
+    },
+  },
+  setup() {
+    const toast = useToast();
+    return {toast}
   },
   computed: {
     customColor() {
@@ -146,6 +165,32 @@ export default {
       }
       return metadataInstance.data.personalSummary;
     },
+    otherExperienceList() {
+      if(this.isPreview && this.previewData.otherExperience){
+        return this.previewData.otherExperience
+      }
+      return metadataInstance.data.otherExperience
+      // 如果是预览模式且有预览数据，则使用预览数据
+    },
+    totalTitleAndItemCount(){
+      let count=0;
+      if (this.educationList && this.educationList.length > 0) {
+        count+=this.educationList.length+1;
+      }
+      if (this.workList && this.workList.length > 0) {
+        count+=this.workList.length+1;
+      }
+      if (this.projectList && this.projectList.length > 0) {
+        count+=this.projectList.length+1;
+      }
+      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
+        count+=this.otherExperienceList.length+1;
+      }
+      if (this.personalSummary && this.personalSummary.length > 0) {
+        count+=1;
+      }
+      return count+1;
+    },
     modulesData() {
       const modules = []
       modules.push({
@@ -213,6 +258,23 @@ export default {
           }
         })
       }
+      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
+        modules.push({
+          component: CreativeModernOtherExperienceSection,
+          props: {
+            otherExperienceList: this.otherExperienceList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
       return modules
     }
   },
@@ -239,8 +301,13 @@ export default {
     handleChangeFont() {
       this.$emit('change-font');
     },
-    handleSmartFit() {
-      this.$emit('smart-fit');
+    handleSmartFit(marginBottom) {
+       // 给当前组件根节点设置 CSS 变量
+       marginBottom=Math.floor(marginBottom)
+      this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
+      this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
+      this.marginBottom = marginBottom
+      this.toast.success('智能一页成功')
     }
   }
 };
@@ -272,6 +339,8 @@ export default {
   position: relative;
   background-color: var(--custom-color-light);
   color: var(--custom-color, var(--color-primary)); 
+  margin-top: 0px;
+  margin-bottom: var(--session-title-margin,10px);
 }
 
 ::v-deep .session-title-left-line {
@@ -310,7 +379,7 @@ export default {
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 10px;
+  margin-bottom: var(--session-item-margin,10px);
 }
 
 ::v-deep .highlight {

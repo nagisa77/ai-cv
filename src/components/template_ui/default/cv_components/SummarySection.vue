@@ -22,4 +22,8 @@
   .summary-section p {
     font-size: 9px;
   }
+  
+  .summary-section {
+    display: flow-root;
+  }
   </style>

@@ -5,8 +5,10 @@
       v-model="innerValue"
       :config="fpConfig"
       class="form-input"
-      placeholder=" "
+      placeholder=""
       :disabled="!enable"
+      ref="dateRef"
+      :id="id"
     />
 
     <label class="form-label" :for="id">{{ labelText }}</label>
@@ -44,8 +46,6 @@ export default {
     modelValue:    { type: [String, null], default: '' },
     enable:        { type: Boolean, default: true },
     invalid:       { type: Boolean, default: false },
-    /** 允许“至今”按钮 */
-    allowPresent:  { type: Boolean, default: false }
   },
   emits: ['update:modelValue'],
   data () {
@@ -71,12 +71,18 @@ export default {
           })
         ]
       }
-    }
+    },
+    //控制至今按钮是否显示
+    allowPresent () {
+      return this.labelText.trim() === '结束时间'
+    },
   },
   methods: {
     setPresent () {
       // 自定义“至今”值，可根据业务换成空串、null 等
-      const PRESENT = 'present'
+      const PRESENT = '至今'
+      const fpInstance = this.$refs.dateRef.fp
+      fpInstance.input.value = PRESENT // 直接修改 input 显示
       this.innerValue = PRESENT
       this.$emit('update:modelValue', PRESENT)
     }
@@ -143,9 +149,15 @@ export default {
   padding: 2px 6px;
   font-size: 11px;
   border: none;
-  background: var(--color-gray-light);
+  background: var(--color-primary);
+  color: white; 
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease; 
+}
+
+.present-btn:hover {
+  background: var(--color-primary-hover); 
 }
 .present-btn:disabled { cursor: not-allowed; opacity: 0.5; }
 </style>

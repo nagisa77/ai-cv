@@ -1,7 +1,7 @@
 <template>
     <div class="edit-title-component" v-if="localContent">
         <div v-if="isNewTitle" class="edit-title-component-title">
-            您正在添加一个新的<span class="title-highlight">{{ currentEditingTypeComputed }}</span>项目
+            您正在添加一个新的<span class="title-highlight">{{ currentEditingTypeComputed }}</span>
         </div>
         <div v-else class="edit-title-component-title">
             您正在编辑的是 <span class="title-highlight">{{ currentEditingTitle }}</span>
@@ -114,6 +114,36 @@
             </button>
         </div>
 
+        <!-- ================== Other Experience ================== -->
+        <div v-if="currentEditingType === 'otherExperience'">
+            <div class="session-edit-title">基础信息</div>
+            <div class="session-edit">
+                <AppleStyleInput v-if="isNewTitle" id="other-title" labelText="主题/名称" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.title" />
+                <div class="form-line">
+                    <AppleStyleInput id="other-from" labelText="开始时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.from_time" />
+                    <AppleStyleInput id="other-to" labelText="结束时间" inputType="text" :required="true"
+                        v-model:modelValue="localContent.content.to_time" />
+                </div>
+                <AppleStyleInput id="other-desc" labelText="描述" inputType="text" :required="true"
+                    v-model:modelValue="localContent.content.desc" />
+            </div>
+            <div class="session-edit-title">Bullet Points</div>
+            <div class="bullet-point-container" v-for="(point, index) in localContent.content.content" :key="index">
+                <div class="button-container">
+                    <button v-on:mouseenter="handleMouseEnter(index)" v-on:mouseleave="handleMouseLeave" type="button"
+                        class="remove-button" @click="removeBulletPoint(index)">
+                        x
+                    </button>
+                </div>
+                <AppleStyleInput :id="`other-bullet-${index}`" labelText="要点" inputType="text" rows="3" :required="true" v-model:modelValue="point.combined" />
+            </div>
+            <button class="add-button" type="button" @click="addBulletPoint">
+                + 新增Bullet Point
+            </button>
+        </div>
+
         <!-- ================== Footer 操作按钮 ================== -->
         <div class="edit-title-component-footer">
             <div class="edit-cancel-btn" @click="cancelChanges">取消</div>
@@ -164,7 +194,7 @@ export default {
             } else if (this.currentEditingType === 'projectExperience') {
                 return '项目经历';
             } else  {
-                return '其他';
+                return '其他经历';
             }
         }
     },
@@ -210,6 +240,17 @@ export default {
                         from_time: '',
                         to_time: '',
                         title: '',
+                        content: []
+                    }
+                }
+            }else if (this.currentEditingType === 'otherExperience') {
+                this.localContent = {
+                    title: '',
+                    content: {
+                        from_time: '',
+                        to_time: '',
+                        title: '',
+                        desc: '',
                         content: []
                     }
                 }

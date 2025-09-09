@@ -118,3 +118,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.education-section {
+  display: flow-root;
+}
+</style>

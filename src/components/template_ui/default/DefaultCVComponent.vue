@@ -3,6 +3,8 @@
     :isPreview="isPreview"
     :highlightTitle="highlightTitle"
     :modulesData="modulesData"
+    :totalTitleAndItemCount="totalTitleAndItemCount"
+    :marginBottom="marginBottom"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
@@ -34,6 +36,8 @@ import WorkSection from '@/components/template_ui/default/cv_components/WorkSect
 import ProjectSection from '@/components/template_ui/default/cv_components/ProjectSection.vue';
 import SummarySection from '@/components/template_ui/default/cv_components/SummarySection.vue';
 import metadataInstance from '@/models/metadata_model.js';
+import OtherExperienceSection from '@/components/template_ui/default/cv_components/OtherExperienceSection.vue';
+import { useToast } from 'vue-toastification'
 export default {
   name: "DefaultCVComponent",
   components: {
@@ -42,7 +46,8 @@ export default {
     EducationSection,
     WorkSection,
     ProjectSection,
-    SummarySection
+    SummarySection,
+    OtherExperienceSection,
   },
   props: {
     highlightTitle: {
@@ -60,6 +65,17 @@ export default {
     previewData: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data() {
+    return {
+      marginBottom: 10
+    }
+  },
+  setup(){
+    const toast = useToast()
+    return {
+      toast
     }
   },
   computed: {
@@ -112,6 +128,33 @@ export default {
         return this.previewData.personalSummary;
       }
       return metadataInstance.data.personalSummary;
+    },
+    otherExperienceList() {
+      // 如果是预览模式且有预览数据，则使用预览数据
+      if (this.isPreview && this.previewData.otherExperience) {
+        return this.previewData.otherExperience;
+      }
+      return metadataInstance.data.otherExperience;
+    },
+    totalTitleAndItemCount()
+    {
+      let count=0;
+      if (this.educationList && this.educationList.length > 0) {
+        count+=this.educationList.length+1;
+      }
+      if (this.workList && this.workList.length > 0) {
+        count+=this.workList.length+1;
+      }
+      if (this.projectList && this.projectList.length > 0) {
+        count+=this.projectList.length+1;
+      }
+      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
+        count+=this.otherExperienceList.length+1;
+      }
+      if (this.personalSummary && this.personalSummary.length > 0) {
+        count+=1;
+      }
+      return count+1;
     },
     modulesData() {
       const modules = []
@@ -180,6 +223,23 @@ export default {
           }
         })
       }
+      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
+        modules.push({
+          component: OtherExperienceSection,
+          props: {
+            otherExperienceList: this.otherExperienceList,
+            highlightTitle: this.highlightTitle,
+            enableHover: !this.isPreview,
+            color: this.color
+          },
+          listeners: {
+            'selected-module-changed': this.handleSelectedModuleChanged,
+            'edit-title': this.handleEdit,
+            'delete-title': this.handleDelete,
+            'add-title': this.handleAddTitle
+          }
+        })
+      }
       return modules
     }
   },
@@ -205,8 +265,13 @@ export default {
     handleChangeFont() {
       this.$emit('change-font');
     },
-    handleSmartFit() {
-      this.$emit('smart-fit');
+    handleSmartFit(marginBottom) {
+      // 给当前组件根节点设置 CSS 变量
+      marginBottom=Math.floor(marginBottom)
+      this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
+      this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
+      this.marginBottom = marginBottom
+      this.toast.success('智能一页成功')
     }
   }
 };
@@ -232,6 +297,8 @@ export default {
   font-size: 10px;
   position: relative;
   color: var(--custom-color, var(--color-primary)); 
+  margin-top: 0px;
+  margin-bottom: var(--session-title-margin, 10px);
 }
 
 ::v-deep .session-title::after {
@@ -270,7 +337,7 @@ export default {
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 10px;
+  margin-bottom: var(--session-item-margin, 10px);
 }
 
 ::v-deep .highlight {
