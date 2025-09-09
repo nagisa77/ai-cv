@@ -77,7 +77,26 @@
                 :invalid="validationErrors.personalInfo.name"
                 v-model="basicInfo.name"
               />
-
+              <div class="form-line">
+                <!-- 手机号选填，这里不校验 -->
+                <AppleStyleInput
+                  id="phone"
+                  labelText="手机号"
+                  inputType="tel"
+                  :required="true"
+                  :invalid="validationErrors.personalInfo.phone"
+                  v-model="basicInfo.phone"
+                />
+                <!-- 邮箱选填，不做必填校验 -->
+                <AppleStyleInput
+                  id="email"
+                  labelText="邮箱"
+                  inputType="email"
+                  :required="true"
+                  :invalid="validationErrors.personalInfo.email"
+                  v-model="basicInfo.email"
+                />
+              </div>
               <!-- 折叠/展开选填信息 -->
               <div
                 class="optional-toggle clickable"
@@ -98,24 +117,6 @@
                     />
                     <div class="upload-tip">点击上传证件照 (可选)</div>
                   </div>
-
-                  <div class="form-line">
-                    <!-- 手机号选填，这里不校验 -->
-                    <AppleStyleInput
-                      id="phone"
-                      labelText="手机号 (选填)"
-                      inputType="tel"
-                      v-model="basicInfo.phone"
-                    />
-                    <!-- 邮箱选填，不做必填校验 -->
-                    <AppleStyleInput
-                      id="email"
-                      labelText="邮箱 (选填)"
-                      inputType="email"
-                      v-model="basicInfo.email"
-                    />
-                  </div>
-
                   <div class="form-line">
                     <AppleStyleInput
                       id="targetCompany"
@@ -555,7 +556,7 @@ export default {
   data() {
     return {
       /**
-       * 基础信息 - 仅“姓名”必填
+       * 基础信息 - “姓名,手机号,邮箱”必填
        */
       basicInfo: {
         name: '',
@@ -637,7 +638,9 @@ export default {
       // 校验错误对象
       validationErrors: {
         personalInfo: {
-          name: false
+          name: false,
+          phone: false,
+          email: false
         },
         // 教育经历对应的校验初始值
         educationList: [
@@ -929,6 +932,18 @@ export default {
       // 基础信息：姓名必填
       if (!this.basicInfo.name) {
         this.validationErrors.personalInfo.name = true
+        this.sectionsCollapsed.personalInfo = false
+        hasError = true
+      }
+      // 手机号必填
+      if (!this.basicInfo.phone) {
+        this.validationErrors.personalInfo.phone = true
+        this.sectionsCollapsed.personalInfo = false
+        hasError = true
+      }
+      // 邮箱必填
+      if (!this.basicInfo.email) {
+        this.validationErrors.personalInfo.email = true
         this.sectionsCollapsed.personalInfo = false
         hasError = true
       }
