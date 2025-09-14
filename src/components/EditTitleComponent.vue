@@ -311,9 +311,7 @@ export default {
                             this.currentEditingType,
                             this.localContent.content.title || ''
                         );
-                        const gptValue = await chatgptInstance.fetchGptResponse(
-                            this.currentEditingType,
-                            this.localContent.content.title || '',
+                        const gptValue = await chatgptInstance.getGptResponse(
                             `请将以下句子转换为“主题: 内容”格式，只返回转换后的句子：${value}`
                         );
                         if (typeof gptValue === 'string') {
