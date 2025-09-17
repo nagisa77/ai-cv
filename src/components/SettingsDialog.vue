@@ -15,12 +15,12 @@
         </div>
         <div class="modal-user">
           <div class="user-head">
-            <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg" alt="user"
+            <img :src="useravatar" alt="user"
                 class="user-icon">
           </div>
           <div class="user-imformation">
              <div class="user-id">
-               {{ contact }}
+               {{ username }}
              </div>
              <div class="user-card">
                {{ activecard }}
@@ -101,6 +101,12 @@ export default {
     },
     id() {
       return AuthService.getUserId()
+    },
+    username() {
+      return AuthService.getUsername()
+    },
+    useravatar() {
+      return AuthService.getUserAvatar()||'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/user-icon.svg'
     }
   },
   methods: {

@@ -145,10 +145,10 @@ class MetadataModel {
           "to_time": "",
         });
       case 'workExperience':
-      case 'projectExperience':
         return JSON.stringify({
-          "title": "",
-          "sub_title": "",
+          "title": "//这是公司名称",
+          "sub_title": "//这是工作经历中的职位名称",
+          "city": "",
           "from_time": "",
           "to_time": "",
           "content": [
