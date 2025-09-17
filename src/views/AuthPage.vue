@@ -2,13 +2,32 @@
     <div class="app">
         <div class="auth-page">
             <div class="auth-title">欢迎回来</div>
-
-            <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
-            <button class="continue-button" @click="continueToSecondStep" :disabled="isLoading">
-                <span v-if="!isLoading">继续</span>
-                <span v-else>发送中...</span>
-            </button>
-
+            <div class="auth-tabs">
+                <div
+                    class="tab"
+                    :class="{ active: activeTab === 'wechat' }"
+                    @click="activeTab = 'wechat'"
+                >
+                    微信登录
+                </div>
+                <div
+                    class="tab"
+                    :class="{ active: activeTab === 'email' }"
+                    @click="activeTab = 'email'"
+                >
+                    邮箱登录
+                </div>
+            </div>
+            <div class="auth-tab-content">
+                <div class="auth-input-area" v-show="activeTab === 'email'">
+                    <AppleStyleInput id="email" labelText="电子邮件地址" inputType="email" :required="true" v-model="email" />
+                    <button class="continue-button" @click="continueToSecondStep" :disabled="isLoading">
+                        <span v-if="!isLoading">继续</span>
+                        <span v-else>发送中...</span>
+                    </button>
+                </div>
+                <div id="wx-qrcode" class="wechat-qrcode-container" v-show="activeTab === 'wechat'"></div>
+            </div>
             <div class="question-area">
                 <div class="question-text">还没有账户?</div>
                 <div class="question-link">注册</div>
@@ -26,10 +45,10 @@
                         alt="google" />
                     <div class="login-with-button-text">继续使用 Google 登录</div>
                 </div>
-                <div class="login-with-button" @click="signInWithWeChat">
+                <!-- <div class="login-with-button" @click="signInWithWeChat">
                     <img class="login-with-button-icon" src="https://img.icons8.com/color/48/000000/weixing.png" alt="wechat" />
                     <div class="login-with-button-text">继续使用 微信 登录</div>
-                </div>
+                </div>-->
                 <!-- <div class="login-with-button">
                     <img class="login-with-button-icon"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMKR0m0zmgdmCsLPxh0TKXwhAY_inxpNQHA&s"
@@ -64,10 +83,14 @@ export default {
 
         return { toast }
     },
+    mounted() {
+        this.renderQr()
+    },
     data() {
         return {
             email: '',
             isLoading: false,
+            activeTab: 'wechat',
         }
     },
     methods: {
@@ -132,7 +155,34 @@ export default {
         validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
-        }
+        },
+        genState(len = 24) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            let s = ''
+            for (let i = 0; i < len; i++) s += chars[Math.floor(Math.random() * chars.length)]
+            return s
+        },
+        renderQr() {
+            const box = document.getElementById('wx-qrcode')
+            if (!box) return
+            box.innerHTML = ''
+            const state = this.genState()
+            sessionStorage.setItem('wx_oauth_state', state)
+
+            if (window.WxLogin) {
+                new window.WxLogin({
+                    id: "wx-qrcode",
+                    appid: process.env.VUE_APP_WECHAT_APP_ID,
+                    scope: "snsapi_login",
+                    redirect_uri: encodeURIComponent(`${window.location.origin}/#/wechat-callback`),
+                    state: Math.random().toString(36).substring(2),
+                    style: "black",
+                    href: ""
+                });
+            }
+        },
+        
+
     }
 }
 
@@ -161,6 +211,58 @@ export default {
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 30px;
+}
+
+.auth-tabs {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab.active {
+    color: var(--color-primary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.tab:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.auth-tab-content {
+    width: 100%;
+    overflow: hidden;
+    height: 140px;
+}
+
+.wechat-qrcode-container ::v-deep(iframe) {
+    transform: scale(0.6);       /* 缩放到 40% */
+    transform-origin: top left;  /* 缩放基点 */
+    width: 300px;                /* 保持原始大小 */
+    height: 340px;
+}
+
+.wechat-qrcode-container {
+    position: relative;
+    top: -35px; /* 向上移动 20px */
+    margin: 0 auto;
+    width: 180px;   /* 容器限制 */
+    height: 204px;
+}
+
+.auth-input-area {
+    width: 100%;
 }
 
 .continue-button {
