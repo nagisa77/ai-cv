@@ -15,7 +15,7 @@
     @smart-fit="handleSmartFit"
   >
     <template #default="{ page }">
-      <div :style="{ '--custom-color': customColor }">
+      <div :style="{ '--custom-color': customColor, 'font-family': getFontFamily() }">
         <component
           v-for="(module, moduleIndex) in page"
           :key="moduleIndex"
@@ -69,7 +69,8 @@ export default {
   },
   data() {
     return {
-      marginBottom: 10
+      marginBottom: 10,
+      currentFont: 'default'
     }
   },
   setup(){
@@ -262,8 +263,23 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
-    handleChangeFont() {
+    handleChangeFont(font) {
+      if (font) {
+        this.currentFont = font;
+      }
       this.$emit('change-font');
+    },
+    getFontFamily() {
+      switch (this.currentFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
     },
     handleSmartFit(marginBottom) {
       // 给当前组件根节点设置 CSS 变量

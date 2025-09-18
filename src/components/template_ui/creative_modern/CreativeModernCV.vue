@@ -22,7 +22,13 @@
       <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-      <div :style="{ '--custom-color': customColor, '--custom-color-deep': customColorDeep, '--custom-color-light': customColorLight  }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+      <div 
+      :style="{ 
+        '--custom-color': customColor, 
+        '--custom-color-deep': customColorDeep, 
+        '--custom-color-light': customColorLight,
+        'font-family': getFontFamily()
+      }">
         <component
           v-for="(module, moduleIndex) in page"
           :key="moduleIndex"
@@ -58,7 +64,8 @@ export default {
   },
   data() {
     return {
-      marginBottom: 10
+      marginBottom: 10,
+      currentFont: 'default'
     }
   },
   props: {
@@ -279,6 +286,18 @@ export default {
     }
   },
   methods: {
+    getFontFamily() {
+      switch (this.currentFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
+    },
     // 透传或自定义处理事件
     handleSelectedModuleChanged(payload) {
       this.$emit('selected-module-changed', payload);
@@ -298,7 +317,10 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
-    handleChangeFont() {
+    handleChangeFont(font) {
+      if (font) {
+        this.currentFont = font;
+      }
       this.$emit('change-font');
     },
     handleSmartFit(marginBottom) {
