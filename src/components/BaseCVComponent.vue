@@ -83,16 +83,26 @@
           v-on="module.listeners"
         />
       </div>
-    </div>
+        <FontSelectionDialog 
+      v-if="showFontSelectionDialog" 
+      :curFont="curFont"
+      @close="showFontSelectionDialog = false"
+      @confirm="handleFontSelection"
+    />
   </div>
+</div>
 </template>
 
 <script>
 import metadataInstance from '@/models/metadata_model.js';
 import { useToast } from 'vue-toastification';
+import FontSelectionDialog from '@/components/FontSelectionDialog.vue';
 
 export default {
   name: 'BaseCVComponent',
+  components: {
+    FontSelectionDialog
+  },
   setup() {
     const toast = useToast();
     return { toast };
@@ -137,6 +147,8 @@ export default {
       measuredHeights: [],
       paginatedModules: [],
       totalHeight:0,
+      showFontSelectionDialog: false,
+      curFont: 'default',
     }
   },
   computed: {
@@ -204,7 +216,11 @@ export default {
       this.$emit('add-module');
     },
     handleChangeFont() {
-      this.$emit('change-font');
+      this.showFontSelectionDialog = true;
+    },
+    handleFontSelection(font) {
+      this.curFont=font
+      this.$emit('change-font', font);
     },
     handleSmartFit() {
       if(this.paginatedModules.length === 1){
