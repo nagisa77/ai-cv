@@ -71,7 +71,7 @@
         </div>
       </div>
     </template>
-    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType !== 'default'}">
+    <div class="measure-container" :style="{'font-family': getFontFamily()}">
       <div
         v-for="(module, moduleIndex) in modulesData"
         :key="'measure-' + moduleIndex"
@@ -83,16 +83,26 @@
           v-on="module.listeners"
         />
       </div>
-    </div>
+        <FontSelectionDialog 
+      v-if="showFontSelectionDialog" 
+      :curFont="curFont"
+      @close="showFontSelectionDialog = false"
+      @confirm="handleFontSelection"
+    />
   </div>
+</div>
 </template>
 
 <script>
 import metadataInstance from '@/models/metadata_model.js';
 import { useToast } from 'vue-toastification';
+import FontSelectionDialog from '@/components/FontSelectionDialog.vue';
 
 export default {
   name: 'BaseCVComponent',
+  components: {
+    FontSelectionDialog
+  },
   setup() {
     const toast = useToast();
     return { toast };
@@ -137,6 +147,8 @@ export default {
       measuredHeights: [],
       paginatedModules: [],
       totalHeight:0,
+      showFontSelectionDialog: false,
+      curFont: 'default',
     }
   },
   computed: {
@@ -146,8 +158,9 @@ export default {
         return false;
       }
       return metadataInstance.getIsFetching();
-    }
+    },
   },
+     
   mounted() {
     // this.fitScale(0);
     // 监听窗口大小变化，动态缩放（可自行去掉）
@@ -203,8 +216,24 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
+    getFontFamily() {
+      switch (this.curFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
+    },
     handleChangeFont() {
-      this.$emit('change-font');
+      this.showFontSelectionDialog = true;
+    },
+    handleFontSelection(font) {
+      this.curFont=font
+      this.$emit('change-font', font);
     },
     handleSmartFit() {
       if(this.paginatedModules.length === 1){
@@ -433,10 +462,6 @@ export default {
   left: -9999px;
   width: 453px;
   top: 0;
-}
-
-.measure-container-GeneralSimple{
-  font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
 }
 
 /* 加载状态时的容器 */
