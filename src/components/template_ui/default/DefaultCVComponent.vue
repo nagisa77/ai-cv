@@ -310,7 +310,7 @@ export default {
 }
 
 ::v-deep .session-title {
-  font-size: 10px;
+  font-size: 9px;
   position: relative;
   color: var(--custom-color, var(--color-primary)); 
   margin-top: 0px;
