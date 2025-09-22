@@ -24,7 +24,7 @@
       </div>
       <div class="title-and-time">
         <h3 v-if="work.title" class="item-title">{{ work.title }}</h3>
-        <h3 v-else class="item-title">（您的职位）</h3>
+        <h3 v-else class="item-title">（您的公司名称）</h3>
         <p class="item-time">{{ work.content.from_time }} - {{ work.content.to_time }}</p>
       </div>
       <div class="sub-title-and-city">

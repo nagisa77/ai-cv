@@ -71,7 +71,7 @@
         </div>
       </div>
     </template>
-    <div class="measure-container" :class="{'measure-container-GeneralSimple': TemplateType !== 'default'}">
+    <div class="measure-container" :style="{'font-family': getFontFamily()}">
       <div
         v-for="(module, moduleIndex) in modulesData"
         :key="'measure-' + moduleIndex"
@@ -83,16 +83,26 @@
           v-on="module.listeners"
         />
       </div>
-    </div>
+        <FontSelectionDialog 
+      v-if="showFontSelectionDialog" 
+      :curFont="curFont"
+      @close="showFontSelectionDialog = false"
+      @confirm="handleFontSelection"
+    />
   </div>
+</div>
 </template>
 
 <script>
 import metadataInstance from '@/models/metadata_model.js';
 import { useToast } from 'vue-toastification';
+import FontSelectionDialog from '@/components/FontSelectionDialog.vue';
 
 export default {
   name: 'BaseCVComponent',
+  components: {
+    FontSelectionDialog
+  },
   setup() {
     const toast = useToast();
     return { toast };
@@ -116,15 +126,18 @@ export default {
     },
     pageMaxHeight: {
       type: Number,
-      default: 613
+      default: 623
     },
     totalTitleAndItemCount: {
       type: Number,
       default: 0
     },
-    marginBottom: {
-      type: Number,
-      default: 10
+    changeParams: {
+      type: Object,
+      default: () => ({
+        marginBottom: 10,
+        lineHeight: 12
+      })
     },
     TemplateType: {
       type: String,
@@ -137,6 +150,9 @@ export default {
       measuredHeights: [],
       paginatedModules: [],
       totalHeight:0,
+      showFontSelectionDialog: false,
+      curFont: 'default',
+      isSmartFit: false,
     }
   },
   computed: {
@@ -146,8 +162,9 @@ export default {
         return false;
       }
       return metadataInstance.getIsFetching();
-    }
+    },
   },
+     
   mounted() {
     // this.fitScale(0);
     // 监听窗口大小变化，动态缩放（可自行去掉）
@@ -175,7 +192,7 @@ export default {
       },
       deep: true
     },
-    marginBottom: {
+    changeParams: {
       handler() {
         this.$nextTick(() => {
           this.moduleRefs = []
@@ -183,7 +200,8 @@ export default {
           this.paginatedModules = []
           this.$nextTick(this.measureAll)
         })
-      }
+      },
+      deep: true
     },
     isFetching(newVal, oldVal) {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
@@ -203,8 +221,24 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
+    getFontFamily() {
+      switch (this.curFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
+    },
     handleChangeFont() {
-      this.$emit('change-font');
+      this.showFontSelectionDialog = true;
+    },
+    handleFontSelection(font) {
+      this.curFont=font
+      this.$emit('change-font', font);
     },
     handleSmartFit() {
       if(this.paginatedModules.length === 1){
@@ -247,6 +281,15 @@ export default {
         return rect.height + marginBottom
       })
       console.log(this.measuredHeights)
+      console.log('totalHeight',this.totalHeight)
+      if(this.isSmartFit){
+        if(this.totalHeight>this.pageMaxHeight){
+          this.$emit('smart-fit',0,true)
+        }else{
+          this.isSmartFit=false
+          this.toast.success("智能一页成功")
+        }
+      }
       this.buildPages()
     },
     buildPages() {
@@ -289,12 +332,15 @@ export default {
         });
       }, delay);
     },
-    adjustSpace(){
+    async adjustSpace(){
+      this.isSmartFit=true
       let everyHeight=(this.totalHeight-this.pageMaxHeight)/this.totalTitleAndItemCount;
-      console.log(everyHeight)
+      console.log('totalHeight',this.totalHeight)
+      console.log('everyHeight',everyHeight)
+      console.log('totalTitleAndItemCount',this.totalTitleAndItemCount)
       const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[0].querySelectorAll('.session-title')[0]).marginBottom)
       if(everyHeight>curHeight){
-        this.toast.error('简历内容太多,智能一页失败')
+        this.$emit('smart-fit',curHeight-everyHeight,true)
       }else{
         this.$emit('smart-fit',curHeight-everyHeight)
       }
@@ -433,10 +479,6 @@ export default {
   left: -9999px;
   width: 453px;
   top: 0;
-}
-
-.measure-container-GeneralSimple{
-  font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
 }
 
 /* 加载状态时的容器 */

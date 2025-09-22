@@ -4,7 +4,7 @@
     :highlightTitle="highlightTitle"
     :modulesData="modulesData"
     :totalTitleAndItemCount="totalTitleAndItemCount"
-    :marginBottom="marginBottom"
+    :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
     :TemplateType="TemplateType"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
@@ -22,7 +22,13 @@
       <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet" />
 
-      <div :style="{ '--custom-color': customColor, '--custom-color-deep': customColorDeep, '--custom-color-light': customColorLight  }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+      <div 
+      :style="{ 
+        '--custom-color': customColor, 
+        '--custom-color-deep': customColorDeep, 
+        '--custom-color-light': customColorLight,
+        'font-family': getFontFamily()
+      }">
         <component
           v-for="(module, moduleIndex) in page"
           :key="moduleIndex"
@@ -58,7 +64,12 @@ export default {
   },
   data() {
     return {
-      marginBottom: 10
+      marginBottom: 10,
+      currentFont: 'default',
+      titleFontSize: 10,
+      contentFontSize: 8,
+      lineHeight: 12,
+      titlePadding:2,
     }
   },
   props: {
@@ -173,7 +184,7 @@ export default {
       // 如果是预览模式且有预览数据，则使用预览数据
     },
     totalTitleAndItemCount(){
-      let count=0;
+      let count=2;
       if (this.educationList && this.educationList.length > 0) {
         count+=this.educationList.length+1;
       }
@@ -187,9 +198,9 @@ export default {
         count+=this.otherExperienceList.length+1;
       }
       if (this.personalSummary && this.personalSummary.length > 0) {
-        count+=1;
+        count+=2;
       }
-      return count+1;
+      return count;
     },
     modulesData() {
       const modules = []
@@ -279,6 +290,18 @@ export default {
     }
   },
   methods: {
+    getFontFamily() {
+      switch (this.currentFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
+    },
     // 透传或自定义处理事件
     handleSelectedModuleChanged(payload) {
       this.$emit('selected-module-changed', payload);
@@ -298,16 +321,31 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
-    handleChangeFont() {
+    handleChangeFont(font) {
+      if (font) {
+        this.currentFont = font;
+      }
       this.$emit('change-font');
     },
-    handleSmartFit(marginBottom) {
-       // 给当前组件根节点设置 CSS 变量
-       marginBottom=Math.floor(marginBottom)
-      this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
-      this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
-      this.marginBottom = marginBottom
-      this.toast.success('智能一页成功')
+    handleSmartFit(marginBottom,adjustfontSize) {
+      // 给当前组件根节点设置 CSS 变量
+      if(marginBottom){
+        marginBottom=Math.max(0,Math.floor(marginBottom))
+        console.log('marginBottom',marginBottom)
+        this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
+        this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
+        this.marginBottom = marginBottom
+      }
+      if(adjustfontSize){
+          this.contentFontSize=this.contentFontSize-1
+          this.lineHeight=this.lineHeight-1
+          this.titleFontSize=this.titleFontSize-1
+          this.titlePadding=this.titlePadding-1
+          this.$el.style.setProperty('--title-padding', this.titlePadding+ 'px')
+          this.$el.style.setProperty('--content-font-size', this.contentFontSize+ 'px')
+          this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
+          this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
+      }
     }
   }
 };
@@ -315,10 +353,26 @@ export default {
 
 <style scoped>
 /* 只保留创意Modern风格特有的样式，公共样式已经在 BaseCVComponent.vue 中 */
+::v-deep .item-summary {
+  font-size: var(--content-font-size, 8px);
+  margin-bottom: var(--session-item-margin, 10px);
+  margin-top: 0px;
+}
+
+::v-deep .email-phone{
+  font-size: calc(var(--title-font-size, 10px) + 2px);
+  margin-bottom: var(--session-item-margin,10px);
+}
+
+::v-deep .name {
+  font-size: calc(var(--title-font-size, 10px) + 8px);
+  font-weight: bold;
+  margin-bottom: var(--session-title-margin,10px);
+}
 
 ::v-deep .item-content-item {
   display: flex;
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .bullet-point {
@@ -332,10 +386,10 @@ export default {
 }
 
 ::v-deep .session-title {
-  font-size: 10px;
+  font-size: var(--title-font-size, 10px);
   padding-left: 10px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: var(--title-padding, 2px);
+  padding-bottom: var(--title-padding, 2px);
   position: relative;
   background-color: var(--custom-color-light);
   color: var(--custom-color, var(--color-primary)); 
@@ -354,25 +408,25 @@ export default {
 
 ::v-deep .title-and-time {
   display: flex;
-  height: 12px;
+  height: var(--line-height, 12px);
   justify-content: space-between;
   align-items: center;
 }
 
 ::v-deep .sub-title-and-city {
   display: flex;
-  height: 12px;
+  height: var(--line-height, 12px);
   justify-content: space-between;
   align-items: center;
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .item-title {
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .item-time {
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .session-item {
@@ -446,7 +500,7 @@ export default {
 }
 
 ::v-deep .bullet-point-prefix {
-  font-size: 10px;
+  font-size: var(--content-font-size, 8px);
   font-weight: bold;
   margin-top: 2px;
   margin-right: 4px;

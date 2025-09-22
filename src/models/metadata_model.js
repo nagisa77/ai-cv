@@ -183,6 +183,8 @@ class MetadataModel {
             }
           ],
         });
+      case 'personalSummary':
+        return '(个人总结这部分内容是一段字符串)'
       default:
         return '{}';
     }
