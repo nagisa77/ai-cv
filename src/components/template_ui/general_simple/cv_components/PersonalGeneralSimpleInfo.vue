@@ -2,18 +2,18 @@
 <template>
   <div class="personal-info">
     <div class="left-info">
-      <h1 class="name" v-if="personalInfo.name">{{ personalInfo.name }}</h1>
-      <h1 class="name" v-else>（您的名称）</h1>
-      <p class="email-phone" v-if="personalInfo.email && personalInfo.phone">
+      <div class="name" v-if="personalInfo.name">{{ personalInfo.name }}</div>
+      <div class="name" v-else>（您的名称）</div>
+      <div class="email-phone" v-if="personalInfo.email && personalInfo.phone">
         {{ personalInfo.email }} | {{ personalInfo.phone }}
-      </p>
-      <p class="email-phone" v-else-if="personalInfo.email">
+      </div>
+      <div class="email-phone" v-else-if="personalInfo.email">
         {{ personalInfo.email }}
-      </p>
-      <p class="email-phone" v-else-if="personalInfo.phone">
+      </div>
+      <div class="email-phone" v-else-if="personalInfo.phone">
         {{ personalInfo.phone }}
-      </p>
-      <p class="email-phone" v-else>（您的联系方式）</p>
+      </div>
+      <div class="email-phone" v-else>（您的联系方式）</div>
 
     </div>
 
@@ -41,20 +41,12 @@ export default {
   justify-content: space-between;
 }
 
-.name {
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .left-info {
+  display:flow-root;
   position: relative;
   width: calc(100% - 62px);
   text-align: center;
   left: 31px;
-}
-
-.email-phone {
-  font-size: 12px;
 }
 
 .avatar {

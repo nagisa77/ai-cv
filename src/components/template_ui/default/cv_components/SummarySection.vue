@@ -1,8 +1,8 @@
 <!-- src/components/SummarySection.vue -->
 <template>
     <section v-if="personalSummary" class="summary-section session">
-      <h2 class="session-title">个人总结</h2>
-      <p>{{ personalSummary }}</p>
+      <div class="session-title">个人总结</div>
+      <div class="item-summary">{{ personalSummary }}</div>
     </section>
   </template>
   
@@ -19,10 +19,6 @@
   </script>
   
   <style scoped>
-  .summary-section p {
-    font-size: 9px;
-  }
-  
   .summary-section {
     display: flow-root;
   }

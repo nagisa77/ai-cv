@@ -124,6 +124,7 @@ export default {
         },
         signInWithWeChat() {
             const appId = process.env.VUE_APP_WECHAT_APP_ID;
+            console.log(`${window.location.origin}/#/wechat-callback`)
             const redirectUri = encodeURIComponent(`${window.location.origin}/#/wechat-callback`);
             const state = Math.random().toString(36).substring(2);
             window.location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_login&state=${state}#wechat_redirect`;

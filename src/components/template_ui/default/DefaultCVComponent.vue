@@ -4,7 +4,9 @@
     :highlightTitle="highlightTitle"
     :modulesData="modulesData"
     :totalTitleAndItemCount="totalTitleAndItemCount"
-    :marginBottom="marginBottom"
+    :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
+    :TemplateType="TemplateType"    
+    :color="color"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
@@ -13,9 +15,10 @@
     @add-module="handleAddModule"
     @change-font="handleChangeFont"
     @smart-fit="handleSmartFit"
+    @change-template="handleChangeTemplate"
   >
     <template #default="{ page }">
-      <div :style="{ '--custom-color': customColor }">
+      <div :style="{ '--custom-color': customColor, 'font-family': getFontFamily() }">
         <component
           v-for="(module, moduleIndex) in page"
           :key="moduleIndex"
@@ -65,11 +68,19 @@ export default {
     previewData: {
       type: Object,
       default: () => ({})
-    }
+    },
+    TemplateType: {
+      type: String,
+      default: 'default'
+    },
   },
   data() {
     return {
-      marginBottom: 10
+      marginBottom: 10,
+      currentFont: 'default',
+      titleFontSize: 10,
+      contentFontSize: 8,
+      lineHeight: 12,
     }
   },
   setup(){
@@ -138,7 +149,7 @@ export default {
     },
     totalTitleAndItemCount()
     {
-      let count=0;
+      let count=2;
       if (this.educationList && this.educationList.length > 0) {
         count+=this.educationList.length+1;
       }
@@ -152,9 +163,9 @@ export default {
         count+=this.otherExperienceList.length+1;
       }
       if (this.personalSummary && this.personalSummary.length > 0) {
-        count+=1;
+        count+=2;
       }
-      return count+1;
+      return count;
     },
     modulesData() {
       const modules = []
@@ -262,25 +273,70 @@ export default {
     handleAddModule() {
       this.$emit('add-module');
     },
-    handleChangeFont() {
+    handleChangeFont(font) {
+      if (font) {
+        this.currentFont = font;
+      }
       this.$emit('change-font');
     },
-    handleSmartFit(marginBottom) {
+    getFontFamily() {
+      switch (this.currentFont) {
+        case 'times':
+          return "'Times New Roman', Times, serif";
+        case 'arial':
+          return "Arial, Helvetica, sans-serif";
+        case 'courier':
+          return "'Courier New', Courier, monospace";
+        default:
+          return "'Microsoft YaHei', '微软雅黑', sans-serif";
+      }
+    },
+    handleSmartFit(marginBottom,adjustfontSize=false) {
       // 给当前组件根节点设置 CSS 变量
-      marginBottom=Math.floor(marginBottom)
-      this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
-      this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
-      this.marginBottom = marginBottom
-      this.toast.success('智能一页成功')
-    }
+      if(marginBottom){
+        marginBottom=Math.max(0,Math.floor(marginBottom))
+        console.log('marginBottom',marginBottom)
+        this.$el.style.setProperty('--session-title-margin', marginBottom + 'px')
+        this.$el.style.setProperty('--session-item-margin', marginBottom + 'px')
+        this.marginBottom = marginBottom
+      }
+      if(adjustfontSize){
+        this.contentFontSize=this.contentFontSize-1
+        this.lineHeight=this.lineHeight-1
+        this.titleFontSize=this.titleFontSize-1
+        this.$el.style.setProperty('--content-font-size', this.contentFontSize+ 'px')
+        this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
+        this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
+      }
+    },
+    handleChangeTemplate(templateWithColor) {  
+      this.$emit('change-template', templateWithColor);
+    },
   }
 };
 </script>
 
 <style scoped>
+::v-deep .item-summary {
+  font-size: var(--content-font-size, 8px);
+  margin-bottom: var(--session-item-margin, 10px);
+  margin-top: 0px;
+}
+
+::v-deep .email-phone{
+  font-size: calc(var(--title-font-size, 10px) + 2px);
+  margin-bottom: var(--session-item-margin,10px);
+}
+
+::v-deep .name {
+  font-size: calc(var(--title-font-size, 10px) + 8px);
+  font-weight: bold;
+  margin-bottom: var(--session-title-margin,10px);
+}
+
 ::v-deep .item-content-item {
   display: flex;
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .bullet-point {
@@ -294,7 +350,7 @@ export default {
 }
 
 ::v-deep .session-title {
-  font-size: 10px;
+  font-size: var(--title-font-size, 10px);
   position: relative;
   color: var(--custom-color, var(--color-primary)); 
   margin-top: 0px;
@@ -312,25 +368,25 @@ export default {
 
 ::v-deep .title-and-time {
   display: flex;
-  height: 12px;
+  height: var(--line-height, 12px);
   justify-content: space-between;
   align-items: center;
 }
 
 ::v-deep .sub-title-and-city {
   display: flex;
-  height: 12px;
+  height: var(--line-height,12px);
   justify-content: space-between;
   align-items: center;
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .item-title {
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .item-time {
-  font-size: 8px;
+  font-size: var(--content-font-size, 8px);
 }
 
 ::v-deep .session-item {
@@ -404,7 +460,7 @@ export default {
 }
 
 ::v-deep .bullet-point-prefix {
-  font-size: 10px;
+  font-size: var(--content-font-size, 8px);
   font-weight: bold;
   margin-top: 2px;
   margin-right: 4px;

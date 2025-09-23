@@ -55,6 +55,7 @@
         @add-title="handleAddTitle"
         @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
         @add-module="handleAddModule"
+        @change-template="handleChangeTemplate"
       />
     </div>
 
@@ -93,6 +94,7 @@
               @add-title="handleAddTitle"
               @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
               @add-module="handleAddModule"
+              @change-template="handleChangeTemplate"
             />
           </div>
         </div>
@@ -111,7 +113,7 @@ import ChatComponent from '@/components/ChatComponent.vue';
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
 import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
 import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCV.vue';
-
+import apiClient from '@/api/axios.js';
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue';
 import EditTitleComponent from '@/components/EditTitleComponent.vue';
 import AddModuleDialog from '@/components/AddModuleDialog.vue';
@@ -119,10 +121,8 @@ import metadataInstance from '@/models/metadata_model.js';
 import ChatgptModel from '@/models/chatgpt_model.js';
 import { waveform } from 'ldrs';
 import { resumeModel } from '@/models/resume_model.js';
-import apiClient from '@/api/axios';
 import { useToast } from 'vue-toastification';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
+import { downloadResume } from '@/utils/pdfdownload';
 
 waveform.register();
 const chatgptInstance = ChatgptModel.getInstance();
@@ -281,69 +281,21 @@ export default {
     /**
      * 下载截图
      */
-    handleCaptureAndSaveScreenshot() {
+    async handleCaptureAndSaveScreenshot() {
       if (this.isDownloading) return
       this.isDownloading = true
-
-      // 提示下载开始
-      this.toast.success('简历下载中')
-
-      // 获取当前简历ID
-      const resumeId = this.$route.params.resumeId
-
-      // 使用新的截图接口获取实时截图
-      apiClient
-        .post('/pic/scf-screenshot', {
-          resumeId,
-          templateType: this.templateType,
-          color: this.color,
-        })
-        .then(async (response) => {
-          const urls = response.data.data.screenshotUrls
-          if (response.data.code === 20009 && Array.isArray(urls) && urls.length) {
-            if (urls.length === 1) {
-              const link = document.createElement('a')
-              link.href = urls[0]
-              link.download = `${response.data.data.resumeId}.png`
-              document.body.appendChild(link)
-              link.click()
-              document.body.removeChild(link)
-            } else {
-              await this.downloadZip(urls, response.data.data.resumeId)
-            }
-          } else if (response.data.data.screenshotUrl) {
-            // 向后兼容旧接口
-            const link = document.createElement('a')
-            link.href = response.data.data.screenshotUrl
-            link.download = `${response.data.data.resumeId}.png`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-          } else {
-            this.toast.error('下载失败，请重试')
-            console.error('获取简历截图失败:', response.data.message)
-          }
-        })
-        .catch((error) => {
+      
+      await downloadResume({
+        resumeId: this.$route.params.resumeId,
+        templateType: this.templateType,
+        color: this.color,
+      }).catch((error) => {
           console.error('下载简历截图时出错:', error)
           this.toast.error('下载失败，请重试')
         })
         .finally(() => {
           this.isDownloading = false
         })
-    },
-
-    async downloadZip(urls, baseName) {
-      const zip = new JSZip()
-      await Promise.all(
-        urls.map((url, index) =>
-          apiClient.get(url, { responseType: 'blob' }).then((res) => {
-            zip.file(`${baseName}_${index + 1}.png`, res.data)
-          })
-        )
-      )
-      const blob = await zip.generateAsync({ type: 'blob' })
-      saveAs(blob, `${baseName}.zip`)
     },
     /**
      * 编辑某个标题
@@ -388,14 +340,27 @@ export default {
       }
       metadataInstance.deleteContentForTitle(type, title)
     },
-    handleChangeTemplate() {
+    async handleChangeTemplate(templateWithColor) {
+      // 从返回的对象中解构出template和color
+      const { template, color } = templateWithColor;
+      
       this.$router.push({
-        name: 'TemplateSelection',
-        params: {
-          selectionType: 'change_resume',
-          resumeId: this.$route.params.resumeId,
-        },
+            name: 'CreateResume',
+            params: {
+              resumeId: this.$route.params.resumeId,
+              templateType: template,
+              color: color,
+            },
       });
+      try {
+        await apiClient.patch(`/user/resumes/${this.$route.params.resumeId}`, {
+          templateType: template,
+          color: color,
+        })
+      } catch (error) {
+        console.error('更换模板失败:', error)
+        this.toast.error('更换模板失败，请重试')
+      }
     },
   },
 };
