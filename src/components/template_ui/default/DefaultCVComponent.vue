@@ -5,6 +5,7 @@
     :modulesData="modulesData"
     :totalTitleAndItemCount="totalTitleAndItemCount"
     :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
+    :TemplateType="TemplateType"    
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
@@ -13,6 +14,7 @@
     @add-module="handleAddModule"
     @change-font="handleChangeFont"
     @smart-fit="handleSmartFit"
+    @change-template="handleChangeTemplate"
   >
     <template #default="{ page }">
       <div :style="{ '--custom-color': customColor, 'font-family': getFontFamily() }">
@@ -65,7 +67,11 @@ export default {
     previewData: {
       type: Object,
       default: () => ({})
-    }
+    },
+    TemplateType: {
+      type: String,
+      default: 'default'
+    },
   },
   data() {
     return {
@@ -301,7 +307,10 @@ export default {
         this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
         this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
       }
-    }
+    },
+    handleChangeTemplate(template) {
+      this.$emit('change-template', template);
+    },
   }
 };
 </script>

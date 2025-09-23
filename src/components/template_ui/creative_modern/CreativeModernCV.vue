@@ -12,6 +12,7 @@
     @delete-title="handleDelete"
     @add-title="handleAddTitle"
     @add-module="handleAddModule"
+    @change-template="handleChangeTemplate"
     @change-font="handleChangeFont"
     @smart-fit="handleSmartFit"
   >
@@ -346,7 +347,10 @@ export default {
           this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
           this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
       }
-    }
+    },
+    handleChangeTemplate(template) {
+      this.$emit('change-template', template);
+    },
   }
 };
 </script>
