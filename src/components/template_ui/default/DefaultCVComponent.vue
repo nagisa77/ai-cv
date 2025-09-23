@@ -6,6 +6,7 @@
     :totalTitleAndItemCount="totalTitleAndItemCount"
     :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
     :TemplateType="TemplateType"    
+    :color="color"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
@@ -308,8 +309,8 @@ export default {
         this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
       }
     },
-    handleChangeTemplate(template) {
-      this.$emit('change-template', template);
+    handleChangeTemplate(templateWithColor) {  
+      this.$emit('change-template', templateWithColor);
     },
   }
 };

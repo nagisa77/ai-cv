@@ -92,6 +92,7 @@
     <TemplateSelectionDialog 
       v-if="showTemplateSelectionDialog" 
       :curTemplate="TemplateType"
+      :curColor="color"
       @close="showTemplateSelectionDialog = false"
       @confirm="handleTemplateSelection"
     />
@@ -149,6 +150,10 @@ export default {
     TemplateType: {
       type: String,
       default: ''
+    },
+    color: {
+      type: String,
+      default: 'red'
     },
   },
   data() {
@@ -273,9 +278,13 @@ export default {
     handleChangeTemplate() {
        this.showTemplateSelectionDialog = true;
     },
-    handleTemplateSelection(template) {
-      this.toast.success('模板更换成功')
-      this.$emit('change-template',template);
+    handleTemplateSelection(templateWithColor) {
+      // 从返回的对象中解构出template和color
+      const { template, color } = templateWithColor;
+      // 显示成功消息
+      this.toast.success('模板更换成功');
+      // 向上传递事件，包含模板和颜色信息
+      this.$emit('change-template', { template, color });
     },
     registerModuleRef(el, idx) {
       if (el) {

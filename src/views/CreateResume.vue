@@ -340,19 +340,22 @@ export default {
       }
       metadataInstance.deleteContentForTitle(type, title)
     },
-    async handleChangeTemplate(template) {
+    async handleChangeTemplate(templateWithColor) {
+      // 从返回的对象中解构出template和color
+      const { template, color } = templateWithColor;
+      
       this.$router.push({
             name: 'CreateResume',
             params: {
               resumeId: this.$route.params.resumeId,
               templateType: template,
-              color: this.color,
+              color: color,
             },
       });
       try {
         await apiClient.patch(`/user/resumes/${this.$route.params.resumeId}`, {
           templateType: template,
-          color: this.color,
+          color: color,
         })
       } catch (error) {
         console.error('更换模板失败:', error)

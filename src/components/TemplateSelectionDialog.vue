@@ -22,9 +22,26 @@
               </div>
             </div>
             
+            <!-- 颜色选择区 -->
+            <div class="color-selection" v-if="selectedTemplate">
+              <h3 class="color-title">选择颜色</h3>
+              <div class="color-options">
+                <div
+                  v-for="(color, key) in colorOptions"
+                  :key="key"
+                  class="color-option"
+                  :class="{ selected: selectedColor === key }"
+                  @click="selectColor(key)"
+                >
+                  <div class="color-circle" :class="key"></div>
+                  <span class="color-name">{{ color.name }}</span>
+                </div>
+              </div>
+            </div>
+            
             <div class="modal-footer">
               <button class="btn btn-white" @click="closeDialog">取消</button>
-              <button class="btn btn-primary" @click="confirmSelection">确定</button>
+              <button class="btn btn-primary" @click="confirmSelection" :disabled="!selectedTemplate">确定</button>
             </div>
           </div>
         </div>
@@ -40,11 +57,16 @@
       curTemplate:{
         type:String,
         default:'default'
+      },
+      curColor: {
+        type: String,
+        default: 'gray'
       }
     },
     data() {
       return {
         selectedTemplate: this.curTemplate,
+        selectedColor: this.curColor,
         templateOptions: [
             {
                 value: 'default',
@@ -58,8 +80,21 @@
                 value:'general_simple',
                 previewText:'AI简历君 - 简约模板'
             }
-      ]
-  
+        ],
+        colorOptions: {
+          gray: {
+            name: '灰色',
+            value: 'gray'
+          },
+          blue: {
+            name: '蓝色',
+            value: 'blue'
+          },
+          red: {
+            name: '红色',
+            value: 'red'
+          }
+        }
       }
     },
     methods: {
@@ -69,8 +104,14 @@
       selectTemplate(templateValue) {
         this.selectedTemplate = templateValue
       },
+      selectColor(colorKey) {
+        this.selectedColor = colorKey
+      },
       confirmSelection() {
-        this.$emit('confirm', this.selectedTemplate)
+        this.$emit('confirm', {
+          template: this.selectedTemplate,
+          color: this.selectedColor
+        })
         this.closeDialog()
       }
     }
@@ -181,6 +222,58 @@
     margin-bottom: 10px;
     min-height: 24px;
   }
+  
+  /* 颜色选择区样式 */
+  .color-selection {
+    margin-bottom: 30px;
+  }
+  
+  .color-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .color-options {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .color-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .color-option.selected .color-circle {
+    border: 2px solid var(--color-primary);
+    transform: scale(1.1);
+  }
+  
+  .color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    transition: all 0.2s ease;
+  }
+  
+  .color-circle.gray {
+    background-color: var(--color-cv-gray);
+  }
+  
+  .color-circle.blue {
+    background-color: var(--color-cv-blue);
+  }
+  
+  .color-circle.red {
+    background-color: var(--color-cv-red);
+  }
+  
+  .color-name {
+    font-size: 14px;
+  }
 
   .modal-footer {
     display: flex;
@@ -204,8 +297,13 @@
     color: var(--color-white);
   }
   
-  .btn-primary:hover {
+  .btn-primary:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
+  }
+  
+  .btn-primary:disabled {
+    background-color: var(--color-gray-light);
+    cursor: not-allowed;
   }
   
   .btn-white {
