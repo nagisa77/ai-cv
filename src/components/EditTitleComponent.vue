@@ -208,79 +208,98 @@ export default {
             isSubmitting: false
         };
     },
-    mounted() {
-        if (this.isNewTitle) {
-            if (this.currentEditingType === 'education') {
-                this.localContent = {
-                    title: '',
-                    content: {
-                        title: '',
-                        from_time: '',
-                        to_time: '',
-                        major: '',
-                        degree: '',
-                        gpa: '',
-                        city: '',
-                        content: []
-                    }
-                }
-            } else if (this.currentEditingType === 'workExperience') {
-                this.localContent = {
-                    title: '',
-                    content: {
-                        from_time: '',
-                        to_time: '',
-                        title: '',
-                        sub_title: '',
-                        city: '',
-                        content: []
-                    }
-                }
-            } else if (this.currentEditingType === 'projectExperience') {
-                this.localContent = {
-                    title: '',
-                    content: {
-                        from_time: '',
-                        to_time: '',
-                        title: '',
-                        content: []
-                    }
-                }
-            }else if (this.currentEditingType === 'otherExperience') {
-                this.localContent = {
-                    title: '',
-                    content: {
-                        from_time: '',
-                        to_time: '',
-                        title: '',
-                        desc: '',
-                        content: []
-                    }
-                }
-            }
-        } else {
-            // 深拷贝 metadataInstance 原始数据，赋值给 localContent
-            // 注意：ResumeForm.vue 中 setContentForType 时，把真正要存的结构都放在 content 里了
-            // 比如： { from_time: '', to_time: '', content: [] } 等等
-            // 因此这里需要根据 ResumeForm.vue 实际写入的结构来匹配
-            const originalContent = metadataInstance.contentForType(
-                this.currentEditingType,
-                this.currentEditingTitle
-            );
-            // 深拷贝
-            this.localContent = JSON.parse(JSON.stringify(originalContent));
-            console.log(this.localContent);
-        }
-        // 初始化每个 bullet point 的 combined 字符串
-        if (this.localContent && this.localContent.content && Array.isArray(this.localContent.content.content)) {
-            this.localContent.content.content = this.localContent.content.content.map(point => {
-                const prefix = point.bullet_point ? point.bullet_point : '';
-                const suffix = point.content ? `: ${point.content}` : '';
-                return { ...point, combined: `${prefix}${suffix}`.trim() };
-            });
+    watch: {
+        // 监听 currentEditingTitle 和 currentEditingType 的变化
+        currentEditingTitle: {
+            handler() {
+                this.initializeLocalContent();
+            },
+            immediate: true
+        },
+        currentEditingType: {
+            handler() {
+                this.initializeLocalContent();
+            },
+            immediate: true
         }
     },
+    mounted() {
+        // 初始化逻辑已移至 watch 中
+    },
     methods: {
+        // 将原来的 mounted 逻辑移到这里作为一个方法
+        initializeLocalContent() {
+            if (this.isNewTitle) {
+                if (this.currentEditingType === 'education') {
+                    this.localContent = {
+                        title: '',
+                        content: {
+                            title: '',
+                            from_time: '',
+                            to_time: '',
+                            major: '',
+                            degree: '',
+                            gpa: '',
+                            city: '',
+                            content: []
+                        }
+                    }
+                } else if (this.currentEditingType === 'workExperience') {
+                    this.localContent = {
+                        title: '',
+                        content: {
+                            from_time: '',
+                            to_time: '',
+                            title: '',
+                            sub_title: '',
+                            city: '',
+                            content: []
+                        }
+                    }
+                } else if (this.currentEditingType === 'projectExperience') {
+                    this.localContent = {
+                        title: '',
+                        content: {
+                            from_time: '',
+                            to_time: '',
+                            title: '',
+                            content: []
+                        }
+                    }
+                }else if (this.currentEditingType === 'otherExperience') {
+                    this.localContent = {
+                        title: '',
+                        content: {
+                            from_time: '',
+                            to_time: '',
+                            title: '',
+                            desc: '',
+                            content: []
+                        }
+                    }
+                }
+            } else {
+                // 深拷贝 metadataInstance 原始数据，赋值给 localContent
+                // 注意：ResumeForm.vue 中 setContentForType 时，把真正要存的结构都放在 content 里了
+                // 比如： { from_time: '', to_time: '', content: [] } 等等
+                // 因此这里需要根据 ResumeForm.vue 实际写入的结构来匹配
+                const originalContent = metadataInstance.contentForType(
+                    this.currentEditingType,
+                    this.currentEditingTitle
+                );
+                // 深拷贝
+                this.localContent = JSON.parse(JSON.stringify(originalContent));
+                console.log(this.localContent);
+            }
+            // 初始化每个 bullet point 的 combined 字符串
+            if (this.localContent && this.localContent.content && Array.isArray(this.localContent.content.content)) {
+                this.localContent.content.content = this.localContent.content.content.map(point => {
+                    const prefix = point.bullet_point ? point.bullet_point : '';
+                    const suffix = point.content ? `: ${point.content}` : '';
+                    return { ...point, combined: `${prefix}${suffix}`.trim() };
+                });
+            }
+        },
         // 新增 Bullet Point：各类型共用
         addBulletPoint() {
             this.localContent.content.content.push({
