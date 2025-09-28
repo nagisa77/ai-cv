@@ -247,7 +247,22 @@ class MetadataModel {
   getIsFetching() {
     return this.data.isFetching
   }
-
+  
+  updateTitle(type,newTitle,oldTitle)
+  {
+    const types = ['education', 'workExperience', 'projectExperience', 'otherExperience'];
+    for (const type of types) {
+      const arr = this.data[type];
+      if (!arr || !Array.isArray(arr)) continue;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].title === oldTitle) {
+          arr[i].title = newTitle;
+          arr[i].content.title = newTitle;
+          return;
+        }
+      }
+    }
+  }
   // 设置数据（示例逻辑）
   setContentForType(type, content, title = null) {
     switch (type) {

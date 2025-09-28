@@ -4,7 +4,7 @@
             您正在添加一个新的<span class="title-highlight">{{ currentEditingTypeComputed }}</span>
         </div>
         <div v-else class="edit-title-component-title">
-            您正在编辑的是 <span class="title-highlight">{{ currentEditingTitle }}</span>
+            您正在编辑的是 <span class="title-highlight"><ClickToEdit :modelValue="localContent.content.title" @update:modelValue="newValue => localContent.content.title = newValue" /></span>
         </div>
 
         <!-- ================== Education ================== -->
@@ -163,12 +163,14 @@
 import AppleStyleInput from '@/components/basic_ui/AppleStyleInput.vue'; // 确保路径正确
 import metadataInstance from '@/models/metadata_model.js';
 import ChatgptModel from '@/models/chatgpt_model.js';
+import ClickToEdit from '@/components/basic_ui/ClickToEdit.vue';
 
 const chatgptInstance = ChatgptModel.getInstance();
 
 export default {
     components: {
-        AppleStyleInput
+        AppleStyleInput,
+        ClickToEdit
     },
     name: 'EditTitleComponent',
     props: {
@@ -212,6 +214,7 @@ export default {
                 this.localContent = {
                     title: '',
                     content: {
+                        title: '',
                         from_time: '',
                         to_time: '',
                         major: '',
@@ -266,6 +269,7 @@ export default {
             );
             // 深拷贝
             this.localContent = JSON.parse(JSON.stringify(originalContent));
+            console.log(this.localContent);
         }
         // 初始化每个 bullet point 的 combined 字符串
         if (this.localContent && this.localContent.content && Array.isArray(this.localContent.content.content)) {
@@ -343,6 +347,11 @@ export default {
                     ...this.localContent.content,
                     content: finalContent,
                 };
+                metadataInstance.updateTitle(
+                    this.currentEditingType,
+                    this.localContent.content.title,
+                    this.currentEditingTitle
+                )
                 metadataInstance.setContentForType(
                     this.currentEditingType,
                     dataToSave,
