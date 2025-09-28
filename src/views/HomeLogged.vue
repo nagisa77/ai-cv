@@ -21,7 +21,7 @@
               class="btn-icon btn-icon-model" />
             <span>面试题合集</span>
           </button>
-          <button class="btn btn-white btn-disabled" disabled title="该功能还在开发中">
+          <button class="btn btn-white btn-disabled" disabled title="敬请期待">
             <img src="https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/icon/interview.png" alt="icon"
               class="btn-icon btn-icon-interview" />
             <span>模拟面试</span>
@@ -910,14 +910,20 @@ export default {
 
 .btn-disabled,
 .btn:disabled {
-  background-color: var(--color-gray);
-  color: var(--color-gray-dark);
-  border: 1.5px solid var(--color-gray-dark);
+  background-color: #f8f8f8;
+  color: #aaaaaa;
+  border: 1.5px solid #eaeaea;
   cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(30%);
+  transition: all 0.2s ease;
 }
 
 .btn-disabled:hover {
-  background-color: var(--color-gray);
+  background-color: #f8f8f8;
+  transform: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  opacity: 0.6;
 }
 
 .btn-icon {
@@ -929,6 +935,11 @@ export default {
 /* 为白色按钮的图标添加主题色 */
 .btn-white .btn-icon {
   filter: invert(58%) sepia(19%) saturate(1155%) hue-rotate(333deg) brightness(92%) contrast(84%);
+}
+
+/* 为禁用按钮的图标添加灰度效果 */
+.btn-disabled .btn-icon {
+  filter: grayscale(100%) opacity(0.6);
 }
 
 /* 改进的标签页样式 */
