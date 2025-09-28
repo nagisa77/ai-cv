@@ -55,6 +55,7 @@
         @add-title="handleAddTitle"
         @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
         @add-module="handleAddModule"
+        @change-template="handleChangeTemplate"
       />
     </div>
 
@@ -93,6 +94,7 @@
               @add-title="handleAddTitle"
               @capture-and-save-screenshot="handleCaptureAndSaveScreenshot"
               @add-module="handleAddModule"
+              @change-template="handleChangeTemplate"
             />
           </div>
         </div>
@@ -111,7 +113,7 @@ import ChatComponent from '@/components/ChatComponent.vue';
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
 import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
 import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCV.vue';
-
+import apiClient from '@/api/axios.js';
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue';
 import EditTitleComponent from '@/components/EditTitleComponent.vue';
 import AddModuleDialog from '@/components/AddModuleDialog.vue';
@@ -338,14 +340,27 @@ export default {
       }
       metadataInstance.deleteContentForTitle(type, title)
     },
-    handleChangeTemplate() {
+    async handleChangeTemplate(templateWithColor) {
+      // 从返回的对象中解构出template和color
+      const { template, color } = templateWithColor;
+      
       this.$router.push({
-        name: 'TemplateSelection',
-        params: {
-          selectionType: 'change_resume',
-          resumeId: this.$route.params.resumeId,
-        },
+            name: 'CreateResume',
+            params: {
+              resumeId: this.$route.params.resumeId,
+              templateType: template,
+              color: color,
+            },
       });
+      try {
+        await apiClient.patch(`/user/resumes/${this.$route.params.resumeId}`, {
+          templateType: template,
+          color: color,
+        })
+      } catch (error) {
+        console.error('更换模板失败:', error)
+        this.toast.error('更换模板失败，请重试')
+      }
     },
   },
 };

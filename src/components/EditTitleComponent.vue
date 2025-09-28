@@ -126,7 +126,7 @@
                     <AppleStyleInput id="other-to" labelText="结束时间" inputType="text" :required="true"
                         v-model:modelValue="localContent.content.to_time" />
                 </div>
-                <AppleStyleInput id="other-desc" labelText="描述" inputType="text" :required="true"
+                <AppleStyleInput id="other-desc" labelText="角色" inputType="text" :required="true"
                     v-model:modelValue="localContent.content.desc" />
             </div>
             <div class="session-edit-title">Bullet Points</div>

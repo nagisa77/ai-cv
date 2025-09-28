@@ -89,6 +89,13 @@
       @close="showFontSelectionDialog = false"
       @confirm="handleFontSelection"
     />
+    <TemplateSelectionDialog 
+      v-if="showTemplateSelectionDialog" 
+      :curTemplate="TemplateType"
+      :curColor="color"
+      @close="showTemplateSelectionDialog = false"
+      @confirm="handleTemplateSelection"
+    />
   </div>
 </div>
 </template>
@@ -97,11 +104,12 @@
 import metadataInstance from '@/models/metadata_model.js';
 import { useToast } from 'vue-toastification';
 import FontSelectionDialog from '@/components/FontSelectionDialog.vue';
-
+import TemplateSelectionDialog from '@/components/TemplateSelectionDialog.vue';
 export default {
   name: 'BaseCVComponent',
   components: {
-    FontSelectionDialog
+    FontSelectionDialog,
+    TemplateSelectionDialog
   },
   setup() {
     const toast = useToast();
@@ -143,6 +151,10 @@ export default {
       type: String,
       default: ''
     },
+    color: {
+      type: String,
+      default: 'red'
+    },
   },
   data() {
     return {
@@ -153,6 +165,7 @@ export default {
       showFontSelectionDialog: false,
       curFont: 'default',
       isSmartFit: false,
+      showTemplateSelectionDialog: false,
     }
   },
   computed: {
@@ -263,7 +276,15 @@ export default {
       this.$emit('add-title', type);
     },
     handleChangeTemplate() {
-      this.$emit('change-template');
+       this.showTemplateSelectionDialog = true;
+    },
+    handleTemplateSelection(templateWithColor) {
+      // 从返回的对象中解构出template和color
+      const { template, color } = templateWithColor;
+      // 显示成功消息
+      this.toast.success('模板更换成功');
+      // 向上传递事件，包含模板和颜色信息
+      this.$emit('change-template', { template, color });
     },
     registerModuleRef(el, idx) {
       if (el) {

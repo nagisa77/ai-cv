@@ -6,12 +6,14 @@
     :totalTitleAndItemCount="totalTitleAndItemCount"
     :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
     :TemplateType="TemplateType"
+    :color="color"
     @selected-module-changed="handleSelectedModuleChanged"
     @capture-and-save-screenshot="captureAndSaveScreenshot"
     @edit-title="handleEdit"
     @delete-title="handleDelete"
     @add-title="handleAddTitle"
     @add-module="handleAddModule"
+    @change-template="handleChangeTemplate"
     @change-font="handleChangeFont"
     @smart-fit="handleSmartFit"
   >
@@ -346,7 +348,10 @@ export default {
           this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
           this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
       }
-    }
+    },
+    handleChangeTemplate(templateWithColor) {
+      this.$emit('change-template', templateWithColor);
+    },
   }
 };
 </script>
