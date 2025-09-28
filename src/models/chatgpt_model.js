@@ -168,7 +168,15 @@ const ChatgptModel = (function () {
 
       return text;
     }
-
+    async function getGptResponse(userText)
+    {
+      const response=await apiClient.post('/chat/completions', {
+        messages: [
+          { role: 'user', content: userText },
+        ],
+      });
+      return response.data.choices[0].message.content.trim();
+    }
     // 核心: 调用 GPT 接口时，使用用户提供的 API Key
     async function fetchGptResponse(type, title, userText) {
       try {
@@ -206,6 +214,7 @@ const ChatgptModel = (function () {
       addMessage,
       clearConversations,
       fetchGptResponse,
+      getGptResponse,
     }
   }
 
