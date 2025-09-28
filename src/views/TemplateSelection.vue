@@ -185,6 +185,19 @@ export default {
               red: 'https://aicv-1307107697.cos.ap-guangzhou.myqcloud.com/asserts/model_preview_v1/model_3_3.jpg'
             }
           },
+          {
+            id: 'modern',
+            name: '模版4',
+            description: '2024年最受欢迎设计，适合大多数求职场景',
+            tags: ['美观', '舒适'],
+            isNew: false,
+            selectedColor: 'gray',
+            colorOptions: {
+              gray: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png'),
+              blue: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png'),
+              red: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png')
+            }
+          },
         ],
         '社招': [
           // {

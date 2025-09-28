@@ -590,6 +590,7 @@ import AppleStyleDatePicker from '@/components/basic_ui/AppleStyleDatePicker.vue
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
 import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
 import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCV.vue';
+import ModernCVComponent from '@/components/template_ui/modern/ModernCVComponent.vue';
 
 /**
  * ========== 3. 其他业务相关的模块 ========== 
@@ -785,6 +786,8 @@ export default {
         return GeneralSimpleCV;
       } else if (this.templateType === 'creative_modern') {
         return CreativeModernCV;
+      }else if (this.templateType === 'modern') {
+        return ModernCVComponent;
       }
       return DefaultCV;
     },

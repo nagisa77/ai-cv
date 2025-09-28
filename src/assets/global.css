@@ -30,6 +30,10 @@
   --color-cv-red-light: #dcc2b9;
   --color-cv-blue-light: #e7eefa;
   --color-cv-gray-light: #e8e7e7;
+
+  --theme-color: #26267d;
+  --text-sec: #444;
+  --gray: #666;
 }
 
 html, body {
