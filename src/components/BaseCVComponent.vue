@@ -126,15 +126,18 @@ export default {
     },
     pageMaxHeight: {
       type: Number,
-      default: 613
+      default: 623
     },
     totalTitleAndItemCount: {
       type: Number,
       default: 0
     },
-    marginBottom: {
-      type: Number,
-      default: 10
+    changeParams: {
+      type: Object,
+      default: () => ({
+        marginBottom: 10,
+        lineHeight: 12
+      })
     },
     TemplateType: {
       type: String,
@@ -149,6 +152,7 @@ export default {
       totalHeight:0,
       showFontSelectionDialog: false,
       curFont: 'default',
+      isSmartFit: false,
     }
   },
   computed: {
@@ -188,7 +192,7 @@ export default {
       },
       deep: true
     },
-    marginBottom: {
+    changeParams: {
       handler() {
         this.$nextTick(() => {
           this.moduleRefs = []
@@ -196,7 +200,8 @@ export default {
           this.paginatedModules = []
           this.$nextTick(this.measureAll)
         })
-      }
+      },
+      deep: true
     },
     isFetching(newVal, oldVal) {
       // 当 isFetching 从 true 变为 false 时（即加载完成后）
@@ -276,6 +281,15 @@ export default {
         return rect.height + marginBottom
       })
       console.log(this.measuredHeights)
+      console.log('totalHeight',this.totalHeight)
+      if(this.isSmartFit){
+        if(this.totalHeight>this.pageMaxHeight){
+          this.$emit('smart-fit',0,true)
+        }else{
+          this.isSmartFit=false
+          this.toast.success("智能一页成功")
+        }
+      }
       this.buildPages()
     },
     buildPages() {
@@ -318,12 +332,15 @@ export default {
         });
       }, delay);
     },
-    adjustSpace(){
+    async adjustSpace(){
+      this.isSmartFit=true
       let everyHeight=(this.totalHeight-this.pageMaxHeight)/this.totalTitleAndItemCount;
-      console.log(everyHeight)
+      console.log('totalHeight',this.totalHeight)
+      console.log('everyHeight',everyHeight)
+      console.log('totalTitleAndItemCount',this.totalTitleAndItemCount)
       const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[0].querySelectorAll('.session-title')[0]).marginBottom)
       if(everyHeight>curHeight){
-        this.toast.error('简历内容太多,智能一页失败')
+        this.$emit('smart-fit',curHeight-everyHeight,true)
       }else{
         this.$emit('smart-fit',curHeight-everyHeight)
       }
