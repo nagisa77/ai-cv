@@ -99,12 +99,12 @@
                             <i v-else class="fas fa-spinner fa-spin"></i>
                             {{ resume.isDownloading ? '下载中...' : '下载简历' }}
                           </div>
+                          <div class="resume-dropdown-item" @click.stop="renameResume(resume)">
+                            <i class="fas fa-edit"></i> 修改名称
+                          </div>
                           <div class="resume-dropdown-item resume-dropdown-item-delete"
                             @click.stop="deleteResume(resume.resumeId)">
                             <i class="fas fa-trash"></i> 删除简历
-                          </div>
-                          <div class="resume-dropdown-item" @click.stop="renameResume(resume)">
-                            <i class="fas fa-edit"></i> 修改名称
                           </div>
                         </div>
                       </template>
