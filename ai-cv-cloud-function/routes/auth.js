@@ -161,10 +161,11 @@ router.post('/captcha/login', validateContact, async (req, res) => {
         // 获取或创建用户ID (使用 MySQL 存储)
         let [rows] = await pool.query('SELECT id FROM users WHERE contact=?', [contact]);
         let userId = rows.length ? rows[0].id : null;
-
+        let username=null;
+        let useravatar=null;
         if (!userId) {
             userId = uuidv4();
-            await pool.query('INSERT INTO users (id, contact) VALUES (?, ?)', [userId, contact]);
+            await pool.query('INSERT INTO users (id, contact, username, useravatar) VALUES (?, ?, ?, ?)', [userId, contact, username, useravatar]);
         }
 
         // 生成 JWT Token
@@ -180,7 +181,9 @@ router.post('/captcha/login', validateContact, async (req, res) => {
                 user: {
                     user_id: userId, 
                     contact,
-                    type: req.contactType
+                    type: req.contactType,
+                    username,
+                    useravatar
                 }
             }
         });
@@ -250,7 +253,7 @@ router.post('/wechat', async (req, res) => {
     try {
         const wxRes = await fetch(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${process.env.WECHAT_APP_ID}&secret=${process.env.WECHAT_APP_SECRET}&code=${code}&grant_type=authorization_code`);
         const wxData = await wxRes.json();
-
+        console.log('wxData', wxData);
         if (wxData.errcode) {
             return res.status(401).json({
                 code: 40104,
@@ -259,14 +262,26 @@ router.post('/wechat', async (req, res) => {
             });
         }
 
-        const { openid, unionid } = wxData;
+        const { openid, unionid, access_token } = wxData;
+        let username=null;
+        let useravatar=null;
+        try {
+            const userInfoRes = await fetch(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`);
+            const userInfo = await userInfoRes.json();
+            if (!userInfo.errcode) {
+                username = userInfo.nickname;
+                useravatar = userInfo.headimgurl;
+            }
+        } catch (e) {
+            console.error('获取微信用户信息失败:', e);
+        }
 
         let [rows] = await pool.query('SELECT id FROM users WHERE wechat_openid=?', [openid]);
         let userId = rows.length ? rows[0].id : null;
 
         if (!userId) {
             userId = uuidv4();
-            await pool.query('INSERT INTO users (id, contact, wechat_openid) VALUES (?, ?, ?)', [userId, unionid || openid, openid]);
+            await pool.query('INSERT INTO users (id, contact, wechat_openid,username,useravatar) VALUES (?, ?, ?,?,?)', [userId, unionid || openid, openid,username,useravatar]);
         }
 
         const token = jwt.sign({ user_id: userId, contact: unionid || openid }, secretKey, { expiresIn: '7d' });
@@ -276,7 +291,7 @@ router.post('/wechat', async (req, res) => {
             message: '登录成功',
             data: {
                 token,
-                user: { user_id: userId, contact: unionid || openid, provider: 'wechat', openid }
+                user: { user_id: userId, contact: unionid || openid, provider: 'wechat', openid,username,useravatar }
             }
         });
     } catch (err) {

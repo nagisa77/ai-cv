@@ -120,6 +120,14 @@ class AuthService {
   getUserContact() {
     return authState.currentUser?.contact || null
   }
+
+  getUsername() {
+    return authState.currentUser?.username || null
+  }
+
+  getUserAvatar() {
+    return authState.currentUser?.useravatar || null
+  }
 }
 
 export default new AuthService()
