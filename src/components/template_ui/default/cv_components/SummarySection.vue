@@ -2,7 +2,7 @@
 <template>
     <section v-if="personalSummary" class="summary-section session">
       <h2 class="session-title">个人总结</h2>
-      <p>{{ personalSummary }}</p>
+      <div class="item-summary">{{ personalSummary }}</div>
     </section>
   </template>
   

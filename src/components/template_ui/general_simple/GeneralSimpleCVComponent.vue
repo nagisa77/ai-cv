@@ -20,7 +20,7 @@
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
 
-          <div :style="{ '--custom-color': customColor }" style="font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;">
+          <div :style="{ '--custom-color': customColor, 'font-family': getFontFamily() }">
               <component
                 v-for="(module, moduleIndex) in page"
                 :key="moduleIndex"
@@ -82,7 +82,8 @@ export default {
     },
     data(){
         return{
-            marginBottom: 10
+            marginBottom: 10,
+            currentFont: 'default'
         }
     },
     computed: {
@@ -269,8 +270,23 @@ export default {
         handleAddModule() {
             this.$emit('add-module');
         },
-        handleChangeFont() {
+        handleChangeFont(font) {
+            if(font) {
+                this.currentFont = font;
+            }
             this.$emit('change-font');
+        },
+        getFontFamily() {
+            switch (this.currentFont) {
+                case 'times':
+                    return "'Times New Roman', Times, serif";
+                case 'arial':
+                    return "Arial, Helvetica, sans-serif";
+                case 'courier':
+                    return "'Courier New', Courier, monospace";
+                default:
+                    return "'Microsoft YaHei', '微软雅黑', sans-serif";
+            }
         },
         handleSmartFit(marginBottom) {
             // 给当前组件根节点设置 CSS 变量
