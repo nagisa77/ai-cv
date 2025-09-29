@@ -193,9 +193,9 @@ export default {
             isNew: false,
             selectedColor: 'gray',
             colorOptions: {
-              gray: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png'),
-              blue: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png'),
-              red: require('@/assets/a6e0e2c8538dca447207403bdbe38e25.png')
+              gray: require('@/assets/Modern_cv_gray.png'),
+              blue: require('@/assets/Modern_cv_blue.png'),
+              red: require('@/assets/Modern_cv_red.png')
             }
           },
         ],
