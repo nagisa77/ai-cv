@@ -30,6 +30,14 @@
   --color-cv-red-light: #dcc2b9;
   --color-cv-blue-light: #e7eefa;
   --color-cv-gray-light: #e8e7e7;
+
+  --theme-color: #26267d;
+  --text-sec: #444;
+  --gray: #666;
+
+  --filter-red: invert(43%) sepia(15%) saturate(2127%) hue-rotate(345deg) brightness(95%) contrast(92%);
+  --filter-blue: invert(41%) sepia(94%) saturate(7486%) hue-rotate(183deg) brightness(92%) contrast(96%);
+  --filter-gray: invert(16%) sepia(8%) saturate(237%) hue-rotate(169deg) brightness(90%) contrast(90%);
 }
 
 html, body {

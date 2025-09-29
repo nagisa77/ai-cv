@@ -135,8 +135,8 @@ export default {
     },
     personalSummary() {
       // 如果是预览模式且有预览数据，则使用预览数据
-      if (this.isPreview && this.previewData.personalSummary) {
-        return this.previewData.personalSummary;
+      if (this.isPreview ) {
+        return '';
       }
       return metadataInstance.data.personalSummary;
     },
