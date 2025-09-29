@@ -1,6 +1,6 @@
 <template>
     <div class="section">
-      <div class="section-title with-add-btn">
+      <div class="session-title with-add-btn">
         <img class="icon" src="/icons/fa-graduation-cap.svg" alt="" /> 教育经历
         <span class="add-btn" @click="onAddTitleClick">+</span>
       </div>

@@ -1,6 +1,6 @@
 <template>
      <div class="section">
-      <div class="section-title with-add-btn">
+      <div class="session-title with-add-btn">
         <img class="icon" src="/icons/fa-star.svg" alt="" /> 其他经历
         <span class="add-btn" @click="onAddTitleClick">+</span>
       </div>

@@ -1,9 +1,9 @@
 <template>
     <div class="section">
-      <div class="section-title">
+      <div class="session-title">
         <img class="icon" src="/icons/fa-lightbulb.svg" alt="" /> 个人总结
       </div>
-      <p class="summary">{{ personalSummary }}</p>
+      <div class="summary">{{ personalSummary }}</div>
     </div>
 </template>
 <script>

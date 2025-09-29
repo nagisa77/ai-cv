@@ -4,7 +4,7 @@
       :highlightTitle="highlightTitle"
       :modulesData="modulesData"
       :totalTitleAndItemCount="totalTitleAndItemCount"
-      :changeParams="{marginBottom:marginBottom,lineHeight:lineHeight}"
+      :changeParams="{marginBottom:marginBottom,contentFontSize:contentFontSize}"
       :TemplateType="TemplateType"    
       :color="color"
       @selected-module-changed="handleSelectedModuleChanged"
@@ -78,9 +78,8 @@
       return {
         marginBottom: 10,
         currentFont: 'default',
-        titleFontSize: 10,
-        contentFontSize: 8,
-        lineHeight: 12,
+        titleFontSize: 14,
+        contentFontSize: 10,
       }
     },
     setup(){
@@ -318,11 +317,9 @@
         }
         if(adjustfontSize){
           this.contentFontSize=this.contentFontSize-1
-          this.lineHeight=this.lineHeight-1
           this.titleFontSize=this.titleFontSize-1
           this.$el.style.setProperty('--content-font-size', this.contentFontSize+ 'px')
           this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
-          this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
         }
       },
       handleChangeTemplate(templateWithColor) {  
@@ -374,7 +371,7 @@
   border-radius: 6px;
 }
 /* 模块标题 */
-::v-deep(.section-title) {
+::v-deep(.session-title) {
   font-size: var(--title-font-size, 14px);
   color: var(--theme-color);
   font-weight: 700;
@@ -383,12 +380,12 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-bottom: 10px; /* 标题与内容距离 */
+  margin-bottom: var(--session-title-margin,10px); /* 标题与内容距离 */
 }
 
 /* 经历条目 */
 ::v-deep(.entry) {
-  margin-bottom: 10px; /* 间距由条目撑开 */
+  margin-bottom: var(--session-item-margin,10px); /* 间距由条目撑开 */
   position:relative;
 }
 
@@ -447,6 +444,8 @@
 ::v-deep(.summary) {
   line-height: 1.4;
   font-size: var(--content-font-size, 10px);
+  color: var(--text-sec);
+  white-space: pre-wrap; /* 保留换行和空格，适合多段总结 */
 }
 
 ::v-deep(.entry-actions) {
