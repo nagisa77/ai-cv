@@ -1,16 +1,22 @@
 <template>
      <div class="section">
-      <div class="section-title">
+      <div class="section-title with-add-btn">
         <img class="icon" src="/icons/fa-star.svg" alt="" /> 其他经历
+        <span class="add-btn" @click="onAddTitleClick">+</span>
       </div>
-      <div class="entry" v-for="(other, i) in otherExperienceList" :key="i">
+      <div class="entry"  :class="{ highlighttitle:  enableHover &&highlightTitle === other.title }" v-for="(other, i) in otherExperienceList" :key="i">
         <div class="entry-top">
-          <div class="entry-title">{{ other.content.title || '其他经历标题' }}</div>
+          <div class="entry-title">{{ other.title || '其他经历标题' }}</div>
           <div class="entry-right">{{ other.content.from_time || '其他经历的开始时间' }} - {{ other.content.to_time || '其他经历的结束时间' }}</div>
         </div>
-        <div class="entry-sub">{{ other.content.des || '其他经历的描述' }}</div>
-        <ul v-if="other.content.length > 0">
-          <li v-for="(p, j) in other.content" :key="j">
+        <div class="entry-actions" v-if="enableHover">
+          <button class="action-btn" @click.stop="onEditClick('otherExperience', other.title)">编辑</button>
+          <button class="action-btn" @click.stop="onTitleClick('otherExperience', other.title)">AI对话</button>
+          <button class="action-btn delete" @click.stop="onTitleDelete('otherExperience', other.title)">删除</button>
+        </div>
+        <div class="entry-sub">{{ other.content.desc || '其他经历的描述' }}</div>
+        <ul v-if="other.content.content.length > 0">
+          <li v-for="(p, j) in other.content.content" :key="j">
             <span class="point-title">{{ p.bullet_point }}：</span>
             <span class="point-content">{{ p.content }}</span>
           </li>
@@ -65,18 +71,6 @@ export default {
     onAddTitleClick() {
       this.$emit('add-title', 'otherExperience');
     },
-
-    handleMouseEnter(index) {
-      if (this.enableHover) {
-        this.hoverIndex = index;
-      }
-    },
-
-    handleMouseLeave() {
-      if (this.enableHover) {
-        this.hoverIndex = null;
-      }
-    }
   }
 };
 </script>

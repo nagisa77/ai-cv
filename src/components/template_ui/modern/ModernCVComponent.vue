@@ -18,7 +18,7 @@
       @change-template="handleChangeTemplate"
     >
       <template #default="{ page }">
-        <div :style="{ '--custom-color': customColor, 'font-family': getFontFamily() }">
+        <div :style="{ '--theme-color': customColor, 'font-family': getFontFamily() ,'--icon-filter': customFilter}">
           <component
             v-for="(module, moduleIndex) in page"
             :key="moduleIndex"
@@ -100,6 +100,18 @@
             return 'var(--color-cv-gray)';
           default:
             return this.color || 'var(--color-primary)';
+        }
+      },
+      customFilter() {
+        switch (this.color) {
+          case 'red':
+            return 'var(--filter-red)';
+          case 'blue':
+            return 'var(--filter-blue)';
+          case 'gray':
+            return 'var(--filter-gray)';
+          default:
+            return this.color || 'var(--filter-red)';
         }
       },
       isFetching() {
@@ -354,8 +366,7 @@
   height: 14px;
   vertical-align: -2px;
   margin-right: 3px;
-  filter: brightness(0) saturate(100%) invert(18%) sepia(93%) saturate(2060%)
-    hue-rotate(218deg) brightness(90%) contrast(94%);
+  filter: var(--icon-filter);
 }
 
 ::v-deep .photo img {
@@ -378,6 +389,7 @@
 /* 经历条目 */
 ::v-deep(.entry) {
   margin-bottom: 10px; /* 间距由条目撑开 */
+  position:relative;
 }
 
 ::v-deep(.entry-top) {
@@ -435,5 +447,100 @@
 ::v-deep(.summary) {
   line-height: 1.4;
   font-size: var(--content-font-size, 10px);
+}
+
+::v-deep(.entry-actions) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+::v-deep(.entry:hover .entry-actions) {
+  opacity: 1;
+}
+
+::v-deep(.action-btn) {
+  background: var(--theme-color);
+  color: #fff;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+::v-deep(.action-btn:hover) {
+  background: #444da7; /* hover 时稍微变浅 */
+}
+
+::v-deep(.action-btn.delete) {
+  background: #d9534f; /* 删除按钮红色 */
+}
+
+::v-deep(.action-btn.delete:hover) {
+  background: #c9302c;
+}
+
+::v-deep(.entry.highlighttitle) {
+  position: relative;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(38,38,125,0.08), #fff);
+  box-shadow: inset 0 0 6px rgba(38,38,125,0.15),
+              0 2px 6px rgba(0,0,0,0.06);
+  transition: all 0.25s ease;
+  padding: 6px 10px;
+}
+
+/* 左侧主题条 */
+::v-deep(.entry.highlighttitle::before) {
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: -4px;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--theme-color), #4a4ad8);
+}
+
+/* hover 状态让它更有动效 */
+::v-deep(.entry.highlighttitle:hover) {
+  box-shadow: inset 0 0 8px rgba(38,38,125,0.2),
+              0 4px 10px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* 通用标题容器：保持标题靠左，右侧预留空间给 + 号 */
+::v-deep(.with-add-btn) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 不再拉开两端，标题靠左 */
+  padding-right: 24px;         /* 预留右侧空间，避免文字与 + 重叠 */
+}
+
+/* 默认隐藏的 + 按钮：绝对定位到标题右侧，垂直居中 */
+::v-deep(.with-add-btn .add-btn) {
+  position: absolute;
+  left: 80px;                /* 离右边留点空隙 */
+  top: 40%;                  /* 垂直居中基准 */
+  transform: translateY(-50%); /* 精准垂直居中 */
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--theme-color);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+/* 悬停标题时显示 +，轻微放大 */
+::v-deep(.with-add-btn:hover .add-btn) {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.2);
 }
 </style>

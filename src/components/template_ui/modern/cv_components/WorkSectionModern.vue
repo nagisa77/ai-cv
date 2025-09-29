@@ -1,12 +1,18 @@
 <template>
     <div class="section">
-      <div class="section-title">
+      <div class="section-title with-add-btn">
         <img class="icon" src="/icons/fa-work.svg" alt="" /> 工作经历
+        <span class="add-btn" @click="onAddTitleClick">+</span>
       </div>
-      <div class="entry" v-for="(work, i) in workList" :key="i">
+      <div class="entry" :class="{ highlighttitle:  enableHover &&highlightTitle === work.title }" v-for="(work, i) in workList" :key="i">
         <div class="entry-top">
           <div class="entry-title">{{ work.title || '您公司的名称' }}</div>
           <div class="entry-right">{{ work.content.from_time || '您的入职时间' }} - {{ work.content.to_time || '您的离职时间' }} · {{ work.city || '您的工作城市' }}</div>
+        </div>
+        <div class="entry-actions" v-if="enableHover">
+          <button class="action-btn" @click.stop="onEditClick('workExperience', work.title)">编辑</button>
+          <button class="action-btn" @click.stop="onTitleClick('workExperience', work.title)">AI对话</button>
+          <button class="action-btn delete" @click.stop="onTitleDelete('workExperience', work.title)">删除</button>
         </div>
         <div class="entry-sub">{{ work.content.sub_title || '您的职务' }}</div>
         <ul>

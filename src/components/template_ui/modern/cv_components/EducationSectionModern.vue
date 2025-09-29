@@ -1,23 +1,28 @@
 <template>
     <div class="section">
-      <div class="section-title">
+      <div class="section-title with-add-btn">
         <img class="icon" src="/icons/fa-graduation-cap.svg" alt="" /> 教育经历
+        <span class="add-btn" @click="onAddTitleClick">+</span>
       </div>
-      <div class="entry" v-for="(edu, i) in educationList" :key="i">
+      <div class="entry"  v-for="(edu, i) in educationList" :key="i">
         <div class="entry-top">
           <div class="entry-title">{{ edu.title || "您的大学名称"}} · {{ edu.content.degree ||"您的学历"}}</div>
-          <div class="entry-right">{{ edu.content.from_time || "您的入学时间" }} - {{edu.content.to_time || "您的毕业时间"}} · {{ edu.content.city || "您的城市" }}</div>
+          <div class="entry-right">{{ edu.content.from_time || "您的入学时间" }} - {{edu.content.to_time || "您的毕业时间"}} · {{ edu.content.city }}</div>
         </div>
-        <div class="entry-sub">{{ 'GPA:'+edu.content.gpa || "您的GPA" }} · {{ '专业:'+edu.content.major || "您的专业" }}</div>
+        <div class="entry-actions" v-if="enableHover">
+          <button class="action-btn" @click.stop="onEditClick('education', edu.title)">编辑</button>
+          <button class="action-btn delete" @click.stop="onTitleDelete('education', edu.title)">删除</button>
+        </div>
+        <div class="entry-sub">{{ 'GPA:'+(edu.content.gpa || "您的GPA") }} · {{ edu.content.major || "您的专业" }}</div>
         <div class="honors">
-          {{ edu.content.honors || "您的荣誉奖项" }}
+          {{ edu.content.honors }}
         </div>
       </div>
     </div>
 </template>
 <script>
 export default {
-  name: "EducationSection",
+  name: "EducationSectionModern",
   props: {
     educationList: {
       type: Array,
@@ -54,18 +59,6 @@ export default {
     onAddTitleClick() {
       this.$emit('add-title', 'education');
     },
-
-    handleMouseEnter(index) {
-      if (this.enableHover) {
-        this.hoverIndex = index;
-      }
-    },
-
-    handleMouseLeave() {
-      if (this.enableHover) {
-        this.hoverIndex = null;
-      }
-    }
   }
 };
 </script>
