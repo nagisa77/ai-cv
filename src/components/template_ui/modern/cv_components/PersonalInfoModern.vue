@@ -14,13 +14,13 @@
               <a :href="`mailto:${personalInfo.email}`">{{ personalInfo.email }}</a>
             </span>
             <span v-if="!personalInfo.phone && !personalInfo.email">
-              <img class="icon" :src="personalInfo.avatar || '/icons/fa-phone.svg'" alt="phone" />
+              <img class="icon" src='/icons/fa-phone.svg' alt="phone" />
               您的联系方式
             </span>
           </div>
         </div>
         <div class="photo">
-          <img src="/profile.jpg" alt="profile" />
+          <img :src="personalInfo.avatar || '/profile.jpg'" alt="profile" />
         </div>
       </div>
     </div>
