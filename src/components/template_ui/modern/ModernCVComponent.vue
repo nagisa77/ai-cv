@@ -15,7 +15,6 @@
       @add-module="handleAddModule"
       @change-font="handleChangeFont"
       @smart-fit="handleSmartFit"
-      @change-template="handleChangeTemplate"
     >
       <template #default="{ page }">
         <div :style="{ '--theme-color': customColor, 'font-family': getFontFamily() ,'--icon-filter': customFilter}">
@@ -327,9 +326,6 @@
           this.$el.style.setProperty('--content-font-size', this.contentFontSize+ 'px')
           this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
         }
-      },
-      handleChangeTemplate(templateWithColor) {  
-        this.$emit('change-template', templateWithColor);
       },
     }
   };
