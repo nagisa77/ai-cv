@@ -50,7 +50,6 @@ import CreativeModernWorkSection from '@/components/template_ui/creative_modern/
 import CreativeModernProjectSection from '@/components/template_ui/creative_modern/cv_components/CreativeModernProjectSection.vue';
 import CreativeModernSummarySection from '@/components/template_ui/creative_modern/cv_components/CreativeModernSummarySection.vue';
 import metadataInstance from '@/models/metadata_model.js';
-import CreativeModernOtherExperienceSection from './cv_components/CreativeModernOtherExperienceSection.vue';
 import { useToast } from 'vue-toastification';
 export default {
   name: "CreativeModernCV",
@@ -61,7 +60,6 @@ export default {
     CreativeModernWorkSection,
     CreativeModernProjectSection,
     CreativeModernSummarySection,
-    CreativeModernOtherExperienceSection
   },
   data() {
     return {
@@ -177,13 +175,6 @@ export default {
       }
       return metadataInstance.data.personalSummary;
     },
-    otherExperienceList() {
-      if(this.isPreview && this.previewData.otherExperience){
-        return this.previewData.otherExperience
-      }
-      return metadataInstance.data.otherExperience
-      // 如果是预览模式且有预览数据，则使用预览数据
-    },
     totalTitleAndItemCount(){
       let count=2;
       if (this.educationList && this.educationList.length > 0) {
@@ -194,9 +185,6 @@ export default {
       }
       if (this.projectList && this.projectList.length > 0) {
         count+=this.projectList.length+1;
-      }
-      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
-        count+=this.otherExperienceList.length+1;
       }
       if (this.personalSummary && this.personalSummary.length > 0) {
         count+=2;
@@ -267,23 +255,6 @@ export default {
             personalSummary: this.personalSummary,
             enableHover: !this.isPreview,
             color: this.color
-          }
-        })
-      }
-      if (this.otherExperienceList && this.otherExperienceList.length > 0) {
-        modules.push({
-          component: CreativeModernOtherExperienceSection,
-          props: {
-            otherExperienceList: this.otherExperienceList,
-            highlightTitle: this.highlightTitle,
-            enableHover: !this.isPreview,
-            color: this.color
-          },
-          listeners: {
-            'selected-module-changed': this.handleSelectedModuleChanged,
-            'edit-title': this.handleEdit,
-            'delete-title': this.handleDelete,
-            'add-title': this.handleAddTitle
           }
         })
       }
