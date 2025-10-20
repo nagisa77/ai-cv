@@ -359,7 +359,7 @@ export default {
       console.log('totalHeight',this.totalHeight)
       console.log('everyHeight',everyHeight)
       console.log('totalTitleAndItemCount',this.totalTitleAndItemCount)
-      const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[0].querySelectorAll('.session-title')[0]).marginBottom)
+      const curHeight=parseFloat(getComputedStyle(this.$refs.pageContents[1].querySelectorAll('.session-title')[0]).marginBottom)
       if(everyHeight>curHeight){
         this.$emit('smart-fit',curHeight-everyHeight,true)
       }else{

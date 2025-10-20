@@ -113,6 +113,7 @@ import ChatComponent from '@/components/ChatComponent.vue';
 import DefaultCV from '@/components/template_ui/default/DefaultCVComponent.vue';
 import GeneralSimpleCV from '@/components/template_ui/general_simple/GeneralSimpleCVComponent.vue';
 import CreativeModernCV from '@/components/template_ui/creative_modern/CreativeModernCV.vue';
+import ModernCVComponent from '@/components/template_ui/modern/ModernCVComponent.vue';
 import apiClient from '@/api/axios.js';
 import SelectModuleComponent from '@/components/SelectModuleComponent.vue';
 import EditTitleComponent from '@/components/EditTitleComponent.vue';
@@ -137,6 +138,7 @@ export default {
     SelectModuleComponent,
     EditTitleComponent,
     AddModuleDialog,
+    ModernCVComponent,
   },
   props: {
     templateType: {
@@ -197,6 +199,8 @@ export default {
         return GeneralSimpleCV;
       } else if (this.templateType == 'creative_modern') {
         return CreativeModernCV;
+      } else if (this.templateType == 'modern') {
+        return ModernCVComponent;
       }
       return DefaultCV;
     },
