@@ -287,6 +287,12 @@ export default {
           return "Arial, Helvetica, sans-serif";
         case 'courier':
           return "'Courier New', Courier, monospace";
+        case 'kaiti':
+          return "'KaiTi', '楷体', serif";
+        case 'dengxian':
+          return "'DengXian', '等线', sans-serif";
+        case 'simsun':
+          return "'SimSun', '宋体', serif";
         default:
           return "'Microsoft YaHei', '微软雅黑', sans-serif";
       }

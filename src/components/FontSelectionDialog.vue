@@ -56,6 +56,24 @@ export default {
           previewText: 'AI简历君 - 默认字体'
         },
         {
+          name: '楷体',
+          value: 'kaiti',
+          fontFamily: "'KaiTi', '楷体', serif",
+          previewText: 'AI简历君 - 楷体'
+        },
+        {
+          name: '等线',
+          value: 'dengxian',
+          fontFamily: "'DengXian', '等线', sans-serif",
+          previewText: 'AI简历君 - 等线'
+        },
+        {
+          name: '宋体',
+          value: 'simsun',
+          fontFamily: "'SimSun', '宋体', serif",
+          previewText: 'AI简历君 - 宋体'
+        },
+        {
           name: 'Times New Roman',
           value: 'times',
           fontFamily: "'Times New Roman', Times, serif",
@@ -168,9 +186,15 @@ export default {
 
 .font-options {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin-bottom: 30px;
+}
+
+@media (max-width: 600px) {
+  .font-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .font-option {
