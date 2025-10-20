@@ -89,13 +89,6 @@
       @close="showFontSelectionDialog = false"
       @confirm="handleFontSelection"
     />
-    <TemplateSelectionDialog 
-      v-if="showTemplateSelectionDialog" 
-      :curTemplate="TemplateType"
-      :curColor="color"
-      @close="showTemplateSelectionDialog = false"
-      @confirm="handleTemplateSelection"
-    />
   </div>
 </div>
 </template>
@@ -104,12 +97,10 @@
 import metadataInstance from '@/models/metadata_model.js';
 import { useToast } from 'vue-toastification';
 import FontSelectionDialog from '@/components/FontSelectionDialog.vue';
-import TemplateSelectionDialog from '@/components/TemplateSelectionDialog.vue';
 export default {
   name: 'BaseCVComponent',
   components: {
     FontSelectionDialog,
-    TemplateSelectionDialog
   },
   setup() {
     const toast = useToast();
@@ -165,7 +156,6 @@ export default {
       showFontSelectionDialog: false,
       curFont: 'default',
       isSmartFit: false,
-      showTemplateSelectionDialog: false,
     }
   },
   computed: {
@@ -282,15 +272,10 @@ export default {
       this.$emit('add-title', type);
     },
     handleChangeTemplate() {
-       this.showTemplateSelectionDialog = true;
-    },
-    handleTemplateSelection(templateWithColor) {
-      // 从返回的对象中解构出template和color
-      const { template, color } = templateWithColor;
-      // 显示成功消息
-      this.toast.success('模板更换成功');
-      // 向上传递事件，包含模板和颜色信息
-      this.$emit('change-template', { template, color });
+      this.$router.push({
+        name: 'TemplateSelection',
+        params: { selectionType: 'change_resume' , resumeId: this.$route.params.resumeId}
+      })
     },
     registerModuleRef(el, idx) {
       if (el) {

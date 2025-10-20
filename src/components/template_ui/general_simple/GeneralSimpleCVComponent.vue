@@ -15,7 +15,6 @@
       @add-module="handleAddModule"
       @change-font="handleChangeFont"
       @smart-fit="handleSmartFit"
-      @change-template="handleChangeTemplate"
   >
       <template #default="{ page }">
           <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -319,9 +318,6 @@ export default {
                 this.$el.style.setProperty('--title-font-size', this.titleFontSize+ 'px')
                 this.$el.style.setProperty('--line-height', this.lineHeight+ 'px')
             }
-        },
-        handleChangeTemplate(templateWithColor) {
-            this.$emit('change-template', templateWithColor);
         },
     }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="template-select">
+  <div class="template-select" :class="{ 'change-template-mode': selectionType === 'change_resume' }">
     <!-- 添加返回按钮 -->
     <button class="back-button" @click="goBack">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -10,8 +10,8 @@
       返回
     </button>
 
-    <h1 class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
-    <h2 class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
+    <h1 v-if="selectionType !== 'change_resume'" class="title">你好，欢迎来到<span style="color: var(--color-primary);">AI简历君</span></h1>
+    <h2 v-if="selectionType !== 'change_resume'" class="subtitle">在开始为您创建AI智能简历前，请先选择你心仪的简历模板：</h2>
 
     <!-- 新增确认弹窗 -->
     <teleport to="body">
@@ -69,7 +69,7 @@
     </teleport>
 
     <!-- 类别选项卡 -->
-    <div class="category-tabs">
+    <div class="category-tabs" :class="{ 'change-template-mode': selectionType === 'change_template' }">
       <button v-for="category in filteredCategories" :key="category"
         :class="['tab-button', { active: currentCategory === category }]" @click="currentCategory = category">
         {{ category }}
@@ -77,12 +77,17 @@
     </div>
 
     <!-- 模板展示区 -->
-    <div class="template-container">
+    <div class="template-container" :class="{ 'change-template-mode': selectionType === 'change_template' }" 
+         @wheel.prevent="selectionType === 'change_template' ? handleTemplateWheel($event) : null">
       <div v-for="template in filteredTemplates" :key="template.id" class="template-card"
         @click="selectTemplate(template.id)">
         <div class="preview-wrapper">
           <!-- 这里根据当前选中颜色显示对应预览图 -->
-          <img :src="template.colorOptions[template.selectedColor]" alt="模板预览" class="preview-image" />
+          <img :src="template.colorOptions[template.selectedColor]" alt="模板预览" class="preview-image" 
+               :style="selectionType === 'change_template' ? {
+                 transform: 'scale(' + templateScale + ')',
+                 transformOrigin: templateTransformOrigin
+               } : {}" />
           <div class="badge" v-if="template.isNew">NEW</div>
         </div>
         <div class="template-info">
@@ -140,6 +145,9 @@ export default {
       isConfirmPopupVisible: false,
       scale: 1,
       transformOrigin: '0 0',
+      // 模板选择区域的缩放相关数据
+      templateScale: 1,
+      templateTransformOrigin: '0 0',
       categories: ['热门', '通用', '社招', '校招/实习', '零经验', '英文'],
       templatesByCategory: {
         '热门': [
@@ -271,6 +279,34 @@ export default {
       // 更新状态
       this.transformOrigin = originX + '% ' + originY + '%'
       this.scale = newScale
+    },
+
+    // 处理模板选择区域的滚轮缩放
+    handleTemplateWheel(event) {
+      // 获取第一个模板图片作为参考（所有模板图片大小相同）
+      const templateImages = this.$el.querySelectorAll('.preview-image')
+      if (!templateImages || templateImages.length === 0) return
+
+      const img = templateImages[0]
+      const rect = img.getBoundingClientRect()
+      const offsetX = event.clientX - rect.left
+      const offsetY = event.clientY - rect.top
+
+      // 计算缩放中心点百分比
+      const originX = (offsetX / rect.width) * 100
+      const originY = (offsetY / rect.height) * 100
+
+      // 调整缩放比例（步长0.05）
+      const delta = event.deltaY > 0 ? -0.05 : 0.05
+      let newScale = this.templateScale + delta
+
+      // 限制最小缩放比例为1，最大缩放比例为2
+      newScale = Math.max(newScale, 1)
+      newScale = Math.min(newScale, 2)
+
+      // 更新状态
+      this.templateTransformOrigin = originX + '% ' + originY + '%'
+      this.templateScale = newScale
     },
 
     // 点击模板卡片
@@ -554,9 +590,13 @@ export default {
     goBack() {
       if (this.selectionType === 'change_resume' && this.resumeId) {
         // 如果是从简历编辑页来的，返回到简历编辑页
+        // 需要传递templateType参数，这里使用默认值'default'
         this.$router.push({
           name: 'CreateResume',
-          params: { resumeId: this.resumeId }
+          params: { 
+            templateType: 'default',
+            resumeId: this.resumeId 
+          }
         })
       } else {
         // 否则返回上一页
@@ -721,6 +761,43 @@ export default {
   overflow-x: hidden;
 }
 
+/* 更换模板模式下的样式 */
+.template-select.change-template-mode {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.template-select.change-template-mode .template-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 80px 0 0 0;
+  max-width: 95%;
+  margin: 0 auto;
+  cursor: zoom-in;
+  min-height: calc(100vh - 100px);
+}
+
+.template-select.change-template-mode .template-card {
+  flex: 0 0 auto;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+.template-select.change-template-mode .category-tabs {
+  position: absolute;
+  top: 70px;
+  left: 100px;
+  z-index: 10;
+  margin-bottom: 0;
+  justify-content: flex-start;
+}
+
 .title {
   color: var(--color-black);
 }
@@ -771,6 +848,26 @@ export default {
   gap: 20px;
   padding-right: 80px;
   padding-bottom: 80px;
+}
+
+/* 修改模板模式下的预览图片样式 */
+.template-select.change-template-mode .preview-wrapper {
+  overflow: hidden;
+  aspect-ratio: 0.7;
+}
+
+.template-select.change-template-mode .preview-image {
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 修改模板模式下的模板卡片悬停效果 */
+.template-select.change-template-mode .template-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(204, 124, 94, 0.15);
 }
 
 .template-card {
