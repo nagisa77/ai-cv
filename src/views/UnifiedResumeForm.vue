@@ -1287,18 +1287,24 @@ export default {
 .back-button {
   position: absolute;
   top: 20px;
-  left: 100px; /* 考虑到左侧菜单栏 */
   display: flex;
   align-items: center;
   gap: 5px;
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.6); /* 半透明背景 */
+  backdrop-filter: blur(8px); /* 毛玻璃模糊效果 */
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #dee2e6;
   color: var(--color-primary);
   font-size: 16px;
   cursor: pointer;
   padding: 10px 15px;
   border-radius: 8px;
   transition: all 0.3s ease;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  z-index: 1000;
 }
 
 .back-button:hover {
